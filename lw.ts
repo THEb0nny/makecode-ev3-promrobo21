@@ -1,10 +1,4 @@
-/**
- * Движения.
- */
-//% block="Motion"
-//% block.ru="Движение"
-//% color="#00751B" weight=89 icon="\uf1b9"
-namespace motion {
+namespace motions {
 
     /**
      * Функция движения по линии до перекрёстка.
@@ -13,7 +7,7 @@ namespace motion {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToIntersaction"
-    //% block="движение по линии до перекрёстка на $speed|\\% c действием после $actionAfterMotion||и отладкой $debug"
+    //% block="движение по линии до перекрёстка на $speed|\\% c действием после $actionAfterMotion||отладка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
@@ -30,7 +24,6 @@ namespace motion {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            control.timer1.reset(); // Сброс таймера
             let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
             let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
@@ -48,12 +41,12 @@ namespace motion {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.timer1.pauseUntil(10); // Ожидание выполнения цикла
+            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         control.runInParallel(function() {
             music.playTone(262, music.beat(BeatFraction.Half));
         });
-        ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
     /**
@@ -64,7 +57,7 @@ namespace motion {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDist"
-    //% block="движение по линии на расстояние $dist|на %speed|\\% с действием после $actionAfterMotion||и отладкой $debug"
+    //% block="движение по линии на расстояние $dist|на %speed|\\% с действием после $actionAfterMotion||отладка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
@@ -84,7 +77,6 @@ namespace motion {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            control.timer1.reset(); // Сброс таймера
             let lMotEnc = CHASSIS_L_MOTOR.angle(), rMotEnc = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
             let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
@@ -103,12 +95,12 @@ namespace motion {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.timer1.pauseUntil(10); // Ожидание выполнения цикла
+            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         control.runInParallel(function () {
             music.playTone(262, music.beat(BeatFraction.Half));
         });
-        ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
     /**
@@ -119,7 +111,7 @@ namespace motion {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToLeftIntersaction"
-    //% block="движение по линии до перекрёстка слева $lineLocation|на $speed|\\% c действием после $actionAfterMotion||и отладкой $debug"
+    //% block="движение по линии до перекрёстка слева $lineLocation|на $speed|\\% c действием после $actionAfterMotion||отладка $debug"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
@@ -145,7 +137,6 @@ namespace motion {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            control.timer1.reset(); // Сброс таймера
             let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
             let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
@@ -161,12 +152,12 @@ namespace motion {
             brick.printValue("error", error, 3);
             brick.printValue("U", U, 4);
             brick.printValue("dt", dt, 12);
-            control.timer1.pauseUntil(10); // Ожидание выполнения цикла
+            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         control.runInParallel(function () {
             music.playTone(262, music.beat(BeatFraction.Half));
         });
-        ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией извне
@@ -180,7 +171,6 @@ namespace motion {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            control.timer1.reset(); // Сброс таймера
             let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
             let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
@@ -198,12 +188,12 @@ namespace motion {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.timer1.pauseUntil(20); // Ожидание выполнения цикла
+            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         control.runInParallel(function () {
             music.playTone(262, music.beat(BeatFraction.Half));
         });
-        ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
     /**
@@ -214,7 +204,7 @@ namespace motion {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToRightIntersaction"
-    //% block="движение по линии до перекрёстка справа $lineLocation|на $speed|\\% c действием после $actionAfterMotion||и отладкой $debug"
+    //% block="движение по линии до перекрёстка справа $lineLocation|на $speed|\\% c действием после $actionAfterMotion||отладка $debug"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
@@ -240,7 +230,6 @@ namespace motion {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            control.timer1.reset(); // Сброс таймера
             let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
             let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
@@ -258,12 +247,12 @@ namespace motion {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.timer1.pauseUntil(10); // Ожидание выполнения цикла
+            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         control.runInParallel(function () {
             music.playTone(262, music.beat(BeatFraction.Half));
         });
-        ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа с линией извне
@@ -277,7 +266,6 @@ namespace motion {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            control.timer1.reset(); // Сброс таймера
             let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
             let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
@@ -295,12 +283,12 @@ namespace motion {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.timer1.pauseUntil(10); // Ожидание выполнения цикла
+            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         control.runInParallel(function () {
             music.playTone(262, music.beat(BeatFraction.Half));
         });
-        ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
 }

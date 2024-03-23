@@ -45,8 +45,8 @@ function SetLineFollowParams(speed: number, Kp?: number, Kd?: number) {
 function TestRGBToHSVLConvert() {
     while (true) {
         const rgbCS = CHECK_COLOR_CS.rgbRaw();
-        const hsvlCS = RGB2HSVLConverter(rgbCS);
-        const color = HsvToColorNum(hsvlCS);
+        const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
+        const color = sensors.HsvToColorNum(hsvlCS);
         brick.clearScreen();
         brick.printValue("r", rgbCS[0], 1);
         brick.printValue("g", rgbCS[1], 2);
@@ -71,7 +71,7 @@ function TestRGBToHSVLConvert() {
 
 function Main() { // Определение главной функции
     MANIPULATOR_MOTOR.setInverted(false); // Установить инверсию для манипулятора, если требуется
-    brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение
+    brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
     brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ожидание нажатия центальной кнопки
     brick.clearScreen(); // Очистить экрана
     // Ваш код тут

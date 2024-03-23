@@ -1,6 +1,6 @@
 {
     "name": "prom-robo-21",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Methods (blocks) for working with ev3 to participate in competitions.",
     "dependencies": {
         "ev3": "*",
@@ -14,11 +14,10 @@
         "enums.ts",
         "motions.ts",
         "turns.ts",
-        "sensors.ts"
+        "sensors.ts",
+        "ns.ts"
     ],
-    "testFiles": [
-        "test.ts"
-    ],
+    "testFiles": [],
     "targetVersions": {
         "branch": "v1.4.40",
         "tag": "v1.4.40",

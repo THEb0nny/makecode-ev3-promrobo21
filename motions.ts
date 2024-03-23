@@ -1,6 +1,18 @@
 namespace motions {
 
-    // Движение на расстояние в мм
+    /**
+     * Движение на расстояние в мм.
+     * @param dist дистанция движения в мм, eg: 100
+     * @param speed скорость движения, eg: 60
+     * @param setBreak тип торможения, если true, то с удержанием, eg: true
+     */
+    //% blockId="DistMove"
+    //% block="движение на расстояние $dist|на $speed|\\% и с жёстким тормозом $setBreak"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% setBreak.shadow="toggleOnOff"
+    //% weight="3"
+    //% group="Move"
     export function DistMove(dist: number, speed: number, setBreak: boolean = true) {
         if (dist == 0 || speed == 0) {
             CHASSIS_MOTORS.stop();
@@ -11,7 +23,7 @@ namespace motions {
         CHASSIS_MOTORS.tank(speed, speed, mRotCalc, MoveUnit.Degrees); // Передаём команду моторам
     }
 
-    // Вспомогательная функция для типа торможения движения на расстоние без торможения (например, для съезда с линии, чтобы её не считал алгоритм движения по линии)
+    // Вспомогательная функция для типа торможения движения на расстоние без торможения. Например, для съезда с линии, чтобы её не считал алгоритм движения по линии.
     export function RollingMoveOut(dist: number, speed: number) {
         if (dist == 0 || speed == 0) {
             CHASSIS_MOTORS.stop();
