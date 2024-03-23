@@ -15,9 +15,9 @@ namespace motions {
     //% weight="1"
     //% group="Движение по линии"
     export function LineFollowToIntersaction(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        automation.pid1.setGains(LW_KP_2S, 0, LW_KD_2S); // Установка коэффицентов регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
-        automation.pid1.reset(); // Сброс регулятора
+        automation.pid1.setGains(LW_KP_2S, LW_KI_2S, LW_KD_2S); // Установка коэффицентов  ПИД регулятора
+        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        automation.pid1.reset(); // Сброс ПИД регулятора
         
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Цикл регулирования движения по линии
@@ -43,9 +43,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        control.runInParallel(function() {
-            music.playTone(262, music.beat(BeatFraction.Half));
-        });
+        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
@@ -68,9 +66,9 @@ namespace motions {
         let lMotEncPrev = CHASSIS_L_MOTOR.angle(), rMotEncPrev = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = (dist / (Math.PI * WHEELS_D)) * 360; // Дистанция в мм, которую нужно проехать по линии
 
-        automation.pid1.setGains(LW_KP_2S, 0, LW_KD_2S);
-        automation.pid1.setControlSaturation(-200, 200);
-        automation.pid1.reset();
+        automation.pid1.setGains(LW_KP_2S, LW_KI_2S, LW_KD_2S); // Установка коэффицентов  ПИД регулятора
+        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        automation.pid1.reset(); // Сброс ПИД регулятора
 
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
@@ -97,9 +95,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        control.runInParallel(function () {
-            music.playTone(262, music.beat(BeatFraction.Half));
-        });
+        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
@@ -128,7 +124,7 @@ namespace motions {
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией между датчиками
     function LineFollowToLeftIntersactionInside(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        automation.pid1.setGains(LW_KP_RS, 0, LW_KD_RS); // Установка коэффицентов регулятора
+        automation.pid1.setGains(LW_KP_RS, LW_KI_RS, LW_KD_RS); // Установка коэффицентов регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         automation.pid1.reset(); // Сброс регулятора
         
@@ -154,15 +150,13 @@ namespace motions {
             brick.printValue("dt", dt, 12);
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        control.runInParallel(function () {
-            music.playTone(262, music.beat(BeatFraction.Half));
-        });
+        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией извне
     function LineFollowToLeftIntersactionOutside(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        automation.pid1.setGains(LW_KP_RS, 0, LW_KD_RS); // Установка коэффицентов регулятора
+        automation.pid1.setGains(LW_KP_RS, LW_KI_RS, LW_KD_RS); // Установка коэффицентов регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         automation.pid1.reset(); // Сброс регулятора
         
@@ -190,9 +184,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        control.runInParallel(function () {
-            music.playTone(262, music.beat(BeatFraction.Half));
-        });
+        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
@@ -221,7 +213,7 @@ namespace motions {
 
     // Функция движения по линии левым датчиком до перекрёстка справа
     function LineFollowToRightIntersactionInside(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        automation.pid1.setGains(LW_KP_RS, 0, LW_KD_RS); // Установка коэффицентов регулятора
+        automation.pid1.setGains(LW_KP_LS, LW_KI_LS, LW_KD_LS); // Установка коэффицентов регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         automation.pid1.reset(); // Сброс регулятора
         
@@ -249,15 +241,13 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        control.runInParallel(function () {
-            music.playTone(262, music.beat(BeatFraction.Half));
-        });
+        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа с линией извне
     function LineFollowToRightIntersactionOutside(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        automation.pid1.setGains(LW_KP_RS, 0, LW_KD_RS); // Установка коэффицентов регулятора
+        automation.pid1.setGains(LW_KP_LS, LW_KI_LS, LW_KD_LS); // Установка коэффицентов регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         automation.pid1.reset(); // Сброс регулятора
 
@@ -285,9 +275,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        control.runInParallel(function () {
-            music.playTone(262, music.beat(BeatFraction.Half));
-        });
+        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 

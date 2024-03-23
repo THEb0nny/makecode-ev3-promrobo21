@@ -36,6 +36,13 @@ namespace custom {
         }
     }
 
+    // Функция для запуска тона в паралельной задачи
+    export function PlayToneInParallel(frequency: number, ms: number) {
+        control.runInParallel(function () {
+            music.playTone(frequency, ms);
+        });
+    }
+
 }
 
 namespace control {
