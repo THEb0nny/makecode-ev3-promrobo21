@@ -7,7 +7,7 @@ namespace sensors {
      * @param whiteValColorS скорость движения, eg: 650
      */
     //% blockId="GetNormRefValCS"
-    //% block="получить норм-ое знач-е отраж-я где сырое значение $refRawValCS|и чёрное $bRefRawValCS|и белое $wRefRawValCS"
+    //% block="нормализовать знач-е отраж-я $refRawValCS|при чёрном $bRefRawValCS|и белом $wRefRawValCS"
     //% inlineInputMode="inline"
     //% weight="8"
     //% group="Color Sensor"

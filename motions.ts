@@ -4,7 +4,7 @@ namespace motions {
      * Движение на расстояние в мм.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
-     * @param setBreak тип торможения, если true, то с удержанием, eg: true
+     * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
      */
     //% blockId="DistMove"
     //% block="движение на расстояние $dist|на $speed|\\% и с жёстким тормозом $setBreak"
@@ -32,11 +32,15 @@ namespace motions {
         let lMotEncPrev = CHASSIS_L_MOTOR.angle(), rMotEncPrev = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = (dist / (Math.PI * WHEELS_D)) * 360; // Дистанция в мм, которую нужно пройти
         CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
+
+        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
-            control.timer1.reset();
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
             let lMotEnc = CHASSIS_L_MOTOR.angle(), rMotEnc = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            control.timer1.pauseUntil(5);
+            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         // Команды для остановки не нужно, в этом и смысл функции
     }

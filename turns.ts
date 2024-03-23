@@ -1,11 +1,12 @@
 namespace turns {
 
     /**
-     * Поворот относительно центра колёс в градусах.
-     * @param deg градус поворота, где положительное число - вправо, а отрицательное влево, eg: 90
+     * Поворот относительно центра колёс на угол в градусах.
+     * @param deg угол градуса поворота, где положительное число - вправо, а отрицательное влево, eg: 90
      * @param speed скорость движения, eg: 50
      */
-    //% blockId=SpinTurn block="поворот на $deg|° с $speed|\\% относительно центра колёс"
+    //% blockId="SpinTurn"
+    //% block="поворот на $deg|° с $speed|\\% относительно центра колёс"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
@@ -22,13 +23,13 @@ namespace turns {
     }
 
     /**
-     * Повороты относительно левого или правого колеса.
+     * Повороты относительно левого или правого колеса на угол в градусах.
      * @param deg угол в градусах для поворота, где положительное число - вправо, а отрицательное влево, eg: 90
      * @param speed скорость движения, eg: 80
      * @param wheelPivot относительно колеса, eg: WheelPivot.LeftWheel
      */
     //% blockId="PivotTurn"
-    //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса"
+    //% block="поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
