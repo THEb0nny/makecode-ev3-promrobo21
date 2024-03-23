@@ -2,9 +2,9 @@ namespace sensors {
 
     /**
      * Функция для программной калибровки и нормализации сырых значений с датчика.
-     * @param rawRefValColorS направление поворота, eg: 0
-     * @param blackValColorS направление поворота, eg: 500
-     * @param whiteValColorS скорость движения, eg: 650
+     * @param refRawValCS текущее сырое значение отражения, eg: 0
+     * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
+     * @param wRefRawValCS сырое значение отражения на белом, eg: 650
      */
     //% blockId="GetNormRefValCS"
     //% block="нормализовать знач-е отраж-я $refRawValCS|при чёрном $bRefRawValCS|и белом $wRefRawValCS"
