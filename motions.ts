@@ -1,4 +1,4 @@
-namespace motion {
+namespace motions {
 
     // Движение на расстояние в мм
     export function DistMove(dist: number, speed: number, setBreak: boolean = true) {

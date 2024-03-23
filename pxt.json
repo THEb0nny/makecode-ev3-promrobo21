@@ -11,9 +11,9 @@
         "README.md",
         "custom.ts",
         "lw.ts",
-        "enum.ts",
-        "move.ts",
-        "turn.ts",
+        "enums.ts",
+        "motions.ts",
+        "turns.ts",
         "sensors.ts"
     ],
     "testFiles": [
