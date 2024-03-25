@@ -50,6 +50,7 @@ let L_CS = sensors.color2; // Ссылка на объект левого дат
 let R_CS = sensors.color3; // Ссылка на объект правого датчика цвета
 let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
+/*
 let lineFollowParams: number[] = [60, 1, 0, 1];
 
 function SetLineFollowParams(speed: number, Kp?: number, Ki?: number, Kd?: number) {
@@ -58,6 +59,7 @@ function SetLineFollowParams(speed: number, Kp?: number, Ki?: number, Kd?: numbe
     if (Ki) lineFollowParams[2] = Ki;
     if (Kd) lineFollowParams[3] = Kd;
 }
+*/
 
 function TestRGBToHSVLConvert() {
     while (true) {
@@ -86,6 +88,7 @@ function TestRGBToHSVLConvert() {
 // Manipulator(ClawState.Close); // Закрыть манипулятор
 // Manipulator(ClawState.Open, 60); // Открыть манипулятор с произвольной скоростью 60
 
+/*
 function Main() { // Определение главной функции
     MANIPULATOR_MOTOR.setInverted(false); // Установить инверсию для манипулятора, если требуется
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
@@ -96,3 +99,4 @@ function Main() { // Определение главной функции
 }
 
 Main(); // Вызов главной функции
+*/
