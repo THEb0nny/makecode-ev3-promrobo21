@@ -42,7 +42,7 @@ namespace turns {
             if (!isTurned && Math.abs(error) <= ENC_TURN_MAX_ERR_DIFFERENCE && Math.abs(u) <= ENC_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца при маленькой ошибке и маленькой мощности регулятора
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
-                custom.PlayToneInParallel(294, 50); // Сигнал начале дорегулирования
+                music.PlayToneInParallel(294, 50); // Сигнал начале дорегулирования
             }
             if (isTurned && currTime - deregStartTime >= ENC_TURN_TIME_DEREG || currTime - startTime >= ENC_SPIN_TURN_OUT_TIME) break; // Дорегулируемся
             CHASSIS_L_MOTOR.run(u); CHASSIS_R_MOTOR.run(-u); // Передаём управляющее воздействие на моторы
@@ -59,7 +59,7 @@ namespace turns {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        custom.PlayToneInParallel(294, 50); // Издаём сигнал завершения дорегулирования
+        music.PlayToneInParallel(294, 50); // Издаём сигнал завершения дорегулирования
         CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Установка тормоз с удержанием на моторы
         CHASSIS_L_MOTOR.stop(); CHASSIS_R_MOTOR.stop(); // Остановка моторов
     }
@@ -114,7 +114,7 @@ namespace turns {
             if (!isTurned && Math.abs(error) <= ENC_TURN_MAX_ERR_DIFFERENCE && Math.abs(U) <= ENC_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
-                custom.PlayToneInParallel(294, 50); // Сигнал начале дорегулирования
+                music.PlayToneInParallel(294, 50); // Сигнал начале дорегулирования
             }
             if (wheelPivot == WheelPivot.LeftWheel) CHASSIS_L_MOTOR.run(U); // Передаём правому мотору управляющее воздействие
             else if (wheelPivot == WheelPivot.RightWheel) CHASSIS_R_MOTOR.run(U); // Передаём левому мотору управляющее воздействие
@@ -128,7 +128,7 @@ namespace turns {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        custom.PlayToneInParallel(294, 100); // Издаём сигнал завершения дорегулирования
+        music.PlayToneInParallel(294, 100); // Издаём сигнал завершения дорегулирования
         CHASSIS_L_MOTOR.stop(); CHASSIS_R_MOTOR.stop(); // Остановить моторы
     }
 

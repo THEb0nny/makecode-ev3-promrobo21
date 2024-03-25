@@ -22,7 +22,7 @@ namespace custom {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
             motions.DistMove(DIST_AFTER_INTERSECTION, speed, true);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            // RampDistMove(DIST_AFTER_INTERSECTION, 0, DIST_AFTER_INTERSECTION / 2, speed);
+            motions.RampDistMove(DIST_AFTER_INTERSECTION, 0, DIST_AFTER_INTERSECTION / 2, speed);
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             motions.RollingMoveOut(DIST_ROLLING_MOVE_OUT, speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением
@@ -35,6 +35,10 @@ namespace custom {
             CHASSIS_MOTORS.steer(0, speed);
         }
     }
+
+}
+
+namespace music {
 
     // Функция для запуска тона в паралельной задачи
     export function PlayToneInParallel(frequency: number, ms: number) {

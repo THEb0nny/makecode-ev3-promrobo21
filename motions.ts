@@ -23,6 +23,32 @@ namespace motions {
         CHASSIS_MOTORS.tank(speed, speed, mRotCalc, MoveUnit.Degrees); // Передаём команду моторам
     }
 
+    /**
+     * Движение на заданное расстояние с ускорением и замедлением в мм.
+     * @param totalDist общее расстояние в мм, eg: 150
+     * @param accelDist расстояние ускорения в мм, eg: 100
+     * @param decelDist расстояние замедления в мм, eg: 100
+     * @param speed скорость движения, eg: 60
+     */
+    //% blockId="RampDistMove"
+    //% block="движение на расстояние $totalDist|c расстоянием ускорения $accelDist и замедления $deccelDist со скоростью $speed|\\%"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="4"
+    //% group="Move"
+    export function RampDistMove(totalDist: number, accelDist: number, decelDist: number, speed: number) {
+        CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Установить торможение с удержанием
+        let mRotAccelCalc = (accelDist == 0 ? 0 : Math.round((accelDist / (Math.PI * WHEELS_D)) * 360)); // Расчитываем расстояние ускорения
+        let mRotDecelCalc = (decelDist == 0 ? 0 : Math.round((decelDist / (Math.PI * WHEELS_D)) * 360)); // Расчитываем расстояние замедления
+        let mRotNormCalc = Math.round((totalDist / (Math.PI * WHEELS_D)) * 360) - mRotAccelCalc - mRotDecelCalc; // Рассчитываем общюю дистанцию
+        CHASSIS_L_MOTOR.setPauseOnRun(false); CHASSIS_R_MOTOR.setPauseOnRun(false); // Отключаем у моторов ожидание выполнения
+        // Передаём команды движения на моторы
+        CHASSIS_L_MOTOR.ramp(speed, mRotNormCalc, MoveUnit.Degrees, mRotAccelCalc, mRotDecelCalc);
+        CHASSIS_R_MOTOR.ramp(speed, mRotNormCalc, MoveUnit.Degrees, mRotAccelCalc, mRotDecelCalc);
+        CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды
+        CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем обратно у моторов ожидание выполнения ???
+    }
+
     // Вспомогательная функция для типа торможения движения на расстоние без торможения. Например, для съезда с линии, чтобы её не считал алгоритм движения по линии.
     export function RollingMoveOut(dist: number, speed: number) {
         if (dist == 0 || speed == 0) {

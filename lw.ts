@@ -43,7 +43,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
@@ -95,7 +95,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
@@ -150,7 +150,7 @@ namespace motions {
             brick.printValue("dt", dt, 12);
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
@@ -184,7 +184,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
@@ -241,7 +241,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
@@ -275,7 +275,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        custom.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
         custom.ActionAfterMotion(speed, actionAfterMotion);
     }
 
