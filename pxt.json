@@ -1,5 +1,5 @@
 {
-    "name": "prom-robo-21",
+    "name": "Promrobo-21",
     "version": "0.4.3",
     "description": "Methods (blocks) for working with ev3 to participate in competitions.",
     "dependencies": {
