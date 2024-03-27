@@ -72,7 +72,7 @@ namespace turns {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartPivotTurn"
-    //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot||и отладкой %debug"
+    //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса||и отладкой %debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
