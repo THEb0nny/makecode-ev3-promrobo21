@@ -218,7 +218,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(LW_SPEED_2S, actionAfterMotion);
+        custom.ActionAfterMotion(LW_SPEED_2S, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -229,23 +229,31 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToLeftIntersaction"
-    //% block="движение по линии до перекрёстка слева $lineLocation|на $speed|\\% c действием после $actionAfterMotion||отладка $debug"
+    //% block="движение по линии до перекрёстка слева $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Движение по линии"
-    export function LineFollowToLeftIntersaction(lineLocation: LineLocation, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    export function LineFollowToLeftIntersaction(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
         if (lineLocation == LineLocation.Inside) {
-            LineFollowToLeftIntersectionInside(speed, actionAfterMotion, debug);
+            LineFollowToLeftIntersectionInside(actionAfterMotion, params, debug);
         } else if (lineLocation == LineLocation.Outside) {
-            LineFollowToLeftIntersectionOutside(speed, actionAfterMotion, debug);
+            LineFollowToLeftIntersectionOutside(actionAfterMotion, params, debug);
         }
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией между датчиками
-    function LineFollowToLeftIntersectionInside(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    function LineFollowToLeftIntersectionInside(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+        if (params) {
+            if (params.speed) LW_SPEED_RS = params.speed;
+            if (params.Kp) LW_KP_RS = params.Kp;
+            if (params.Ki) LW_KI_RS = params.Ki;
+            if (params.Kd) LW_KD_RS = params.Kd;
+            if (params.N) LW_N_RS = params.N;
+        }
+
         automation.pid1.setGains(LW_KP_RS, LW_KI_RS, LW_KD_RS); // Установка коэффицентов регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         automation.pid1.reset(); // Сброс регулятора
@@ -263,7 +271,7 @@ namespace motions {
             if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, speed); // Команда моторам
+            CHASSIS_MOTORS.steer(U, LW_SPEED_RS); // Команда моторам
             brick.clearScreen(); // Очистка экрана
             brick.printValue("refLCS", refLCS, 1);
             brick.printValue("refRCS", refRCS, 2);
@@ -273,11 +281,19 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(LW_SPEED_RS, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией извне
-    function LineFollowToLeftIntersectionOutside(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    function LineFollowToLeftIntersectionOutside(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+        if (params) {
+            if (params.speed) LW_SPEED_RS = params.speed;
+            if (params.Kp) LW_KP_RS = params.Kp;
+            if (params.Ki) LW_KI_RS = params.Ki;
+            if (params.Kd) LW_KD_RS = params.Kd;
+            if (params.N) LW_N_RS = params.N;
+        }
+
         automation.pid1.setGains(LW_KP_RS, LW_KI_RS, LW_KD_RS); // Установка коэффицентов регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         automation.pid1.reset(); // Сброс регулятора
@@ -295,7 +311,7 @@ namespace motions {
             if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, speed); // Команда моторам
+            CHASSIS_MOTORS.steer(U, LW_SPEED_RS); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -307,7 +323,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(LW_SPEED_RS, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -318,23 +334,31 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToRightIntersection"
-    //% block="движение по линии до перекрёстка справа $lineLocation|на $speed|\\% c действием после $actionAfterMotion||отладка $debug"
+    //% block="движение по линии до перекрёстка справа $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% inlineInputMode="inline"
     //% weight="79"
     //% group="Движение по линии"
-    export function LineFollowToRightIntersection(lineLocation: LineLocation, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    export function LineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
         if (lineLocation == LineLocation.Inside) {
-            LineFollowToRightIntersectionInside(speed, actionAfterMotion, debug);
+            LineFollowToRightIntersectionInside(actionAfterMotion, params, debug);
         } else if (lineLocation == LineLocation.Outside) {
-            LineFollowToRightIntersectionOutside(speed, actionAfterMotion, debug);
+            LineFollowToRightIntersectionOutside(actionAfterMotion, params, debug);
         }
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа
-    function LineFollowToRightIntersectionInside(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    function LineFollowToRightIntersectionInside(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+        if (params) {
+            if (params.speed) LW_SPEED_LS = params.speed;
+            if (params.Kp) LW_KP_LS = params.Kp;
+            if (params.Ki) LW_KI_LS = params.Ki;
+            if (params.Kd) LW_KD_LS = params.Kd;
+            if (params.N) LW_N_LS = params.N;
+        }
+
         automation.pid1.setGains(LW_KP_LS, LW_KI_LS, LW_KD_LS); // Установка коэффицентов регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         automation.pid1.reset(); // Сброс регулятора
@@ -352,7 +376,7 @@ namespace motions {
             if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, speed); // Команда моторам
+            CHASSIS_MOTORS.steer(U, LW_SPEED_LS); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -364,11 +388,19 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(LW_SPEED_LS, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа с линией извне
-    function LineFollowToRightIntersectionOutside(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    function LineFollowToRightIntersectionOutside(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+        if (params) {
+            if (params.speed) LW_SPEED_LS = params.speed;
+            if (params.Kp) LW_KP_LS = params.Kp;
+            if (params.Ki) LW_KI_LS = params.Ki;
+            if (params.Kd) LW_KD_LS = params.Kd;
+            if (params.N) LW_N_LS = params.N;
+        }
+
         automation.pid1.setGains(LW_KP_LS, LW_KI_LS, LW_KD_LS); // Установка коэффицентов регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         automation.pid1.reset(); // Сброс регулятора
@@ -386,7 +418,7 @@ namespace motions {
             if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, speed); // Команда моторам
+            CHASSIS_MOTORS.steer(U, LW_SPEED_LS); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -398,7 +430,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(speed, actionAfterMotion);
+        custom.ActionAfterMotion(LW_SPEED_LS, actionAfterMotion); // Действие после алгоритма движения
     }
 
 }
