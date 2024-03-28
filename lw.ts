@@ -156,8 +156,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refRawLCS = LCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = RCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             if (refLCS < LW_TRESHOLD && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток
@@ -219,8 +219,8 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let lMotEnc = CHASSIS_L_MOTOR.angle(), rMotEnc = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refRawLCS = LCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = RCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = LW_SET_POINT - refRCS; // Ошибка регулирования
@@ -285,8 +285,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refRawLCS = LCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = RCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = LW_SET_POINT - refRCS; // Ошибка регулирования
@@ -326,8 +326,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refRawLCS = LCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = RCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = refRCS - LW_SET_POINT; // Ошибка регулирования
@@ -393,8 +393,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refRawLCS = LCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = RCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = refLCS - LW_SET_POINT; // Ошибка регулирования
@@ -436,8 +436,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLCS = L_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = R_CS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refRawLCS = LCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = RCS.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = LW_SET_POINT - refLCS; // Ошибка регулирования
