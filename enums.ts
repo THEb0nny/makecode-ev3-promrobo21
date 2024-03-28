@@ -1,39 +1,51 @@
 // Перечисление о вариантах работы манипулятора
 const enum ClawState {
-    //% block="открыть"
+    //% block="open"
+    //% block.loc.ru="открыть"
     Open,
-    //% block="закрыть"
+    //% block="close"
+    //% block.loc.ru="закрыть"
     Close
 }
 
 // Перечисление о типах торможения полный вариант
 const enum AfterMotion {
-    //% block="прокатка"
+    //% block="rolling"
+    //% block.loc.ru="прокатка"
     Rolling,
-    //% block="плавная прокатка"
+    //% block="decel rolling"
+    //% block.loc.ru="плавная прокатка"
     DecelRolling,
-    //% block="прокатка без торможения"
+    //% block="rolling no stop"
+    //% block.loc.ru="прокатка без торможения"
     RollingNoStop,
-    //% block="тормоз с удержанием"
+    //% block="brake stop"
+    //% block.loc.ru="тормоз с удержанием"
     BreakStop,
-    //% block="тормоз с инерцией"
+    //% block="no break stop"
+    //% block.loc.ru="тормоз с инерцией"
     NoBreakStop,
-    //% block="не тормозить"
+    //% block="no stop"
+    //% block.loc.ru="не тормозить"
     NoStop
 }
 
 // Перечисление о типах относительных поворотов
 const enum WheelPivot {
-    //% block="левого"
+    //% block="left"
+    //% block.loc.ru="левого"
     LeftWheel,
-    //% block="правого"
+    //% block="right"
+    //% block.loc.ru="правого"
     RightWheel
 }
 
 // Позиция линии при движении по линии
 const enum LineLocation {
-    //% block="изнутри"
+    //% block="inside"
+    //% block.loc.ru="изнутри"
     Inside,
-    //% block="снаружи"
+    //% block="outside"
+    //% block.loc.ru="снаружи"
     Outside
 }

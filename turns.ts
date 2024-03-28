@@ -161,7 +161,8 @@ namespace turns {
      * @param wheelPivot относительно колеса, eg: WheelPivot.LeftWheel
      */
     //% blockId="PivotTurn"
-    //% block="поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса"
+    //% block="turn to $deg|° with $speed|\\% relatively $wheelPivot|колеса"
+    //% block.loc.ru="поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
