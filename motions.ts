@@ -31,7 +31,7 @@ namespace motions {
      * @param speed скорость движения, eg: 60
      */
     //% blockId="RampDistMove"
-    //% block="движение на расстояние $totalDist|c расстоянием ускорения $accelDist и замедления $deccelDist со скоростью $speed|\\%"
+    //% block="движение на расстояние $totalDist|c расстоянием ускорения $accelDist и замедления $decelDist со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="4"
