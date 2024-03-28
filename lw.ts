@@ -1,110 +1,5 @@
 namespace motions {
 
-    // Интерфейс перадачи параметров для алгоритма с регулятором
-    export interface LineFollowInreface {
-        speed?: number;
-        Kp?: number;
-        Ki?: number;
-        Kd?: number;
-        N?: number;
-    }
-
-    /**
-     * Пустые праметры для алгоритма с регулятором.
-     */
-    //% blockId="SetEmptyParams"
-    //% block="empty"
-    //% block.loc.ru="пусто"
-    //% inlineInputMode="inline"
-    //% blockHidden=true
-    //% weight="99"
-    //% group="Params"
-    export function SetEmptyParams(): LineFollowInreface {
-        return null;
-    }
-
-    /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
-     */
-    //% blockId="Set1Params"
-    //% block="speed = $newSpeed\\%"
-    //% block.loc.ru="скорость = $newSpeed\\%"
-    //% inlineInputMode="inline"
-    //% newSpeed.defl="50"
-    //% newKp.defl="1"
-    //% weight="98"
-    //% group="Params"
-    export function Set1Params(newSpeed?: number): LineFollowInreface {
-        return {
-            speed: newSpeed
-        };
-    }
-
-    /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
-     */
-    //% blockId="Set2Params"
-    //% block="speed = $newSpeed\\%| Kp = $newKp"
-    //% block.loc.ru="скорость = $newSpeed\\%| Kp = $newKp"
-    //% inlineInputMode="inline"
-    //% newSpeed.defl="50"
-    //% newKp.defl="1"
-    //% weight="97"
-    //% group="Params"
-    export function Set2Params(newSpeed?: number, newKp?: number): LineFollowInreface {
-        return {
-            speed: newSpeed,
-            Kp: newKp
-        };
-    }
-
-    /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
-     */
-    //% blockId="Set4Params"
-    //% block="speed = $newSpeed\\%| Kp = $newKp| Kd = $newKd|| N = $newN"
-    //% block.loc.ru="скорость = $newSpeed\\%| Kp = $newKp| Kd = $newKd|| N = $newN"
-    //% expandableArgumentMode="enabled"
-    //% inlineInputMode="inline"
-    //% newSpeed.defl="50"
-    //% newKp.defl="1"
-    //% weight="96"
-    //% group="Params"
-    export function Set4Params(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInreface {
-        return {
-            speed: newSpeed,
-            Kp: newKp,
-            Kd: newKd,
-            N: newN
-        };
-    }
-
-    /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
-     */
-    //% blockId="SetAllParams"
-    //% block="speed = $newSpeed\\%| Kp = $newKp| Ki = $newKi| Kd = $newKd|| N = $newN"
-    //% block.loc.ru="скорость = $newSpeed\\%| Kp = $newKp| Ki = $newKi| Kd = $newKd|| N = $newN"
-    //% expandableArgumentMode="enabled"
-    //% inlineInputMode="inline"
-    //% newSpeed.defl="50"
-    //% newKp.defl="1"
-    //% weight="95"
-    //% group="Params"
-    export function SetAllParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInreface {
-        return {
-            speed: newSpeed,
-            Kp: newKp,
-            Ki: newKi,
-            Kd: newKd,
-            N: newN
-        };
-    }
-
-}
-
-namespace motions {
-
     let lineFollow2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
     let lineFollow2SensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     let lineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
@@ -137,7 +32,7 @@ namespace motions {
     //% params.shadow=SetEmptyParams
     //% weight="99"
     //% group="Движение по линии"
-    export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+    export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (params) {
             if (params.speed) lineFollow2SensorSpeed = params.speed;
             if (params.Kp) lineFollow2SensorKp = params.Kp;
@@ -195,7 +90,7 @@ namespace motions {
     //% params.shadow=SetEmptyParams
     //% weight="98"
     //% group="Движение по линии"
-    export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+    export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (params) {
             if (params.speed) lineFollow2SensorSpeed = params.speed;
             if (params.Kp) lineFollow2SensorKp = params.Kp;
@@ -257,7 +152,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Движение по линии"
-    export function LineFollowToLeftIntersaction(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+    export function LineFollowToLeftIntersaction(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (lineLocation == LineLocation.Inside) {
             LineFollowToLeftIntersectionInside(actionAfterMotion, params, debug);
         } else if (lineLocation == LineLocation.Outside) {
@@ -266,7 +161,7 @@ namespace motions {
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией между датчиками
-    function LineFollowToLeftIntersectionInside(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+    function LineFollowToLeftIntersectionInside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (params) {
             if (params.speed) lineFollowRightSensorSpeed = params.speed;
             if (params.Kp) lineFollowRightSensorKp = params.Kp;
@@ -307,7 +202,7 @@ namespace motions {
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией извне
-    function LineFollowToLeftIntersectionOutside(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+    function LineFollowToLeftIntersectionOutside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (params) {
             if (params.speed) lineFollowRightSensorSpeed = params.speed;
             if (params.Kp) lineFollowRightSensorKp = params.Kp;
@@ -365,7 +260,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% weight="79"
     //% group="Движение по линии"
-    export function LineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+    export function LineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (lineLocation == LineLocation.Inside) {
             LineFollowToRightIntersectionInside(actionAfterMotion, params, debug);
         } else if (lineLocation == LineLocation.Outside) {
@@ -374,7 +269,7 @@ namespace motions {
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа
-    function LineFollowToRightIntersectionInside(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+    function LineFollowToRightIntersectionInside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (params) {
             if (params.speed) lineFollowLeftSensorSpeed = params.speed;
             if (params.Kp) lineFollowLeftSensorKp = params.Kp;
@@ -417,7 +312,7 @@ namespace motions {
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа с линией извне
-    function LineFollowToRightIntersectionOutside(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
+    function LineFollowToRightIntersectionOutside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (params) {
             if (params.speed) lineFollowLeftSensorSpeed = params.speed;
             if (params.Kp) lineFollowLeftSensorKp = params.Kp;

@@ -26,7 +26,7 @@ namespace turns {
     //% debug.shadow="toggleOnOff"
     //% weight="4"
     //% group="Повороты с регулятором"
-    export function SmartSpinTurn(deg: number, params?: motions.LineFollowInreface, debug: boolean = false) {
+    export function SmartSpinTurn(deg: number, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (params) {
             if (params.speed) smartSpinTurnSpeed = params.speed;
             if (params.Kp) smartSpinTurnKp = params.Kp;
@@ -100,7 +100,7 @@ namespace turns {
     //% debug.shadow="toggleOnOff"
     //% weight="3"
     //% group="Повороты с регулятором"
-    export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: motions.LineFollowInreface, debug: boolean = false) {
+    export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: automation.LineFollowInreface, debug: boolean = false) {
         if (params) {
             if (params.speed) smartPivotTurnSpeed = params.speed;
             if (params.Kp) smartPivotTurnKp = params.Kp;
