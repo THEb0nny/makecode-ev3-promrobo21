@@ -50,16 +50,15 @@ function TestRGBToHSVLConvert() {
 }
 
 //// Примеры вызовов функций
-// LineFollowToIntersaction(50, AfterMotion.Rolling); // Движение по линии до перекрёстка со скоростью 70 и прокаткой
-// LineFollowToLeftIntersaction(40, AfterMotion.Rolling); // Движение по линии на правом датчике до перекрёстка слева со скоростью 50 и с прокаткой
-// LineFollowToRightIntersaction(40, AfterMotion.Rolling); // Движение по линии на левом датчике до перекрёстка справа со скоростью 60 и с прокаткой
-// LineFollowToDist(400, 50, AfterMotion.BreakStop); // Движение по линии на расстояние со скоростью 50 и жёстким торможением после
-// SpinTurn(90, 30); // Поворот на 90 градусов вправо на скорости 30
-// PivotTurn(90, 40, WheelPivot.LeftWheel); // Вращение на 90 градусов со скоростью 40 относительно левого мотора
+// motions.LineFollowToIntersaction(50, AfterMotion.Rolling); // Движение по линии до перекрёстка со скоростью 70 и прокаткой
+// motions.LineFollowToLeftIntersaction(40, AfterMotion.Rolling); // Движение по линии на правом датчике до перекрёстка слева со скоростью 50 и с прокаткой
+// motions.LineFollowToRightIntersaction(40, AfterMotion.Rolling); // Движение по линии на левом датчике до перекрёстка справа со скоростью 60 и с прокаткой
+// motions.LineFollowToDist(400, 50, AfterMotion.BreakStop); // Движение по линии на расстояние со скоростью 50 и жёстким торможением после
+// turns.SpinTurn(90, 30); // Поворот на 90 градусов вправо на скорости 30
+// turns.PivotTurn(90, 40, WheelPivot.LeftWheel); // Вращение на 90 градусов со скоростью 40 относительно левого мотора
 // Manipulator(ClawState.Close); // Закрыть манипулятор
 // Manipulator(ClawState.Open, 60); // Открыть манипулятор с произвольной скоростью 60
 
-/*
 function Main() { // Определение главной функции
     MANIPULATOR_MOTOR.setInverted(false); // Установить инверсию для манипулятора, если требуется
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
@@ -70,4 +69,3 @@ function Main() { // Определение главной функции
 }
 
 Main(); // Вызов главной функции
-*/

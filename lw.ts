@@ -71,7 +71,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -133,7 +133,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -198,7 +198,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией извне
@@ -241,7 +241,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -308,7 +308,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа с линией извне
@@ -351,7 +351,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
-        custom.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
 }
