@@ -134,7 +134,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow=SetLineFollowEmptyParams
+    //% params.shadow=SetEmptyParams
     //% weight="99"
     //% group="Движение по линии"
     export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
@@ -192,7 +192,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow=SetLineFollowEmptyParams
+    //% params.shadow=SetEmptyParams
     //% weight="98"
     //% group="Движение по линии"
     export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: LineFollowInreface, debug: boolean = false) {
@@ -253,6 +253,7 @@ namespace motions {
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
+    //% params.shadow=SetEmptyParams
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Движение по линии"
@@ -360,6 +361,7 @@ namespace motions {
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
+    //% params.shadow=SetEmptyParams
     //% inlineInputMode="inline"
     //% weight="79"
     //% group="Движение по линии"

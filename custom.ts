@@ -40,10 +40,21 @@ namespace custom {
 
 namespace music {
 
-    // Функция для запуска тона в паралельной задачи
-    export function PlayToneInParallel(frequency: number, ms: number) {
+    /**
+     * Функция для запуска тона в паралельной задачи.
+     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
+     * @param ms tone duration in milliseconds(ms), eg: BeatFraction.Half
+     */
+    //% blockId="PlayToneInParallel"
+    //% block="play tone|at $frequency| for $duration|in the background"
+    //% block.loc.ru="проиграть тон $frequency| продолжительностью $duration| в фоне"
+    //% frequency.shadow=device_note
+    //% duration.shadow=device_beat
+    //% weight=75 blockGap=8
+    //% group="Tone"
+    export function PlayToneInParallel(frequency: number, duration: number) {
         control.runInParallel(function () {
-            music.playTone(frequency, ms);
+            music.playTone(frequency, duration);
         });
     }
 

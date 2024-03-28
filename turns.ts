@@ -1,5 +1,17 @@
 namespace turns {
 
+    let smartSpinTurnSpeed = 50; // Переменная для хранения скорости при повороте относительно центра оси
+    let smartSpinTurnKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при повороте относительно центра оси
+    let smartSpinTurnKi = 0; // Переменная для хранения коэффицента интегорального регулятора при повороте относительно центра оси
+    let smartSpinTurnKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при повороте относительно центра оси
+    let smartSpinTurnN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при повороте относительно центра оси
+
+    let smartPivotTurnSpeed = 50; // Переменная для хранения скорости при повороте относительно колеса
+    let smartPivotTurnKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при повороте относительно колеса
+    let smartPivotTurnKi = 0; // Переменная для хранения коэффицента интегорального регулятора при повороте относительно колеса
+    let smartPivotTurnKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при повороте относительно колеса
+    let smartPivotTurnN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при повороте относительно колеса
+
     /**
      * Поворот относительно центра колёс c регулятором.
      * @param deg угол в градусах поворота в градусах, где положительное число - вправо, а отрицательное влево, eg: 90
@@ -7,19 +19,28 @@ namespace turns {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartSpinTurn"
-    //% block="умный поворот на $deg|° с $speed|\\% относительно центра колёс||отдалка $debug"
+    //% block="умный поворот на $deg|° с $speed|\\% относительно центра колёс||параметры = $params| отдалка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% weight="4"
     //% group="Повороты с регулятором"
-    export function SmartSpinTurn(deg: number, speed: number, debug: boolean = false) {
+    export function SmartSpinTurn(deg: number, params?: motions.LineFollowInreface, debug: boolean = false) {
+        if (params) {
+            if (params.speed) smartSpinTurnSpeed = params.speed;
+            if (params.Kp) smartSpinTurnKp = params.Kp;
+            if (params.Ki) smartSpinTurnKi = params.Ki;
+            if (params.Kd) smartSpinTurnKd = params.Kd;
+            if (params.N) smartSpinTurnN = params.N;
+        }
+
         let lMotEncPrev = CHASSIS_L_MOTOR.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
         let rMotEncPrev = CHASSIS_R_MOTOR.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
         let calcMotRot = Math.round(deg * WHEELS_W / WHEELS_D); // Расчёт угла поворота моторов для поворота
 
-        automation.pid2.setGains(KP_SPIN_TURN, 0, KD_SPIN_TURN); // Установка коэффициентов ПИД регулятора
+        automation.pid2.setGains(smartSpinTurnKp, smartSpinTurnKi, smartSpinTurnKd); // Установка коэффициентов ПИД регулятора
+        automation.pid2.setDerivativeFilter(smartSpinTurnN); // Установить фильтр дифференциального регулятора
         automation.pid2.setControlSaturation(-100, 100); // Устанавливаем интервал ПИД регулятора
         automation.pid2.reset(); // Сброс ПИД регулятора
 
@@ -38,7 +59,7 @@ namespace turns {
             let error = errorL - errorR; // Расчитываем общую ошибку
             automation.pid2.setPoint(error); // Передаём ошибку регулятору
             let u = automation.pid2.compute(dt, 0); // Вычисляем и записываем значение с регулятора
-            u = Math.constrain(u, -speed, speed); // Ограничение скорости
+            u = Math.constrain(u, -smartSpinTurnSpeed, smartSpinTurnSpeed); // Ограничение скорости
             if (!isTurned && Math.abs(error) <= ENC_TURN_MAX_ERR_DIFFERENCE && Math.abs(u) <= ENC_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца при маленькой ошибке и маленькой мощности регулятора
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
@@ -72,14 +93,22 @@ namespace turns {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartPivotTurn"
-    //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса||и отладкой %debug"
+    //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса||параметры = $params| отладка %debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% weight="3"
     //% group="Повороты с регулятором"
-    export function SmartPivotTurn(deg: number, speed: number, wheelPivot: WheelPivot, debug: boolean = false) {
+    export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: motions.LineFollowInreface, debug: boolean = false) {
+        if (params) {
+            if (params.speed) smartPivotTurnSpeed = params.speed;
+            if (params.Kp) smartPivotTurnKp = params.Kp;
+            if (params.Ki) smartPivotTurnKi = params.Ki;
+            if (params.Kd) smartPivotTurnKd = params.Kd;
+            if (params.N) smartPivotTurnN = params.N;
+        }
+
         CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Установить жёсткий тормоз для моторов
         let motEncPrev = 0; // Инициализируем переменную хранения значения с энкодера мотора
         if (wheelPivot == WheelPivot.LeftWheel) { // Записываем текущее значение с энкодера нужного мотора и ставим тормоз нужному мотору
@@ -92,6 +121,7 @@ namespace turns {
         let calcMotRot = Math.round(((deg * WHEELS_W) / WHEELS_D) * 2); // Рассчитываем сколько градусов вращать мотор
         
         automation.pid2.setGains(KP_PIVOT_TURN, 0, KD_PIVOT_TURN); // Устанавливаем коэффиценты ПИД регулятора
+        automation.pid2.setDerivativeFilter(smartPivotTurnN); // Установить фильтр дифференциального регулятора
         automation.pid2.setControlSaturation(-100, 100); // Устанавливаем интервал ПИД регулятора
         automation.pid2.reset(); // Сбросить ПИД регулятора
 
@@ -110,7 +140,7 @@ namespace turns {
             if (isTurned && currTime - deregStartTime >= ENC_TURN_TIME_DEREG || currTime - startTime >= ENC_PIVOT_TURN_OUT_TIME) break; // Дорегулируемся
             automation.pid2.setPoint(error); // Передаём ошибку регулятору
             let U = automation.pid2.compute(dt, 0); // Записываем в переменную управляющее воздействие регулятора
-            U = Math.constrain(U, -speed, speed); // Ограничить скорость по входному параметру
+            U = Math.constrain(U, -smartPivotTurnSpeed, smartPivotTurnSpeed); // Ограничить скорость по входному параметру
             if (!isTurned && Math.abs(error) <= ENC_TURN_MAX_ERR_DIFFERENCE && Math.abs(U) <= ENC_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
