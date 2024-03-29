@@ -1,5 +1,24 @@
 namespace motions {
 
+    // Функция, которая выполняет действие после цикла с движением
+    export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion) {
+        if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
+            motions.DistMove(DIST_AFTER_INTERSECTION, speed, true);
+        } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
+            motions.RampDistMove(DIST_AFTER_INTERSECTION, 0, DIST_AFTER_INTERSECTION / 2, speed);
+        } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
+            motions.RollingMoveOut(DIST_ROLLING_MOVE_OUT, speed);
+        } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением
+            CHASSIS_MOTORS.setBrake(true);
+            CHASSIS_MOTORS.stop();
+        } else if (actionAfterMotion == AfterMotion.NoBreakStop) { // Тормоз с прокаткой по инерции
+            CHASSIS_MOTORS.setBrake(false);
+            CHASSIS_MOTORS.stop();
+        } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
+            CHASSIS_MOTORS.steer(0, speed);
+        }
+    }
+
     /**
      * Движение на расстояние в мм.
      * @param dist дистанция движения в мм, eg: 100
@@ -47,25 +66,6 @@ namespace motions {
         CHASSIS_R_MOTOR.ramp(speed, mRotNormCalc, MoveUnit.Degrees, mRotAccelCalc, mRotDecelCalc);
         CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды
         CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем обратно у моторов ожидание выполнения ???
-    }
-
-    // Функция, которая выполняет действие после цикла с движением
-    export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion) {
-        if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
-            motions.DistMove(DIST_AFTER_INTERSECTION, speed, true);
-        } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            motions.RampDistMove(DIST_AFTER_INTERSECTION, 0, DIST_AFTER_INTERSECTION / 2, speed);
-        } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
-            motions.RollingMoveOut(DIST_ROLLING_MOVE_OUT, speed);
-        } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением
-            CHASSIS_MOTORS.setBrake(true);
-            CHASSIS_MOTORS.stop();
-        } else if (actionAfterMotion == AfterMotion.NoBreakStop) { // Тормоз с прокаткой по инерции
-            CHASSIS_MOTORS.setBrake(false);
-            CHASSIS_MOTORS.stop();
-        } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
-            CHASSIS_MOTORS.steer(0, speed);
-        }
     }
 
     // Вспомогательная функция для типа торможения движения на расстоние без торможения. Например, для съезда с линии, чтобы её не считал алгоритм движения по линии.

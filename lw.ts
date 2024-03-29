@@ -1,22 +1,22 @@
 namespace motions {
 
-    let lineFollow2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
-    let lineFollow2SensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
-    let lineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
-    let lineFollow2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
-    let lineFollow2SensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
+    export let lineFollow2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
+    export let lineFollow2SensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
+    export let lineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
+    export let lineFollow2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
+    export let lineFollow2SensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
-    let lineFollowLeftSensorSpeed = 50; // Переменная для хранения скорости при движения по линии левым датчиком
-    let lineFollowLeftSensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии левым датчиком
-    let lineFollowLeftSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии левым датчиком
-    let lineFollowLeftSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии левым датчиком
-    let lineFollowLeftSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии левым датчиком
+    export let lineFollowLeftSensorSpeed = 50; // Переменная для хранения скорости при движения по линии левым датчиком
+    export let lineFollowLeftSensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии левым датчиком
+    export let lineFollowLeftSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии левым датчиком
+    export let lineFollowLeftSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии левым датчиком
+    export let lineFollowLeftSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии левым датчиком
 
-    let lineFollowRightSensorSpeed = 50; // Переменная для хранения скорости при движения по линии правым датчиком
-    let lineFollowRightSensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии правым датчиком
-    let lineFollowRightSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии правым датчиком
-    let lineFollowRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком
-    let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
+    export let lineFollowRightSensorSpeed = 50; // Переменная для хранения скорости при движения по линии правым датчиком
+    export let lineFollowRightSensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии правым датчиком
+    export let lineFollowRightSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии правым датчиком
+    export let lineFollowRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком
+    export let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
 
     /**
      * Функция движения по линии до перекрёстка.
@@ -25,15 +25,14 @@ namespace motions {
      */
     //% blockId="LineFollowToIntersection"
     //% block="движение по линии до перекрёстка с действием после $actionAfterMotion||параметры = $params| отладка $debug"
-    //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow=SetEmptyParams
     //% weight="99"
     //% group="Движение по линии"
     export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
-        if (params) {
+        if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = params.speed;
             if (params.Kp) lineFollow2SensorKp = params.Kp;
             if (params.Ki) lineFollow2SensorKi = params.Ki;
@@ -70,7 +69,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -83,15 +82,14 @@ namespace motions {
      */
     //% blockId="LineFollowToDistance"
     //% block="движение по линии на расстояние $dist|мм с действием после $actionAfterMotion||параметры = $params| отладка $debug"
-    //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"
     //% params.shadow=SetEmptyParams
     //% weight="98"
     //% group="Движение по линии"
     export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
-        if (params) {
+        if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = params.speed;
             if (params.Kp) lineFollow2SensorKp = params.Kp;
             if (params.Ki) lineFollow2SensorKi = params.Ki;
@@ -132,7 +130,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -145,11 +143,10 @@ namespace motions {
      */
     //% blockId="LineFollowToLeftIntersaction"
     //% block="движение по линии до перекрёстка слева $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
-    //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% params.shadow=SetEmptyParams
-    //% inlineInputMode="inline"
     //% weight="89"
     //% group="Движение по линии"
     export function LineFollowToLeftIntersaction(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
@@ -162,7 +159,7 @@ namespace motions {
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией между датчиками
     function LineFollowToLeftIntersectionInside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
-        if (params) {
+        if (params) { // Если были переданы параметры
             if (params.speed) lineFollowRightSensorSpeed = params.speed;
             if (params.Kp) lineFollowRightSensorKp = params.Kp;
             if (params.Ki) lineFollowRightSensorKi = params.Ki;
@@ -197,13 +194,13 @@ namespace motions {
             brick.printValue("dt", dt, 12);
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией извне
     function LineFollowToLeftIntersectionOutside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
-        if (params) {
+        if (params) { // Если были переданы параметры
             if (params.speed) lineFollowRightSensorSpeed = params.speed;
             if (params.Kp) lineFollowRightSensorKp = params.Kp;
             if (params.Ki) lineFollowRightSensorKi = params.Ki;
@@ -240,7 +237,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -253,11 +250,10 @@ namespace motions {
      */
     //% blockId="LineFollowToRightIntersection"
     //% block="движение по линии до перекрёстка справа $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
-    //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% params.shadow=SetEmptyParams
-    //% inlineInputMode="inline"
     //% weight="79"
     //% group="Движение по линии"
     export function LineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
@@ -270,7 +266,7 @@ namespace motions {
 
     // Функция движения по линии левым датчиком до перекрёстка справа
     function LineFollowToRightIntersectionInside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
-        if (params) {
+        if (params) { // Если были переданы параметры
             if (params.speed) lineFollowLeftSensorSpeed = params.speed;
             if (params.Kp) lineFollowLeftSensorKp = params.Kp;
             if (params.Ki) lineFollowLeftSensorKi = params.Ki;
@@ -307,13 +303,13 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа с линией извне
     function LineFollowToRightIntersectionOutside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInreface, debug: boolean = false) {
-        if (params) {
+        if (params) { // Если были переданы параметры
             if (params.speed) lineFollowLeftSensorSpeed = params.speed;
             if (params.Kp) lineFollowLeftSensorKp = params.Kp;
             if (params.Ki) lineFollowLeftSensorKi = params.Ki;
@@ -350,7 +346,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInParallel(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 

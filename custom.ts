@@ -1,36 +1,18 @@
-// Функция для управление манипулятором
-function Manipulator(state: ClawState, speed?: number) {
-    if (!speed) speed = MANIP_DEFL_SPEED; // Если аргумент не был передан, то за скорость установится значение по умолчанию
-    else speed = Math.abs(speed);
-    MANIPULATOR_MOTOR.setBrake(true); // Устанавливаем ударжание мотора при остановке
-    if (state == ClawState.Open) MANIPULATOR_MOTOR.run(speed);
-    else MANIPULATOR_MOTOR.run(-speed);
-    loops.pause(20); // Пауза перед началом алгоритма для того, чтобы дать стартануть защите
-    while (true) { // Проверяем, что мотор застопорился и не может больше двигаться
-        let encA1 = MANIPULATOR_MOTOR.angle();
-        loops.pause(15); // Задержка между измерениями
-        let encA2 = MANIPULATOR_MOTOR.angle();
-        if (Math.abs(Math.abs(encA2) - Math.abs(encA1)) <= 1) break;
-    }
-    MANIPULATOR_MOTOR.stop(); // Останавливаем мотор
-}
-
-
 namespace music {
 
     /**
-     * Функция для запуска тона в паралельной задачи.
+     * Функция для запуска тона в фоне(паралельной задачи).
      * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
      * @param ms tone duration in milliseconds(ms), eg: BeatFraction.Half
      */
-    //% blockId="PlayToneInParallel"
+    //% blockId="PlayToneInBackground"
     //% block="play tone|at $frequency| for $duration|in the background"
     //% block.loc.ru="проиграть тон $frequency| продолжительностью $duration| в фоне"
     //% frequency.shadow=device_note
     //% duration.shadow=device_beat
     //% weight=75 blockGap=8
     //% group="Tone"
-    export function PlayToneInParallel(frequency: number, duration: number) {
+    export function PlayToneInBackground(frequency: number, duration: number) {
         control.runInParallel(function () {
             music.playTone(frequency, duration);
         });
@@ -59,13 +41,26 @@ namespace control {
 
 namespace automation {
 
-    // Интерфейс перадачи параметров для алгоритма с регулятором
+    // Интерфейс перадачи параметров для алгоритма движения по линии
     export interface LineFollowInreface {
         speed?: number;
         Kp?: number;
         Ki?: number;
         Kd?: number;
         N?: number;
+    }
+
+    // Интерфейс перадачи параметров для алгоритма выравнивания на линии
+    export interface LineAlignmentInreface {
+        maxSpeed?: number;
+        leftKp?: number;
+        rightKp?: number;
+        leftKi?: number;
+        rightKi?: number;
+        leftKd?: number;
+        rightKd?: number;
+        leftN?: number;
+        rightN?: number;
     }
 
     /**
@@ -75,7 +70,7 @@ namespace automation {
     //% block="empty"
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"
-    //% blockHidden=true
+    //% blockHidden="true"
     //% weight="99"
     //% group="Params"
     export function SetEmptyParams(): LineFollowInreface {

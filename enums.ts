@@ -49,3 +49,13 @@ const enum LineLocation {
     //% block.loc.ru="снаружи"
     Outside
 }
+
+// Перечисление о нахождении линии от датчиков робота
+enum MovementOnLine {
+    //% block="front"
+    //% block.loc.ru="спереди"
+    Front,
+    //% block="behind"
+    //% block.loc.ru="сзади"
+    Behind
+}

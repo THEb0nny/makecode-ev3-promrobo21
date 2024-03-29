@@ -49,6 +49,23 @@ function TestRGBToHSVLConvert() {
     }
 }
 
+// Функция для управление манипулятором
+function Manipulator(state: ClawState, speed?: number) {
+    if (!speed) speed = MANIP_DEFL_SPEED; // Если аргумент не был передан, то за скорость установится значение по умолчанию
+    else speed = Math.abs(speed);
+    MANIPULATOR_MOTOR.setBrake(true); // Устанавливаем ударжание мотора при остановке
+    if (state == ClawState.Open) MANIPULATOR_MOTOR.run(speed);
+    else MANIPULATOR_MOTOR.run(-speed);
+    loops.pause(20); // Пауза перед началом алгоритма для того, чтобы дать стартануть защите
+    while (true) { // Проверяем, что мотор застопорился и не может больше двигаться
+        let encA1 = MANIPULATOR_MOTOR.angle();
+        loops.pause(15); // Задержка между измерениями
+        let encA2 = MANIPULATOR_MOTOR.angle();
+        if (Math.abs(Math.abs(encA2) - Math.abs(encA1)) <= 1) break;
+    }
+    MANIPULATOR_MOTOR.stop(); // Останавливаем мотор
+}
+
 //// Примеры вызовов функций
 // motions.LineFollowToIntersaction(50, AfterMotion.Rolling); // Движение по линии до перекрёстка со скоростью 70 и прокаткой
 // motions.LineFollowToLeftIntersaction(40, AfterMotion.Rolling); // Движение по линии на правом датчике до перекрёстка слева со скоростью 50 и с прокаткой
