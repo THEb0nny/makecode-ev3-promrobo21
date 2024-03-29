@@ -12,6 +12,11 @@ namespace levelings {
     export let lineAlignmentRightSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии правой стороны
     export let lineAlignmentRightSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии правой стороны
 
+    export let linePositioningKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
+    export let linePositioningKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
+    export let linePositioningKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии левой стороны
+    export let linePositioningN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
+
     /**
      * Выравнивание на линии перпендикулярно.
      * @param MovementOnLine наезжать спереди на линию или двигаться назад на линию, eg: MovementOnLine.Front
@@ -91,53 +96,67 @@ namespace levelings {
     }
 
     /**
-    * Позиционирование (выравнивание) датчиками между линией.
-    * @param regTime время регулирования, eg: 100
-    * @param debug отладка, eg: false
-    */
+     * Позиционирование (выравнивание) датчиками между линией.
+     * @param regTime время регулирования, eg: 100
+     * @param debug отладка, eg: false
+     */
     //% blockId="LinePositioning"
-    //% block="спозиционироваться на линии за время $regTime|мс||и отладкой $debug"
-    //% block.loc.ru="спозиционироваться на линии за время $regTime|мс||и отладкой $debug"
+    //% block="positioning on line at $regTime|ms|| debug $debug"
+    //% block.loc.ru="спозиционироваться на линии за время $regTime|мс|| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
-    //% weight=1
+    //% debug.shadow="toggleOnOff"
+    //% weight="98"
     //% group="Линия"
-    // export function LinePositioning(regTime: number, debug: boolean = false) {
-    //     automation.pid1.setGains(KP_LINE_POSITIONING, 0, KD_LINE_POSITIONING); // Установка значений регулятору
-    //     automation.pid1.setControlSaturation(-100, 100); // Ограничение ПИДа
-    //     automation.pid1.reset(); // Сброс ПИДа
-    //     WaitColorSensVal(); // Функция, которая ждёт, что датчики цвета дадут адекватные значения
-    //     control.timer7.reset(); // Сброс таймера
-    //     const MAX_TIME_REG = (regTime > 1000 ? regTime : 1000); // Максимальное время регулирования для защиты
-    //     let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
-    //     let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
-    //     while (control.timer7.millis() < MAX_TIME_REG) { // Пока время не вышло
-    //         let currTime = control.millis();
-    //         let loopTime = currTime - prevTime;
-    //         prevTime = currTime;
-    //         if (isOnLine && control.timer8.millis() >= regTime) break; // Условие выхода из цикла при дорегулировании
-    //         let refLCS = custom.GetRefCalibValCS(sensors.color2.light(LightIntensityMode.ReflectedRaw), B_RAW_REF_L_CS, W_RAW_REF_L_CS);
-    //         let refRCS = custom.GetRefCalibValCS(sensors.color3.light(LightIntensityMode.ReflectedRaw), B_RAW_REF_R_CS, W_RAW_REF_R_CS);
-    //         let error = refLCS - refRCS; // Находим ошибку
-    //         if (!isOnLine && Math.abs(error) <= (LINE_REF_TRESHOLD - 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
-    //             isOnLine = true; // Переменная флажок, о начале дорегулирования
-    //             control.timer8.reset(); // Сброс таймера дорегулирования
-    //             control.runInParallel(function () { music.playTone(294, 100); }); // Сигнал о том, что пороговое значение ошибки достигнуто
-    //         }
-    //         automation.pid1.setPoint(error); // Устанавливаем ошибку в регулятор
-    //         let u = automation.pid1.compute(loopTime, 0); // Вычисляем и записываем значение с регулятора
-    //         motors.mediumB.run(u); motors.mediumC.run(-u); // Передаём управляющее воздействие на моторы
-    //         if (debug) { // Отладка
-    //             brick.clearScreen();
-    //             brick.showValue("refLCS", refLCS, 1);
-    //             brick.showValue("refRCS", refRCS, 2);
-    //             brick.showValue("error", error, 3);
-    //             brick.showValue("u", u, 4);
-    //         }
-    //         PauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
-    //     }
-    //     ChassisStop(true); // Жёсткое торможение
-    //     control.runInParallel(function () { music.playTone(Note.E, 100); }); // Сигнал для понимация состояния
-    // }
+    export function LinePositioning(regTime: number, params?: automation.LinePositioningInreface, debug: boolean = false) {
+        if (params) { // Если были переданы параметры
+            if (params.maxSpeed) lineAlignmentMaxSpeed = params.maxSpeed;
+            if (params.Kp) linePositioningKp = params.Kp;
+            if (params.Ki) linePositioningKi = params.Ki;
+            if (params.Kd) linePositioningKd = params.Kd;
+            if (params.N) linePositioningN = params.N;
+        }
+
+        automation.pid1.setGains(linePositioningKp, linePositioningKi, linePositioningKd); // Установка значений регулятору
+        automation.pid3.setDerivativeFilter(linePositioningN); // Установить фильтр дифференциального регулятора
+        automation.pid1.setControlSaturation(-100, 100); // Ограничение ПИДа
+        automation.pid1.reset(); // Сброс ПИДа
+        
+        control.timer7.reset(); // Сброс таймера
+        const MAX_TIME_REG = (regTime > 1000 ? regTime : 1000); // Максимальное время регулирования для защиты
+        let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
+        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        while (control.timer7.millis() < MAX_TIME_REG) { // Пока время не вышло
+            let currTime = control.millis();
+            let dt = currTime - prevTime;
+            prevTime = currTime;
+            if (isOnLine && control.timer8.millis() >= regTime) break; // Условие выхода из цикла при дорегулировании
+            let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
+            let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
+            let error = refLCS - refRCS; // Находим ошибку
+            if (!isOnLine && Math.abs(error) <= (LW_SET_POINT - 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
+                isOnLine = true; // Переменная флажок, о начале дорегулирования
+                control.timer8.reset(); // Сброс таймера дорегулирования
+                music.PlayToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
+            }
+            automation.pid1.setPoint(error); // Устанавливаем ошибку в регулятор
+            let u = automation.pid1.compute(dt, 0); // Вычисляем и записываем значение с регулятора
+            CHASSIS_L_MOTOR.run(u); CHASSIS_R_MOTOR.run(-u); // Передаём управляющее воздействие на моторы
+            if (debug) { // Отладка
+                brick.clearScreen();
+                brick.showValue("refLCS", refLCS, 1);
+                brick.showValue("refRCS", refRCS, 2);
+                brick.showValue("error", error, 3);
+                brick.showValue("u", u, 4);
+                brick.showValue("dt", dt, 12);
+            }
+            control.PauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
+        }
+        music.PlayToneInBackground(Note.E, 100); // Сигнал о завершении
+        CHASSIS_MOTORS.setBrake(true);
+        CHASSIS_MOTORS.stop();
+    }
     
 }

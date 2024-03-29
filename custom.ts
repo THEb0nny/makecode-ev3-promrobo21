@@ -63,6 +63,15 @@ namespace automation {
         rightN?: number;
     }
 
+    // Интерфейс перадачи параметров для алгоритма позиционирования на линии
+    export interface LinePositioningInreface {
+        maxSpeed?: number;
+        Kp?: number;
+        Ki?: number;
+        Kd?: number;
+        N?: number;
+    }
+
     /**
      * Пустые праметры для алгоритма с регулятором.
      */
