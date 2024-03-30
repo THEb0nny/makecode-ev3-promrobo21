@@ -94,6 +94,7 @@ namespace chassis {
      */
     //% blockId="SmartPivotTurn"
     //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса||параметры = $params| отладка %debug"
+    //% block.loc.ru="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса||параметры = $params| отладка %debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
@@ -169,6 +170,7 @@ namespace chassis {
      */
     //% blockId="SpinTurn"
     //% block="поворот на $deg|° с $speed|\\% относительно центра колёс"
+    //% block.loc.ru="поворот на $deg|° с $speed|\\% относительно центра колёс"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
@@ -191,8 +193,8 @@ namespace chassis {
      * @param wheelPivot относительно колеса, eg: WheelPivot.LeftWheel
      */
     //% blockId="PivotTurn"
-    //% block="turn to $deg|° with $speed|\\% relatively $wheelPivot|колеса"
-    //% block.loc.ru="поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса"
+    //% block="turn to $deg|° with $speed|\\% relatively $wheelPivot| wheel"
+    //% block.loc.ru="поворот на $deg|° с $speed|\\% относительно $wheelPivot| колеса"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"

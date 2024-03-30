@@ -82,7 +82,9 @@ function Main() { // Определение главной функции
     brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ожидание нажатия центальной кнопки
     brick.clearScreen(); // Очистить экрана
     // Ваш код тут
-    TestRGBToHSVLConvert();
+    // TestRGBToHSVLConvert();
+    chassis.PivotTurn(90, 50, WheelPivot.LeftWheel);
+    motions.LineFollowToIntersection(AfterMotion.Rolling, { speed: 50, Kp: 0.4 })
 }
 
 Main(); // Вызов главной функции
