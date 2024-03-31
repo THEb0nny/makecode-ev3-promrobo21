@@ -71,8 +71,8 @@ function Manipulator(state: ClawState, speed?: number) {
 // motions.LineFollowToLeftIntersaction(40, AfterMotion.Rolling); // Движение по линии на правом датчике до перекрёстка слева со скоростью 50 и с прокаткой
 // motions.LineFollowToRightIntersaction(40, AfterMotion.Rolling); // Движение по линии на левом датчике до перекрёстка справа со скоростью 60 и с прокаткой
 // motions.LineFollowToDist(400, 50, AfterMotion.BreakStop); // Движение по линии на расстояние со скоростью 50 и жёстким торможением после
-// turns.SpinTurn(90, 30); // Поворот на 90 градусов вправо на скорости 30
-// turns.PivotTurn(90, 40, WheelPivot.LeftWheel); // Вращение на 90 градусов со скоростью 40 относительно левого мотора
+// chassis.SpinTurn(90, 30); // Поворот на 90 градусов вправо на скорости 30
+// chassis.PivotTurn(90, 40, WheelPivot.LeftWheel); // Вращение на 90 градусов со скоростью 40 относительно левого мотора
 // Manipulator(ClawState.Close); // Закрыть манипулятор
 // Manipulator(ClawState.Open, 60); // Открыть манипулятор с произвольной скоростью 60
 
