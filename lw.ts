@@ -33,7 +33,7 @@ namespace motions {
     //% group="Движение по линии"
     export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollow2SensorSpeed = params.speed;
+            if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollow2SensorKp = params.Kp;
             if (params.Ki) lineFollow2SensorKi = params.Ki;
             if (params.Kd) lineFollow2SensorKd = params.Kd;
@@ -91,7 +91,7 @@ namespace motions {
     //% group="Движение по линии"
     export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollow2SensorSpeed = params.speed;
+            if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollow2SensorKp = params.Kp;
             if (params.Ki) lineFollow2SensorKi = params.Ki;
             if (params.Kd) lineFollow2SensorKd = params.Kd;
@@ -162,7 +162,7 @@ namespace motions {
     // Функция движения по линии правым датчиком до перекрёстка слева с линией между датчиками
     function LineFollowToLeftIntersectionInside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowRightSensorSpeed = params.speed;
+            if (params.speed) lineFollowRightSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowRightSensorKp = params.Kp;
             if (params.Ki) lineFollowRightSensorKi = params.Ki;
             if (params.Kd) lineFollowRightSensorKd = params.Kd;
@@ -206,7 +206,7 @@ namespace motions {
     // Функция движения по линии правым датчиком до перекрёстка слева с линией извне
     function LineFollowToLeftIntersectionOutside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowRightSensorSpeed = params.speed;
+            if (params.speed) lineFollowRightSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowRightSensorKp = params.Kp;
             if (params.Ki) lineFollowRightSensorKi = params.Ki;
             if (params.Kd) lineFollowRightSensorKd = params.Kd;
@@ -273,7 +273,7 @@ namespace motions {
     // Функция движения по линии левым датчиком до перекрёстка справа
     function LineFollowToRightIntersectionInside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowLeftSensorSpeed = params.speed;
+            if (params.speed) lineFollowLeftSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowLeftSensorKp = params.Kp;
             if (params.Ki) lineFollowLeftSensorKi = params.Ki;
             if (params.Kd) lineFollowLeftSensorKd = params.Kd;
@@ -317,7 +317,7 @@ namespace motions {
     // Функция движения по линии левым датчиком до перекрёстка справа с линией извне
     function LineFollowToRightIntersectionOutside(actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowLeftSensorSpeed = params.speed;
+            if (params.speed) lineFollowLeftSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowLeftSensorKp = params.Kp;
             if (params.Ki) lineFollowLeftSensorKi = params.Ki;
             if (params.Kd) lineFollowLeftSensorKd = params.Kd;

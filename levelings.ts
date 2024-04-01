@@ -35,7 +35,7 @@ namespace levelings {
     //% group="Линия"
     export function LineAlignment(movementOnLine: MovementOnLine, regulatorTime: number, params?: automation.LineAlignmentInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed) lineAlignmentMaxSpeed = params.maxSpeed;
+            if (params.maxSpeed) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
             if (params.leftKp) lineAlignmentLeftSideKp = params.leftKp;
             if (params.leftKi) lineAlignmentLeftSideKi = params.leftKi;
             if (params.leftKd) lineAlignmentLeftSideKd = params.leftKd;
@@ -79,6 +79,8 @@ namespace levelings {
             automation.pid3.setPoint(errorL); automation.pid4.setPoint(errorR); // Передаём ошибки регуляторам
             let uL = automation.pid3.compute(dt, 0) * regulatorMultiplier; // Регулятор левой стороны
             let uR = automation.pid4.compute(dt, 0) * regulatorMultiplier; // Регулятор правой стороны
+            uL = Math.constrain(uL, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость левой стороны
+            uR = Math.constrain(uR, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость правой стороны
             CHASSIS_L_MOTOR.run(uL); CHASSIS_R_MOTOR.run(uR); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
@@ -113,7 +115,7 @@ namespace levelings {
     //% group="Линия"
     export function LinePositioning(regTime: number, params?: automation.LinePositioningInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed) linePositioningMaxSpeed = params.maxSpeed;
+            if (params.maxSpeed) linePositioningMaxSpeed = Math.abs(params.maxSpeed);
             if (params.Kp) linePositioningKp = params.Kp;
             if (params.Ki) linePositioningKi = params.Ki;
             if (params.Kd) linePositioningKd = params.Kd;
@@ -146,6 +148,7 @@ namespace levelings {
             }
             automation.pid1.setPoint(error); // Устанавливаем ошибку в регулятор
             let u = automation.pid1.compute(dt, 0); // Вычисляем и записываем значение с регулятора
+            u = Math.constrain(u, -linePositioningMaxSpeed, linePositioningMaxSpeed); // Ограничиваем скорость
             CHASSIS_L_MOTOR.run(u); CHASSIS_R_MOTOR.run(-u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();

@@ -8,9 +8,9 @@ namespace music {
     //% blockId="PlayToneInBackground"
     //% block="play tone|at $frequency| for $duration|in the background"
     //% block.loc.ru="проиграть тон $frequency| продолжительностью $duration| в фоне"
-    //% frequency.shadow=device_note
-    //% duration.shadow=device_beat
-    //% weight=75 blockGap=8
+    //% frequency.shadow="device_note"
+    //% duration.shadow="device_beat"
+    //% weight="75" blockGap="8"
     //% group="Tone"
     export function PlayToneInBackground(frequency: number, duration: number) {
         control.runInParallel(function () {
