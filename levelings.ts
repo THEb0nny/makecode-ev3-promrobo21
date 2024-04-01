@@ -71,7 +71,7 @@ namespace levelings {
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let errorL = LW_SET_POINT - refLCS, errorR = LW_SET_POINT - refRCS; // Вычисляем ошибки регулирования
-            if (!isOnLine && Math.abs(errorL) <= (LW_SET_POINT - 10) && Math.abs(errorR) <= (LW_SET_POINT - 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
+            if (!isOnLine && Math.abs(errorL) >= (LW_SET_POINT - 10) && Math.abs(errorL) <= (LW_SET_POINT + 10) && Math.abs(errorR) >= (LW_SET_POINT - 10) && Math.abs(errorR) <= (LW_SET_POINT + 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки (нахождения линии) достигнуто
