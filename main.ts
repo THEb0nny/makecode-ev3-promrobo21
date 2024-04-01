@@ -1,4 +1,5 @@
-let MANIPULATOR_MOTOR = motors.mediumA; // Ссылка на объект мотора манипулятора
+let MANIPULATOR_MOTOR_1 = motors.mediumA; // Ссылка на объект мотора манипулятора
+let MANIPULATOR_MOTOR_2 = motors.mediumD; // Ссылка на объект мотора манипулятора
 //let CHASSIS_MOTORS = motors.largeBC; // Ссылка на объект моторов в шасси
 let CHASSIS_L_MOTOR = motors.largeB; // Ссылка на объект левого мотора в шасси
 let CHASSIS_R_MOTOR = motors.largeC; // Ссылка на объект правого мотора в шасси
@@ -60,17 +61,17 @@ function RgbToHsvlConvert(debug: boolean = false) {
 function Manipulator(state: ClawState, speed?: number) {
     if (!speed) speed = MANIP_DEFL_SPEED; // Если аргумент не был передан, то за скорость установится значение по умолчанию
     else speed = Math.abs(speed);
-    MANIPULATOR_MOTOR.setBrake(true); // Устанавливаем ударжание мотора при остановке
-    if (state == ClawState.Open) MANIPULATOR_MOTOR.run(speed);
-    else MANIPULATOR_MOTOR.run(-speed);
+    MANIPULATOR_MOTOR_1.setBrake(true); // Устанавливаем ударжание мотора при остановке
+    if (state == ClawState.Open) MANIPULATOR_MOTOR_1.run(speed);
+    else MANIPULATOR_MOTOR_1.run(-speed);
     loops.pause(20); // Пауза перед началом алгоритма для того, чтобы дать стартануть защите
     while (true) { // Проверяем, что мотор застопорился и не может больше двигаться
-        let encA1 = MANIPULATOR_MOTOR.angle();
+        let encA1 = MANIPULATOR_MOTOR_1.angle();
         loops.pause(15); // Задержка между измерениями
-        let encA2 = MANIPULATOR_MOTOR.angle();
+        let encA2 = MANIPULATOR_MOTOR_1.angle();
         if (Math.abs(Math.abs(encA2) - Math.abs(encA1)) <= 1) break;
     }
-    MANIPULATOR_MOTOR.stop(); // Останавливаем мотор
+    MANIPULATOR_MOTOR_1.stop(); // Останавливаем мотор
 }
 
 // Примеры установки параметров для методов с регулятором
@@ -117,7 +118,7 @@ function Main() { // Определение главной функции
     levelings.linePositioningKp = 0.175;
     levelings.linePositioningKd = 2;
 
-    MANIPULATOR_MOTOR.setInverted(false); // Установить инверсию для манипулятора, если требуется
+    MANIPULATOR_MOTOR_1.setInverted(false); MANIPULATOR_MOTOR_2.setInverted(false); // Установить инверсию для манипулятора, если требуется
     CHASSIS_L_MOTOR.setInverted(false); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
 
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
