@@ -74,7 +74,7 @@ namespace levelings {
             if (!isOnLine && Math.abs(errorL) <= (LW_SET_POINT - 10) && Math.abs(errorR) <= (LW_SET_POINT - 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
-                music.PlayToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки (нахождения линии) достигнуто
+                music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки (нахождения линии) достигнуто
             }
             automation.pid3.setPoint(errorL); automation.pid4.setPoint(errorR); // Передаём ошибки регуляторам
             let uL = automation.pid3.compute(dt, 0) * regulatorMultiplier; // Регулятор левой стороны
@@ -92,9 +92,9 @@ namespace levelings {
                 brick.showValue("uR", uR, 6);
                 brick.showValue("dt", dt, 12);
             }
-            control.PauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
         }
-        music.PlayToneInBackground(Note.E, 250); // Сигнал о завершении
+        music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         // CHASSIS_MOTORS.setBrake(true);
         // CHASSIS_MOTORS.stop();
         chassis.ChassisStop(true);
@@ -144,7 +144,7 @@ namespace levelings {
             if (!isOnLine && Math.abs(error) <= (LW_SET_POINT - 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
-                music.PlayToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
+                music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
             }
             automation.pid1.setPoint(error); // Устанавливаем ошибку в регулятор
             let u = automation.pid1.compute(dt, 0); // Вычисляем и записываем значение с регулятора
@@ -158,9 +158,9 @@ namespace levelings {
                 brick.showValue("u", u, 4);
                 brick.showValue("dt", dt, 12);
             }
-            control.PauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
         }
-        music.PlayToneInBackground(Note.E, 250); // Сигнал о завершении
+        music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         // CHASSIS_MOTORS.setBrake(true);
         // CHASSIS_MOTORS.stop();
         chassis.ChassisStop(true);

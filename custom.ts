@@ -12,7 +12,7 @@ namespace music {
     //% duration.shadow="device_beat"
     //% weight="75" blockGap="8"
     //% group="Tone"
-    export function PlayToneInBackground(frequency: number, duration: number) {
+    export function playToneInBackground(frequency: number, duration: number) {
         control.runInParallel(function () {
             music.playTone(frequency, duration);
         });
@@ -31,7 +31,7 @@ namespace control {
     //% block="wait $delay ms|at start at $startTime"
     //% block.loc.ru="ждать $delay мс|при начале в $startTime|мс"
     //% weight="6"
-    export function PauseUntilTime(startTime: number, ms: number) {
+    export function pauseUntilTime(startTime: number, ms: number) {
         if (startTime == 0) startTime = control.millis();
         const waitCompletionTime = startTime + ms;
         while (control.millis() < waitCompletionTime) loops.pause(0.01);

@@ -68,9 +68,9 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -130,9 +130,9 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -197,9 +197,9 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -241,9 +241,9 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -308,9 +308,9 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -352,9 +352,9 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 

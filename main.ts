@@ -37,7 +37,6 @@ function RgbToHsvlConvert(debug: boolean = false) {
     let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
     while (true) {
         let currTime = control.millis(); // Текущее время
-        let dt = currTime - prevTime; // Время за которое выполнился цикл
         prevTime = currTime; // Новое время в переменную предыдущего времени
         const rgbCS = CHECK_COLOR_CS.rgbRaw();
         const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
@@ -53,7 +52,7 @@ function RgbToHsvlConvert(debug: boolean = false) {
             brick.printValue("light", hsvlCS[3], 8);
             brick.printValue("color", color, 10);
         }
-        control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+        control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
     }
 }
 

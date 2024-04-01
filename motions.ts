@@ -134,7 +134,7 @@ namespace chassis {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let lMotEnc = CHASSIS_L_MOTOR.angle(), rMotEnc = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         // Команды для остановки не нужно, в этом и смысл функции
     }
