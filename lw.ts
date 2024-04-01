@@ -70,7 +70,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -132,7 +132,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -199,7 +199,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -243,7 +243,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -310,7 +310,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -354,7 +354,7 @@ namespace motions {
             }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
+        music.PlayToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 

@@ -98,6 +98,11 @@ function Main() { // Определение главной функции
         loops.pause(5);
     }
 
+    // Установка коэффицентов движения по линии двумя датчиками
+    motions.lineFollow2SensorSpeed = 60;
+    motions.lineFollow2SensorKp = 0.075;
+    motions.lineFollow2SensorKd = 3.5;
+
     // Установка коэффицентов умного поворота
     chassis.smartSpinTurnSpeed = 60;
     chassis.smartSpinTurnKp = 0.25;
