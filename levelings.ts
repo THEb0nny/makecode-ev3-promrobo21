@@ -193,11 +193,11 @@ namespace levelings {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
-            if (refLCS <= LW_SET_POINT) { // Левый датчик первый нашёл линию
+            if (refLCS <= LINE_REF_TRESHOLD) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
                 encC1 = CHASSIS_R_MOTOR.angle(); // Считываем угол
                 break;
-            } else if (refRCS <= LW_SET_POINT) { // Правый датчик первый нашёл линию
+            } else if (refRCS <= LINE_REF_TRESHOLD) { // Правый датчик первый нашёл линию
                 firstSide = "RIGHT_SIDE";
                 encB1 = CHASSIS_L_MOTOR.angle(); // Считываем угол
                 break;
@@ -213,7 +213,7 @@ namespace levelings {
             if (firstSide == "LEFT_SIDE") {
                 let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
                 let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
-                if (refRCS <= LW_SET_POINT) { // Левый датчик нашёл линию
+                if (refRCS <= LINE_REF_TRESHOLD) { // Левый датчик нашёл линию
                     encC2 = CHASSIS_R_MOTOR.angle(); // Считываем угол по новой
                     a = encC2 - encC1; // Рассчитываем длину стороны a в тиках энкодера
                     break;
@@ -221,7 +221,7 @@ namespace levelings {
             } else if (firstSide == "RIGHT_SIDE") {
                 let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
                 let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
-                if (refLCS <= LW_SET_POINT) { // Левый датчик нашёл линию
+                if (refLCS <= LINE_REF_TRESHOLD) { // Левый датчик нашёл линию
                     encB2 = CHASSIS_L_MOTOR.angle(); // Считываем угол по новой
                     a = encB2 - encB1; // Рассчитываем длину стороны a в тиках энкодера
                     break;
