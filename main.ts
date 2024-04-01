@@ -6,10 +6,10 @@ let W_REF_RAW_RCS = 500; // Сырое значение на белом для �
 let LW_TRESHOLD = 35; // Пороговое значение определения перекрёстка
 let LW_SET_POINT = 50; // Среднее значение серого
 
-let WHEELS_D = 56; // Диаметер колёс в мм
+let WHEELS_D = 56; // Диаметр колёс в мм
 let WHEELS_W = 135; // Расстояние между центрами колёс в мм
 
-let LW_CONDITION_DETECT_MAX_ERR = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
+let LW_CONDITION_MAX_ERR = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
 let ENC_TURN_MAX_ERR_DIFFERENCE = 10; // Пороговое значения ошибки для регулятора умного поворота, что поворот выполнен
 let ENC_TURN_MAX_REG_DIFFERENCE = 10; // Пороговое значение регулятора для определения умного поворота
@@ -32,20 +32,27 @@ let L_COLOR_SEN = sensors.color2; // Ссылка на объект левого
 let R_COLOR_SEN = sensors.color3; // Ссылка на объект правого датчика цвета
 let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
-function TestRGBToHSVLConvert() {
+function RgbToHsvlConvert(debug: boolean = false) {
+    let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
     while (true) {
+        let currTime = control.millis(); // Текущее время
+        let dt = currTime - prevTime; // Время за которое выполнился цикл
+        prevTime = currTime; // Новое время в переменную предыдущего времени
         const rgbCS = CHECK_COLOR_CS.rgbRaw();
         const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
         const color = sensors.HsvToColorNum(hsvlCS);
-        brick.clearScreen();
-        brick.printValue("r", rgbCS[0], 1);
-        brick.printValue("g", rgbCS[1], 2);
-        brick.printValue("b", rgbCS[2], 3);
-        brick.printValue("hue", hsvlCS[0], 5);
-        brick.printValue("sat", hsvlCS[1], 6);
-        brick.printValue("val", hsvlCS[2], 7);
-        brick.printValue("light", hsvlCS[3], 8);
-        brick.printValue("color", color, 10);
+        if (debug) {
+            brick.clearScreen();
+            brick.printValue("r", rgbCS[0], 1);
+            brick.printValue("g", rgbCS[1], 2);
+            brick.printValue("b", rgbCS[2], 3);
+            brick.printValue("hue", hsvlCS[0], 5);
+            brick.printValue("sat", hsvlCS[1], 6);
+            brick.printValue("val", hsvlCS[2], 7);
+            brick.printValue("light", hsvlCS[3], 8);
+            brick.printValue("color", color, 10);
+        }
+        control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
     }
 }
 
@@ -66,25 +73,37 @@ function Manipulator(state: ClawState, speed?: number) {
     MANIPULATOR_MOTOR.stop(); // Останавливаем мотор
 }
 
+// Примеры установки параметров для методов с регулятором
+// { speed: 50 } - только скорость
+// { speed: 50, Kp: 0.5 } - скорость и Kp
+// { speed: 50, Kp: 0.5, Kd: 2 } - скорость, Kp и Kd
+// { speed: 50, Kp: 0.5, Ki: 0, Kd: 2 } - скорость, Kp, Ki, Kd
+
 //// Примеры вызовов функций
-// motions.LineFollowToIntersaction(50, AfterMotion.Rolling); // Движение по линии до перекрёстка со скоростью 70 и прокаткой
-// motions.LineFollowToLeftIntersaction(40, AfterMotion.Rolling); // Движение по линии на правом датчике до перекрёстка слева со скоростью 50 и с прокаткой
-// motions.LineFollowToRightIntersaction(40, AfterMotion.Rolling); // Движение по линии на левом датчике до перекрёстка справа со скоростью 60 и с прокаткой
-// motions.LineFollowToDist(400, 50, AfterMotion.BreakStop); // Движение по линии на расстояние со скоростью 50 и жёстким торможением после
+// motions.LineFollowToIntersaction(AfterMotion.Rolling, { speed: 50, Kp: 0.5, Kd: 2 }); // Движение по линии до перекрёстка со скоростью 70 и прокаткой
+// motions.LineFollowToLeftIntersaction(LineLocation.Inside, AfterMotion.Rolling); // Движение по линии на правом датчике до перекрёстка слева со скоростью 50 и с прокаткой
+// motions.LineFollowToRightIntersaction(LineLocation.Inside, AfterMotion.Rolling); // Движение по линии на левом датчике до перекрёстка справа со скоростью 60 и с прокаткой
+// motions.LineFollowToDist(400, AfterMotion.BreakStop); // Движение по линии на расстояние со скоростью 50 и жёстким торможением после
 // chassis.SpinTurn(90, 30); // Поворот на 90 градусов вправо на скорости 30
 // chassis.PivotTurn(90, 40, WheelPivot.LeftWheel); // Вращение на 90 градусов со скоростью 40 относительно левого мотора
-// Manipulator(ClawState.Close); // Закрыть манипулятор
+// Manipulator(ClawState.Close); // Закрыть манипулятор со скоростью по умолчанию
 // Manipulator(ClawState.Open, 60); // Открыть манипулятор с произвольной скоростью 60
 
 function Main() { // Определение главной функции
+    // Установка коэффицентов умного поворота
+    chassis.smartSpinTurnSpeed = 60;
+    chassis.smartSpinTurnKp = 0.25;
+    chassis.smartSpinTurnKd = 2;
+    chassis.smartPivotTurnSpeed = 50;
+    chassis.smartSpinTurnKp = 0.4;
+    chassis.smartSpinTurnKd = 2;
     MANIPULATOR_MOTOR.setInverted(false); // Установить инверсию для манипулятора, если требуется
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
-    brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ожидание нажатия центальной кнопки
+    brick.buttonRight.pauseUntil(ButtonEvent.Pressed); // Ожидание нажатия правой кнопки
     brick.clearScreen(); // Очистить экрана
     // Ваш код тут
-    // TestRGBToHSVLConvert();
-    chassis.PivotTurn(90, 50, WheelPivot.LeftWheel);
-    motions.LineFollowToIntersection(AfterMotion.Rolling, { speed: 50, Kp: 0.4 })
+    // chassis.PivotTurn(90, 50, WheelPivot.LeftWheel);
+    // motions.LineFollowToIntersection(AfterMotion.Rolling, { speed: 50, Kp: 0.4 });
 }
 
 Main(); // Вызов главной функции

@@ -1,5 +1,7 @@
 namespace sensors {
 
+    let HSV_TO_COLOR_S_TRESHOLD = 50;
+
     /**
      * Функция для программной калибровки и нормализации сырых значений с датчика.
      * @param refRawValCS текущее сырое значение отражения, eg: 0
@@ -66,7 +68,6 @@ namespace sensors {
 
     // Перевести HSV в код цвета
     export function HsvToColorNum(hsvl: number[]): number {
-        const HSV_TO_COLOR_S_TRESHOLD = 50;
         const H = hsvl[0], S = hsvl[1], V = hsvl[2];
         if (S > HSV_TO_COLOR_S_TRESHOLD) { // Граница цветности
             if (H < 25) return 5; // red

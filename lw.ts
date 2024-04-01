@@ -184,7 +184,7 @@ namespace motions {
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = LW_SET_POINT - refRCS; // Ошибка регулирования
-            if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
+            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
@@ -228,7 +228,7 @@ namespace motions {
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = refRCS - LW_SET_POINT; // Ошибка регулирования
-            if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
+            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
@@ -295,7 +295,7 @@ namespace motions {
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = refLCS - LW_SET_POINT; // Ошибка регулирования
-            if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
+            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
@@ -339,7 +339,7 @@ namespace motions {
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = LW_SET_POINT - refLCS; // Ошибка регулирования
-            if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
+            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
