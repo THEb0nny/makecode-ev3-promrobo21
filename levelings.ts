@@ -123,7 +123,7 @@ namespace levelings {
         }
 
         automation.pid1.setGains(linePositioningKp, linePositioningKi, linePositioningKd); // Установка значений регулятору
-        automation.pid3.setDerivativeFilter(linePositioningN); // Установить фильтр дифференциального регулятора
+        automation.pid1.setDerivativeFilter(linePositioningN); // Установить фильтр дифференциального регулятора
         automation.pid1.setControlSaturation(-100, 100); // Ограничение ПИДа
         automation.pid1.reset(); // Сброс ПИДа
         
@@ -160,7 +160,7 @@ namespace levelings {
             }
             control.PauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
         }
-        music.PlayToneInBackground(Note.E, 100); // Сигнал о завершении
+        music.PlayToneInBackground(Note.E, 250); // Сигнал о завершении
         // CHASSIS_MOTORS.setBrake(true);
         // CHASSIS_MOTORS.stop();
         chassis.ChassisStop(true);
