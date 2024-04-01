@@ -12,6 +12,8 @@ namespace levelings {
     export let lineAlignmentRightSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии правой стороны
     export let lineAlignmentRightSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии правой стороны
 
+    export let linePositioningMaxSpeed = 50; // Переменная для хранения максимальной скорости при позиционировании на линии
+
     export let linePositioningKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
     export let linePositioningKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
     export let linePositioningKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии левой стороны
@@ -111,7 +113,7 @@ namespace levelings {
     //% group="Линия"
     export function LinePositioning(regTime: number, params?: automation.LinePositioningInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed) lineAlignmentMaxSpeed = params.maxSpeed;
+            if (params.maxSpeed) linePositioningMaxSpeed = params.maxSpeed;
             if (params.Kp) linePositioningKp = params.Kp;
             if (params.Ki) linePositioningKi = params.Ki;
             if (params.Kd) linePositioningKd = params.Kd;

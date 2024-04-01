@@ -90,6 +90,13 @@ function Manipulator(state: ClawState, speed?: number) {
 // Manipulator(ClawState.Open, 60); // Открыть манипулятор с произвольной скоростью 60
 
 function Main() { // Определение главной функции
+    for (let i = 0; i < 10; i++) { // Опрашиваем какое-то количество раз датчики, чтобы они включились перед стартом по нажатию кнопки
+        L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+        R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+        CHECK_COLOR_CS.rgbRaw();
+        loops.pause(5);
+    }
+
     // Установка коэффицентов умного поворота
     chassis.smartSpinTurnSpeed = 60;
     chassis.smartSpinTurnKp = 0.25;
@@ -97,8 +104,21 @@ function Main() { // Определение главной функции
     chassis.smartPivotTurnSpeed = 50;
     chassis.smartSpinTurnKp = 0.4;
     chassis.smartSpinTurnKd = 2;
+
+    // Коэффиценты для выравнивания на линии
+    levelings.lineAlignmentMaxSpeed = 50;
+    levelings.lineAlignmentLeftSideKp = 0.15;
+    levelings.lineAlignmentLeftSideKd = 0.3;
+    levelings.lineAlignmentRightSideKp = 0.15;
+    levelings.lineAlignmentRightSideKd = 0.3;
+
+    // Коэффиценты для позиционирования на линии
+    levelings.linePositioningMaxSpeed = 50;
+    levelings.linePositioningKp = 0.175;
+    levelings.linePositioningKd = 2;
+
     MANIPULATOR_MOTOR.setInverted(false); // Установить инверсию для манипулятора, если требуется
-    CHASSIS_L_MOTOR.setInverted(false); CHASSIS_R_MOTOR.setInverted(false);
+    CHASSIS_L_MOTOR.setInverted(false); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
 
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
     brick.buttonRight.pauseUntil(ButtonEvent.Pressed); // Ожидание нажатия правой кнопки
