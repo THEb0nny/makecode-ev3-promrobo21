@@ -6,12 +6,12 @@ namespace chassis {
      * @param speed скорость движения, eg: 80
      */
     //% blockId="ChassisControl"
-    //% block="движение по направлению $dir|и на $speed\\%"
+    //% block="движение по направлению $dir|и на $speed|\\%"
     //% inlineInputMode="inline"
     //% dir.shadow="motorTurnRatioPicker"
+    //% dir.min="-100" dir.max="100"
     //% speed.shadow="motorSpeedPicker"
     //% weight="2"
-    //% dir.min="-100" dir.max="100"
     //% group="Move"
     export function ChassisControl(dir: number, speed: number) {
         let mB = speed + dir, mC = speed - dir;
