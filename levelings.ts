@@ -22,7 +22,7 @@ namespace levelings {
     /**
      * Выравнивание на линии перпендикулярно.
      * @param MovementOnLine наезжать спереди на линию или двигаться назад на линию, eg: MovementOnLine.Front
-     * @param regulatorTime время дорегулирования, eg: 200
+     * @param regulatorTime время дорегулирования, eg: 500
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignment"
@@ -102,7 +102,7 @@ namespace levelings {
 
     /**
      * Позиционирование (выравнивание) датчиками между линией.
-     * @param regTime время регулирования, eg: 100
+     * @param regTime время регулирования, eg: 500
      * @param debug отладка, eg: false
      */
     //% blockId="LinePositioning"
