@@ -1,13 +1,22 @@
+let MANIPULATOR_MOTOR = motors.mediumA; // Ссылка на объект мотора манипулятора
+//let CHASSIS_MOTORS = motors.largeBC; // Ссылка на объект моторов в шасси
+let CHASSIS_L_MOTOR = motors.largeB; // Ссылка на объект левого мотора в шасси
+let CHASSIS_R_MOTOR = motors.largeC; // Ссылка на объект правого мотора в шасси
+
+let L_COLOR_SEN = sensors.color2; // Ссылка на объект левого датчика цвета
+let R_COLOR_SEN = sensors.color3; // Ссылка на объект правого датчика цвета
+let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
+
 let B_REF_RAW_LCS = 650; // Сырое значение на чёрном для левого датчика цвета
 let W_REF_RAW_LCS = 500; // Сырое значение на белом для левого датчика цвета
 let B_REF_RAW_RCS = 650; // Сырое значение на чёрном для левого датчика цвета
 let W_REF_RAW_RCS = 500; // Сырое значение на белом для левого датчика цвета
 
-let LW_TRESHOLD = 35; // Пороговое значение определения перекрёстка
-let LW_SET_POINT = 50; // Среднее значение серого
-
 let WHEELS_D = 56; // Диаметр колёс в мм
 let WHEELS_W = 135; // Расстояние между центрами колёс в мм
+
+let LW_TRESHOLD = 35; // Пороговое значение определения перекрёстка
+let LW_SET_POINT = 50; // Среднее значение серого
 
 let LW_CONDITION_MAX_ERR = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
@@ -22,15 +31,6 @@ let DIST_AFTER_INTERSECTION = 50; // Дистанция для проезда п
 let DIST_ROLLING_MOVE_OUT = 20; // Дистанция для прокатки без торможения на перекрёстке в мм
 
 let MANIP_DEFL_SPEED = 40; // Скорость работы манипулятора по умолчанию
-
-let MANIPULATOR_MOTOR = motors.mediumA; // Ссылка на объект мотора манипулятора
-let CHASSIS_MOTORS = motors.largeBC; // Ссылка на объект моторов в шасси
-let CHASSIS_L_MOTOR = motors.largeB; // Ссылка на объект левого мотора в шасси
-let CHASSIS_R_MOTOR = motors.largeC; // Ссылка на объект правого мотора в шасси
-
-let L_COLOR_SEN = sensors.color2; // Ссылка на объект левого датчика цвета
-let R_COLOR_SEN = sensors.color3; // Ссылка на объект правого датчика цвета
-let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
 function RgbToHsvlConvert(debug: boolean = false) {
     let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
@@ -98,9 +98,12 @@ function Main() { // Определение главной функции
     chassis.smartSpinTurnKp = 0.4;
     chassis.smartSpinTurnKd = 2;
     MANIPULATOR_MOTOR.setInverted(false); // Установить инверсию для манипулятора, если требуется
+    CHASSIS_L_MOTOR.setInverted(false); CHASSIS_R_MOTOR.setInverted(false);
+
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
     brick.buttonRight.pauseUntil(ButtonEvent.Pressed); // Ожидание нажатия правой кнопки
     brick.clearScreen(); // Очистить экрана
+
     // Ваш код тут
     // chassis.PivotTurn(90, 50, WheelPivot.LeftWheel);
     // motions.LineFollowToIntersection(AfterMotion.Rolling, { speed: 50, Kp: 0.4 });
