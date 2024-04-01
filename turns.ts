@@ -193,6 +193,7 @@ namespace chassis {
         CHASSIS_R_MOTOR.run(-speed, calcMotRot, MoveUnit.Degrees); // Передаём команду движения правый мотор
         CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды
         CHASSIS_L_MOTOR.stop(); CHASSIS_R_MOTOR.stop(); // Остановить моторы для защиты, если будет calcMotRot = 0, то моторы будут вращаться бесконечно
+        CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
     }
 
     /**
