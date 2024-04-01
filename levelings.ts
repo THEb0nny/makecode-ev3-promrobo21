@@ -33,7 +33,7 @@ namespace levelings {
     //% debug.shadow="toggleOnOff"
     //% weight="99"
     //% group="Линия"
-    export function LineAlignment(movementOnLine: MovementOnLine, regulatorTime: number, params?: automation.LineAlignmentInterface, debug: boolean = false) {
+    export function LineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, params?: automation.LineAlignmentInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
             if (params.leftKp) lineAlignmentLeftSideKp = params.leftKp;
@@ -57,7 +57,7 @@ namespace levelings {
 
         control.timer7.reset(); // Сброс таймера
         const timeOut = (regulatorTime > 1000 ? regulatorTime : 1000); // Максимальное время регулирования для защиты
-        const regulatorMultiplier = (movementOnLine == MovementOnLine.Front ? -1 : 1); // MovementOnLine.Front - линия спереди, а MovementOnLine.Backword - назад
+        const regulatorMultiplier = (lineLocation == VerticalLineLocation.Front ? -1 : 1); // MovementOnLine.Front - линия спереди, а MovementOnLine.Backword - назад
         
         let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования

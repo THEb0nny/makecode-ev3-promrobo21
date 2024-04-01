@@ -25,7 +25,7 @@ namespace chassis {
      * @param setBreak жёсткое торможение или торможение по инерции, eg: true
      */
     //% blockId="ChassisStop"
-    //% block="остановить моторы с жёстким тормозом %setBreak"
+    //% block="остановить моторы с жёстким тормозом $setBreak"
     //% inlineInputMode="inline"
     //% setBreak.shadow="toggleOnOff"
     //% weight="1"
@@ -35,6 +35,28 @@ namespace chassis {
         CHASSIS_L_MOTOR.setBrake(setBreak); CHASSIS_R_MOTOR.setBrake(setBreak);
         CHASSIS_L_MOTOR.stop(); CHASSIS_R_MOTOR.stop();
         CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем обратно у моторов ожидание выполнения ???
+    }
+
+    // Функция, которая выполняет действие после цикла с движением
+    export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
+        if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
+            chassis.DistMove(DIST_ROLLING_AFTER_INTERSECTION, speed, true);
+        } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
+            chassis.RampDistMove(DIST_ROLLING_AFTER_INTERSECTION, 0, DIST_ROLLING_AFTER_INTERSECTION / 2, speed);
+        } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
+            chassis.RollingMoveOut(DIST_ROLLING_MOVE_OUT, speed);
+        } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением
+            // CHASSIS_MOTORS.setBrake(true);
+            // CHASSIS_MOTORS.stop();
+            chassis.ChassisStop(true);
+        } else if (actionAfterMotion == AfterMotion.NoBreakStop) { // Тормоз с прокаткой по инерции
+            // CHASSIS_MOTORS.setBrake(false);
+            // CHASSIS_MOTORS.stop();
+            chassis.ChassisStop(false);
+        } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
+            // CHASSIS_MOTORS.steer(0, speed);
+            chassis.ChassisControl(0, speed);
+        }
     }
 
     /**
@@ -117,26 +139,96 @@ namespace chassis {
         // Команды для остановки не нужно, в этом и смысл функции
     }
 
-    // Функция, которая выполняет действие после цикла с движением
-    export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
-        if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
-            chassis.DistMove(DIST_ROLLING_AFTER_INTERSECTION, speed, true);
-        } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            chassis.RampDistMove(DIST_ROLLING_AFTER_INTERSECTION, 0, DIST_ROLLING_AFTER_INTERSECTION / 2, speed);
-        } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
-            chassis.RollingMoveOut(DIST_ROLLING_MOVE_OUT, speed);
-        } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением
-            // CHASSIS_MOTORS.setBrake(true);
-            // CHASSIS_MOTORS.stop();
-            chassis.ChassisStop(true);
-        } else if (actionAfterMotion == AfterMotion.NoBreakStop) { // Тормоз с прокаткой по инерции
-            // CHASSIS_MOTORS.setBrake(false);
-            // CHASSIS_MOTORS.stop();
-            chassis.ChassisStop(false);
-        } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
-            // CHASSIS_MOTORS.steer(0, speed);
-            chassis.ChassisControl(0, speed);
+    /**
+     * Движение вперёд до зоны с необходимым отражением.
+     * @param SensorSelection определение датчиками, eg: SensorSelection.LeftAndRight
+     * @param refCondition отражение больше или меньше, eg: Condition.Larger
+     * @param refTreshold пороговое значение отражения света, eg: 50
+     * @param dir нпарвление движения, eg: 0
+     * @param speed скорость движения, eg: 80
+     * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
+     * @param debug отладка, eg: false
+     */
+    //% blockId="MoveToRefZone"
+    //% block="move in direction $dir| before determining reflection $sensorsCondition|$refCondition|$refTreshold at $speed|\\% with action after $actionAfterMotion|| debug $debug"
+    //% block.loc.ru="двигаться по направлению $dir| до отражения $sensorsCondition|$refCondition|$refTreshold на $speed|\\% c действием после $actionAfterMotion|| отладка $debug"
+    //% expandableArgumentMode="toggle"
+    //% inlineInputMode="inline"
+    //% dir.shadow="motorTurnRatioPicker"
+    //% dir.min="-100" dir.max="100"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="6"
+    //% group="Move"
+    export function MoveToRefZone(sensorsCondition: SensorSelection, refCondition: LogicalOperators, refTreshold: number, dir: number, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+        ChassisControl(dir, speed); // Команда двигаться вперёд
+        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
+            let currTime = control.millis();
+            let dt = currTime - prevTime;
+            prevTime = currTime;
+            let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
+            let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
+            if (sensorsCondition == SensorSelection.LeftAndRight) { // Левый и правый датчик
+                if (refCondition == LogicalOperators.Greater) { // Больше
+                    if (refLCS > refTreshold && refRCS > refTreshold) break;
+                } else if (refCondition == LogicalOperators.GreaterOrEqual) { // Больше или равно
+                    if (refLCS >= refTreshold && refRCS >= refTreshold) break;
+                } else if (refCondition == LogicalOperators.Less) { // Меньше
+                    if (refLCS < refTreshold && refRCS < refTreshold) break;
+                } else if (refCondition == LogicalOperators.LessOrEqual) { // Меньше или равно
+                    if (refLCS <= refTreshold && refRCS <= refTreshold) break;
+                } else if (refCondition == LogicalOperators.Equal) { // Равно
+                    if (refLCS == refTreshold && refRCS == refTreshold) break;
+                }
+            } else if (sensorsCondition == SensorSelection.LeftOrRight) { // Левый или правый датчик
+                if (refCondition == LogicalOperators.Greater) { // Больше
+                    if (refLCS > refTreshold || refRCS > refTreshold) break;
+                } else if (refCondition == LogicalOperators.GreaterOrEqual) { // Больше или равно
+                    if (refLCS >= refTreshold || refRCS >= refTreshold) break;
+                } else if (refCondition == LogicalOperators.Less) { // Меньше
+                    if (refLCS < refTreshold || refRCS < refTreshold) break;
+                } else if (refCondition == LogicalOperators.LessOrEqual) { // Меньше или равно
+                    if (refLCS <= refTreshold || refRCS <= refTreshold) break;
+                } if (refCondition == LogicalOperators.Equal) { // Равно
+                    if (refLCS == refTreshold || refRCS == refTreshold) break;
+                }
+            } else if (sensorsCondition == SensorSelection.OnlyLeft) { // Только левый датчик
+                if (refCondition == LogicalOperators.Greater) { // Больше
+                    if (refLCS > refTreshold) break;
+                } else if (refCondition == LogicalOperators.GreaterOrEqual) { // Больше или равно
+                    if (refLCS >= refTreshold) break;
+                } else if (refCondition == LogicalOperators.Less) { // Меньше
+                    if (refLCS < refTreshold) break;
+                } else if (refCondition == LogicalOperators.LessOrEqual) { // Меньше или равно
+                    if (refLCS <= refTreshold) break;
+                } else if (refCondition == LogicalOperators.Equal) { // Равно
+                    if (refLCS == refTreshold) break;
+                }
+            } else if (sensorsCondition == SensorSelection.OnlyRight) { // Только правый датчик
+                if (refCondition == LogicalOperators.Greater) { // Больше
+                    if (refRCS > refTreshold) break;
+                } else if (refCondition == LogicalOperators.GreaterOrEqual) { // Больше или равно
+                    if (refRCS >= refTreshold) break;
+                } else if (refCondition == LogicalOperators.Less) { // Меньше
+                    if (refRCS < refTreshold) break;
+                } else if (refCondition == LogicalOperators.LessOrEqual) { // Меньше или равно
+                    if (refRCS <= refTreshold) break;
+                } else if (refCondition == LogicalOperators.Equal) { // Равно
+                    if (refRCS == refTreshold) break;
+                }
+            }
+            if (debug) { // Отладка
+                brick.clearScreen(); // Очистка экрана
+                brick.printValue("refLCS", refLCS, 1);
+                brick.printValue("refRCS", refRCS, 2);
+                brick.printValue("dt", dt, 12);
+            }
+            control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
         }
+        music.playToneInBackground(Note.C, 500); // Сигнал о завершении
+        ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
     }
-    
+
 }

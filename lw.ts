@@ -151,10 +151,10 @@ namespace motions {
     //% params.shadow=SetEmptyParams
     //% weight="89"
     //% group="Движение по линии"
-    export function LineFollowToLeftIntersaction(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
-        if (lineLocation == LineLocation.Inside) {
+    export function LineFollowToLeftIntersaction(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
+        if (lineLocation == HorizontalLineLocation.Inside) {
             LineFollowToLeftIntersectionInside(actionAfterMotion, params, debug);
-        } else if (lineLocation == LineLocation.Outside) {
+        } else if (lineLocation == HorizontalLineLocation.Outside) {
             LineFollowToLeftIntersectionOutside(actionAfterMotion, params, debug);
         }
     }
@@ -262,10 +262,10 @@ namespace motions {
     //% params.shadow=SetEmptyParams
     //% weight="79"
     //% group="Движение по линии"
-    export function LineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
-        if (lineLocation == LineLocation.Inside) {
+    export function LineFollowToRightIntersection(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: automation.LineFollowInterface, debug: boolean = false) {
+        if (lineLocation == HorizontalLineLocation.Inside) {
             LineFollowToRightIntersectionInside(actionAfterMotion, params, debug);
-        } else if (lineLocation == LineLocation.Outside) {
+        } else if (lineLocation == HorizontalLineLocation.Outside) {
             LineFollowToRightIntersectionOutside(actionAfterMotion, params, debug);
         }
     }

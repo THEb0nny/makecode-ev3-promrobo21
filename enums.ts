@@ -8,6 +8,41 @@ const enum ClawState {
     Close
 }
 
+// Перечисление о типе больше или меньше
+const enum LogicalOperators {
+    //% block="greater"
+    //% block.loc.ru="больше"
+    Greater,
+    //% block="greater or equal"
+    //% block.loc.ru="больше или равно"
+    GreaterOrEqual,
+    //% block="less"
+    //% block.loc.ru="меньше"
+    Less,
+    //% block="less or equal"
+    //% block.loc.ru="меньше или равно"
+    LessOrEqual,
+    //% block="equals"
+    //% block.loc.ru="равно"
+    Equal
+}
+
+// Перечисление о вариантах выбора датчиков для реагирования
+const enum SensorSelection {
+    //% block="left and right sensor"
+    //% block.loc.ru="левым и правым датчиком"
+    LeftAndRight,
+    //% block="left or right sensor"
+    //% block.loc.ru="левым или правым датчиком"
+    LeftOrRight,
+    //% block="left sensor"
+    //% block.loc.ru="левым датчиком"
+    OnlyLeft,
+    //% block="right sensor"
+    //% block.loc.ru="правым датчиком"
+    OnlyRight
+}
+
 // Перечисление о типах торможения полный вариант
 const enum AfterMotion {
     //% block="rolling"
@@ -53,8 +88,8 @@ const enum WheelPivot {
     RightWheel
 }
 
-// Позиция линии при движении по линии
-const enum LineLocation {
+// Перечисление о расположении линии при движении по линии
+const enum HorizontalLineLocation {
     //% block="inside"
     //% block.loc.ru="изнутри"
     Inside,
@@ -63,8 +98,8 @@ const enum LineLocation {
     Outside
 }
 
-// Перечисление о нахождении линии от датчиков робота
-enum MovementOnLine {
+// Перечисление о расположении линии от датчиков робота
+const enum VerticalLineLocation {
     //% block="front"
     //% block.loc.ru="спереди"
     Front,
