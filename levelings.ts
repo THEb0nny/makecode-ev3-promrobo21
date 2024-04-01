@@ -91,8 +91,9 @@ namespace levelings {
             control.PauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
         }
         music.PlayToneInBackground(Note.E, 250); // Сигнал о завершении
-        CHASSIS_MOTORS.setBrake(true);
-        CHASSIS_MOTORS.stop();
+        // CHASSIS_MOTORS.setBrake(true);
+        // CHASSIS_MOTORS.stop();
+        chassis.ChassisStop(true);
     }
 
     /**
@@ -155,8 +156,9 @@ namespace levelings {
             control.PauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
         }
         music.PlayToneInBackground(Note.E, 100); // Сигнал о завершении
-        CHASSIS_MOTORS.setBrake(true);
-        CHASSIS_MOTORS.stop();
+        // CHASSIS_MOTORS.setBrake(true);
+        // CHASSIS_MOTORS.stop();
+        chassis.ChassisStop(true);
     }
     
 }

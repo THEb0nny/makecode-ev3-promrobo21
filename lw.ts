@@ -58,7 +58,8 @@ namespace motions {
             let error = refLCS - refRCS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
+            //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -70,7 +71,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -119,7 +120,8 @@ namespace motions {
             let error = LW_SET_POINT - refRCS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
+            //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -131,7 +133,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -185,17 +187,20 @@ namespace motions {
             if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
+            //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollowRightSensorSpeed);
             brick.clearScreen(); // Очистка экрана
-            brick.printValue("refLCS", refLCS, 1);
-            brick.printValue("refRCS", refRCS, 2);
-            brick.printValue("error", error, 3);
-            brick.printValue("U", U, 4);
-            brick.printValue("dt", dt, 12);
+            if (debug) {
+                brick.printValue("refLCS", refLCS, 1);
+                brick.printValue("refRCS", refRCS, 2);
+                brick.printValue("error", error, 3);
+                brick.printValue("U", U, 4);
+                brick.printValue("dt", dt, 12);
+            }
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        chassis.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // Функция движения по линии правым датчиком до перекрёстка слева с линией извне
@@ -226,7 +231,8 @@ namespace motions {
             if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
+            //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollowRightSensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -238,7 +244,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        chassis.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -292,7 +298,8 @@ namespace motions {
             if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
+            //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollowLeftSensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -304,7 +311,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // Функция движения по линии левым датчиком до перекрёстка справа с линией извне
@@ -335,7 +342,8 @@ namespace motions {
             if (Math.abs(error) <= LW_CONDITION_DETECT_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
-            CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
+            //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollowLeftSensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -347,7 +355,7 @@ namespace motions {
             control.PauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.PlayToneInBackground(262, BeatFraction.Half); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
 }
