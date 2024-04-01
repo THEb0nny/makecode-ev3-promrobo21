@@ -31,7 +31,7 @@ namespace levelings {
     //% debug.shadow="toggleOnOff"
     //% weight="99"
     //% group="Линия"
-    export function LineAlignment(movementOnLine: MovementOnLine, regulatorTime: number, params?: automation.LineAlignmentInreface, debug: boolean = false) {
+    export function LineAlignment(movementOnLine: MovementOnLine, regulatorTime: number, params?: automation.LineAlignmentInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) lineAlignmentMaxSpeed = params.maxSpeed;
             if (params.leftKp) lineAlignmentLeftSideKp = params.leftKp;
@@ -109,7 +109,7 @@ namespace levelings {
     //% debug.shadow="toggleOnOff"
     //% weight="98"
     //% group="Линия"
-    export function LinePositioning(regTime: number, params?: automation.LinePositioningInreface, debug: boolean = false) {
+    export function LinePositioning(regTime: number, params?: automation.LinePositioningInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) lineAlignmentMaxSpeed = params.maxSpeed;
             if (params.Kp) linePositioningKp = params.Kp;

@@ -1,7 +1,7 @@
 namespace automation {
 
     // Интерфейс перадачи параметров для алгоритма движения по линии
-    export interface LineFollowInreface {
+    export interface LineFollowInterface {
         speed?: number;
         Kp?: number;
         Ki?: number;
@@ -10,7 +10,7 @@ namespace automation {
     }
 
     // Интерфейс перадачи параметров для алгоритма выравнивания на линии
-    export interface LineAlignmentInreface {
+    export interface LineAlignmentInterface {
         maxSpeed?: number;
         leftKp?: number;
         rightKp?: number;
@@ -23,7 +23,7 @@ namespace automation {
     }
 
     // Интерфейс перадачи параметров для алгоритма позиционирования на линии
-    export interface LinePositioningInreface {
+    export interface LinePositioningInterface {
         maxSpeed?: number;
         Kp?: number;
         Ki?: number;
@@ -41,7 +41,7 @@ namespace automation {
     //% blockHidden="true"
     //% weight="99"
     //% group="Params"
-    export function SetEmptyParams(): LineFollowInreface {
+    export function SetEmptyParams(): LineFollowInterface {
         return null;
     }
 
@@ -56,7 +56,7 @@ namespace automation {
     //% newKp.defl="1"
     //% weight="98"
     //% group="Params"
-    export function Set1Params(newSpeed?: number): LineFollowInreface {
+    export function Set1Params(newSpeed?: number): LineFollowInterface {
         return {
             speed: newSpeed
         };
@@ -73,7 +73,7 @@ namespace automation {
     //% newKp.defl="1"
     //% weight="97"
     //% group="Params"
-    export function Set2Params(newSpeed?: number, newKp?: number): LineFollowInreface {
+    export function Set2Params(newSpeed?: number, newKp?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp
@@ -92,7 +92,7 @@ namespace automation {
     //% newKp.defl="1"
     //% weight="96"
     //% group="Params"
-    export function Set4Params(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInreface {
+    export function Set4Params(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp,
@@ -113,7 +113,7 @@ namespace automation {
     //% newKp.defl="1"
     //% weight="95"
     //% group="Params"
-    export function SetAllParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInreface {
+    export function SetAllParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp,
