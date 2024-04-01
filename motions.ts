@@ -118,7 +118,7 @@ namespace chassis {
     }
 
     // Функция, которая выполняет действие после цикла с движением
-    export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion) {
+    export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
             chassis.DistMove(DIST_AFTER_INTERSECTION, speed, true);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка

@@ -1,6 +1,6 @@
 {
     "name": "Promrobo21",
-    "version": "0.12.7",
+    "version": "0.13.0",
     "description": "Methods (blocks) for working with ev3 to participate in competitions.",
     "dependencies": {
         "ev3": "*",
@@ -17,7 +17,8 @@
         "sensors.ts",
         "ns.ts",
         "levelings.ts",
-        "params.ts"
+        "params.ts",
+        "tune.ts"
     ],
     "testFiles": [],
     "targetVersions": {

@@ -30,6 +30,19 @@ const enum AfterMotion {
     NoStop
 }
 
+// Перечисление о типах торможения сокращённый вариант
+const enum AfterMotionShort {
+    //% block="brake stop"
+    //% block.loc.ru="тормоз с удержанием"
+    BreakStop,
+    //% block="no break stop"
+    //% block.loc.ru="тормоз с инерцией"
+    NoBreakStop,
+    //% block="no stop"
+    //% block.loc.ru="не тормозить"
+    NoStop
+}
+
 // Перечисление о типах относительных поворотов
 const enum WheelPivot {
     //% block="left"
