@@ -1,6 +1,6 @@
 namespace sensors {
 
-    let HSV_TO_COLOR_S_TRESHOLD = 50;
+    let HSV_TO_COLOR_S_TRESHOLD = 50; // Пороговое значение границы цветности
 
     /**
      * Функция для программной калибровки и нормализации сырых значений с датчика.
@@ -11,7 +11,7 @@ namespace sensors {
     //% blockId="GetNormRefValCS"
     //% block="нормализовать знач-е отраж-я $refRawValCS|при чёрном $bRefRawValCS|и белом $wRefRawValCS"
     //% inlineInputMode="inline"
-    //% weight="8"
+    //% weight="68" blockGap="8"
     //% group="Color Sensor"
     export function GetNormRefValCS(refRawValCS: number, bRefRawValCS: number, wRefRawValCS: number): number {
         let refValCS = Math.map(refRawValCS, bRefRawValCS, wRefRawValCS, 0, 100);
@@ -19,6 +19,18 @@ namespace sensors {
         return refValCS;
     }
 
+    /**
+     * Перевод значений цветового пространства rgb в hsvl.
+     * @param refRawValCS текущее сырое значение отражения, eg: 0
+     * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
+     * @param wRefRawValCS сырое значение отражения на белом, eg: 650
+     */
+    //% blockId="RgbToHsvlConverter"
+    //% block="convert rgb $rgbArr| to hsvl"
+    //% block.loc.ru="перевести rgb $rgbArr| в hsvl"
+    //% inlineInputMode="inline"
+    //% weight="96" blockGap="8"
+    //% group="Color Sensor"
     export function RgbToHsvlConverter(rgbArr: number[]): number[] {
         // https://github.com/ofdl-robotics-tw/EV3-CLEV3R-Modules/blob/main/Mods/Color.bpm
         let r = rgbArr[0], g = rgbArr[1], b = rgbArr[2];
