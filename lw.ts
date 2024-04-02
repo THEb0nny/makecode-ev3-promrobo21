@@ -57,7 +57,7 @@ namespace motions {
             if (refLCS < LW_TRESHOLD && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток
             let error = refLCS - refRCS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
             chassis.ChassisControl(U, lineFollow2SensorSpeed);
             if (debug) {
@@ -119,7 +119,7 @@ namespace motions {
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = LW_SET_POINT - refRCS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
             chassis.ChassisControl(U, lineFollow2SensorSpeed);
             if (debug) {
@@ -186,7 +186,7 @@ namespace motions {
             let error = LW_SET_POINT - refRCS; // Ошибка регулирования
             if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
             chassis.ChassisControl(U, lineFollowRightSensorSpeed);
             brick.clearScreen(); // Очистка экрана
@@ -230,7 +230,7 @@ namespace motions {
             let error = refRCS - LW_SET_POINT; // Ошибка регулирования
             if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
             chassis.ChassisControl(U, lineFollowRightSensorSpeed);
             if (debug) {
@@ -297,7 +297,7 @@ namespace motions {
             let error = refLCS - LW_SET_POINT; // Ошибка регулирования
             if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
             chassis.ChassisControl(U, lineFollowLeftSensorSpeed);
             if (debug) {
@@ -341,7 +341,7 @@ namespace motions {
             let error = LW_SET_POINT - refLCS; // Ошибка регулирования
             if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздейвствие
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
             chassis.ChassisControl(U, lineFollowLeftSensorSpeed);
             if (debug) {
@@ -356,6 +356,69 @@ namespace motions {
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+    }
+
+    export function LineFollow3Sensor(params?: automation.LineFollowInterface, debug: boolean = false) {
+        // Движение по линии с волновым регулятором (PID + защита от слёта с линии)
+        if (M_COLOR_SEN == undefined) return; // Если центрального сенсора нет
+
+        
+        if (params) { // Если были переданы параметры
+            if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollow2SensorKp = params.Kp;
+            if (params.Ki) lineFollow2SensorKi = params.Ki;
+            if (params.Kd) lineFollow2SensorKd = params.Kd;
+            if (params.N) lineFollow2SensorN = params.N;
+        }
+
+        automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов регулятора
+        automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
+        automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
+        automation.pid1.reset(); // Сброс регулятора
+
+        control.timer1.reset();
+        let lastSensor = 2; // Переменная для хранения последнего сенсора, который видел линию, изначально центральный
+        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        while (true) {
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawMCS = M_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
+            let refMCS = sensors.GetNormRefValCS(refRawMCS, B_REF_RAW_MCS, W_REF_RAW_MCS); // Нормализованное значение с левого датчика цвета
+            let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
+            let error = refLCS - refRCS; // Ошибка регулирования
+            automation.pid1.setPoint(error); // Передать ошибку регулятору
+            let U = 0;
+            if (refLCS > LINE_REF_TRESHOLD) {
+                control.timer1.reset();
+                lastSensor = 1;
+            } else if (refMCS > LINE_REF_TRESHOLD) {
+                control.timer1.reset();
+                lastSensor = 2;
+            } else if (refRCS > LINE_REF_TRESHOLD) {
+                control.timer1.reset();
+                lastSensor = 3;
+            } else if (control.timer1.millis() > 100) {
+                U = (2 - lastSensor) * lineFollow2SensorSpeed;
+            } else {
+                U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            }
+            //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollow2SensorSpeed);
+            if (debug) {
+                brick.clearScreen(); // Очистка экрана
+                brick.printValue("refLCS", refLCS, 1);
+                brick.printValue("refMCS", refMCS, 2);
+                brick.printValue("refRCS", refRCS, 3);
+                brick.printValue("error", error, 4);
+                brick.printValue("U", U, 5);
+                brick.printValue("dt", dt, 12);
+            }
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+        }
     }
 
 }
