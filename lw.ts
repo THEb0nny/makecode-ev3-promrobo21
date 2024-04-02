@@ -249,7 +249,7 @@ namespace motions {
 
     /**
      * Функция движения по линии для определения перекрёстка справа левым датчиком.
-     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
+     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
      * @param speed скорость движения, eg: 60
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false

@@ -6,7 +6,7 @@ namespace chassis {
      * @param speed скорость движения, eg: 80
      */
     //% blockId="ChassisControl"
-    //% block="движение по направлению $dir|и на $speed|\\%"
+    //% block="движение по направлению $dir| на $speed|\\%"
     //% inlineInputMode="inline"
     //% dir.shadow="motorTurnRatioPicker"
     //% dir.min="-100" dir.max="100"
@@ -25,7 +25,7 @@ namespace chassis {
      * @param setBreak жёсткое торможение или торможение по инерции, eg: true
      */
     //% blockId="ChassisStop"
-    //% block="остановить моторы с жёстким тормозом $setBreak"
+    //% block="остановить моторы жёсткий тормоз $setBreak"
     //% inlineInputMode="inline"
     //% setBreak.shadow="toggleOnOff"
     //% weight="1"
@@ -66,7 +66,7 @@ namespace chassis {
      * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
      */
     //% blockId="DistMove"
-    //% block="движение на расстояние $dist|на $speed|\\% и с жёстким тормозом $setBreak"
+    //% block="движение на расстояние $dist|на $speed|\\% жёсткий тормоз $setBreak"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% setBreak.shadow="toggleOnOff"
@@ -97,7 +97,7 @@ namespace chassis {
      * @param speed скорость движения, eg: 60
      */
     //% blockId="RampDistMove"
-    //% block="движение на расстояние $totalDist|c расстоянием ускорения $accelDist и замедления $decelDist со скоростью $speed|\\%"
+    //% block="движение на расстояние $totalDist|c расстоянием ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="4"
@@ -150,8 +150,8 @@ namespace chassis {
      * @param debug отладка, eg: false
      */
     //% blockId="MoveToRefZone"
-    //% block="move in direction $dir| before determining reflection $sensorsCondition|$refCondition|$refTreshold at $speed|\\% with action after $actionAfterMotion|| debug $debug"
-    //% block.loc.ru="двигаться по направлению $dir| до отражения $sensorsCondition|$refCondition|$refTreshold на $speed|\\% c действием после $actionAfterMotion|| отладка $debug"
+    //% block="move in direction $dir| before determining reflection $sensorsCondition|$refCondition|$refTreshold at $speed|\\% action after $actionAfterMotion|| debug $debug"
+    //% block.loc.ru="двигаться по направлению $dir| до отражения $sensorsCondition|$refCondition|$refTreshold на $speed|\\% действие после $actionAfterMotion|| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% dir.shadow="motorTurnRatioPicker"
