@@ -59,6 +59,30 @@ namespace chassis {
         }
     }
 
+    // Вспомогательная функция для типа торможения движения на расстоние без торможения. Например, для съезда с линии, чтобы её не считал алгоритм движения по линии.
+    export function RollingMoveOut(dist: number, speed: number) {
+        if (dist == 0 || speed == 0) {
+            //CHASSIS_MOTORS.stop();
+            ChassisStop(true);
+            return;
+        }
+        let lMotEncPrev = CHASSIS_L_MOTOR.angle(), rMotEncPrev = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторов до запуска
+        let calcMotRot = (dist / (Math.PI * WHEELS_D)) * 360; // Дистанция в мм, которую нужно пройти
+        //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
+        ChassisControl(0, MANIP_DEFL_SPEED);
+
+        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        while (true) { // Пока моторы не достигнули градусов вращения
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let lMotEnc = CHASSIS_L_MOTOR.angle(), rMotEnc = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторы
+            if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+        }
+        // Команды для остановки не нужно, в этом и смысл функции
+    }
+
     /**
      * Движение на расстояние в мм.
      * @param dist дистанция движения в мм, eg: 100
@@ -113,30 +137,6 @@ namespace chassis {
         CHASSIS_R_MOTOR.ramp(speed, mRotNormCalc, MoveUnit.Degrees, mRotAccelCalc, mRotDecelCalc);
         CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды
         CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем обратно у моторов ожидание выполнения ???
-    }
-
-    // Вспомогательная функция для типа торможения движения на расстоние без торможения. Например, для съезда с линии, чтобы её не считал алгоритм движения по линии.
-    export function RollingMoveOut(dist: number, speed: number) {
-        if (dist == 0 || speed == 0) {
-            //CHASSIS_MOTORS.stop();
-            ChassisStop(true);
-            return;
-        }
-        let lMotEncPrev = CHASSIS_L_MOTOR.angle(), rMotEncPrev = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = (dist / (Math.PI * WHEELS_D)) * 360; // Дистанция в мм, которую нужно пройти
-        //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
-        ChassisControl(0, MANIP_DEFL_SPEED);
-
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
-        while (true) { // Пока моторы не достигнули градусов вращения
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
-            prevTime = currTime; // Новое время в переменную предыдущего времени
-            let lMotEnc = CHASSIS_L_MOTOR.angle(), rMotEnc = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторы
-            if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
-        }
-        // Команды для остановки не нужно, в этом и смысл функции
     }
 
     /**
@@ -227,7 +227,7 @@ namespace chassis {
             }
             control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
         }
-        music.playToneInBackground(Note.C, 500); // Сигнал о завершении
+        music.playToneInBackground(277, 500); // Сигнал о завершении
         ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
     }
 

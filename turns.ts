@@ -24,7 +24,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
-    //% weight="4"
+    //% weight="99"
     //% group="Повороты с регулятором"
     export function SmartSpinTurn(deg: number, params?: automation.LineFollowInterface, debug: boolean = false) {
         if (params) {
@@ -63,7 +63,7 @@ namespace chassis {
             if (!isTurned && Math.abs(error) <= ENC_TURN_MAX_ERR_DIFFERENCE && Math.abs(u) <= ENC_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца при маленькой ошибке и маленькой мощности регулятора
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
-                music.playToneInBackground(294, 50); // Сигнал начале дорегулирования
+                music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
             }
             if (isTurned && currTime - deregStartTime >= ENC_TURN_TIME_DEREG || currTime - startTime >= ENC_SPIN_TURN_OUT_TIME) break; // Дорегулируемся
             CHASSIS_L_MOTOR.run(u); CHASSIS_R_MOTOR.run(-u); // Передаём управляющее воздействие на моторы
@@ -80,7 +80,7 @@ namespace chassis {
             }
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(294, 50); // Издаём сигнал завершения дорегулирования
+        music.playToneInBackground(622, 50); // Издаём сигнал завершения дорегулирования
         CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Установка тормоз с удержанием на моторы
         CHASSIS_L_MOTOR.stop(); CHASSIS_R_MOTOR.stop(); // Остановка моторов
     }
@@ -99,7 +99,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
-    //% weight="3"
+    //% weight="98"
     //% group="Повороты с регулятором"
     export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: automation.LineFollowInterface, debug: boolean = false) {
         if (params) {
@@ -145,7 +145,7 @@ namespace chassis {
             if (!isTurned && Math.abs(error) <= ENC_TURN_MAX_ERR_DIFFERENCE && Math.abs(U) <= ENC_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
-                music.playToneInBackground(294, 50); // Сигнал начале дорегулирования
+                music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
             }
             if (wheelPivot == WheelPivot.LeftWheel) CHASSIS_L_MOTOR.run(U); // Передаём правому мотору управляющее воздействие
             else if (wheelPivot == WheelPivot.RightWheel) CHASSIS_R_MOTOR.run(U); // Передаём левому мотору управляющее воздействие
@@ -159,7 +159,7 @@ namespace chassis {
             }
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(294, 100); // Издаём сигнал завершения дорегулирования
+        music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
         CHASSIS_L_MOTOR.stop(); CHASSIS_R_MOTOR.stop(); // Остановить моторы
     }
 
@@ -174,7 +174,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="2"
+    //% weight="89"
     //% group="Обычные повороты"
     export function SpinTurn(deg: number, speed: number) {
         if (deg == 0 || speed == 0) {
@@ -208,7 +208,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="3"
+    //% weight="88"
     //% group="Обычные повороты"
     export function PivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
         if (deg == 0 || speed == 0) {
