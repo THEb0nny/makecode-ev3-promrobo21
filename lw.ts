@@ -361,7 +361,6 @@ namespace motions {
     export function LineFollow3Sensor(params?: automation.LineFollowInterface, debug: boolean = false) {
         // Движение по линии с волновым регулятором (PID + защита от слёта с линии)
         if (M_COLOR_SEN == undefined) return; // Если центрального сенсора нет
-
         
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
@@ -379,7 +378,7 @@ namespace motions {
         control.timer1.reset();
         let lastSensor = 2; // Переменная для хранения последнего сенсора, который видел линию, изначально центральный
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
-        while (true) {
+        while (brick.buttonEnter.wasPressed()) {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
