@@ -136,7 +136,11 @@ function Main() { // Определение главной функции
     CHASSIS_L_MOTOR.setInverted(false); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
 
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
-    brick.buttonRight.pauseUntil(ButtonEvent.Pressed); // Ожидание нажатия правой кнопки
+    while (true) {
+        if (brick.buttonLeft.wasPressed()) custom.FunctionsTune(0, true);
+        else if (brick.buttonRight.wasPressed()) break; // Ожидание нажатия правой кнопки, чтобы выйти и пойти дальше по коду
+        loops.pause(0.001);
+    }
     brick.clearScreen(); // Очистить экрана
 
     // Ваш код тут
