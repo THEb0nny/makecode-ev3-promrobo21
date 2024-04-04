@@ -2,6 +2,22 @@ namespace sensors {
 
     let HSV_TO_COLOR_S_TRESHOLD = 50; // Пороговое значение границы цветности
 
+    //% blockId="GetLineSensorRawValue"
+    //% block="line sensor $sensor| raw value"
+    //% block.loc.ru="сырое значение датчика линии $sensor"
+    //% inlineInputMode="inline"
+    //% weight="99" blockGap="8"
+    //% group="Line Sensor"
+    export function GetLineSensorRawValue(sensor: LineSensor): number {
+        if (sensor == LineSensor.Left) {
+            return L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+        } else if (sensor == LineSensor.Right) {
+            return R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+        } else {
+            return 0;
+        }
+    }
+
     /**
      * Функция для программной калибровки и нормализации сырых значений с датчика.
      * @param refRawValCS текущее сырое значение отражения, eg: 0
@@ -9,10 +25,11 @@ namespace sensors {
      * @param wRefRawValCS сырое значение отражения на белом, eg: 650
      */
     //% blockId="GetNormRefValCS"
-    //% block="нормализовать знач-е отраж-я $refRawValCS|при чёрном $bRefRawValCS|и белом $wRefRawValCS"
+    //% block="normalize reflection $refRawValCS| at black $bRefRawValCS| white $wRefRawValCS"
+    //% block.loc.ru="нормализовать отраж-е $refRawValCS| при чёрном $bRefRawValCS| белом $wRefRawValCS"
     //% inlineInputMode="inline"
-    //% weight="68" blockGap="8"
-    //% group="Color Sensor"
+    //% weight="98" blockGap="8"
+    //% group="Line Sensor"
     export function GetNormRefValCS(refRawValCS: number, bRefRawValCS: number, wRefRawValCS: number): number {
         let refValCS = Math.map(refRawValCS, bRefRawValCS, wRefRawValCS, 0, 100);
         refValCS = Math.constrain(refValCS, 0, 100);
@@ -78,7 +95,16 @@ namespace sensors {
         return [Math.round(hue), Math.round(sat), Math.round(val), Math.round(light)];
     }
 
-    // Перевести HSV в код цвета
+    /**
+     * Перевести HSV в код цвета.
+     * @param hsvl массив значений hsvl
+     */
+    //% blockId="HsvToColorNum"
+    //% block="convert $hsvl| to color code"
+    //% block.loc.ru="перевести $hsvl| в цветовой код"
+    //% inlineInputMode="inline"
+    //% weight="95" blockGap="8"
+    //% group="Color Sensor"
     export function HsvToColorNum(hsvl: number[]): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2];
         if (S > HSV_TO_COLOR_S_TRESHOLD) { // Граница цветности

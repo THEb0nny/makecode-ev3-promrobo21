@@ -107,3 +107,13 @@ const enum VerticalLineLocation {
     //% block.loc.ru="сзади"
     Behind
 }
+
+// Перечисление о датчиках, которые используется для линии
+const enum LineSensor {
+    //% block="left"
+    //% block.loc.ru="левый"
+    Left,
+    //% block="right"
+    //% block.loc.ru="правый"
+    Right
+}

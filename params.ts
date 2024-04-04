@@ -1,4 +1,4 @@
-namespace automation {
+namespace custom {
 
     // Интерфейс перадачи параметров для алгоритма движения по линии
     export interface LineFollowInterface {

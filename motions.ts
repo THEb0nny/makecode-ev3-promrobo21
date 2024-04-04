@@ -160,7 +160,7 @@ namespace chassis {
     //% weight="6"
     //% group="Move"
     export function MoveToRefZone(sensorsCondition: SensorSelection, refCondition: LogicalOperators, refTreshold: number, dir: number, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        ChassisControl(dir, speed); // Команда двигаться вперёд
+        ChassisControl(dir, speed); // Команда двигаться по направлению и скоростью
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
             let currTime = control.millis();

@@ -16,6 +16,16 @@ namespace custom {
 namespace motions {
 }
 
+//% block="Chassis"
+//% block.loc.ru="Шасси"
+namespace chassis {
+}
+
+//% block="Automation"
+//% block.loc.ru="Автоматизация"
+namespace automation {
+}
+
 /**
  * Повороты.
  */

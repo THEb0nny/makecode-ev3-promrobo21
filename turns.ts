@@ -26,7 +26,7 @@ namespace chassis {
     //% debug.shadow="toggleOnOff"
     //% weight="99"
     //% group="Повороты с регулятором"
-    export function SmartSpinTurn(deg: number, params?: automation.LineFollowInterface, debug: boolean = false) {
+    export function SmartSpinTurn(deg: number, params?: custom.LineFollowInterface, debug: boolean = false) {
         if (params) {
             if (params.speed) smartSpinTurnSpeed = params.speed;
             if (params.Kp) smartSpinTurnKp = params.Kp;
@@ -101,7 +101,7 @@ namespace chassis {
     //% debug.shadow="toggleOnOff"
     //% weight="98"
     //% group="Повороты с регулятором"
-    export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: automation.LineFollowInterface, debug: boolean = false) {
+    export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: custom.LineFollowInterface, debug: boolean = false) {
         if (params) {
             if (params.speed) smartPivotTurnSpeed = params.speed;
             if (params.Kp) smartPivotTurnKp = params.Kp;
@@ -186,7 +186,6 @@ namespace chassis {
         // let calcMotRot = (deg * WHEELS_W) / WHEELS_D; // Расчёт значения угла для поворота
         // CHASSIS_MOTORS.tank(speed, -speed, calcMotRot, MoveUnit.Degrees);
         CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Удерживать при тормозе
-        CHASSIS_L_MOTOR.stop(); CHASSIS_R_MOTOR.stop(); // Остановить моторы перед командой поворота
         const calcMotRot = (deg * WHEELS_W) / WHEELS_D; // Расчитать градусы для поворота в градусы для мотора
         CHASSIS_L_MOTOR.setPauseOnRun(false); CHASSIS_R_MOTOR.setPauseOnRun(false); // Отключаем у моторов ожидание выполнения
         CHASSIS_L_MOTOR.run(speed, calcMotRot, MoveUnit.Degrees); // Передаём команду движения левый мотор
