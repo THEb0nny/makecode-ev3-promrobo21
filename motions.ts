@@ -69,7 +69,7 @@ namespace chassis {
         let lMotEncPrev = CHASSIS_L_MOTOR.angle(), rMotEncPrev = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = (dist / (Math.PI * WHEELS_D)) * 360; // Дистанция в мм, которую нужно пройти
         //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
-        ChassisControl(0, MANIP_DEFL_SPEED);
+        ChassisControl(0, speed);
 
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
