@@ -117,7 +117,7 @@ namespace motions {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
-            let error = LW_SET_POINT - refRCS; // Ошибка регулирования
+            let error = refLCS - refRCS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
