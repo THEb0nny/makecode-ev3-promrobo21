@@ -1,5 +1,5 @@
-let MANIPULATOR_MOTOR1 = motors.mediumA; // Ссылка на объект мотора манипулятора
-let MANIPULATOR_MOTOR2 = motors.mediumD; // Ссылка на объект мотора манипулятора
+let MANIPULATOR_MOTOR1: motors.Motor = undefined; // Ссылка на объект мотора манипулятора
+let MANIPULATOR_MOTOR2: motors.Motor = undefined; // Ссылка на объект мотора манипулятора
 //let CHASSIS_MOTORS = motors.largeBC; // Ссылка на объект моторов в шасси
 let CHASSIS_L_MOTOR = motors.largeB; // Ссылка на объект левого мотора в шасси
 let CHASSIS_R_MOTOR = motors.largeC; // Ссылка на объект правого мотора в шасси
@@ -12,8 +12,6 @@ let B_REF_RAW_LCS = 650; // Сырое значение на чёрном для
 let W_REF_RAW_LCS = 500; // Сырое значение на белом для левого датчика цвета
 let B_REF_RAW_RCS = 650; // Сырое значение на чёрном для правого датчика цвета
 let W_REF_RAW_RCS = 500; // Сырое значение на белом для правого датчика цвета
-let B_REF_RAW_MCS = 0; // Сырое значение на чёрном для центрального датчика цвета
-let W_REF_RAW_MCS = 0; // Сырое значение на белом для центрального датчика цвета
 
 let MAX_RGB_LCS = [0, 0, 0]; // Максимальные значения RGB на белом левого датчика цвета
 let MAX_RGB_RCS = [0, 0, 0]; // Максимальные значения RGB на белом правого датчика цвета
@@ -131,9 +129,10 @@ function Main() { // Определение главной функции
     levelings.linePositioningKp = 0.175;
     levelings.linePositioningKd = 2;
 
-    MANIPULATOR_MOTOR1.setInverted(false); MANIPULATOR_MOTOR1.setInverted(false); // Установить инверсию для манипулятора, если требуется
     CHASSIS_L_MOTOR.setInverted(false); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
-    MANIPULATOR_MOTOR1.setBrake(true); MANIPULATOR_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
+
+    // MANIPULATOR_MOTOR1.setInverted(false); MANIPULATOR_MOTOR1.setInverted(false); // Установить инверсию для манипулятора, если требуется
+    // MANIPULATOR_MOTOR1.setBrake(true); MANIPULATOR_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
 
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
     while (true) {

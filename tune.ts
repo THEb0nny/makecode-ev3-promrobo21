@@ -3,8 +3,10 @@ namespace custom {
     /**
      * Настройка параметров функций.
      * @param startupScreen экран при старте, eg: 0
+     * @param debug отладка, eg: false
      */
-    //% blockId=FunctionsTune block="проверка функций||начальный экран $screen"
+    //% blockId="FunctionsTune"
+    //% block="проверка функций|| начальный экран $screen| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% weight="99"
     //% group="Дополнительно"
