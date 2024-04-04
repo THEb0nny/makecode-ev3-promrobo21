@@ -6,7 +6,7 @@ namespace music {
      * @param ms tone duration in milliseconds(ms), eg: BeatFraction.Half
      */
     //% blockId="PlayToneInBackground"
-    //% block="play tone|at $frequency| for $duration|in the background"
+    //% block="play tone|at $frequency| for $duration| in the background"
     //% block.loc.ru="проиграть тон $frequency| продолжительностью $duration| в фоне"
     //% frequency.shadow="device_note"
     //% duration.shadow="device_beat"
@@ -28,8 +28,8 @@ namespace control {
      * @param delay waiting time, eg: 10
      */
     //% blockId="PauseUntilTime"
-    //% block="wait $delay ms|at start at $startTime"
-    //% block.loc.ru="ждать $delay мс|при начале в $startTime|мс"
+    //% block="wait $delay ms| at start at $startTime"
+    //% block.loc.ru="ждать $delay мс| при начале в $startTime|мс"
     //% weight="6"
     export function pauseUntilTime(startTime: number, ms: number) {
         if (startTime == 0) startTime = control.millis();

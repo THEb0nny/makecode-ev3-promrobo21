@@ -4,9 +4,9 @@ namespace custom {
      * Настройка параметров функций.
      * @param startupScreen экран при старте, eg: 0
      */
-    //% blockId=FunctionsTune block="проверка функций||с начальным экраном %screen"
+    //% blockId=FunctionsTune block="проверка функций||начальный экран $screen"
     //% expandableArgumentMode="toggle"
-    //% weight=3
+    //% weight="99"
     //% group="Дополнительно"
     export function FunctionsTune(startupScreen: number = 0, debug: boolean = false) {
         const LOOP_DELAY = 10; // Задержка цикла
@@ -212,10 +212,10 @@ namespace custom {
                     if (screen == 0) {
                         const params = {
                             speed: methodScreens.LW_2S_TO_INTERSECTION.params.speed.val,
-                            Kp: methodScreens.LW_2S_TO_INTERSECTION.params.speed.Kp,
-                            Ki: methodScreens.LW_2S_TO_INTERSECTION.params.speed.Ki,
-                            Kd: methodScreens.LW_2S_TO_INTERSECTION.params.speed.Kd,
-                            N: methodScreens.LW_2S_TO_INTERSECTION.params.speed.N
+                            Kp: methodScreens.LW_2S_TO_INTERSECTION.params.Kp.val,
+                            Ki: methodScreens.LW_2S_TO_INTERSECTION.params.Ki.val,
+                            Kd: methodScreens.LW_2S_TO_INTERSECTION.params.Kd.val,
+                            N: methodScreens.LW_2S_TO_INTERSECTION.params.N.val
                         };
                         motions.LineFollowToIntersection(AfterMotion.BreakStop, params, true);
                     }
