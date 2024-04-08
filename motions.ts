@@ -9,14 +9,15 @@ namespace chassis {
     //% block="движение по направлению $dir| на $speed|\\%"
     //% inlineInputMode="inline"
     //% dir.shadow="motorTurnRatioPicker"
-    //% dir.min="-100" dir.max="100"
+    //% dir.min="-200" dir.max="200"
     //% speed.shadow="motorSpeedPicker"
     //% weight="2"
     //% group="Move"
     export function ChassisControl(dir: number, speed: number) {
-        let mB = speed + dir, mC = speed - dir;
-        let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
-        mB *= z; mC *= z;
+        // let mB = speed + dir, mC = speed - dir;
+        // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
+        // mB *= z; mC *= z;
+        const mB = speed + dir, mC = speed - dir;
         CHASSIS_L_MOTOR.run(mB); CHASSIS_R_MOTOR.run(mC);
     }
 

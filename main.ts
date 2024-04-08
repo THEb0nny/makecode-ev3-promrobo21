@@ -144,7 +144,7 @@ function Main() { // Определение главной функции
 
     // Ваш код тут
     // chassis.PivotTurn(90, 50, WheelPivot.LeftWheel);
-    // motions.LineFollowToIntersection(AfterMotion.Rolling, { speed: 50, Kp: 0.4 });
+    motions.LineFollowToIntersection(AfterMotion.Rolling, { speed: 50, Kp: 0.4 }, true);
 }
 
 Main(); // Вызов главной функции
