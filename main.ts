@@ -37,7 +37,7 @@ let ENC_PIVOT_TURN_OUT_TIME = 1000; // Максимальное время ум�
 let DIST_ROLLING_AFTER_INTERSECTION = 50; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
 let DIST_ROLLING_MOVE_OUT = 20; // Дистанция для прокатки без торможения на перекрёстке в мм
 
-function RgbToHsvlConvert(debug: boolean = false) {
+function RgbToHsvlToColorConvert(debug: boolean = false) {
     let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
     while (true) {
         let currTime = control.millis(); // Текущее время
