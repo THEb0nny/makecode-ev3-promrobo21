@@ -143,6 +143,7 @@ function Main() { // Определение главной функции
     MANIPULATOR_MOTOR1.setInverted(true); MANIPULATOR_MOTOR2.setInverted(false); // Установить инверсию для манипулятора, если требуется
     MANIPULATOR_MOTOR1.setBrake(true); MANIPULATOR_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
 
+    // Ожидание старта
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
     while (true) {
         if (brick.buttonLeft.wasPressed()) custom.FunctionsTune(0, true);
