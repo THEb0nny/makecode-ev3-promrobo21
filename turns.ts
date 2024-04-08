@@ -174,7 +174,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="89"
+    //% weight="99"
     //% group="Обычные повороты"
     export function SpinTurn(deg: number, speed: number) {
         if (deg == 0 || speed == 0) {
@@ -185,6 +185,7 @@ namespace chassis {
         // CHASSIS_MOTORS.setBrake(true); // Удерживать при тормозе
         // let calcMotRot = (deg * WHEELS_W) / WHEELS_D; // Расчёт значения угла для поворота
         // CHASSIS_MOTORS.tank(speed, -speed, calcMotRot, MoveUnit.Degrees);
+        CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды ?????
         CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Удерживать при тормозе
         const calcMotRot = (deg * WHEELS_W) / WHEELS_D; // Расчитать градусы для поворота в градусы для мотора
         CHASSIS_L_MOTOR.setPauseOnRun(false); CHASSIS_R_MOTOR.setPauseOnRun(false); // Отключаем у моторов ожидание выполнения
@@ -207,7 +208,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="88"
+    //% weight="98"
     //% group="Обычные повороты"
     export function PivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
         if (deg == 0 || speed == 0) {
@@ -215,8 +216,9 @@ namespace chassis {
             chassis.ChassisStop(true);
             return;
         }
+        CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды ??????
         //CHASSIS_MOTORS.setBrake(true); // Удерживать при тормозе
-        CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true);
+        CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Удерживать при тормозе
         let calcMotRot = ((deg * WHEELS_W) / WHEELS_D) * 2; // Расчёт значения угла для поворота
         if (wheelPivot == WheelPivot.LeftWheel) {
             CHASSIS_L_MOTOR.stop(); // Остановить левый мотор

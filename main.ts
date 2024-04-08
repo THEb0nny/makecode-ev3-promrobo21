@@ -1,5 +1,6 @@
-let MANIPULATOR_MOTOR1: motors.Motor = undefined; // Ссылка на объект мотора манипулятора
-let MANIPULATOR_MOTOR2: motors.Motor = undefined; // Ссылка на объект мотора манипулятора
+let MANIPULATOR_MOTOR1: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
+let MANIPULATOR_MOTOR2: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
+
 //let CHASSIS_MOTORS = motors.largeBC; // Ссылка на объект моторов в шасси
 let CHASSIS_L_MOTOR = motors.largeB; // Ссылка на объект левого мотора в шасси
 let CHASSIS_R_MOTOR = motors.largeC; // Ссылка на объект правого мотора в шасси
@@ -8,25 +9,23 @@ let L_COLOR_SEN = sensors.color2; // Ссылка на объект левого
 let R_COLOR_SEN = sensors.color3; // Ссылка на объект правого датчика цвета
 let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
-let B_REF_RAW_LCS = 650; // Сырое значение на чёрном для левого датчика цвета
-let W_REF_RAW_LCS = 500; // Сырое значение на белом для левого датчика цвета
-let B_REF_RAW_RCS = 650; // Сырое значение на чёрном для правого датчика цвета
-let W_REF_RAW_RCS = 500; // Сырое значение на белом для правого датчика цвета
+const B_REF_RAW_LCS = 637; // Сырое значение на чёрном для левого датчика цвета
+const W_REF_RAW_LCS = 464; // Сырое значение на белом для левого датчика цвета
+const B_REF_RAW_RCS = 625; // Сырое значение на чёрном для правого датчика цвета
+const W_REF_RAW_RCS = 481; // Сырое значение на белом для правого датчика цвета
 
 let MAX_RGB_LCS = [0, 0, 0]; // Максимальные значения RGB на белом левого датчика цвета
 let MAX_RGB_RCS = [0, 0, 0]; // Максимальные значения RGB на белом правого датчика цвета
 let MAX_RGB_CHECK_COLOR_CS = [0, 0, 0];  // Максимальные значения RGB на белом датчика определяющий цвет предмета
 
-let WHEELS_D = 56; // Диаметр колёс в мм
-let WHEELS_W = 135; // Расстояние между центрами колёс в мм
-
-let DIST_BETWEEN_CS = 25; // Расстояние между датчиками цвета в мм
+let WHEELS_D = 62.4; // Диаметр колёс в мм
+let WHEELS_W = 180; // Расстояние между центрами колёс в мм
 
 let LINE_REF_TRESHOLD = 50 // Среднее значение серого (уставка) для определения границы линии
 let LW_TRESHOLD = 35; // Пороговое значение определения перекрёстка
 let LW_SET_POINT = LINE_REF_TRESHOLD; // Среднее значение серого
 
-let LW_CONDITION_MAX_ERR = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
+let LW_CONDITION_MAX_ERR = 50; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
 let ENC_TURN_MAX_ERR_DIFFERENCE = 10; // Пороговое значения ошибки для регулятора умного поворота, что поворот выполнен
 let ENC_TURN_MAX_REG_DIFFERENCE = 10; // Пороговое значение регулятора для определения умного поворота
@@ -37,8 +36,6 @@ let ENC_PIVOT_TURN_OUT_TIME = 1000; // Максимальное время ум�
 
 let DIST_ROLLING_AFTER_INTERSECTION = 50; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
 let DIST_ROLLING_MOVE_OUT = 20; // Дистанция для прокатки без торможения на перекрёстке в мм
-
-let MANIP_DEFL_SPEED = 40; // Скорость работы манипулятора по умолчанию
 
 function RgbToHsvlConvert(debug: boolean = false) {
     let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
@@ -64,19 +61,23 @@ function RgbToHsvlConvert(debug: boolean = false) {
 }
 
 // Функция для управление манипулятором
-function Manipulator(motor: motors.Motor, state: ClawState, speed?: number) {
-    if (!speed) speed = MANIP_DEFL_SPEED; // Если аргумент не был передан, то за скорость установится значение по умолчанию
+function Manipulator(motor: motors.Motor, state: ClawState, speed?: number, timeOut?: number) {
+    if (!speed) speed = 40; // Если аргумент не был передан, то за скорость установится значение по умолчанию
     else speed = Math.abs(speed);
+    if (!timeOut) speed = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
+    else timeOut = Math.abs(timeOut);
+
     motor.setBrake(true); // Устанавливаем ударжание мотора при остановке
     if (state == ClawState.Open) motor.run(speed);
     else motor.run(-speed);
-    loops.pause(20); // Пауза перед началом алгоритма для того, чтобы дать стартануть защите
-    while (true) { // Проверяем, что мотор застопорился и не может больше двигаться
-        let encA1 = motor.angle();
-        loops.pause(15); // Задержка между измерениями
-        let encA2 = motor.angle();
-        if (Math.abs(Math.abs(encA2) - Math.abs(encA1)) <= 1) break;
-    }
+    // loops.pause(50); // Пауза перед началом алгоритма для того, чтобы дать стартануть защите
+    // while (true) { // Проверяем, что мотор застопорился и не может больше двигаться
+    //     let encA1 = motor.angle();
+    //     loops.pause(15); // Задержка между измерениями
+    //     let encA2 = motor.angle();
+    //     if (Math.abs(Math.abs(encA2) - Math.abs(encA1)) <= 1) break;
+    // }
+    motor.pauseUntilStalled(timeOut);
     motor.stop(); // Останавливаем мотор
 }
 
@@ -129,10 +130,18 @@ function Main() { // Определение главной функции
     levelings.linePositioningKp = 0.175;
     levelings.linePositioningKd = 2;
 
-    CHASSIS_L_MOTOR.setInverted(false); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
+    sensors.SetLineSensorRawValue(LineSensor.Left, B_REF_RAW_LCS, W_REF_RAW_LCS); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
+    sensors.SetLineSensorRawValue(LineSensor.Right, B_REF_RAW_RCS, W_REF_RAW_RCS); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
 
-    // MANIPULATOR_MOTOR1.setInverted(false); MANIPULATOR_MOTOR1.setInverted(false); // Установить инверсию для манипулятора, если требуется
-    // MANIPULATOR_MOTOR1.setBrake(true); MANIPULATOR_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
+    sensors.SetColorSensorMaxRgbValues(L_COLOR_SEN, MAX_RGB_LCS);
+    sensors.SetColorSensorMaxRgbValues(R_COLOR_SEN, MAX_RGB_RCS);
+    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, MAX_RGB_CHECK_COLOR_CS);
+
+    CHASSIS_L_MOTOR.setInverted(true); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
+    CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
+
+    MANIPULATOR_MOTOR1.setInverted(true); MANIPULATOR_MOTOR2.setInverted(false); // Установить инверсию для манипулятора, если требуется
+    MANIPULATOR_MOTOR1.setBrake(true); MANIPULATOR_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
 
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
     while (true) {
@@ -143,8 +152,46 @@ function Main() { // Определение главной функции
     brick.clearScreen(); // Очистить экрана
 
     // Ваш код тут
-    // chassis.PivotTurn(90, 50, WheelPivot.LeftWheel);
-    motions.LineFollowToIntersection(AfterMotion.Rolling, { speed: 50, Kp: 0.4 }, true);
+    control.runInParallel(function () {
+        Manipulator(MANIPULATOR_MOTOR1, ClawState.Open, 20, 1000);
+    });
+    control.runInParallel(function () {
+        Manipulator(MANIPULATOR_MOTOR2, ClawState.Open, 20, 1000);
+    });
+    // chassis.DistMove(10, 40, true);
+    chassis.PivotTurn(90, 40, WheelPivot.RightWheel);
+    motions.LineFollowToRightIntersection(HorizontalLineLocation.Outside, AfterMotion.DecelRolling, { speed: 50, Kp: 0.3 });
+    chassis.PivotTurn(85, 40, WheelPivot.LeftWheel);
+    chassis.PivotTurn(85, 40, WheelPivot.RightWheel);
+    chassis.DistMove(240, 40, true);
+    //chassis.RampDistMove(240, 20, 30, 40);
+    control.runInParallel(function () {
+        Manipulator(MANIPULATOR_MOTOR1, ClawState.Open, 40);
+    });
+    control.runInParallel(function () {
+        Manipulator(MANIPULATOR_MOTOR2, ClawState.Open, 40);
+    });
+    pause(500);
+    chassis.DistMove(-550, 40, true);
+    // chassis.RampDistMove(-550, -20, -30, 40);
+    control.runInParallel(function () {
+        Manipulator(MANIPULATOR_MOTOR1, ClawState.Close, 40);
+    });
+    control.runInParallel(function () {
+        Manipulator(MANIPULATOR_MOTOR2, ClawState.Close, 40);
+    });
+    chassis.SpinTurn(-90, 40);
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -50, AfterMotion.BreakStop);
+    levelings.LineAlignment(VerticalLineLocation.Behind, 1000);
+    chassis.DistMove(750, 50, true);
+    //chassis.RampDistMove(750, 20, 30, 60);
+    pause(250);
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -50, AfterMotion.BreakStop);
+    pause(1000);
+    chassis.DistMove(60, 40, true);
+    chassis.SpinTurn(-90, 40);
+    motions.LineFollowToDistance(200, AfterMotion.NoStop);
+    motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.Rolling);
 }
 
 Main(); // Вызов главной функции

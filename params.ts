@@ -40,7 +40,7 @@ namespace custom {
     //% inlineInputMode="inline"
     //% blockHidden="true"
     //% weight="99"
-    //% group="Params"
+    //% group="Параметры"
     export function SetEmptyParams(): LineFollowInterface {
         return null;
     }
@@ -55,7 +55,7 @@ namespace custom {
     //% newSpeed.defl="50"
     //% newKp.defl="1"
     //% weight="98"
-    //% group="Params"
+    //% group="Параметры"
     export function Set1Params(newSpeed?: number): LineFollowInterface {
         return {
             speed: newSpeed
@@ -72,7 +72,7 @@ namespace custom {
     //% newSpeed.defl="50"
     //% newKp.defl="1"
     //% weight="97"
-    //% group="Params"
+    //% group="Параметры"
     export function Set2Params(newSpeed?: number, newKp?: number): LineFollowInterface {
         return {
             speed: newSpeed,
@@ -91,7 +91,7 @@ namespace custom {
     //% newSpeed.defl="50"
     //% newKp.defl="1"
     //% weight="96"
-    //% group="Params"
+    //% group="Параметры"
     export function Set4Params(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
             speed: newSpeed,
@@ -112,7 +112,7 @@ namespace custom {
     //% newSpeed.defl="50"
     //% newKp.defl="1"
     //% weight="95"
-    //% group="Params"
+    //% group="Параметры"
     export function SetAllParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
             speed: newSpeed,

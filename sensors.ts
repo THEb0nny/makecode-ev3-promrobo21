@@ -1,25 +1,55 @@
 namespace sensors {
 
-    let HSV_TO_COLOR_S_TRESHOLD = 50; // Пороговое значение границы цветности
+    export let bRefRawLeftLineSensor: number; // Сырые значения на чёрном для левого датчика линии
+    export let wRefRawLeftLineSensor: number; // Сырые значения на белом для левого датчика линии
 
+    export let bRefRawRightLineSensor: number; // Сырые значения на чёрном для правого датчика линии
+    export let wRefRawRightLineSensor: number; // Сырые значения на белом для правого датчика линии
+
+    export let maxRgbValuesCS1: number[]; // Максимальные значения RGB для датчика цвета в первом порту
+    export let maxRgbValuesCS2: number[]; // Максимальные значения RGB для датчика цвета во втором порту
+    export let maxRgbValuesCS3: number[]; // Максимальные значения RGB для датчика цвета в третьем порту
+    export let maxRgbValuesCS4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
+
+    /**
+     * Метод установки датчику линии сырых значений на чёрном и белом.
+     */
+    //% blockId="SetLineSensorRawValue"
+    //% block="set $sensor| line sensor white $wRefRawVal| black $bRefRawVal| raw values"
+    //% block.loc.ru="установить датчику линии $sensor| сырые значения чёрного $bRefRawVal| белого $wRefRawVal"
+    //% inlineInputMode="inline"
+    //% weight="99" blockGap="8"
+    //% group="Line Sensor"
+    export function SetLineSensorRawValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
+        if (sensor == LineSensor.Left) {
+            bRefRawLeftLineSensor = bRefRawVal;
+            wRefRawLeftLineSensor = wRefRawVal;
+        } else if (sensor == LineSensor.Right) {
+            bRefRawRightLineSensor = bRefRawVal;
+            wRefRawRightLineSensor = wRefRawVal;
+        }
+    }
+
+    /**
+     * Метод получения с датчика линии сырого значения отражения.
+     */
     //% blockId="GetLineSensorRawValue"
     //% block="line sensor $sensor| raw value"
     //% block.loc.ru="сырое значение датчика линии $sensor"
     //% inlineInputMode="inline"
-    //% weight="99" blockGap="8"
+    //% weight="98" blockGap="8"
     //% group="Line Sensor"
     export function GetLineSensorRawValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
             return L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
         } else if (sensor == LineSensor.Right) {
             return R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     /**
-     * Функция для программной калибровки и нормализации сырых значений с датчика.
+     * Метод получения нормализованного значения отражения для датчика линии из сырых значений.
      * @param refRawValCS текущее сырое значение отражения, eg: 0
      * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
      * @param wRefRawValCS сырое значение отражения на белом, eg: 650
@@ -28,12 +58,37 @@ namespace sensors {
     //% block="normalize reflection $refRawValCS| at black $bRefRawValCS| white $wRefRawValCS"
     //% block.loc.ru="нормализовать отраж-е $refRawValCS| при чёрном $bRefRawValCS| белом $wRefRawValCS"
     //% inlineInputMode="inline"
-    //% weight="98" blockGap="8"
+    //% weight="97" blockGap="8"
     //% group="Line Sensor"
     export function GetNormRefValCS(refRawValCS: number, bRefRawValCS: number, wRefRawValCS: number): number {
         let refValCS = Math.map(refRawValCS, bRefRawValCS, wRefRawValCS, 0, 100);
         refValCS = Math.constrain(refValCS, 0, 100);
         return refValCS;
+    }
+
+}
+
+namespace sensors {
+
+    const HSV_TO_COLOR_S_TRESHOLD = 50; // Пороговое значение границы цветности
+
+    /**
+     * Установить максимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
+     * @param maxRgbArr массив с тремя значениями rgb
+     */
+    //% blockId="SetColorSensorMaxRgbValues"
+    //% block="set $sensor| color sensor max RGB values maxRgbArr"
+    //% block.loc.ru="установить $sensor| датчику цвета максимальные значения RGB $maxRgbArr"
+    //% inlineInputMode="inline"
+    //% weight="90" blockGap="8"
+    //% group="Color Sensor"
+    export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxRgbArr: number[]) {
+        /* if (sensor == sensors.color1) maxRgbValuesCS1 = [maxRed, maxGreen, maxBlue];
+        else
+        */
+        if (sensor == sensors.color2) maxRgbValuesCS2 = maxRgbArr;
+        else if (sensor == sensors.color3) maxRgbValuesCS3 = maxRgbArr;
+        else if (sensor == sensors.color4) maxRgbValuesCS4 = maxRgbArr;
     }
 
     /**
@@ -46,7 +101,7 @@ namespace sensors {
     //% block="convert rgb $rgbArr| to hsvl"
     //% block.loc.ru="перевести rgb $rgbArr| в hsvl"
     //% inlineInputMode="inline"
-    //% weight="96" blockGap="8"
+    //% weight="89" blockGap="8"
     //% group="Color Sensor"
     export function RgbToHsvlConverter(rgbArr: number[]): number[] {
         // https://github.com/ofdl-robotics-tw/EV3-CLEV3R-Modules/blob/main/Mods/Color.bpm
@@ -96,14 +151,14 @@ namespace sensors {
     }
 
     /**
-     * Перевести HSV в код цвета.
+     * Перевести HSV в код цвета. Получаемые коды цвета соотвествуют кодам LEGO.
      * @param hsvl массив значений hsvl
      */
     //% blockId="HsvToColorNum"
     //% block="convert $hsvl| to color code"
     //% block.loc.ru="перевести $hsvl| в цветовой код"
     //% inlineInputMode="inline"
-    //% weight="95" blockGap="8"
+    //% weight="88" blockGap="8"
     //% group="Color Sensor"
     export function HsvToColorNum(hsvl: number[]): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2];
@@ -117,7 +172,7 @@ namespace sensors {
             else return -1; // error
         } else if (V >= 40) return 6; // white
         else if (V > 5) return 1; // black
-        else return 0;
+        return 0; // empty
     }
 
 }

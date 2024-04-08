@@ -11,7 +11,7 @@ namespace chassis {
     //% dir.shadow="motorTurnRatioPicker"
     //% dir.min="-200" dir.max="200"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="2"
+    //% weight="99"
     //% group="Move"
     export function ChassisControl(dir: number, speed: number) {
         // let mB = speed + dir, mC = speed - dir;
@@ -26,10 +26,10 @@ namespace chassis {
      * @param setBreak жёсткое торможение или торможение по инерции, eg: true
      */
     //% blockId="ChassisStop"
-    //% block="остановить моторы жёсткий тормоз $setBreak"
+    //% block="остановить моторы c жёстким тормозом $setBreak"
     //% inlineInputMode="inline"
     //% setBreak.shadow="toggleOnOff"
-    //% weight="1"
+    //% weight="98"
     //% group="Move"
     export function ChassisStop(setBreak: boolean) {
         CHASSIS_L_MOTOR.setPauseOnRun(false); CHASSIS_R_MOTOR.setPauseOnRun(false); // Отключаем у моторов ожидание выполнения
@@ -95,7 +95,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% setBreak.shadow="toggleOnOff"
-    //% weight="3"
+    //% weight="89"
     //% group="Move"
     export function DistMove(dist: number, speed: number, setBreak: boolean = true) {
         if (dist == 0 || speed == 0) {
@@ -103,11 +103,14 @@ namespace chassis {
             ChassisStop(true);
             return;
         }
+        
         // CHASSIS_MOTORS.setBrake(setBreak); // Удерживать при тормозе
         // let mRotCalc = (dist / (Math.PI * WHEELS_D)) * 360; // Подсчёт по формуле
         // CHASSIS_MOTORS.tank(speed, speed, mRotCalc, MoveUnit.Degrees); // Передаём команду моторам
-        const mRotCalc = (dist / (Math.PI * WHEELS_D)) * 360; // Расчёт угла поворота на дистанцию
+        
+        CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды
         CHASSIS_L_MOTOR.setBrake(setBreak); CHASSIS_R_MOTOR.setBrake(setBreak); // Установить жёсткий тип торможения
+        const mRotCalc = (dist / (Math.PI * WHEELS_D)) * 360; // Расчёт угла поворота на дистанцию
         CHASSIS_L_MOTOR.setPauseOnRun(false); CHASSIS_R_MOTOR.setPauseOnRun(false); // Отключаем у моторов ожидание выполнения
         CHASSIS_L_MOTOR.run(speed, mRotCalc, MoveUnit.Degrees); CHASSIS_R_MOTOR.run(speed, mRotCalc, MoveUnit.Degrees); // Передаём команды движения на моторы
         CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды
@@ -125,9 +128,10 @@ namespace chassis {
     //% block="движение на расстояние $totalDist|c расстоянием ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="4"
+    //% weight="88"
     //% group="Move"
     export function RampDistMove(totalDist: number, accelDist: number, decelDist: number, speed: number) {
+        CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды ???????
         CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Установить торможение с удержанием
         let mRotAccelCalc = (accelDist == 0 ? 0 : Math.round((accelDist / (Math.PI * WHEELS_D)) * 360)); // Расчитываем расстояние ускорения
         let mRotDecelCalc = (decelDist == 0 ? 0 : Math.round((decelDist / (Math.PI * WHEELS_D)) * 360)); // Расчитываем расстояние замедления
@@ -158,9 +162,10 @@ namespace chassis {
     //% dir.shadow="motorTurnRatioPicker"
     //% dir.min="-100" dir.max="100"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="6"
+    //% weight="79"
     //% group="Move"
     export function MoveToRefZone(sensorsCondition: SensorSelection, refCondition: LogicalOperators, refTreshold: number, dir: number, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+        CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды ??????
         ChassisControl(dir, speed); // Команда двигаться по направлению и скоростью
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
@@ -220,6 +225,7 @@ namespace chassis {
                     if (refRCS == refTreshold) break;
                 }
             }
+            ChassisControl(dir, speed); // Дублирую команду двигаться по направлению и скоростью
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
