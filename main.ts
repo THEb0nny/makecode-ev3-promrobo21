@@ -9,15 +9,6 @@ let L_COLOR_SEN = sensors.color2; // Ссылка на объект левого
 let R_COLOR_SEN = sensors.color3; // Ссылка на объект правого датчика цвета
 let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
-let B_REF_RAW_LCS = 637; // Сырое значение на чёрном для левого датчика цвета
-let W_REF_RAW_LCS = 464; // Сырое значение на белом для левого датчика цвета
-let B_REF_RAW_RCS = 625; // Сырое значение на чёрном для правого датчика цвета
-let W_REF_RAW_RCS = 481; // Сырое значение на белом для правого датчика цвета
-
-let MAX_RGB_LCS = [0, 0, 0]; // Максимальные значения RGB на белом левого датчика цвета
-let MAX_RGB_RCS = [0, 0, 0]; // Максимальные значения RGB на белом правого датчика цвета
-let MAX_RGB_CHECK_COLOR_CS = [0, 0, 0];  // Максимальные значения RGB на белом датчика определяющий цвет предмета
-
 let WHEELS_D = 62.4; // Диаметр колёс в мм
 let WHEELS_W = 180; // Расстояние между центрами колёс в мм
 
@@ -130,12 +121,12 @@ function Main() { // Определение главной функции
     levelings.linePositioningKp = 0.175;
     levelings.linePositioningKd = 2;
 
-    sensors.SetLineSensorRawValue(LineSensor.Left, B_REF_RAW_LCS, W_REF_RAW_LCS); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
-    sensors.SetLineSensorRawValue(LineSensor.Right, B_REF_RAW_RCS, W_REF_RAW_RCS); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
+    sensors.SetLineSensorRawValue(LineSensor.Left, 637, 464); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
+    sensors.SetLineSensorRawValue(LineSensor.Right, 625, 481); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
 
-    sensors.SetColorSensorMaxRgbValues(L_COLOR_SEN, MAX_RGB_LCS);
-    sensors.SetColorSensorMaxRgbValues(R_COLOR_SEN, MAX_RGB_RCS);
-    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, MAX_RGB_CHECK_COLOR_CS);
+    sensors.SetColorSensorMaxRgbValues(L_COLOR_SEN, [0, 0, 0]);
+    sensors.SetColorSensorMaxRgbValues(R_COLOR_SEN, [0, 0, 0]);
+    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [0, 0, 0]);
 
     CHASSIS_L_MOTOR.setInverted(true); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
     CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения

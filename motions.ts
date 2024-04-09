@@ -174,8 +174,8 @@ namespace chassis {
             prevTime = currTime;
             let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
-            let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
-            let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
+            let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
+            let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             if (sensorsCondition == SensorSelection.LeftAndRight) { // Левый и правый датчик
                 if (refCondition == LogicalOperators.Greater) { // Больше
                     if (refLCS > refTreshold && refRCS > refTreshold) break;

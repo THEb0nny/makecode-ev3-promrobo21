@@ -214,7 +214,7 @@ namespace levelings {
             prevTime = currTime;
             if (firstSide == "LEFT_SIDE") {
                 let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
-                let refRCS = sensors.GetNormRefValCS(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
+                let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
                 if (refRCS <= LINE_REF_TRESHOLD) { // Левый датчик нашёл линию
                     encC2 = CHASSIS_R_MOTOR.angle(); // Считываем угол по новой
                     a = encC2 - encC1; // Рассчитываем длину стороны a в тиках энкодера
@@ -222,7 +222,7 @@ namespace levelings {
                 }
             } else if (firstSide == "RIGHT_SIDE") {
                 let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-                let refLCS = sensors.GetNormRefValCS(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
+                let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
                 if (refLCS <= LINE_REF_TRESHOLD) { // Левый датчик нашёл линию
                     encB2 = CHASSIS_L_MOTOR.angle(); // Считываем угол по новой
                     a = encB2 - encB1; // Рассчитываем длину стороны a в тиках энкодера
