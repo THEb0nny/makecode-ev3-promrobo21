@@ -1,18 +1,18 @@
-let MANIPULATOR_MOTOR1: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
-let MANIPULATOR_MOTOR2: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
-
 //let CHASSIS_MOTORS = motors.largeBC; // Ссылка на объект моторов в шасси
 let CHASSIS_L_MOTOR = motors.largeB; // Ссылка на объект левого мотора в шасси
 let CHASSIS_R_MOTOR = motors.largeC; // Ссылка на объект правого мотора в шасси
+
+let MANIPULATOR_MOTOR1: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
+let MANIPULATOR_MOTOR2: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
 
 let L_COLOR_SEN = sensors.color2; // Ссылка на объект левого датчика цвета
 let R_COLOR_SEN = sensors.color3; // Ссылка на объект правого датчика цвета
 let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
-const B_REF_RAW_LCS = 637; // Сырое значение на чёрном для левого датчика цвета
-const W_REF_RAW_LCS = 464; // Сырое значение на белом для левого датчика цвета
-const B_REF_RAW_RCS = 625; // Сырое значение на чёрном для правого датчика цвета
-const W_REF_RAW_RCS = 481; // Сырое значение на белом для правого датчика цвета
+let B_REF_RAW_LCS = 637; // Сырое значение на чёрном для левого датчика цвета
+let W_REF_RAW_LCS = 464; // Сырое значение на белом для левого датчика цвета
+let B_REF_RAW_RCS = 625; // Сырое значение на чёрном для правого датчика цвета
+let W_REF_RAW_RCS = 481; // Сырое значение на белом для правого датчика цвета
 
 let MAX_RGB_LCS = [0, 0, 0]; // Максимальные значения RGB на белом левого датчика цвета
 let MAX_RGB_RCS = [0, 0, 0]; // Максимальные значения RGB на белом правого датчика цвета

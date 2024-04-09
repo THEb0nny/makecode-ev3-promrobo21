@@ -136,7 +136,7 @@ namespace motions {
     }
 
     /**
-     * Движение по линии на расстояние. Очень грубый метод.
+     * Движение по линии на расстояние левым датчиком. Очень грубый метод.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist скорость движения, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
@@ -181,6 +181,70 @@ namespace motions {
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             if (lineLocation == HorizontalLineLocation.Inside) error = refLCS - LW_SET_POINT; // Ошибка регулирования
             else if (lineLocation == HorizontalLineLocation.Outside) error = LW_SET_POINT - refLCS; // Ошибка регулирования
+            automation.pid1.setPoint(error); // Передать ошибку регулятору
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollow2SensorSpeed);
+            if (debug) {
+                brick.clearScreen(); // Очистка экрана
+                brick.printValue("refLCS", refLCS, 1);
+                brick.printValue("refRCS", refRCS, 2);
+                brick.printValue("error", error, 3);
+                brick.printValue("U", U, 4);
+                brick.printValue("dt", dt, 12);
+            }
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+        }
+        music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+    }
+
+    /**
+     * Движение по линии на расстояние правым датчиком. Очень грубый метод.
+     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
+     * @param dist скорость движения, eg: 250
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param debug отладка, eg: false
+     */
+    //% blockId="LineFollowToDistanceWithRightSensor"
+    //% block="движение по линии на расстояние $dist|мм $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% inlineInputMode="inline"
+    //% expandableArgumentMode="toggle"
+    //% debug.shadow="toggleOnOff"
+    //% params.shadow="SetEmptyParams"
+    //% weight="88"
+    //% group="Движение по линии"
+    export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
+        if (params) { // Если были переданы параметры
+            if (params.speed) lineFollowRightSensorSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollowRightSensorKp = params.Kp;
+            if (params.Ki) lineFollowRightSensorKi = params.Ki;
+            if (params.Kd) lineFollowRightSensorKd = params.Kd;
+            if (params.N) lineFollowRightSensorN = params.N;
+        }
+
+        let lMotEncPrev = CHASSIS_L_MOTOR.angle(), rMotEncPrev = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторов до запуска
+        let calcMotRot = (dist / (Math.PI * WHEELS_D)) * 360; // Дистанция в мм, которую нужно проехать по линии
+
+        automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов  ПИД регулятора
+        automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
+        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        automation.pid1.reset(); // Сброс ПИД регулятора
+
+        let error = 0; // Переменная для хранения ошибки регулирования
+        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        while (true) { // Пока моторы не достигнули градусов вращения
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let lMotEnc = CHASSIS_L_MOTOR.angle(), rMotEnc = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторы
+            if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
+            let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
+            let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
+            if (lineLocation == HorizontalLineLocation.Inside) error = LW_SET_POINT - refRCS; // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = refRCS - LW_SET_POINT; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
