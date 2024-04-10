@@ -45,7 +45,7 @@ namespace motions {
         automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         automation.pid1.reset(); // Сброс ПИД регулятора
         
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
@@ -105,7 +105,7 @@ namespace motions {
         automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         automation.pid1.reset(); // Сброс ПИД регулятора
 
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Пока моторы не достигнули градусов вращения
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
@@ -168,7 +168,7 @@ namespace motions {
         automation.pid1.reset(); // Сброс ПИД регулятора
 
         let error = 0; // Переменная для хранения ошибки регулирования
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Пока моторы не достигнули градусов вращения
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
@@ -292,7 +292,7 @@ namespace motions {
         automation.pid1.reset(); // Сброс регулятора
 
         let error = 0; // Переменная для хранения ошибки регулирования
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
@@ -351,7 +351,7 @@ namespace motions {
         automation.pid1.reset(); // Сброс регулятора
 
         let error = 0; // Переменная для хранения ошибки регулирования
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
@@ -400,7 +400,7 @@ namespace motions {
 
     //     control.timer1.reset();
     //     let lastSensor = 2; // Переменная для хранения последнего сенсора, который видел линию, изначально центральный
-    //     let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+    //     let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
     //     while (brick.buttonEnter.wasPressed()) {
     //         let currTime = control.millis(); // Текущее время
     //         let dt = currTime - prevTime; // Время за которое выполнился цикл

@@ -138,6 +138,7 @@ function Main() { // Определение главной функции
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
     while (true) {
         if (brick.buttonLeft.wasPressed()) custom.FunctionsTune(0, true);
+        else if (brick.buttonUp.wasPressed()) sensors.SearchRgbMaxColorSensors();
         else if (brick.buttonRight.wasPressed()) break; // Ожидание нажатия правой кнопки, чтобы выйти и пойти дальше по коду
         loops.pause(0.001);
     }

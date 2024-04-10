@@ -175,4 +175,53 @@ namespace sensors {
         return 0; // empty
     }
 
+    /**
+     * Поиск максимальных значений RGB датчика цвета, т.е. это максимальные значения на белом.
+     */
+    //% blockId="SearchRgbMaxColorSensors"
+    //% block="show max RGB color sensors"
+    //% block.loc.ru="показать максимальные RGB датчиков цвета"
+    //% inlineInputMode="inline"
+    //% weight="80" blockGap="8"
+    //% group="Color Sensor"
+    export function SearchRgbMaxColorSensors() {
+        let rgbMax: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+        let btnPressed = 0;
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (btnPressed < 2) {
+            let currTime = control.millis();
+            let loopTime = currTime - prevTime;
+            prevTime = currTime;
+            if (brick.buttonEnter.wasPressed()) { // Переключение режима
+                btnPressed++;
+                pause(250);
+            }
+            let colorRgb: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+            colorRgb[0] = sensors.color1.rgbRaw();
+            colorRgb[1] = sensors.color2.rgbRaw();
+            colorRgb[2] = sensors.color3.rgbRaw();
+            colorRgb[3] = sensors.color4.rgbRaw();
+            brick.clearScreen();
+            for (let i = 0; i < 4; i++) {
+                brick.showString(`RGB_${i + 1}: ${colorRgb[i][0]} ${colorRgb[i][1]} ${colorRgb[i][2]}`, i + 1);
+            }
+            if (btnPressed == 0) {
+                brick.showString("Press Enter to freeze", 12);
+            }
+            if (btnPressed == 1) {
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        rgbMax[i][j] = Math.max(colorRgb[i][j], rgbMax[i][j]);
+                    }
+                }
+                for (let i = 0, str = 7; i < 4; i++) {
+                    brick.showString(`RGB_max: ${rgbMax[i][0]} ${rgbMax[i][1]} ${rgbMax[i][2]}`, str++);
+                }
+                brick.showString("Press Enter to exit", 12);
+            }
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+        }
+        brick.clearScreen();
+    }
+
 }

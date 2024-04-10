@@ -60,7 +60,7 @@ namespace levelings {
         const regulatorMultiplier = (lineLocation == VerticalLineLocation.Front ? -1 : 1); // MovementOnLine.Front - линия спереди, а MovementOnLine.Backword - назад
         
         let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (control.timer7.millis() < timeOut) { // Цикл работает пока время не вышло
             let currTime = control.millis();
             let dt = currTime - prevTime;
@@ -130,7 +130,7 @@ namespace levelings {
         control.timer7.reset(); // Сброс таймера
         const MAX_TIME_REG = (regTime > 1000 ? regTime : 1000); // Максимальное время регулирования для защиты
         let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (control.timer7.millis() < MAX_TIME_REG) { // Пока время не вышло
             let currTime = control.millis();
             let dt = currTime - prevTime;
@@ -186,7 +186,7 @@ namespace levelings {
         let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
         let encB1 = 0, encB2 = 0, encC1 = 0, encC2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
         let a = 0, b = DIST_BETWEEN_CS, c = 0;
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
             let currTime = control.millis();
             let loopTime = currTime - prevTime;
