@@ -16,7 +16,7 @@ let LINE_REF_TRESHOLD = 50 // Среднее значение серого (ус
 let LW_TRESHOLD = 35; // Пороговое значение определения перекрёстка
 let LW_SET_POINT = LINE_REF_TRESHOLD; // Среднее значение серого
 
-let LW_CONDITION_MAX_ERR = 50; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
+let LW_CONDITION_MAX_ERR = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
 let ENC_TURN_MAX_ERR_DIFFERENCE = 10; // Пороговое значения ошибки для регулятора умного поворота, что поворот выполнен
 let ENC_TURN_MAX_REG_DIFFERENCE = 10; // Пороговое значение регулятора для определения умного поворота
@@ -33,19 +33,22 @@ function RgbToHsvlToColorConvert(debug: boolean = false) {
     while (true) {
         let currTime = control.millis(); // Текущее время
         prevTime = currTime; // Новое время в переменную предыдущего времени
-        const rgbCS = CHECK_COLOR_CS.rgbRaw();
+        let rgbCS = CHECK_COLOR_CS.rgbRaw();
+        for (let i = 0; i < 3; i++) {
+            rgbCS[i] = Math.map(rgbCS[i], 0, sensors.maxRgbValuesCS4[i], 0, 255);
+        }
         const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
         const color = sensors.HsvToColorNum(hsvlCS);
         if (debug) {
             brick.clearScreen();
-            brick.printValue("r", rgbCS[0], 1);
-            brick.printValue("g", rgbCS[1], 2);
-            brick.printValue("b", rgbCS[2], 3);
-            brick.printValue("hue", hsvlCS[0], 5);
-            brick.printValue("sat", hsvlCS[1], 6);
-            brick.printValue("val", hsvlCS[2], 7);
-            brick.printValue("light", hsvlCS[3], 8);
-            brick.printValue("color", color, 10);
+            brick.printValue("r", rgbCS[0], 1, 20);
+            brick.printValue("g", rgbCS[1], 2, 20);
+            brick.printValue("b", rgbCS[2], 3, 20);
+            brick.printValue("hue", hsvlCS[0], 5, 20);
+            brick.printValue("sat", hsvlCS[1], 6, 20);
+            brick.printValue("val", hsvlCS[2], 7, 20);
+            brick.printValue("light", hsvlCS[3], 8, 20);
+            brick.printValue("color", color, 10, 20);
         }
         control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
     }
@@ -121,12 +124,12 @@ function Main() { // Определение главной функции
     levelings.linePositioningKp = 0.175;
     levelings.linePositioningKd = 2;
 
-    sensors.SetLineSensorRawValue(LineSensor.Left, 637, 464); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
-    sensors.SetLineSensorRawValue(LineSensor.Right, 625, 481); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
+    sensors.SetLineSensorRawValue(LineSensor.Left, 643, 450); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
+    sensors.SetLineSensorRawValue(LineSensor.Right, 629, 474); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
 
-    sensors.SetColorSensorMaxRgbValues(L_COLOR_SEN, [0, 0, 0]);
-    sensors.SetColorSensorMaxRgbValues(R_COLOR_SEN, [0, 0, 0]);
-    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [0, 0, 0]);
+    sensors.SetColorSensorMaxRgbValues(L_COLOR_SEN, [273, 297, 355]);
+    sensors.SetColorSensorMaxRgbValues(R_COLOR_SEN, [230, 224, 178]);
+    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [363, 318, 371]);
 
     CHASSIS_L_MOTOR.setInverted(true); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
     CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
@@ -139,7 +142,9 @@ function Main() { // Определение главной функции
     while (true) {
         if (brick.buttonLeft.wasPressed()) custom.FunctionsTune(0, true);
         else if (brick.buttonUp.wasPressed()) sensors.SearchRgbMaxColorSensors();
+        else if (brick.buttonDown.wasPressed()) RgbToHsvlToColorConvert(true);
         else if (brick.buttonRight.wasPressed()) break; // Ожидание нажатия правой кнопки, чтобы выйти и пойти дальше по коду
+
         loops.pause(0.001);
     }
     brick.clearScreen(); // Очистить экрана
@@ -152,12 +157,15 @@ function Main() { // Определение главной функции
         Manipulator(MANIPULATOR_MOTOR2, ClawState.Open, 20, 1000);
     });
     // chassis.DistMove(10, 40, true);
-    chassis.PivotTurn(90, 40, WheelPivot.RightWheel);
-    motions.LineFollowToRightIntersection(HorizontalLineLocation.Outside, AfterMotion.DecelRolling, { speed: 50, Kp: 0.3 });
-    chassis.PivotTurn(85, 40, WheelPivot.LeftWheel);
-    chassis.PivotTurn(85, 40, WheelPivot.RightWheel);
+    chassis.PivotTurn(90, 50, WheelPivot.RightWheel);
+    motions.LineFollowToDistanceWithLeftSensor(HorizontalLineLocation.Outside, 700, AfterMotion.BreakStop, { speed: 50, Kp: 0.3 });
+    chassis.PivotTurn(35, 50, WheelPivot.LeftWheel);
+    chassis.PivotTurn(35, 50, WheelPivot.RightWheel);
+    motions.LineFollowToIntersection(AfterMotion.DecelRolling, { speed: 50, Kp: 0.3 });
+    chassis.PivotTurn(75, 40, WheelPivot.LeftWheel);
+    chassis.PivotTurn(75, 40, WheelPivot.RightWheel);
     chassis.DistMove(240, 40, true);
-    //chassis.RampDistMove(240, 20, 30, 40);
+    // chassis.RampDistMove(240, 20, 30, 40);
     control.runInParallel(function () {
         Manipulator(MANIPULATOR_MOTOR1, ClawState.Open, 40);
     });
@@ -178,9 +186,9 @@ function Main() { // Определение главной функции
     levelings.LineAlignment(VerticalLineLocation.Behind, 1000);
     chassis.DistMove(750, 50, true);
     //chassis.RampDistMove(750, 20, 30, 60);
-    pause(250);
+    pause(200);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -50, AfterMotion.BreakStop);
-    pause(1000);
+    pause(100);
     chassis.DistMove(60, 40, true);
     chassis.SpinTurn(-90, 40);
     motions.LineFollowToDistance(200, AfterMotion.NoStop);

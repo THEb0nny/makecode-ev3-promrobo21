@@ -70,7 +70,7 @@ namespace sensors {
 
 namespace sensors {
 
-    const HSV_TO_COLOR_S_TRESHOLD = 50; // Пороговое значение границы цветности
+    const HSV_TO_COLOR_S_TRESHOLD = 60; // Пороговое значение границы цветности
 
     /**
      * Установить максимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
@@ -161,8 +161,8 @@ namespace sensors {
     //% weight="88" blockGap="8"
     //% group="Color Sensor"
     export function HsvToColorNum(hsvl: number[]): number {
-        const H = hsvl[0], S = hsvl[1], V = hsvl[2];
-        if (S > HSV_TO_COLOR_S_TRESHOLD) { // Граница цветности
+        const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
+        if (V > 0 && S > HSV_TO_COLOR_S_TRESHOLD) { // Граница цветности
             if (H < 25) return 5; // red
             else if (H < 50) return 7; // brown
             else if (H < 100) return 4; // yellow
@@ -171,7 +171,7 @@ namespace sensors {
             else if (H < 360) return 5; // red
             else return -1; // error
         } else if (V >= 40) return 6; // white
-        else if (V > 5) return 1; // black
+        else if (V > 2) return 1; // black
         return 0; // empty
     }
 
