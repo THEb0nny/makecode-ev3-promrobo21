@@ -197,7 +197,7 @@ namespace sensors {
                 pause(250);
             }
             let colorRgb: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-            colorRgb[0] = sensors.color1.rgbRaw();
+            colorRgb[0] = [0, 0, 0]; // sensors.color1.rgbRaw();
             colorRgb[1] = sensors.color2.rgbRaw();
             colorRgb[2] = sensors.color3.rgbRaw();
             colorRgb[3] = sensors.color4.rgbRaw();
