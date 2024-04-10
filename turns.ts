@@ -217,7 +217,7 @@ namespace chassis {
             return;
         }
         CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды ??????
-        //CHASSIS_MOTORS.setBrake(true); // Удерживать при тормозе
+        // CHASSIS_MOTORS.setBrake(true); // Удерживать при тормозе
         CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Удерживать при тормозе
         let calcMotRot = ((deg * WHEELS_W) / WHEELS_D) * 2; // Расчёт значения угла для поворота
         if (wheelPivot == WheelPivot.LeftWheel) {

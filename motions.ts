@@ -107,7 +107,6 @@ namespace chassis {
         // CHASSIS_MOTORS.setBrake(setBreak); // Удерживать при тормозе
         // let mRotCalc = (dist / (Math.PI * WHEELS_D)) * 360; // Подсчёт по формуле
         // CHASSIS_MOTORS.tank(speed, speed, mRotCalc, MoveUnit.Degrees); // Передаём команду моторам
-        
         CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды
         CHASSIS_L_MOTOR.setBrake(setBreak); CHASSIS_R_MOTOR.setBrake(setBreak); // Установить жёсткий тип торможения
         const mRotCalc = (dist / (Math.PI * WHEELS_D)) * 360; // Расчёт угла поворота на дистанцию

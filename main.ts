@@ -1,6 +1,6 @@
 //let CHASSIS_MOTORS = motors.largeBC; // Ссылка на объект моторов в шасси
-let CHASSIS_L_MOTOR = motors.largeB; // Ссылка на объект левого мотора в шасси
-let CHASSIS_R_MOTOR = motors.largeC; // Ссылка на объект правого мотора в шасси
+let CHASSIS_L_MOTOR = motors.mediumB; // Ссылка на объект левого мотора в шасси
+let CHASSIS_R_MOTOR = motors.mediumC; // Ссылка на объект правого мотора в шасси
 
 let MANIPULATOR_MOTOR1: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
 let MANIPULATOR_MOTOR2: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
@@ -35,20 +35,21 @@ function RgbToHsvlToColorConvert(debug: boolean = false) {
         prevTime = currTime; // Новое время в переменную предыдущего времени
         let rgbCS = CHECK_COLOR_CS.rgbRaw();
         for (let i = 0; i < 3; i++) {
-            rgbCS[i] = Math.map(rgbCS[i], 0, sensors.maxRgbValuesCS4[i], 0, 255);
+            rgbCS[i] = Math.map(rgbCS[i], 0, sensors.maxRgbColorSensor4[i], 0, 255);
+            rgbCS[i] = Math.constrain(rgbCS[i], 0, 255);
         }
         const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
         const color = sensors.HsvToColorNum(hsvlCS);
         if (debug) {
             brick.clearScreen();
-            brick.printValue("r", rgbCS[0], 1, 20);
-            brick.printValue("g", rgbCS[1], 2, 20);
-            brick.printValue("b", rgbCS[2], 3, 20);
-            brick.printValue("hue", hsvlCS[0], 5, 20);
-            brick.printValue("sat", hsvlCS[1], 6, 20);
-            brick.printValue("val", hsvlCS[2], 7, 20);
-            brick.printValue("light", hsvlCS[3], 8, 20);
-            brick.printValue("color", color, 10, 20);
+            brick.printValue("r", rgbCS[0], 1, 21);
+            brick.printValue("g", rgbCS[1], 2, 21);
+            brick.printValue("b", rgbCS[2], 3, 21);
+            brick.printValue("hue", hsvlCS[0], 5, 21);
+            brick.printValue("sat", hsvlCS[1], 6, 21);
+            brick.printValue("val", hsvlCS[2], 7, 21);
+            brick.printValue("light", hsvlCS[3], 8, 21);
+            brick.printValue("color", color, 10, 21);
         }
         control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
     }
@@ -58,7 +59,7 @@ function RgbToHsvlToColorConvert(debug: boolean = false) {
 function Manipulator(motor: motors.Motor, state: ClawState, speed?: number, timeOut?: number) {
     if (!speed) speed = 40; // Если аргумент не был передан, то за скорость установится значение по умолчанию
     else speed = Math.abs(speed);
-    if (!timeOut) speed = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
+    if (timeOut == undefined) speed = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
     else timeOut = Math.abs(timeOut);
 
     motor.setBrake(true); // Устанавливаем ударжание мотора при остановке
@@ -129,10 +130,11 @@ function Main() { // Определение главной функции
 
     sensors.SetColorSensorMaxRgbValues(L_COLOR_SEN, [273, 297, 355]);
     sensors.SetColorSensorMaxRgbValues(R_COLOR_SEN, [230, 224, 178]);
-    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [363, 318, 371]);
+    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [354, 299, 354]);
 
     CHASSIS_L_MOTOR.setInverted(true); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
     CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
+    CHASSIS_L_MOTOR.setBrakeSettleTime(10); CHASSIS_R_MOTOR.setBrakeSettleTime(10); // Включаем у моторов ожидание выполнения
 
     MANIPULATOR_MOTOR1.setInverted(true); MANIPULATOR_MOTOR2.setInverted(false); // Установить инверсию для манипулятора, если требуется
     MANIPULATOR_MOTOR1.setBrake(true); MANIPULATOR_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
@@ -157,42 +159,50 @@ function Main() { // Определение главной функции
         Manipulator(MANIPULATOR_MOTOR2, ClawState.Open, 20, 1000);
     });
     // chassis.DistMove(10, 40, true);
-    chassis.PivotTurn(90, 50, WheelPivot.RightWheel);
-    motions.LineFollowToDistanceWithLeftSensor(HorizontalLineLocation.Outside, 700, AfterMotion.BreakStop, { speed: 50, Kp: 0.3 });
-    chassis.PivotTurn(35, 50, WheelPivot.LeftWheel);
-    chassis.PivotTurn(35, 50, WheelPivot.RightWheel);
-    motions.LineFollowToIntersection(AfterMotion.DecelRolling, { speed: 50, Kp: 0.3 });
-    chassis.PivotTurn(75, 40, WheelPivot.LeftWheel);
-    chassis.PivotTurn(75, 40, WheelPivot.RightWheel);
+    chassis.PivotTurn(90, 30, WheelPivot.RightWheel);
+    pause(250);
+    motions.LineFollowToDistanceWithLeftSensor(HorizontalLineLocation.Outside, 700, AfterMotion.DecelRolling, { speed: 30, Kp: 0.3, Kd: 1 });
+    pause(250);
+    chassis.PivotTurn(30, 30, WheelPivot.LeftWheel);
+    pause(100);
+    chassis.PivotTurn(30, 30, WheelPivot.RightWheel);
+    pause(100);
+    motions.LineFollowToIntersection(AfterMotion.DecelRolling, { speed: 40, Kp: 0.2, Kd: 1.5 });
+    pause(250);
+    chassis.PivotTurn(78, 30, WheelPivot.LeftWheel);
+    pause(100);
+    chassis.PivotTurn(78, 30, WheelPivot.RightWheel);
+    pause(100);
     chassis.DistMove(240, 40, true);
     // chassis.RampDistMove(240, 20, 30, 40);
-    control.runInParallel(function () {
-        Manipulator(MANIPULATOR_MOTOR1, ClawState.Open, 40);
-    });
-    control.runInParallel(function () {
-        Manipulator(MANIPULATOR_MOTOR2, ClawState.Open, 40);
-    });
-    pause(500);
-    chassis.DistMove(-550, 40, true);
-    // chassis.RampDistMove(-550, -20, -30, 40);
     control.runInParallel(function () {
         Manipulator(MANIPULATOR_MOTOR1, ClawState.Close, 40);
     });
     control.runInParallel(function () {
         Manipulator(MANIPULATOR_MOTOR2, ClawState.Close, 40);
     });
-    chassis.SpinTurn(-90, 40);
-    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -50, AfterMotion.BreakStop);
+    pause(500);
+    chassis.DistMove(-550, 30, true);
+    // chassis.RampDistMove(-550, -20, -30, 40);
+    chassis.SpinTurn(-90, 30);
+    pause(200);
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
     levelings.LineAlignment(VerticalLineLocation.Behind, 1000);
     chassis.DistMove(750, 50, true);
     //chassis.RampDistMove(750, 20, 30, 60);
     pause(200);
-    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -50, AfterMotion.BreakStop);
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
+    control.runInParallel(function () {
+        Manipulator(MANIPULATOR_MOTOR1, ClawState.Open, 40);
+    });
+    control.runInParallel(function () {
+        Manipulator(MANIPULATOR_MOTOR2, ClawState.Open, 40);
+    });
     pause(100);
     chassis.DistMove(60, 40, true);
     chassis.SpinTurn(-90, 40);
     motions.LineFollowToDistance(200, AfterMotion.NoStop);
-    motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.Rolling);
+    motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.DecelRolling, { speed: 40, Kp: 0.2, Kd: 1.5 });
 }
 
 Main(); // Вызов главной функции

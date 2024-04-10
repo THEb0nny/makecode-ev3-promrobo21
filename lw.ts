@@ -162,8 +162,8 @@ namespace motions {
         let lMotEncPrev = CHASSIS_L_MOTOR.angle(), rMotEncPrev = CHASSIS_R_MOTOR.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = (dist / (Math.PI * WHEELS_D)) * 360; // Дистанция в мм, которую нужно проехать по линии
 
-        automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов  ПИД регулятора
-        automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
+        automation.pid1.setGains(lineFollowLeftSensorKp, lineFollowLeftSensorKi, lineFollowLeftSensorKd); // Установка коэффицентов  ПИД регулятора
+        automation.pid1.setDerivativeFilter(lineFollowLeftSensorN); // Установить фильтр дифференциального регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         automation.pid1.reset(); // Сброс ПИД регулятора
 
@@ -183,8 +183,8 @@ namespace motions {
             else if (lineLocation == HorizontalLineLocation.Outside) error = LW_SET_POINT - refLCS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
-            //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            chassis.ChassisControl(U, lineFollow2SensorSpeed);
+            //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollowLeftSensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -196,7 +196,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**

@@ -6,10 +6,10 @@ namespace sensors {
     export let bRefRawRightLineSensor: number; // Сырые значения на чёрном для правого датчика линии
     export let wRefRawRightLineSensor: number; // Сырые значения на белом для правого датчика линии
 
-    export let maxRgbValuesCS1: number[]; // Максимальные значения RGB для датчика цвета в первом порту
-    export let maxRgbValuesCS2: number[]; // Максимальные значения RGB для датчика цвета во втором порту
-    export let maxRgbValuesCS3: number[]; // Максимальные значения RGB для датчика цвета в третьем порту
-    export let maxRgbValuesCS4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
+    export let maxRgbColorSensor1: number[]; // Максимальные значения RGB для датчика цвета в первом порту
+    export let maxRgbColorSensor2: number[]; // Максимальные значения RGB для датчика цвета во втором порту
+    export let maxRgbColorSensor3: number[]; // Максимальные значения RGB для датчика цвета в третьем порту
+    export let maxRgbColorSensor4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
 
     /**
      * Метод установки датчику линии сырых значений на чёрном и белом.
@@ -86,9 +86,9 @@ namespace sensors {
         /* if (sensor == sensors.color1) maxRgbValuesCS1 = [maxRed, maxGreen, maxBlue];
         else
         */
-        if (sensor == sensors.color2) maxRgbValuesCS2 = maxRgbArr;
-        else if (sensor == sensors.color3) maxRgbValuesCS3 = maxRgbArr;
-        else if (sensor == sensors.color4) maxRgbValuesCS4 = maxRgbArr;
+        if (sensor == sensors.color2) maxRgbColorSensor2 = maxRgbArr;
+        else if (sensor == sensors.color3) maxRgbColorSensor3 = maxRgbArr;
+        else if (sensor == sensors.color4) maxRgbColorSensor4 = maxRgbArr;
     }
 
     /**
