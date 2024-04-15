@@ -63,13 +63,6 @@ function Manipulator(motor: motors.Motor, state: ClawState, speed?: number, time
     motor.setBrake(true); // Устанавливаем ударжание мотора при остановке
     if (state == ClawState.Open) motor.run(speed);
     else motor.run(-speed);
-    // loops.pause(50); // Пауза перед началом алгоритма для того, чтобы дать стартануть защите
-    // while (true) { // Проверяем, что мотор застопорился и не может больше двигаться
-    //     let encA1 = motor.angle();
-    //     loops.pause(15); // Задержка между измерениями
-    //     let encA2 = motor.angle();
-    //     if (Math.abs(Math.abs(encA2) - Math.abs(encA1)) <= 1) break;
-    // }
     motor.pauseUntilStalled(timeOut);
     motor.stop(); // Останавливаем мотор
 }
