@@ -1,7 +1,7 @@
 namespace music {
 
     /**
-     * Функция для запуска тона в фоне(паралельной задачи).
+     * Функция для запуска тона в фоне (паралельной задачи).
      * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
      * @param ms tone duration in milliseconds(ms), eg: BeatFraction.Half
      */
@@ -15,6 +15,29 @@ namespace music {
     export function playToneInBackground(frequency: number, duration: number) {
         control.runInParallel(function () {
             music.playTone(frequency, duration);
+        });
+    }
+
+}
+
+namespace brick {
+
+    /**
+     * Функция для установки индикатору шаблона цвета в фоне (паралельной задачи).
+     * @param pattern the lights pattern to use. eg: StatusLight.Orange
+     * @param duration in milliseconds(ms), eg: 100
+     */
+    //% blockId="SetStatusLightInBackground"
+    //% block="set status light to $pattern| at $duration| in the background"
+    //% block.loc.ru="установить индикатор $pattern| продолжительностью $duration| в фоне"
+    //% help="brick/set-status-light"
+    //% weight="98"
+    //% group="Indicator"
+    export function setStatusLightInBackground(pattern: StatusLight, duration: number) {
+        control.runInParallel(function () {
+            brick.setStatusLight(pattern);
+            pause(duration);
+            brick.setStatusLight(StatusLight.Off);
         });
     }
 

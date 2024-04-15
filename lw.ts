@@ -7,6 +7,8 @@ namespace motions {
     export let distRollingAfterIntersection = 0; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
     export let distRollingAfterIntersectionMoveOut = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
 
+    export let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
+
     export let lineFollow2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
     export let lineFollow2SensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     export let lineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
@@ -35,6 +37,10 @@ namespace motions {
 
     export function SetLineFollowSetPoint(reflection: number) {
         lineFollowSetPoint = reflection;
+    }
+
+    export function SetLineFollowConditionMaxErr(maxErr: number) {
+        lineFollowWithOneSensorConditionMaxErr = maxErr;
     }
 
     /**
@@ -350,7 +356,7 @@ namespace motions {
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             if (lineLocation == HorizontalLineLocation.Inside) error = motions.lineFollowSetPoint - refRCS; // Ошибка регулирования
             else if (lineLocation == HorizontalLineLocation.Outside) error = refRCS - motions.lineFollowSetPoint; // Ошибка регулирования
-            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refLCS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток, когда робот едет по линии
+            if (Math.abs(error) <= motions.lineFollowWithOneSensorConditionMaxErr && refLCS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
@@ -409,7 +415,7 @@ namespace motions {
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             if (lineLocation == HorizontalLineLocation.Inside) error = refLCS - motions.lineFollowSetPoint; // Ошибка регулирования
             else if (lineLocation == HorizontalLineLocation.Outside) error = motions.lineFollowSetPoint - refLCS; // Ошибка регулирования
-            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refRCS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток в момент, когда робот едет по линии
+            if (Math.abs(error) <= motions.lineFollowWithOneSensorConditionMaxErr && refRCS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
