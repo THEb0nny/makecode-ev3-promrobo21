@@ -183,13 +183,13 @@ function Main() { // Определение главной функции
     });
     pause(500);
     chassis.DistMove(-550, 30, true);
-    // chassis.RampDistMove(-550, -20, -30, 40);
+    // chassis.RampDistMove(-550, -20, -30, 30);
     chassis.SpinTurn(-90, 30);
     pause(200);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
     levelings.LineAlignment(VerticalLineLocation.Behind, 1000);
     chassis.DistMove(750, 50, true);
-    //chassis.RampDistMove(750, 20, 30, 60);
+    //chassis.RampDistMove(750, 20, 30, 50);
     pause(200);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
     control.runInParallel(function () {

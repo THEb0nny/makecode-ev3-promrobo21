@@ -77,7 +77,7 @@ namespace sensors {
      * @param maxRgbArr массив с тремя значениями rgb
      */
     //% blockId="SetColorSensorMaxRgbValues"
-    //% block="set $sensor| color sensor max RGB values maxRgbArr"
+    //% block="set $sensor| color sensor max RGB values $maxRgbArr"
     //% block.loc.ru="установить $sensor| датчику цвета максимальные значения RGB $maxRgbArr"
     //% inlineInputMode="inline"
     //% weight="90" blockGap="8"
