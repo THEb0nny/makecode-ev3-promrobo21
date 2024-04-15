@@ -18,6 +18,37 @@ namespace motions {
     export let lineFollowRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком
     export let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
 
+    export let distRollingAfterIntersection = 0; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
+    export let distRollingAfterIntersectionMoveOut = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
+
+    /**
+     * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
+     * @param dist дистанция прокатки после перекрёстка, eg: 50
+     */
+    //% blockId="SetDistRollingAfterInsetsection"
+    //% block="set distance $dist| rolling after intersection"
+    //% block.loc.ru="установить дистанцию $dist прокатки после перекрёстка"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Параметры"
+    export function SetDistRollingAfterInsetsection(dist: number) {
+        distRollingAfterIntersection = dist;
+    }
+
+    /**
+     * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
+     * @param dist дистанция прокатки после перекрёстка, eg: 20
+     */
+    //% blockId="SetDistRollingAfterIntersectionMoveOut"
+    //% block="set distance $dist| rolling exit an intersection"
+    //% block.loc.ru="установить дистанцию $dist| прокатки съезда с перекрёстка"
+    //% inlineInputMode="inline"
+    //% weight="98"
+    //% group="Параметры"
+    export function SetDistRollingAfterIntersectionMoveOut(dist: number) {
+        distRollingAfterIntersectionMoveOut = dist;
+    }
+
     /**
      * Функция движения по линии до перекрёстка.
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling

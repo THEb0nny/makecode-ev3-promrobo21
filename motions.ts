@@ -41,11 +41,11 @@ namespace chassis {
     // Функция, которая выполняет действие после цикла с движением
     export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
-            chassis.DistMove(DIST_ROLLING_AFTER_INTERSECTION, speed, true);
+            chassis.DistMove(motions.distRollingAfterIntersection, speed, true);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            chassis.RampDistMove(DIST_ROLLING_AFTER_INTERSECTION, 0, DIST_ROLLING_AFTER_INTERSECTION / 2, speed);
+            chassis.RampDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
-            chassis.RollingMoveOut(DIST_ROLLING_MOVE_OUT, speed);
+            chassis.RollingMoveOut(motions.distRollingAfterIntersectionMoveOut, speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением
             // CHASSIS_MOTORS.setBrake(true);
             // CHASSIS_MOTORS.stop();

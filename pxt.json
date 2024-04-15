@@ -1,6 +1,6 @@
 {
     "name": "Promrobo21",
-    "version": "0.21.4",
+    "version": "0.21.5",
     "description": "Methods (blocks) for working with ev3 to participate in competitions.",
     "dependencies": {
         "ev3": "*",
@@ -32,5 +32,10 @@
     "supportedTargets": [
         "ev3"
     ],
-    "preferredEditor": "tsprj"
+    "preferredEditor": "tsprj",
+    "yotta": {
+        "config": {
+            "PXT_GC_CHECKS": 1
+        }
+    }
 }
