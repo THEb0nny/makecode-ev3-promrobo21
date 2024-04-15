@@ -70,8 +70,8 @@ namespace levelings {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            let errorL = LW_SET_POINT - refLCS, errorR = LW_SET_POINT - refRCS; // Вычисляем ошибки регулирования
-            if (!isOnLine && Math.abs(errorL) >= (LW_SET_POINT - 10) && Math.abs(errorL) <= (LW_SET_POINT + 10) && Math.abs(errorR) >= (LW_SET_POINT - 10) && Math.abs(errorR) <= (LW_SET_POINT + 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
+            let errorL = motions.lineFollowSetPoint - refLCS, errorR = motions.lineFollowSetPoint - refRCS; // Вычисляем ошибки регулирования
+            if (!isOnLine && Math.abs(errorL) >= (motions.lineFollowSetPoint - 10) && Math.abs(errorL) <= (motions.lineFollowSetPoint + 10) && Math.abs(errorR) >= (motions.lineFollowSetPoint - 10) && Math.abs(errorR) <= (motions.lineFollowSetPoint + 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки (нахождения линии) достигнуто
@@ -141,7 +141,7 @@ namespace levelings {
             let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             let error = refLCS - refRCS; // Находим ошибку
-            if (!isOnLine && Math.abs(error) <= (LW_SET_POINT - 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
+            if (!isOnLine && Math.abs(error) <= (motions.lineFollowSetPoint - 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
@@ -195,11 +195,11 @@ namespace levelings {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            if (refLCS <= LINE_REF_TRESHOLD) { // Левый датчик первый нашёл линию
+            if (refLCS <= motions.lineRefTreshold) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
                 encC1 = CHASSIS_R_MOTOR.angle(); // Считываем угол
                 break;
-            } else if (refRCS <= LINE_REF_TRESHOLD) { // Правый датчик первый нашёл линию
+            } else if (refRCS <= motions.lineRefTreshold) { // Правый датчик первый нашёл линию
                 firstSide = "RIGHT_SIDE";
                 encB1 = CHASSIS_L_MOTOR.angle(); // Считываем угол
                 break;
@@ -215,7 +215,7 @@ namespace levelings {
             if (firstSide == "LEFT_SIDE") {
                 let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
                 let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-                if (refRCS <= LINE_REF_TRESHOLD) { // Левый датчик нашёл линию
+                if (refRCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
                     encC2 = CHASSIS_R_MOTOR.angle(); // Считываем угол по новой
                     a = encC2 - encC1; // Рассчитываем длину стороны a в тиках энкодера
                     break;
@@ -223,7 +223,7 @@ namespace levelings {
             } else if (firstSide == "RIGHT_SIDE") {
                 let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
                 let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
-                if (refLCS <= LINE_REF_TRESHOLD) { // Левый датчик нашёл линию
+                if (refLCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
                     encB2 = CHASSIS_L_MOTOR.angle(); // Считываем угол по новой
                     a = encB2 - encB1; // Рассчитываем длину стороны a в тиках энкодера
                     break;

@@ -1,5 +1,12 @@
 namespace motions {
 
+    export let lineRefTreshold = 50; // Среднее значение серого (уставка) для определения границы линии
+    export let lineFollowRefTreshold = 35; // Пороговое значение определения перекрёстка
+    export let lineFollowSetPoint = lineFollowRefTreshold; // Среднее значение серого
+
+    export let distRollingAfterIntersection = 0; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
+    export let distRollingAfterIntersectionMoveOut = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
+
     export let lineFollow2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
     export let lineFollow2SensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     export let lineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
@@ -18,8 +25,17 @@ namespace motions {
     export let lineFollowRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком
     export let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
 
-    export let distRollingAfterIntersection = 0; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
-    export let distRollingAfterIntersectionMoveOut = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
+    export function SetLineRefTreshold(reflection: number) {
+        lineRefTreshold = reflection;
+    }
+
+    export function SetLineFollowRefTreshold(reflection: number) {
+        lineFollowRefTreshold = reflection;
+    }
+
+    export function SetLineFollowSetPoint(reflection: number) {
+        lineFollowSetPoint = reflection;
+    }
 
     /**
      * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
@@ -85,7 +101,7 @@ namespace motions {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            if (refLCS < LW_TRESHOLD && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток
+            if (refLCS < motions.lineFollowRefTreshold && refRCS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток
             let error = refLCS - refRCS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
@@ -210,8 +226,8 @@ namespace motions {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            if (lineLocation == HorizontalLineLocation.Inside) error = refLCS - LW_SET_POINT; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = LW_SET_POINT - refLCS; // Ошибка регулирования
+            if (lineLocation == HorizontalLineLocation.Inside) error = refLCS - motions.lineFollowSetPoint; // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = motions.lineFollowSetPoint - refLCS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
@@ -274,8 +290,8 @@ namespace motions {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            if (lineLocation == HorizontalLineLocation.Inside) error = LW_SET_POINT - refRCS; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = refRCS - LW_SET_POINT; // Ошибка регулирования
+            if (lineLocation == HorizontalLineLocation.Inside) error = motions.lineFollowSetPoint - refRCS; // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = refRCS - motions.lineFollowSetPoint; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
@@ -332,9 +348,9 @@ namespace motions {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            if (lineLocation == HorizontalLineLocation.Inside) error = LW_SET_POINT - refRCS; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = refRCS - LW_SET_POINT; // Ошибка регулирования
-            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refLCS < LW_TRESHOLD) break; // Проверка на перекрёсток, когда робот едет по линии
+            if (lineLocation == HorizontalLineLocation.Inside) error = motions.lineFollowSetPoint - refRCS; // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = refRCS - motions.lineFollowSetPoint; // Ошибка регулирования
+            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refLCS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
@@ -391,9 +407,9 @@ namespace motions {
             let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefValCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefValCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            if (lineLocation == HorizontalLineLocation.Inside) error = refLCS - LW_SET_POINT; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = LW_SET_POINT - refLCS; // Ошибка регулирования
-            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refRCS < LW_TRESHOLD) break; // Проверка на перекрёсток в момент, когда робот едет по линии
+            if (lineLocation == HorizontalLineLocation.Inside) error = refLCS - motions.lineFollowSetPoint; // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = motions.lineFollowSetPoint - refLCS; // Ошибка регулирования
+            if (Math.abs(error) <= LW_CONDITION_MAX_ERR && refRCS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
