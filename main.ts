@@ -13,10 +13,10 @@ let WHEELS_D = 62.4; // Диаметр колёс в мм
 let WHEELS_W = 180; // Расстояние между центрами колёс в мм
 
 function RgbToHsvlToColorConvert(debug: boolean = false) {
-    let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+    // let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
     while (true) {
         let currTime = control.millis(); // Текущее время
-        prevTime = currTime; // Новое время в переменную предыдущего времени
+        // prevTime = currTime; // Новое время в переменную предыдущего времени
         let rgbCS = CHECK_COLOR_CS.rgbRaw();
         for (let i = 0; i < 3; i++) {
             rgbCS[i] = Math.map(rgbCS[i], 0, sensors.maxRgbColorSensor4[i], 0, 255);
