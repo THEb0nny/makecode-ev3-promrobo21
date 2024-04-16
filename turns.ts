@@ -1,5 +1,8 @@
 namespace chassis {
 
+    export let encSmartSpinTurnTimeOut = 800; // Максимальное время умного поворота относительно центра в мм
+    export let encSmartPivotTurnTimeOut = 1000; // Максимальное время умного поворота относительно колеса в мм
+
     export let smartSpinTurnSpeed = 50; // Переменная для хранения скорости при повороте относительно центра оси
     export let smartSpinTurnKp = 0.25; // Переменная для хранения коэффицента пропорционального регулятора при повороте относительно центра оси
     export let smartSpinTurnKi = 0; // Переменная для хранения коэффицента интегорального регулятора при повороте относительно центра оси
@@ -11,6 +14,14 @@ namespace chassis {
     export let smartPivotTurnKi = 0; // Переменная для хранения коэффицента интегорального регулятора при повороте относительно колеса
     export let smartPivotTurnKd = 2; // Переменная для хранения коэффицента дифференциального регулятора при повороте относительно колеса
     export let smartPivotTurnN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при повороте относительно колеса
+
+    export function SetSmartSpinTurnTimeOut(time: number) {
+        encSmartSpinTurnTimeOut = time;
+    }
+
+    export function SetSmartPivotTurnTimeOut(time: number) {
+        encSmartPivotTurnTimeOut = time;
+    }
 
     /**
      * Поворот относительно центра колёс c регулятором.
@@ -60,12 +71,12 @@ namespace chassis {
             automation.pid2.setPoint(error); // Передаём ошибку регулятору
             let u = automation.pid2.compute(dt, 0); // Вычисляем и записываем значение с регулятора
             u = Math.constrain(u, -smartSpinTurnSpeed, smartSpinTurnSpeed); // Ограничение скорости
-            if (!isTurned && Math.abs(error) <= ENC_TURN_MAX_ERR_DIFFERENCE && Math.abs(u) <= ENC_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца при маленькой ошибке и маленькой мощности регулятора
+            if (!isTurned && Math.abs(error) <= ENC_SMART_TURN_MAX_ERR_DIFFERENCE && Math.abs(u) <= ENC_SMART_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца при маленькой ошибке и маленькой мощности регулятора
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
                 music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
             }
-            if (isTurned && currTime - deregStartTime >= ENC_TURN_TIME_DEREG || currTime - startTime >= ENC_SPIN_TURN_OUT_TIME) break; // Дорегулируемся
+            if (isTurned && currTime - deregStartTime >= ENC_SMART_TURN_TIME_DEREG || currTime - startTime >= encSmartSpinTurnTimeOut) break; // Дорегулируемся
             CHASSIS_L_MOTOR.run(u); CHASSIS_R_MOTOR.run(-u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
@@ -138,11 +149,11 @@ namespace chassis {
             if (wheelPivot == WheelPivot.LeftWheel) motEnc = CHASSIS_L_MOTOR.angle() - motEncPrev; // Значение левого энкодера мотора в текущий момент
             else if (wheelPivot == WheelPivot.RightWheel) motEnc = CHASSIS_R_MOTOR.angle() - motEncPrev; // Значение правого энкодера мотора в текущий момент
             let error = calcMotRot - motEnc; // Ошибка регулирования
-            if (isTurned && currTime - deregStartTime >= ENC_TURN_TIME_DEREG || currTime - startTime >= ENC_PIVOT_TURN_OUT_TIME) break; // Дорегулируемся
+            if (isTurned && currTime - deregStartTime >= ENC_SMART_TURN_TIME_DEREG || currTime - startTime >= encSmartPivotTurnTimeOut) break; // Дорегулируемся
             automation.pid2.setPoint(error); // Передаём ошибку регулятору
             let U = automation.pid2.compute(dt, 0); // Записываем в переменную управляющее воздействие регулятора
             U = Math.constrain(U, -smartPivotTurnSpeed, smartPivotTurnSpeed); // Ограничить скорость по входному параметру
-            if (!isTurned && Math.abs(error) <= ENC_TURN_MAX_ERR_DIFFERENCE && Math.abs(U) <= ENC_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца
+            if (!isTurned && Math.abs(error) <= ENC_SMART_TURN_MAX_ERR_DIFFERENCE && Math.abs(U) <= ENC_SMART_TURN_MAX_REG_DIFFERENCE) { // Если почти повернулись до конца
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
                 music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
