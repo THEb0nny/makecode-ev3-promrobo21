@@ -27,18 +27,58 @@ namespace motions {
     export let lineFollowRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком
     export let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
 
+    /**
+     * Установить пороговое значение отражения для линии.
+     * @param reflection значение отражения, eg: 50
+     */
+    //% blockId="SetLineRefTreshold"
+    //% block="set reflection $reflection| treshold"
+    //% block.loc.ru="установить пороговое значение $reflection| отражения"
+    //% inlineInputMode="inline"
+    //% weight="89"
+    //% group="Параметры"
     export function SetLineRefTreshold(reflection: number) {
         lineRefTreshold = reflection;
     }
 
+    /**
+     * Установить пороговое значение отражения при движении по линии.
+     * @param reflection значение отражения, eg: 35
+     */
+    //% blockId="SetLineFollowRefTreshold"
+    //% block="set line follow reflection $reflection| treshold"
+    //% block.loc.ru="установить пороговое значение $reflection| отражения движения по линии"
+    //% inlineInputMode="inline"
+    //% weight="88"
+    //% group="Параметры"
     export function SetLineFollowRefTreshold(reflection: number) {
         lineFollowRefTreshold = reflection;
     }
 
-    export function SetLineFollowSetPoint(reflection: number) {
-        lineFollowSetPoint = reflection;
+    /**
+     * Установить уставку (среднее значение) отражения для движения по линии.
+     * @param reflectionSetPoint значение уставки движения по линии, eg: 50
+     */
+    //% blockId="SetLineFollowSetPoint"
+    //% block="set line follow set point $reflectionSetPoint| reflection"
+    //% block.loc.ru="установить уставку $reflectionSetPoint| движения по линии"
+    //% inlineInputMode="inline"
+    //% weight="87"
+    //% group="Параметры"
+    export function SetLineFollowSetPoint(reflectionSetPoint: number) {
+        lineFollowSetPoint = reflectionSetPoint;
     }
 
+    /**
+     * Установить максимальную ошибку условия движения одним датчиком по линии.
+     * @param maxErr максимальное значение ошибки движения по линии, eg: 30
+     */
+    //% blockId="SetLineFollowConditionMaxErr"
+    //% block="set line follow max error $maxErr"
+    //% block.loc.ru="установить максимальую ошибку $maxErr| движения по линии"
+    //% inlineInputMode="inline"
+    //% weight="79"
+    //% group="Параметры"
     export function SetLineFollowConditionMaxErr(maxErr: number) {
         lineFollowWithOneSensorConditionMaxErr = maxErr;
     }

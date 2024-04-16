@@ -40,7 +40,7 @@ function RgbToHsvlToColorConvert(debug: boolean = false) {
 }
 
 // Функция для управление манипулятором
-function Manipulator(motor: motors.Motor, state: ClawState, speed?: number, timeOut?: number) {
+function SetManipulatorPos(motor: motors.Motor, state: ClawState, speed?: number, timeOut?: number) {
     if (!speed) speed = 40; // Если аргумент не был передан, то за скорость установится значение по умолчанию
     else speed = Math.abs(speed);
     if (timeOut == undefined) speed = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
@@ -133,10 +133,10 @@ function Main() { // Определение главной функции
 
     // Ваш код тут
     control.runInParallel(function () {
-        Manipulator(MANIP_MOTOR1, ClawState.Open, 20, 1000);
+        SetManipulatorPos(MANIP_MOTOR1, ClawState.Open, 20, 1000);
     });
     control.runInParallel(function () {
-        Manipulator(MANIP_MOTOR2, ClawState.Open, 20, 1000);
+        SetManipulatorPos(MANIP_MOTOR2, ClawState.Open, 20, 1000);
     });
     // chassis.DistMove(10, 40, true);
     chassis.PivotTurn(90, 30, WheelPivot.RightWheel);
@@ -156,10 +156,10 @@ function Main() { // Определение главной функции
     chassis.DistMove(240, 40, true);
     // chassis.RampDistMove(240, 20, 30, 40);
     control.runInParallel(function () {
-        Manipulator(MANIP_MOTOR1, ClawState.Close, 40);
+        SetManipulatorPos(MANIP_MOTOR1, ClawState.Close, 40);
     });
     control.runInParallel(function () {
-        Manipulator(MANIP_MOTOR2, ClawState.Close, 40);
+        SetManipulatorPos(MANIP_MOTOR2, ClawState.Close, 40);
     });
     pause(500);
     chassis.DistMove(-550, 30, true);
@@ -173,10 +173,10 @@ function Main() { // Определение главной функции
     pause(200);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
     control.runInParallel(function () {
-        Manipulator(MANIP_MOTOR1, ClawState.Open, 40);
+        SetManipulatorPos(MANIP_MOTOR1, ClawState.Open, 40);
     });
     control.runInParallel(function () {
-        Manipulator(MANIP_MOTOR2, ClawState.Open, 40);
+        SetManipulatorPos(MANIP_MOTOR2, ClawState.Open, 40);
     });
     pause(100);
     chassis.DistMove(60, 40, true);
