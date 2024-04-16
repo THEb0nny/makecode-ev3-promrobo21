@@ -2,8 +2,8 @@
 let CHASSIS_L_MOTOR = motors.mediumB; // Ссылка на объект левого мотора в шасси
 let CHASSIS_R_MOTOR = motors.mediumC; // Ссылка на объект правого мотора в шасси
 
-let MANIPULATOR_MOTOR1: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
-let MANIPULATOR_MOTOR2: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
+let MANIP_MOTOR1: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
+let MANIP_MOTOR2: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
 
 let L_COLOR_SEN = sensors.color2; // Ссылка на объект левого датчика цвета
 let R_COLOR_SEN = sensors.color3; // Ссылка на объект правого датчика цвета
@@ -116,8 +116,8 @@ function Main() { // Определение главной функции
     CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
     CHASSIS_L_MOTOR.setBrakeSettleTime(10); CHASSIS_R_MOTOR.setBrakeSettleTime(10); // Включаем у моторов ожидание выполнения
 
-    MANIPULATOR_MOTOR1.setInverted(true); MANIPULATOR_MOTOR2.setInverted(false); // Установить инверсию для манипулятора, если требуется
-    MANIPULATOR_MOTOR1.setBrake(true); MANIPULATOR_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
+    MANIP_MOTOR1.setInverted(true); MANIP_MOTOR2.setInverted(false); // Установить инверсию для манипулятора, если требуется
+    MANIP_MOTOR1.setBrake(true); MANIP_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
 
     // Ожидание старта
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
@@ -133,10 +133,10 @@ function Main() { // Определение главной функции
 
     // Ваш код тут
     control.runInParallel(function () {
-        Manipulator(MANIPULATOR_MOTOR1, ClawState.Open, 20, 1000);
+        Manipulator(MANIP_MOTOR1, ClawState.Open, 20, 1000);
     });
     control.runInParallel(function () {
-        Manipulator(MANIPULATOR_MOTOR2, ClawState.Open, 20, 1000);
+        Manipulator(MANIP_MOTOR2, ClawState.Open, 20, 1000);
     });
     // chassis.DistMove(10, 40, true);
     chassis.PivotTurn(90, 30, WheelPivot.RightWheel);
@@ -156,10 +156,10 @@ function Main() { // Определение главной функции
     chassis.DistMove(240, 40, true);
     // chassis.RampDistMove(240, 20, 30, 40);
     control.runInParallel(function () {
-        Manipulator(MANIPULATOR_MOTOR1, ClawState.Close, 40);
+        Manipulator(MANIP_MOTOR1, ClawState.Close, 40);
     });
     control.runInParallel(function () {
-        Manipulator(MANIPULATOR_MOTOR2, ClawState.Close, 40);
+        Manipulator(MANIP_MOTOR2, ClawState.Close, 40);
     });
     pause(500);
     chassis.DistMove(-550, 30, true);
@@ -173,10 +173,10 @@ function Main() { // Определение главной функции
     pause(200);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
     control.runInParallel(function () {
-        Manipulator(MANIPULATOR_MOTOR1, ClawState.Open, 40);
+        Manipulator(MANIP_MOTOR1, ClawState.Open, 40);
     });
     control.runInParallel(function () {
-        Manipulator(MANIPULATOR_MOTOR2, ClawState.Open, 40);
+        Manipulator(MANIP_MOTOR2, ClawState.Open, 40);
     });
     pause(100);
     chassis.DistMove(60, 40, true);
