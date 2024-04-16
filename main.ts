@@ -12,31 +12,28 @@ let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датч�
 let WHEELS_D = 62.4; // Диаметр колёс в мм
 let WHEELS_W = 180; // Расстояние между центрами колёс в мм
 
-function RgbToHsvlToColorConvert(debug: boolean = false) {
-    // let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
-    while (true) {
-        let currTime = control.millis(); // Текущее время
-        // prevTime = currTime; // Новое время в переменную предыдущего времени
-        let rgbCS = CHECK_COLOR_CS.rgbRaw();
-        for (let i = 0; i < 3; i++) {
-            rgbCS[i] = Math.map(rgbCS[i], 0, sensors.maxRgbColorSensor4[i], 0, 255);
-            rgbCS[i] = Math.constrain(rgbCS[i], 0, 255);
-        }
-        const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
-        const color = sensors.HsvToColorNum(hsvlCS);
-        if (debug) {
-            brick.clearScreen();
-            brick.printValue("r", rgbCS[0], 1, 21);
-            brick.printValue("g", rgbCS[1], 2, 21);
-            brick.printValue("b", rgbCS[2], 3, 21);
-            brick.printValue("hue", hsvlCS[0], 5, 21);
-            brick.printValue("sat", hsvlCS[1], 6, 21);
-            brick.printValue("val", hsvlCS[2], 7, 21);
-            brick.printValue("light", hsvlCS[3], 8, 21);
-            brick.printValue("color", color, 10, 21);
-        }
-        control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+let parkElements: number[] = [0, 0, 0, 0, 0, 0]; // Парковые элементы
+
+function RgbToHsvlToColorConvert(debug: boolean = false): number {
+    let rgbCS = CHECK_COLOR_CS.rgbRaw();
+    for (let i = 0; i < 3; i++) {
+        rgbCS[i] = Math.map(rgbCS[i], 0, sensors.maxRgbColorSensor4[i], 0, 255);
+        rgbCS[i] = Math.constrain(rgbCS[i], 0, 255);
     }
+    const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
+    const color = sensors.HsvToColorNum(hsvlCS);
+    if (debug) {
+        brick.clearScreen();
+        brick.printValue("r", rgbCS[0], 1, 21);
+        brick.printValue("g", rgbCS[1], 2, 21);
+        brick.printValue("b", rgbCS[2], 3, 21);
+        brick.printValue("hue", hsvlCS[0], 5, 21);
+        brick.printValue("sat", hsvlCS[1], 6, 21);
+        brick.printValue("val", hsvlCS[2], 7, 21);
+        brick.printValue("light", hsvlCS[3], 8, 21);
+        brick.printValue("color", color, 10, 21);
+    }
+    return color;
 }
 
 // Функция для управление манипулятором
@@ -70,12 +67,6 @@ function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: n
 // Manipulator(ClawState.Open, 60); // Открыть манипулятор с произвольной скоростью 60
 
 function Main() { // Определение главной функции
-    for (let i = 0; i < 10; i++) { // Опрашиваем какое-то количество раз датчики, чтобы они включились перед стартом по нажатию кнопки
-        L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
-        R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
-        CHECK_COLOR_CS.rgbRaw();
-        loops.pause(5);
-    }
 
     // Установка коэффицентов движения по линии двумя датчиками
     motions.lineFollow2SensorSpeed = 60;
@@ -119,6 +110,14 @@ function Main() { // Определение главной функции
     MANIP_MOTOR1.setInverted(true); MANIP_MOTOR2.setInverted(false); // Установить инверсию для манипулятора, если требуется
     MANIP_MOTOR1.setBrake(true); MANIP_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
 
+    // Опрашиваем какое-то количество раз датчики, чтобы они включились перед стартом по нажатию кнопки
+    for (let i = 0; i < 10; i++) {
+        L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+        R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+        CHECK_COLOR_CS.rgbRaw();
+        loops.pause(5);
+    }
+
     // Ожидание старта
     brick.printString("PRESS ENTER TO RUN", 7, 6); // Вывести на экран сообщение о готовности
     while (true) {
@@ -126,7 +125,6 @@ function Main() { // Определение главной функции
         else if (brick.buttonUp.wasPressed()) sensors.SearchRgbMaxColorSensors();
         else if (brick.buttonDown.wasPressed()) RgbToHsvlToColorConvert(true);
         else if (brick.buttonRight.wasPressed()) break; // Ожидание нажатия правой кнопки, чтобы выйти и пойти дальше по коду
-
         loops.pause(0.001);
     }
     brick.clearScreen(); // Очистить экрана
@@ -141,6 +139,28 @@ function Main() { // Определение главной функции
     // chassis.DistMove(10, 40, true);
     chassis.PivotTurn(90, 30, WheelPivot.RightWheel);
     pause(250);
+    // Запускаем функцию определения цвета парковых элементов в параллельной задаче
+    let startEncLeftMotor = CHASSIS_L_MOTOR.angle(); // Запоминаем значение с энкодера левого мотора перед стартом  поиска парковых элементов
+    let startEncRightMotor = CHASSIS_R_MOTOR.angle(); // Запоминаем значенис с энкодера правого мотора
+    control.runInParallel(function () {
+        while (true) {
+            let currTime = control.millis(); // Текущее время
+            let color = RgbToHsvlToColorConvert(); // Узнаём цвет переведя RGB в HSVL и получив код цвета
+            if (color == 1 || color == 2) { // Если нашли искомые цвета
+                brick.setStatusLightInBackground(StatusLight.Orange, 50); // Светим светодиодом
+                let averageEnc = ((CHASSIS_L_MOTOR.angle() - startEncLeftMotor) + (CHASSIS_R_MOTOR.angle() - startEncRightMotor)) / 2; // Среднее значение с энкодеров
+                if (25 <= averageEnc && averageEnc <= 50) parkElements[5] = color; // Считываем на зоне 6
+                else if (averageEnc <= 100) parkElements[4] = color; // Считываем на зоне 5
+                else if (averageEnc <= 150) parkElements[3] = color; // Считываем на зоне 4
+                else if (averageEnc <= 200) parkElements[2] = color; // Считываем на зоне 3
+                else if (averageEnc <= 250) parkElements[1] = color; // Считываем на зоне 2
+                else if (averageEnc <= 300) parkElements[0] = color; // Считываем на зоне 1
+                else if (averageEnc <= 350) break; // Прервать, если проехал больше
+            }
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+        }
+        brick.setStatusLightInBackground(StatusLight.GreenPulse, 500); // Светим светодиодом, что мы закончили считывание
+    });
     motions.LineFollowToDistanceWithLeftSensor(HorizontalLineLocation.Outside, 700, AfterMotion.DecelRolling, { speed: 30, Kp: 0.3, Kd: 1 });
     pause(250);
     chassis.PivotTurn(30, 30, WheelPivot.LeftWheel);
