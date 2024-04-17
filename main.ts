@@ -21,7 +21,7 @@ function RgbToHsvlToColorConvert(debug: boolean = false): number {
         rgbCS[i] = Math.constrain(rgbCS[i], 0, 255);
     }
     const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
-    const color = sensors.HsvToColorNum(hsvlCS);
+    const color = sensors.HsvlToColorNum(hsvlCS);
     if (debug) {
         brick.clearScreen();
         brick.printValue("r", rgbCS[0], 1, 20);

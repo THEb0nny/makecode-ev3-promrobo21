@@ -54,13 +54,13 @@ namespace sensors {
      * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
      * @param wRefRawValCS сырое значение отражения на белом, eg: 650
      */
-    //% blockId="GetNormRefValCS"
+    //% blockId="GetNormRefCS"
     //% block="normalize reflection $refRawValCS| at black $bRefRawValCS| white $wRefRawValCS"
     //% block.loc.ru="нормализовать отраж-е $refRawValCS| при чёрном $bRefRawValCS| белом $wRefRawValCS"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
     //% group="Line Sensor"
-    export function GetNormRefValCS(refRawValCS: number, bRefRawValCS: number, wRefRawValCS: number): number {
+    export function GetNormRefCS(refRawValCS: number, bRefRawValCS: number, wRefRawValCS: number): number {
         let refValCS = Math.map(refRawValCS, bRefRawValCS, wRefRawValCS, 0, 100);
         refValCS = Math.constrain(refValCS, 0, 100);
         return refValCS;
@@ -70,8 +70,6 @@ namespace sensors {
 
 namespace sensors {
 
-    const HSV_TO_COLOR_S_TRESHOLD = 60; // Пороговое значение границы цветности
-
     /**
      * Установить максимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
      * @param maxRgbArr массив с тремя значениями rgb
@@ -80,15 +78,16 @@ namespace sensors {
     //% block="set $sensor| color sensor max RGB values $maxRgbArr"
     //% block.loc.ru="установить $sensor| датчику цвета максимальные значения RGB $maxRgbArr"
     //% inlineInputMode="inline"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
     //% weight="90" blockGap="8"
     //% group="Color Sensor"
     export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxRgbArr: number[]) {
-        /* if (sensor == sensors.color1) maxRgbValuesCS1 = [maxRed, maxGreen, maxBlue];
-        else
-        */
-        if (sensor == sensors.color2) maxRgbColorSensor2 = maxRgbArr;
-        else if (sensor == sensors.color3) maxRgbColorSensor3 = maxRgbArr;
-        else if (sensor == sensors.color4) maxRgbColorSensor4 = maxRgbArr;
+        if (sensor.port() == 1) maxRgbColorSensor1 = maxRgbArr;
+        else if (sensor.port() == 2) maxRgbColorSensor2 = maxRgbArr;
+        else if (sensor.port() == 3) maxRgbColorSensor3 = maxRgbArr;
+        else if (sensor.port() == 4) maxRgbColorSensor4 = maxRgbArr;
     }
 
     /**
@@ -151,7 +150,7 @@ namespace sensors {
         return [Math.round(hue), Math.round(sat), Math.round(val), Math.round(light)];
     }
 
-    export interface HsvlToColorNumColorSensor {
+    interface HsvlToColorNum {
         colorBoundary: number;
         whiteBoundary: number;
         blackBoundary: number;
@@ -166,15 +165,15 @@ namespace sensors {
      * Перевести HSV в код цвета. Получаемые коды цвета соотвествуют кодам LEGO.
      * @param hsvl массив значений hsvl
      */
-    //% blockId="HsvToColorNum"
+    //% blockId="HsvlToColorNum"
     //% block="convert $hsvl| to color code"
     //% block.loc.ru="перевести $hsvl| в цветовой код"
     //% inlineInputMode="inline"
     //% weight="88" blockGap="8"
     //% group="Color Sensor"
-    export function HsvToColorNum(hsvl: number[]): number {
+    export function HsvlToColorNum(hsvl: number[]): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
-        if (S > HSV_TO_COLOR_S_TRESHOLD) { // Граница цветности
+        if (S > 60) { // Граница цветности
             if (H < 25) return 5; // red
             else if (H < 50) return 7; // brown
             else if (H < 100) return 4; // yellow
