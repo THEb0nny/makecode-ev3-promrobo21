@@ -22,16 +22,17 @@ function RgbToHsvlToColorConvert(debug: boolean = false): number {
     }
     const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
     const color = sensors.HsvlToColorNum(hsvlCS);
+    const column = 20;
     if (debug) {
         brick.clearScreen();
-        brick.printValue("r", rgbCS[0], 1, 20);
-        brick.printValue("g", rgbCS[1], 2, 20);
-        brick.printValue("b", rgbCS[2], 3, 20);
-        brick.printValue("hue", hsvlCS[0], 5, 20);
-        brick.printValue("sat", hsvlCS[1], 6, 20);
-        brick.printValue("val", hsvlCS[2], 7, 20);
-        brick.printValue("light", hsvlCS[3], 8, 20);
-        brick.printValue("color", color, 10, 20);
+        brick.printValue("r", rgbCS[0], 1, column);
+        brick.printValue("g", rgbCS[1], 2, column);
+        brick.printValue("b", rgbCS[2], 3, column);
+        brick.printValue("hue", hsvlCS[0], 5, column);
+        brick.printValue("sat", hsvlCS[1], 6, column);
+        brick.printValue("val", hsvlCS[2], 7, column);
+        brick.printValue("light", hsvlCS[3], 8, column);
+        brick.printValue("color", color, 10, column);
     }
     return color;
 }
@@ -42,10 +43,10 @@ function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: n
     else speed = Math.abs(speed);
     if (timeOut == undefined) speed = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
     else timeOut = Math.abs(timeOut);
-
     motor.setBrake(true); // Устанавливаем ударжание мотора при остановке
-    if (state == ClawState.Open) motor.run(speed);
-    else motor.run(-speed);
+    if (state == ClawState.Open) motor.run(speed); // Запускаем мотор
+    else if (state == ClawState.Close) motor.run(-speed); // Запускаем мотор в другую сторону
+    else return;
     motor.pauseUntilStalled(timeOut);
     motor.stop(); // Останавливаем мотор
 }
