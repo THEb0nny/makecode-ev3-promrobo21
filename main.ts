@@ -5,7 +5,7 @@ let CHASSIS_R_MOTOR = motors.mediumC; // Ссылка на объект прав
 let MANIP_MOTOR1: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
 let MANIP_MOTOR2: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
 
-let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
+let COLOR_DETECTION_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
 let WHEELS_D = 62.4; // Диаметр колёс в мм
 let WHEELS_W = 180; // Расстояние между центрами колёс в мм
@@ -13,10 +13,10 @@ let WHEELS_W = 180; // Расстояние между центрами колё
 let parkElements: number[] = [0, 0, 0, 0, 0, 0]; // Парковые элементы
 
 function RgbToHsvlToColorConvert(debug: boolean = false): number {
-    let rgbCS = CHECK_COLOR_CS.rgbRaw();
+    let rgbCS = COLOR_DETECTION_CS.rgbRaw();
     for (let i = 0; i < 3; i++) {
         rgbCS[i] = Math.map(rgbCS[i], 0, sensors.maxRgbColorSensor4[i], 0, 255);
-        rgbCS[i] = Math.constrain(rgbCS[i], 0, 255);
+        // rgbCS[i] = Math.constrain(rgbCS[i], 0, 255);
     }
     const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
     const color = sensors.HsvlToColorNum(hsvlCS);
@@ -102,7 +102,7 @@ function Main() { // Определение главной функции
 
     sensors.SetColorSensorMaxRgbValues(sensors.leftLineSensor, [273, 297, 355]); // Установить левому датчику линии максималальные значения RGB
     sensors.SetColorSensorMaxRgbValues(sensors.rightLineSensor, [230, 224, 178]); // Установить правому датчику линии максималальные значения RGB
-    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [352, 319, 382]);
+    sensors.SetColorSensorMaxRgbValues(COLOR_DETECTION_CS, [352, 319, 382]);
 
     CHASSIS_L_MOTOR.setInverted(true); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
     CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
@@ -112,10 +112,10 @@ function Main() { // Определение главной функции
     MANIP_MOTOR1.setBrake(true); MANIP_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
 
     // Опрашиваем какое-то количество раз датчики, чтобы они включились перед стартом по нажатию кнопки
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 50; i++) {
         sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw);
         sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw);
-        CHECK_COLOR_CS.rgbRaw();
+        COLOR_DETECTION_CS.rgbRaw();
         loops.pause(5);
     }
 

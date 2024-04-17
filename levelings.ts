@@ -181,7 +181,7 @@ namespace levelings {
     //% group="Линия"
     export function LineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
         let DIST_BETWEEN_CS = 25; // Расстояние между датчиками цвета в мм
-        
+
         chassis.ChassisControl(0, speed); // Команда двигаться вперёд
         let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
         let encB1 = 0, encB2 = 0, encC1 = 0, encC2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
