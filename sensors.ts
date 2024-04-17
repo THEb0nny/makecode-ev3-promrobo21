@@ -1,5 +1,8 @@
 namespace sensors {
 
+    export let leftLineSensor: sensors.ColorSensor; // Левый датчик для движения по линии
+    export let rightLineSensor: sensors.ColorSensor; // Правый датчик для движения по линии
+
     export let bRefRawLeftLineSensor: number; // Сырые значения на чёрном для левого датчика линии
     export let wRefRawLeftLineSensor: number; // Сырые значения на белом для левого датчика линии
 
@@ -12,13 +15,37 @@ namespace sensors {
     export let maxRgbColorSensor4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
 
     /**
+     * Метод установки датчиков для движения и работы с линией.
+     */
+    //% blockId="SetLineSensors"
+    //% block="set left $newLeftLineSensor| right $newRightLineSensor| line sensors"
+    //% block.loc.ru="установить левый $newLeftLineSensor| правый $newRightLineSensor| датчики линии"
+    //% inlineInputMode="inline"
+    //% newLeftLineSensor.fieldEditor="images"
+    //% newLeftLineSensor.fieldOptions.columns="4"
+    //% newLeftLineSensor.fieldOptions.width="300"
+    //% newRightLineSensor.fieldEditor="images"
+    //% newRightLineSensor.fieldOptions.columns="4"
+    //% newRightLineSensor.fieldOptions.width="300"
+    //% weight="99"
+    //% group="Line Sensor"
+    export function SetLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
+        if (newLeftLineSensor !== newRightLineSensor) { // Если сенсоры установили не одинаковые
+            leftLineSensor = newLeftLineSensor;
+            rightLineSensor = newRightLineSensor;
+        } else {
+            control.assert(false, 1);
+        }
+    }
+
+    /**
      * Метод установки датчику линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorRawValue"
     //% block="set $sensor| line sensor white $wRefRawVal| black $bRefRawVal| raw values"
     //% block.loc.ru="установить датчику линии $sensor| сырые значения чёрного $bRefRawVal| белого $wRefRawVal"
     //% inlineInputMode="inline"
-    //% weight="99" blockGap="8"
+    //% weight="89" blockGap="8"
     //% group="Line Sensor"
     export function SetLineSensorRawValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
         if (sensor == LineSensor.Left) {
@@ -37,13 +64,13 @@ namespace sensors {
     //% block="line sensor $sensor| raw value"
     //% block.loc.ru="сырое значение датчика линии $sensor"
     //% inlineInputMode="inline"
-    //% weight="98" blockGap="8"
+    //% weight="87" blockGap="8"
     //% group="Line Sensor"
     export function GetLineSensorRawValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
-            return L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+            return leftLineSensor.light(LightIntensityMode.ReflectedRaw);
         } else if (sensor == LineSensor.Right) {
-            return R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+            return rightLineSensor.light(LightIntensityMode.ReflectedRaw);
         }
         return 0;
     }
@@ -58,7 +85,7 @@ namespace sensors {
     //% block="normalize reflection $refRawValCS| at black $bRefRawValCS| white $wRefRawValCS"
     //% block.loc.ru="нормализовать отраж-е $refRawValCS| при чёрном $bRefRawValCS| белом $wRefRawValCS"
     //% inlineInputMode="inline"
-    //% weight="97" blockGap="8"
+    //% weight="88" blockGap="8"
     //% group="Line Sensor"
     export function GetNormRefCS(refRawValCS: number, bRefRawValCS: number, wRefRawValCS: number): number {
         let refValCS = Math.map(refRawValCS, bRefRawValCS, wRefRawValCS, 0, 100);

@@ -170,64 +170,64 @@ namespace chassis {
             let currTime = control.millis();
             let dt = currTime - prevTime;
             prevTime = currTime;
-            let refRawLCS = L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
-            let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
-            let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
+            let refRawLeftLS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика линии
+            let refRawRightLS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика линии
+            let refLeftLS = sensors.GetNormRefCS(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.GetNormRefCS(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
             if (sensorsCondition == SensorSelection.LeftAndRight) { // Левый и правый датчик
                 if (refCondition == LogicalOperators.Greater) { // Больше
-                    if (refLCS > refTreshold && refRCS > refTreshold) break;
+                    if (refLeftLS > refTreshold && refRightLS > refTreshold) break;
                 } else if (refCondition == LogicalOperators.GreaterOrEqual) { // Больше или равно
-                    if (refLCS >= refTreshold && refRCS >= refTreshold) break;
+                    if (refLeftLS >= refTreshold && refRightLS >= refTreshold) break;
                 } else if (refCondition == LogicalOperators.Less) { // Меньше
-                    if (refLCS < refTreshold && refRCS < refTreshold) break;
+                    if (refLeftLS < refTreshold && refRightLS < refTreshold) break;
                 } else if (refCondition == LogicalOperators.LessOrEqual) { // Меньше или равно
-                    if (refLCS <= refTreshold && refRCS <= refTreshold) break;
+                    if (refLeftLS <= refTreshold && refRightLS <= refTreshold) break;
                 } else if (refCondition == LogicalOperators.Equal) { // Равно
-                    if (refLCS == refTreshold && refRCS == refTreshold) break;
+                    if (refLeftLS == refTreshold && refRightLS == refTreshold) break;
                 }
             } else if (sensorsCondition == SensorSelection.LeftOrRight) { // Левый или правый датчик
                 if (refCondition == LogicalOperators.Greater) { // Больше
-                    if (refLCS > refTreshold || refRCS > refTreshold) break;
+                    if (refLeftLS > refTreshold || refRightLS > refTreshold) break;
                 } else if (refCondition == LogicalOperators.GreaterOrEqual) { // Больше или равно
-                    if (refLCS >= refTreshold || refRCS >= refTreshold) break;
+                    if (refLeftLS >= refTreshold || refRightLS >= refTreshold) break;
                 } else if (refCondition == LogicalOperators.Less) { // Меньше
-                    if (refLCS < refTreshold || refRCS < refTreshold) break;
+                    if (refLeftLS < refTreshold || refRightLS < refTreshold) break;
                 } else if (refCondition == LogicalOperators.LessOrEqual) { // Меньше или равно
-                    if (refLCS <= refTreshold || refRCS <= refTreshold) break;
+                    if (refLeftLS <= refTreshold || refRightLS <= refTreshold) break;
                 } if (refCondition == LogicalOperators.Equal) { // Равно
-                    if (refLCS == refTreshold || refRCS == refTreshold) break;
+                    if (refLeftLS == refTreshold || refRightLS == refTreshold) break;
                 }
             } else if (sensorsCondition == SensorSelection.OnlyLeft) { // Только левый датчик
                 if (refCondition == LogicalOperators.Greater) { // Больше
-                    if (refLCS > refTreshold) break;
+                    if (refLeftLS > refTreshold) break;
                 } else if (refCondition == LogicalOperators.GreaterOrEqual) { // Больше или равно
-                    if (refLCS >= refTreshold) break;
+                    if (refLeftLS >= refTreshold) break;
                 } else if (refCondition == LogicalOperators.Less) { // Меньше
-                    if (refLCS < refTreshold) break;
+                    if (refLeftLS < refTreshold) break;
                 } else if (refCondition == LogicalOperators.LessOrEqual) { // Меньше или равно
-                    if (refLCS <= refTreshold) break;
+                    if (refLeftLS <= refTreshold) break;
                 } else if (refCondition == LogicalOperators.Equal) { // Равно
-                    if (refLCS == refTreshold) break;
+                    if (refLeftLS == refTreshold) break;
                 }
             } else if (sensorsCondition == SensorSelection.OnlyRight) { // Только правый датчик
                 if (refCondition == LogicalOperators.Greater) { // Больше
-                    if (refRCS > refTreshold) break;
+                    if (refRightLS > refTreshold) break;
                 } else if (refCondition == LogicalOperators.GreaterOrEqual) { // Больше или равно
-                    if (refRCS >= refTreshold) break;
+                    if (refRightLS >= refTreshold) break;
                 } else if (refCondition == LogicalOperators.Less) { // Меньше
-                    if (refRCS < refTreshold) break;
+                    if (refRightLS < refTreshold) break;
                 } else if (refCondition == LogicalOperators.LessOrEqual) { // Меньше или равно
-                    if (refRCS <= refTreshold) break;
+                    if (refRightLS <= refTreshold) break;
                 } else if (refCondition == LogicalOperators.Equal) { // Равно
-                    if (refRCS == refTreshold) break;
+                    if (refRightLS == refTreshold) break;
                 }
             }
             ChassisControl(dir, speed); // Дублирую команду двигаться по направлению и скоростью
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
-                brick.printValue("refLCS", refLCS, 1);
-                brick.printValue("refRCS", refRCS, 2);
+                brick.printValue("refLeftLS", refLeftLS, 1);
+                brick.printValue("refRightLS", refRightLS, 2);
                 brick.printValue("dt", dt, 12);
             }
             control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла

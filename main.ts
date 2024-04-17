@@ -5,8 +5,6 @@ let CHASSIS_R_MOTOR = motors.mediumC; // Ссылка на объект прав
 let MANIP_MOTOR1: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
 let MANIP_MOTOR2: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
 
-let L_COLOR_SEN = sensors.color2; // Ссылка на объект левого датчика цвета
-let R_COLOR_SEN = sensors.color3; // Ссылка на объект правого датчика цвета
 let CHECK_COLOR_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
 let WHEELS_D = 62.4; // Диаметр колёс в мм
@@ -51,7 +49,7 @@ function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: n
     motor.stop(); // Останавливаем мотор
 }
 
-// Примеры установки параметров для методов с регулятором
+//// Примеры установки параметров для методов с регулятором
 // { speed: 50 } - только скорость
 // { speed: 50, Kp: 0.5 } - скорость и Kp
 // { speed: 50, Kp: 0.5, Kd: 2 } - скорость, Kp и Kd
@@ -94,27 +92,29 @@ function Main() { // Определение главной функции
     levelings.linePositioningKp = 0.175;
     levelings.linePositioningKd = 2;
 
+    sensors.SetLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
+
     motions.SetDistRollingAfterInsetsection(50); // Дистанция для проезда после опредения перекрёстка для прокатки в мм
     motions.SetDistRollingAfterIntersectionMoveOut(20); // Дистанция для прокатки без торможения на перекрёстке в мм
 
     sensors.SetLineSensorRawValue(LineSensor.Left, 643, 450); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
     sensors.SetLineSensorRawValue(LineSensor.Right, 629, 474); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
 
-    sensors.SetColorSensorMaxRgbValues(L_COLOR_SEN, [273, 297, 355]);
-    sensors.SetColorSensorMaxRgbValues(R_COLOR_SEN, [230, 224, 178]);
+    sensors.SetColorSensorMaxRgbValues(sensors.leftLineSensor, [273, 297, 355]); // Установить левому датчику линии максималальные значения RGB
+    sensors.SetColorSensorMaxRgbValues(sensors.rightLineSensor, [230, 224, 178]); // Установить правому датчику линии максималальные значения RGB
     sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [352, 319, 382]);
 
     CHASSIS_L_MOTOR.setInverted(true); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
     CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
-    CHASSIS_L_MOTOR.setBrakeSettleTime(10); CHASSIS_R_MOTOR.setBrakeSettleTime(10); // Включаем у моторов ожидание выполнения
+    CHASSIS_L_MOTOR.setBrakeSettleTime(10); CHASSIS_R_MOTOR.setBrakeSettleTime(10); // Установить у моторов время ожидание после торможения
 
     MANIP_MOTOR1.setInverted(true); MANIP_MOTOR2.setInverted(false); // Установить инверсию для манипулятора, если требуется
     MANIP_MOTOR1.setBrake(true); MANIP_MOTOR2.setBrake(true); // Удержание моторов манипуляторов
 
     // Опрашиваем какое-то количество раз датчики, чтобы они включились перед стартом по нажатию кнопки
     for (let i = 0; i < 10; i++) {
-        L_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
-        R_COLOR_SEN.light(LightIntensityMode.ReflectedRaw);
+        sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw);
+        sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw);
         CHECK_COLOR_CS.rgbRaw();
         loops.pause(5);
     }
