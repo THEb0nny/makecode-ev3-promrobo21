@@ -104,6 +104,7 @@ namespace sensors {
     //% weight="89" blockGap="8"
     //% group="Color Sensor"
     export function RgbToHsvlConverter(rgbArr: number[]): number[] {
+        // https://en.wikipedia.org/wiki/HSL_and_HSV#/media/File:Hsl-hsv_models.svg
         // https://github.com/ofdl-robotics-tw/EV3-CLEV3R-Modules/blob/main/Mods/Color.bpm
         let r = rgbArr[0], g = rgbArr[1], b = rgbArr[2];
 
@@ -119,7 +120,7 @@ namespace sensors {
         let min = Math.min(Math.min(r, g), b);
         let light = (max + min) / 5.12;
         val = max / 2.56;
-        if (val == 0) { // It's black, there's no way to tell hue and sat
+        if (Math.round(val) == 0 || Math.round(light) == 0) { // It's black, there's no way to tell hue and sat
             hue = -1;
             sat = -1;
         }
@@ -131,7 +132,7 @@ namespace sensors {
             max = Math.max(Math.max(r, g), b);
             min = Math.min(Math.min(r, g), b);
             sat = (max - min) * 100;
-            if (sat == 0) hue = -1;
+            if (Math.round(sat) == 0) hue = -1;
 
             if (hue != -1) { // It's white, there's no way to tell hue
                 r = (r - min) / (max - min);
@@ -140,14 +141,25 @@ namespace sensors {
                 max = Math.max(Math.max(r, g), b);
                 min = Math.min(Math.min(r, g), b);
 
-                if (max == r) {
+                if (Math.round(max) == Math.round(r)) {
                     hue = 0 + 60 * (g - b);
                     if (hue < 0) hue += 360;
-                } else if (max == g) hue = 120 + 60 * (b - r);
+                } else if (Math.round(max) == Math.round(g)) hue = 120 + 60 * (b - r);
                 else hue = 240 + 60 * (r - g);
             }
         }
         return [Math.round(hue), Math.round(sat), Math.round(val), Math.round(light)];
+    }
+
+    export interface HsvlToColorNumColorSensor {
+        colorBoundary: number;
+        whiteBoundary: number;
+        blackBoundary: number;
+        redBoundary: number;
+        brownBoundary: number;
+        yellowBoundary: number;
+        greenBoundary: number;
+        blueBoundary: number;
     }
 
     /**
@@ -162,7 +174,7 @@ namespace sensors {
     //% group="Color Sensor"
     export function HsvToColorNum(hsvl: number[]): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
-        if (V > 0 && S > HSV_TO_COLOR_S_TRESHOLD) { // Граница цветности
+        if (S > HSV_TO_COLOR_S_TRESHOLD) { // Граница цветности
             if (H < 25) return 5; // red
             else if (H < 50) return 7; // brown
             else if (H < 100) return 4; // yellow
@@ -170,8 +182,8 @@ namespace sensors {
             else if (H < 250) return 2; // blue
             else if (H < 360) return 5; // red
             else return -1; // error
-        } else if (V >= 40) return 6; // white
-        else if (V > 2) return 1; // black
+        } else if (V >= 5) return 6; // white
+        else if (V >= 2) return 1; // black
         return 0; // empty
     }
 
@@ -203,7 +215,7 @@ namespace sensors {
             colorRgb[3] = sensors.color4.rgbRaw();
             brick.clearScreen();
             for (let i = 0; i < 4; i++) {
-                brick.showString(`RGB_${i + 1}: ${colorRgb[i][0]} ${colorRgb[i][1]} ${colorRgb[i][2]}`, i + 1);
+                brick.printString(`RGB_${i + 1}: ${colorRgb[i][0]} ${colorRgb[i][1]} ${colorRgb[i][2]}`, i + 1, 12);
             }
             if (btnPressed == 0) {
                 brick.showString("Press Enter to freeze", 12);
@@ -215,7 +227,7 @@ namespace sensors {
                     }
                 }
                 for (let i = 0, str = 7; i < 4; i++) {
-                    brick.showString(`RGB_max: ${rgbMax[i][0]} ${rgbMax[i][1]} ${rgbMax[i][2]}`, str++);
+                    brick.printString(`RGB_max: ${rgbMax[i][0]} ${rgbMax[i][1]} ${rgbMax[i][2]}`, str++, 12);
                 }
                 brick.showString("Press Enter to exit", 12);
             }

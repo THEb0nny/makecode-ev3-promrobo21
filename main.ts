@@ -24,14 +24,14 @@ function RgbToHsvlToColorConvert(debug: boolean = false): number {
     const color = sensors.HsvToColorNum(hsvlCS);
     if (debug) {
         brick.clearScreen();
-        brick.printValue("r", rgbCS[0], 1, 21);
-        brick.printValue("g", rgbCS[1], 2, 21);
-        brick.printValue("b", rgbCS[2], 3, 21);
-        brick.printValue("hue", hsvlCS[0], 5, 21);
-        brick.printValue("sat", hsvlCS[1], 6, 21);
-        brick.printValue("val", hsvlCS[2], 7, 21);
-        brick.printValue("light", hsvlCS[3], 8, 21);
-        brick.printValue("color", color, 10, 21);
+        brick.printValue("r", rgbCS[0], 1, 20);
+        brick.printValue("g", rgbCS[1], 2, 20);
+        brick.printValue("b", rgbCS[2], 3, 20);
+        brick.printValue("hue", hsvlCS[0], 5, 20);
+        brick.printValue("sat", hsvlCS[1], 6, 20);
+        brick.printValue("val", hsvlCS[2], 7, 20);
+        brick.printValue("light", hsvlCS[3], 8, 20);
+        brick.printValue("color", color, 10, 20);
     }
     return color;
 }
@@ -101,7 +101,7 @@ function Main() { // Определение главной функции
 
     sensors.SetColorSensorMaxRgbValues(L_COLOR_SEN, [273, 297, 355]);
     sensors.SetColorSensorMaxRgbValues(R_COLOR_SEN, [230, 224, 178]);
-    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [354, 299, 354]);
+    sensors.SetColorSensorMaxRgbValues(CHECK_COLOR_CS, [352, 319, 382]);
 
     CHASSIS_L_MOTOR.setInverted(true); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
     CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
@@ -123,8 +123,13 @@ function Main() { // Определение главной функции
     while (true) {
         if (brick.buttonLeft.wasPressed()) custom.FunctionsTune(0, true);
         else if (brick.buttonUp.wasPressed()) sensors.SearchRgbMaxColorSensors();
-        else if (brick.buttonDown.wasPressed()) RgbToHsvlToColorConvert(true);
-        else if (brick.buttonRight.wasPressed()) break; // Ожидание нажатия правой кнопки, чтобы выйти и пойти дальше по коду
+        else if (brick.buttonDown.wasPressed()) {
+            while (true) {
+                let currTime = control.millis(); // Текущее время
+                RgbToHsvlToColorConvert(true);
+                control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            }
+        } else if (brick.buttonRight.wasPressed()) break; // Ожидание нажатия правой кнопки, чтобы выйти и пойти дальше по коду
         loops.pause(0.001);
     }
     brick.clearScreen(); // Очистить экрана
