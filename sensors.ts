@@ -193,23 +193,23 @@ namespace sensors {
      * @param hsvl массив значений hsvl
      */
     //% blockId="HsvlToColorNum"
-    //% block="convert $hsvl| to color code"
-    //% block.loc.ru="перевести $hsvl| в цветовой код"
+    //% block="convert $hsvl| to color code at params $params"
+    //% block.loc.ru="перевести $hsvl| в цветовой код при параметрах $params"
     //% inlineInputMode="inline"
     //% weight="88" blockGap="8"
     //% group="Color Sensor"
-    export function HsvlToColorNum(hsvl: number[]): number {
+    export function HsvlToColorNum(hsvl: number[], params: HsvlToColorNum): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
-        if (S > 60) { // Граница цветности
-            if (H < 25) return 5; // red
-            else if (H < 50) return 7; // brown
-            else if (H < 100) return 4; // yellow
-            else if (H < 180) return 3; // green
-            else if (H < 250) return 2; // blue
+        if (S > params.colorBoundary) { // Граница цветности
+            if (H < params.redBoundary) return 5; // red
+            else if (H < params.brownBoundary) return 7; // brown
+            else if (H < params.yellowBoundary) return 4; // yellow
+            else if (H < params.greenBoundary) return 3; // green
+            else if (H < params.blueBoundary) return 2; // blue
             else if (H < 360) return 5; // red
             else return -1; // error
-        } else if (V >= 5) return 6; // white
-        else if (V >= 2) return 1; // black
+        } else if (V >= params.whiteBoundary) return 6; // white
+        else if (V >= params.blackBoundary) return 1; // black
         return 0; // empty
     }
 

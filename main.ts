@@ -12,16 +12,27 @@ let WHEELS_W = 180; // Расстояние между центрами колё
 
 let parkElements: number[] = [0, 0, 0, 0, 0, 0]; // Парковые элементы
 
+let colorDetectionCSParams = {
+    colorBoundary: 50,
+    whiteBoundary: 5,
+    blackBoundary: 2,
+    redBoundary: 25,
+    brownBoundary: 50,
+    yellowBoundary: 100,
+    greenBoundary: 180,
+    blueBoundary: 250
+};
+
 function RgbToHsvlToColorConvert(debug: boolean = false): number {
     let rgbCS = COLOR_DETECTION_CS.rgbRaw();
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) { // Нормализуем значения с датчика
         rgbCS[i] = Math.map(rgbCS[i], 0, sensors.maxRgbColorSensor4[i], 0, 255);
         // rgbCS[i] = Math.constrain(rgbCS[i], 0, 255);
     }
-    const hsvlCS = sensors.RgbToHsvlConverter(rgbCS);
-    const color = sensors.HsvlToColorNum(hsvlCS);
-    const column = 20;
+    const hsvlCS = sensors.RgbToHsvlConverter(rgbCS); // Получаем HSVL
+    const color = sensors.HsvlToColorNum(hsvlCS, colorDetectionCSParams); // Переводим HSVL в цветовой код
     if (debug) {
+        const column = 20;
         brick.clearScreen();
         brick.printValue("r", rgbCS[0], 1, column);
         brick.printValue("g", rgbCS[1], 2, column);
