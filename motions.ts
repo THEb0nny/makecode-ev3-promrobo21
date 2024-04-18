@@ -130,7 +130,7 @@ namespace chassis {
     //% weight="88"
     //% group="Move"
     export function RampDistMove(totalDist: number, accelDist: number, decelDist: number, speed: number) {
-        CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды ???????
+        // CHASSIS_L_MOTOR.pauseUntilReady(); CHASSIS_R_MOTOR.pauseUntilReady(); // Ждём выполнения моторами команды ???????
         CHASSIS_L_MOTOR.setBrake(true); CHASSIS_R_MOTOR.setBrake(true); // Установить торможение с удержанием
         let mRotAccelCalc = (accelDist == 0 ? 0 : Math.round((accelDist / (Math.PI * WHEELS_D)) * 360)); // Расчитываем расстояние ускорения
         let mRotDecelCalc = (decelDist == 0 ? 0 : Math.round((decelDist / (Math.PI * WHEELS_D)) * 360)); // Расчитываем расстояние замедления
