@@ -174,10 +174,10 @@ function Main() { // Определение главной функции
         brick.setStatusLightInBackground(StatusLight.OrangeFlash, 500); // Светим светодиодом, что мы закончили считывание
     });
     motions.LineFollowToDistanceWithLeftSensor(HorizontalLineLocation.Outside, 700, AfterMotion.DecelRolling, { speed: 30, Kp: 0.3, Kd: 1.5 });
+    pause(50);
     for(let i = 0; i < 6; i++) {
         brick.printString(`${i + 1}) ${parkElements[i]}`, i + 1, 20);
     }
-    pause(50);
     // Поворачиваем, чтобы стать на линию
     chassis.PivotTurn(30, 40, WheelPivot.LeftWheel);
     pause(50);
