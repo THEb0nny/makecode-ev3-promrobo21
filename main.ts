@@ -50,7 +50,7 @@ function RgbToHsvlToColorConvert(debug: boolean = false): number {
 function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: number, timeOut?: number) {
     if (!speed) speed = 40; // Если аргумент не был передан, то за скорость установится значение по умолчанию
     else speed = Math.abs(speed);
-    if (timeOut == undefined) speed = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
+    if (timeOut == undefined) timeOut = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
     else timeOut = Math.abs(timeOut);
     motor.setBrake(true); // Устанавливаем ударжание мотора при остановке
     if (state == ClawState.Open) motor.run(speed); // Запускаем мотор
@@ -93,9 +93,9 @@ function Main() { // Определение главной функции
 
     // Коэффиценты для выравнивания на линии
     levelings.lineAlignmentMaxSpeed = 50;
-    levelings.lineAlignmentLeftSideKp = 0.15;
+    levelings.lineAlignmentLeftSideKp = 0.2;
     levelings.lineAlignmentLeftSideKd = 0.3;
-    levelings.lineAlignmentRightSideKp = 0.15;
+    levelings.lineAlignmentRightSideKp = 0.2;
     levelings.lineAlignmentRightSideKd = 0.3;
 
     // Коэффиценты для позиционирования на линии
@@ -108,8 +108,8 @@ function Main() { // Определение главной функции
     motions.SetDistRollingAfterInsetsection(50); // Дистанция для проезда после опредения перекрёстка для прокатки в мм
     motions.SetDistRollingAfterIntersectionMoveOut(20); // Дистанция для прокатки без торможения на перекрёстке в мм
 
-    sensors.SetLineSensorRawValue(LineSensor.Left, 643, 450); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
-    sensors.SetLineSensorRawValue(LineSensor.Right, 629, 474); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
+    sensors.SetLineSensorRawValue(LineSensor.Left, 632, 459); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
+    sensors.SetLineSensorRawValue(LineSensor.Right, 621, 479); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
 
     sensors.SetColorSensorMaxRgbValues(sensors.leftLineSensor, [273, 297, 355]); // Установить левому датчику линии максималальные значения RGB
     sensors.SetColorSensorMaxRgbValues(sensors.rightLineSensor, [230, 224, 178]); // Установить правому датчику линии максималальные значения RGB
@@ -146,7 +146,7 @@ function Main() { // Определение главной функции
     }
     brick.clearScreen(); // Очистить экрана
 
-    // Ваш код тут
+    //// Ваш код тут
     control.runInParallel(function () {
         SetManipulatorPosition(MANIP_MOTOR1, ClawState.Open, 20, 1000);
     });
@@ -154,41 +154,42 @@ function Main() { // Определение главной функции
         SetManipulatorPosition(MANIP_MOTOR2, ClawState.Open, 20, 1000);
     });
     // chassis.DistMove(10, 40, true);
-    chassis.PivotTurn(90, 30, WheelPivot.RightWheel);
-    pause(250);
+    chassis.PivotTurn(90, 40, WheelPivot.RightWheel);
+    pause(100);
     // Запускаем функцию определения цвета парковых элементов в параллельной задаче
     let startEncLeftMotor = CHASSIS_L_MOTOR.angle(); // Запоминаем значение с энкодера левого мотора перед стартом  поиска парковых элементов
     let startEncRightMotor = CHASSIS_R_MOTOR.angle(); // Запоминаем значенис с энкодера правого мотора
     control.runInParallel(function () {
+        brick.setStatusLightInBackground(StatusLight.Red, 500); // Светим светодиодом, что мы закончили считывание
         while (true) {
             let currTime = control.millis(); // Текущее время
             let color = RgbToHsvlToColorConvert(); // Узнаём цвет переведя RGB в HSVL и получив код цвета
-            if (color == 1 || color == 2) { // Если нашли искомые цвета
-                brick.setStatusLightInBackground(StatusLight.Orange, 50); // Светим светодиодом
-                let averageEnc = ((CHASSIS_L_MOTOR.angle() - startEncLeftMotor) + (CHASSIS_R_MOTOR.angle() - startEncRightMotor)) / 2; // Среднее значение с энкодеров
-                if (25 <= averageEnc && averageEnc <= 50) parkElements[5] = color; // Считываем на зоне 6
-                else if (averageEnc <= 100) parkElements[4] = color; // Считываем на зоне 5
-                else if (averageEnc <= 150) parkElements[3] = color; // Считываем на зоне 4
-                else if (averageEnc <= 200) parkElements[2] = color; // Считываем на зоне 3
-                else if (averageEnc <= 250) parkElements[1] = color; // Считываем на зоне 2
-                else if (averageEnc <= 300) parkElements[0] = color; // Считываем на зоне 1
-                else if (averageEnc <= 350) break; // Прервать, если проехал больше
-            }
+            let averageEnc = ((CHASSIS_L_MOTOR.angle() - startEncLeftMotor) + (CHASSIS_R_MOTOR.angle() - startEncRightMotor)) / 2; // Среднее значение с энкодеров
+            if (280 <= averageEnc && averageEnc <= 400) parkElements[5] = color; // Считываем на зоне 6
+            else if (averageEnc <= 550) parkElements[4] = color; // Считываем на зоне 5
+            else if (averageEnc <= 730) parkElements[3] = color; // Считываем на зоне 4
+            else if (averageEnc <= 870) parkElements[2] = color; // Считываем на зоне 3
+            else if (averageEnc <= 1030) parkElements[1] = color; // Считываем на зоне 2
+            else if (averageEnc <= 1100) parkElements[0] = color; // Считываем на зоне 1
+            else if (averageEnc <= 1200) break; // Прервать, если проехал больше
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        brick.setStatusLightInBackground(StatusLight.GreenPulse, 500); // Светим светодиодом, что мы закончили считывание
+        brick.setStatusLightInBackground(StatusLight.OrangeFlash, 500); // Светим светодиодом, что мы закончили считывание
     });
     motions.LineFollowToDistanceWithLeftSensor(HorizontalLineLocation.Outside, 700, AfterMotion.DecelRolling, { speed: 30, Kp: 0.3, Kd: 1 });
-    pause(250);
-    chassis.PivotTurn(30, 30, WheelPivot.LeftWheel);
+    for(let i = 0; i < 6; i++) {
+        brick.printString(`${i + 1}) ${parkElements[i]}`, i + 1, 20);
+    }
+    pause(5000);
+    chassis.PivotTurn(30, 40, WheelPivot.LeftWheel);
     pause(100);
-    chassis.PivotTurn(30, 30, WheelPivot.RightWheel);
+    chassis.PivotTurn(30, 40, WheelPivot.RightWheel);
     pause(100);
     motions.LineFollowToIntersection(AfterMotion.DecelRolling, { speed: 40, Kp: 0.2, Kd: 1.5 });
     pause(250);
-    chassis.PivotTurn(78, 30, WheelPivot.LeftWheel);
+    chassis.PivotTurn(78, 40, WheelPivot.LeftWheel);
     pause(100);
-    chassis.PivotTurn(78, 30, WheelPivot.RightWheel);
+    chassis.PivotTurn(78, 40, WheelPivot.RightWheel);
     pause(100);
     chassis.DistMove(240, 40, true);
     // chassis.RampDistMove(240, 20, 30, 40);
@@ -205,9 +206,9 @@ function Main() { // Определение главной функции
     pause(200);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
     levelings.LineAlignment(VerticalLineLocation.Behind, 1000);
-    chassis.DistMove(750, 50, true);
-    //chassis.RampDistMove(750, 20, 30, 50);
-    pause(200);
+    chassis.DistMove(725, 40, true);
+    // chassis.RampDistMove(750, 20, 30, 50);
+    pause(500);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
     control.runInParallel(function () {
         SetManipulatorPosition(MANIP_MOTOR1, ClawState.Open, 40);
