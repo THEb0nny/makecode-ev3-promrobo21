@@ -50,7 +50,7 @@ function RgbToHsvlToColorConvert(debug: boolean = false): number {
 function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: number, timeOut?: number) {
     if (!speed) speed = 40; // Если аргумент не был передан, то за скорость установится значение по умолчанию
     else speed = Math.abs(speed);
-    if (timeOut == undefined) timeOut = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
+    if (!timeOut) timeOut = 2000; // Если аргумент не был передан, то за максимальное время ожидания остановки устанавливается это значение
     else timeOut = Math.abs(timeOut);
     motor.setBrake(true); // Устанавливаем ударжание мотора при остановке
     if (state == ClawState.Open) motor.run(speed); // Запускаем мотор
