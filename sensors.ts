@@ -113,6 +113,19 @@ namespace sensors {
         blueBoundary: number;
     }
 
+    /**
+     * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
+     * @param maxRgbArr массив с тремя значениями rgb
+     */
+    //% blockId="SetColorSensorMinRgbValues"
+    //% block="set $sensor| color sensor min RGB values $maxRgbArr"
+    //% block.loc.ru="установить $sensor| датчику цвета минимальные значения RGB $maxRgbArr"
+    //% inlineInputMode="inline"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
+    //% weight="90" blockGap="8"
+    //% group="Color Sensor"
     export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor, minRgbArr: number[]) {
         if (sensor.port() == 1) minRgbColorSensor1 = minRgbArr;
         else if (sensor.port() == 2) minRgbColorSensor2 = minRgbArr;
@@ -233,9 +246,9 @@ namespace sensors {
 
         // https://clev3r.ru/codesamples/
         // Color sensor V2 RGB Maxmium is 255
-        r = Math.constrain(r, 0, 255);
-        g = Math.constrain(g, 0, 255);
-        b = Math.constrain(b, 0, 255);
+        // r = Math.constrain(r, 0, 255);
+        // g = Math.constrain(g, 0, 255);
+        // b = Math.constrain(b, 0, 255);
 
         let hue = 0, sat = 0, val = 0;
 
