@@ -13,14 +13,14 @@ let WHEELS_W = 180; // Расстояние между центрами колё
 let parkElements: number[] = [0, 0, 0, 0, 0, 0]; // Парковые элементы
 
 let colorDetectionCSParams = {
-    colorBoundary: 80,
+    colorBoundary: 70,
     whiteBoundary: 10,
     blackBoundary: 1,
     redBoundary: 25,
     brownBoundary: 50,
     yellowBoundary: 100,
     greenBoundary: 180,
-    blueBoundary: 250
+    blueBoundary: 260
 };
 
 function RgbToHsvlToColorConvert(debug: boolean = false): number {
