@@ -103,6 +103,8 @@ function Main() { // Определение главной функции
     motions.SetDistRollingAfterInsetsection(50); // Дистанция для проезда после опредения перекрёстка для прокатки в мм
     motions.SetDistRollingAfterIntersectionMoveOut(20); // Дистанция для прокатки без торможения на перекрёстке в мм
 
+    motions.SetLineFollowConditionMaxErr(50); // Максимальная ошибка при движении одним датчиком для определения перекрёстка
+
     sensors.SetLineSensorRawValue(LineSensor.Left, 632, 459); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
     sensors.SetLineSensorRawValue(LineSensor.Right, 621, 479); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
 
@@ -146,10 +148,10 @@ function Main() { // Определение главной функции
     //// Ваш код тут
     // Закрываем манипуляторы прижимая кабель
     control.runInParallel(function () {
-        SetManipulatorPosition(MANIP_MOTOR1, ClawState.Open, 20, 1000);
+        SetManipulatorPosition(MANIP_MOTOR1, ClawState.Open, 10, 500);
     });
     control.runInParallel(function () {
-        SetManipulatorPosition(MANIP_MOTOR2, ClawState.Open, 20, 1000);
+        SetManipulatorPosition(MANIP_MOTOR2, ClawState.Open, 10, 500);
     });
     chassis.PivotTurn(90, 40, WheelPivot.RightWheel); // Поворачиваем к линии
     pause(50);
@@ -166,14 +168,14 @@ function Main() { // Определение главной функции
             else if (averageEnc <= 550) parkElements[4] = color; // Считываем на зоне 5
             else if (averageEnc <= 730) parkElements[3] = color; // Считываем на зоне 4
             else if (averageEnc <= 870) parkElements[2] = color; // Считываем на зоне 3
-            else if (averageEnc <= 1030) parkElements[1] = color; // Считываем на зоне 2
-            else if (averageEnc <= 1100) parkElements[0] = color; // Считываем на зоне 1
-            else if (averageEnc <= 1200) break; // Прервать, если проехал больше
+            else if (averageEnc <= 1000) parkElements[1] = color; // Считываем на зоне 2
+            else if (averageEnc <= 1150) parkElements[0] = color; // Считываем на зоне 1
+            else if (averageEnc <= 1400) break; // Прервать, если проехал больше
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         brick.setStatusLightInBackground(StatusLight.OrangeFlash, 500); // Светим светодиодом, что мы закончили считывание
     });
-    motions.LineFollowToDistanceWithLeftSensor(HorizontalLineLocation.Outside, 700, AfterMotion.DecelRolling, { speed: 30, Kp: 0.3, Kd: 1.5 });
+    motions.LineFollowToDistanceWithLeftSensor(HorizontalLineLocation.Outside, 700, AfterMotion.DecelRolling, { speed: 20, Kp: 0.2, Kd: 1.75 });
     pause(50);
     for(let i = 0; i < 6; i++) {
         brick.printString(`${i + 1}) ${parkElements[i]}`, i + 1, 20);
@@ -184,7 +186,7 @@ function Main() { // Определение главной функции
     chassis.PivotTurn(30, 40, WheelPivot.RightWheel);
     pause(50);
     // Двигаемся до перекрёстка
-    motions.LineFollowToIntersection(AfterMotion.DecelRolling, { speed: 40, Kp: 0.2, Kd: 1.5 });
+    motions.LineFollowToIntersection(AfterMotion.DecelRolling, { speed: 40, Kp: 0.15, Kd: 1.5 });
     pause(50);
     // Поворачиваемся к зоне установки кабеля
     chassis.PivotTurn(78, 40, WheelPivot.LeftWheel);
@@ -196,18 +198,18 @@ function Main() { // Определение главной функции
     // chassis.RampDistMove(240, 20, 30, 40);
     // Поднимаем манипуляторы, чтобы оставить кабель
     control.runInParallel(function () {
-        SetManipulatorPosition(MANIP_MOTOR1, ClawState.Close, 40);
+        SetManipulatorPosition(MANIP_MOTOR1, ClawState.Close, 30);
     });
     control.runInParallel(function () {
-        SetManipulatorPosition(MANIP_MOTOR2, ClawState.Close, 40);
+        SetManipulatorPosition(MANIP_MOTOR2, ClawState.Close, 30);
     });
     pause(400); // Ждём, чтобы манипуляторы поднялись
-    chassis.DistMove(-540, 40, true); // Едем назад задним ходом
-    // chassis.RampDistMove(-540, -20, -30, 30);
+    chassis.DistMove(-550, 40, true); // Едем назад задним ходом
+    // chassis.RampDistMove(-550, -20, -30, 30);
     chassis.SpinTurn(-90, 30); // Поворачиваем передом к велосипедам
     pause(50);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -40, AfterMotion.BreakStop); // Едем назад до определения чёрной линии
-    levelings.LineAlignment(VerticalLineLocation.Front, 1500); // Выравниваемся на линии
+    levelings.LineAlignment(VerticalLineLocation.Front, 1200); // Выравниваемся на линии
     chassis.DistMove(725, 40, true); // Едем вперёд, чтобы затолкать велосипеды в зону с зарядкой
     // chassis.RampDistMove(750, 20, 30, 50);
     pause(300);
@@ -215,11 +217,11 @@ function Main() { // Определение главной функции
     pause(100);
     // Открываем один манипулятор
     control.runInParallel(function () {
-        SetManipulatorPosition(MANIP_MOTOR1, ClawState.Open, 40);
+        SetManipulatorPosition(MANIP_MOTOR1, ClawState.Open, 30);
     });
     // Закрываем другой манипулятор
     control.runInParallel(function () {
-        SetManipulatorPosition(MANIP_MOTOR2, ClawState.Close, 40);
+        SetManipulatorPosition(MANIP_MOTOR2, ClawState.Open, 30);
     });
     chassis.DistMove(50, 40, true); // Вперёд, чтобы встать колёсами на линию
     chassis.SpinTurn(-90, 40); // Поворачиваем к стороне зоны старта
@@ -227,45 +229,106 @@ function Main() { // Определение главной функции
     motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.DecelRolling, { speed: 40, Kp: 0.2, Kd: 1.5 }); // Едем до перекрёстка справа
     pause(100);
 
-    /// МИССИЯ С ПАРКОВЫМИ ЭЛЕМЕНТАМИ
-    motions.LineFollowToDistance(120, AfterMotion.BreakStop, { speed: 20 });
+    /// МИССИЯ С ПАРКОВЫМИ ЭЛЕМЕНТАМИ 1 
+    motions.LineFollowToDistance(110, AfterMotion.BreakStop, { speed: 20 });
     chassis.SpinTurn(-90, 30);
-    chassis.DistMove(90, 30, true);
-    SetManipulatorPosition(MANIP_MOTOR1, ClawState.Close, 15);
-    pause(500);
-    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
-    pause(100);
-    SetManipulatorPosition(MANIP_MOTOR2, ClawState.Open, 20);
-    pause(100);
-    chassis.SpinTurn(-4, 30);
-    pause(100);
-    chassis.DistMove(120, 20, true);
-    SetManipulatorPosition(MANIP_MOTOR2, ClawState.Close, 15);
-    pause(500);
-    chassis.SpinTurn(4, 30);
-    pause(100);
-    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
-    pause(100);
-    chassis.DistMove(60, 20, true);
-    pause(200);
-    chassis.SpinTurn(-90, 40);
-    motions.LineFollowToDistance(200, AfterMotion.NoStop, { speed: 40 });
-    motions.LineFollowToIntersection(AfterMotion.BreakStop);
-    chassis.SpinTurn(90, 40);
-    chassis.DistMove(140, 30, true);
-    pause(100);
+    levelings.LineAlignment(VerticalLineLocation.Behind, 1000); // Выравниваемся на линии
+    chassis.DistMove(130, 20, true);
+    // SetManipulatorPosition(MANIP_MOTOR1, ClawState.Close, 15);
     control.runInParallel(function () {
-        SetManipulatorPosition(MANIP_MOTOR1, ClawState.Open, 15);
+        MANIP_MOTOR1.run(-10, 150, MoveUnit.Degrees); // Взять первый элемент
     });
     control.runInParallel(function () {
-        SetManipulatorPosition(MANIP_MOTOR2, ClawState.Open, 15);
+        MANIP_MOTOR2.run(-10, 135, MoveUnit.Degrees); // Взять второй элемет
     });
     pause(800);
     chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
-    chassis.DistMove(60, 40, true);
+    pause(50);
+    chassis.DistMove(60, 20, true);
+    pause(50);
+    chassis.SpinTurn(-90, 40);
+    motions.LineFollowToDistance(200, AfterMotion.NoStop, { speed: 40 });
+    motions.LineFollowToIntersection(AfterMotion.BreakStop);
+    pause(50);
+    chassis.DistMove(-20, 30, true);
+    pause(50);
     chassis.SpinTurn(90, 40);
-    motions.LineFollowToDistance(200, AfterMotion.NoStop);
-    motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.DecelRolling, { speed: 40, Kp: 0.2, Kd: 1.5 });
+    pause(50);
+    chassis.DistMove(120, 30, true);
+    pause(50);
+    // Ставим фигуру в левом манипуляторе
+    let blueIsClaw = false;
+    control.runInParallel(function () {
+        SetManipulatorPosition(MANIP_MOTOR1, ClawState.Open, 15);
+    });
+    if (!((parkElements[0] == 2 || parkElements[0] == 3) && (parkElements[1] == 2 || parkElements[1] == 3))) {
+        control.runInParallel(function () {
+            SetManipulatorPosition(MANIP_MOTOR2, ClawState.Open, 15);
+        });
+    } else {
+        blueIsClaw = true;
+    }
+    pause(800);
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
+    levelings.LineAlignment(VerticalLineLocation.Front, 1000); // Выравниваемся на линии
+    if (blueIsClaw == true) {
+        chassis.DistMove(-470, 40, true);
+        pause(50);
+        chassis.SpinTurn(90, 30);
+        pause(50);
+        chassis.DistMove(550, 40, true);
+        pause(50);
+        chassis.SpinTurn(90, 30);
+        pause(50);
+        chassis.DistMove(80, 40, true);
+        pause(50);
+        control.runInParallel(function () {
+            SetManipulatorPosition(MANIP_MOTOR2, ClawState.Open, 15);
+        });
+        pause(800);
+        chassis.DistMove(-80, 40, true);
+        pause(50);
+        chassis.SpinTurn(90, 30);
+        pause(50);
+        chassis.DistMove(450, 40, true);
+        pause(50);
+        chassis.SpinTurn(90, 30);
+        pause(50);
+        chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, 40, AfterMotion.BreakStop);
+        pause(50);
+        chassis.DistMove(50, 40, true);
+        pause(50);
+        chassis.SpinTurn(90, 30);
+    } else {
+        chassis.DistMove(60, 40, true);
+        pause(50);
+        chassis.SpinTurn(90, 40);
+        pause(50);
+    }
+
+    motions.LineFollowToDistance(150, AfterMotion.NoStop);
+    motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.DecelRolling, { speed: 40, Kp: 0.25, Kd: 1.5 });
+
+    /// МИССИЯ С ПАРКОВЫМИ ЭЛЕМЕНТАМИ 2 
+    motions.LineFollowToDistance(270, AfterMotion.BreakStop, { speed: 20 });
+    pause(50);
+    chassis.SpinTurn(-90, 30);
+    pause(50);
+    chassis.DistMove(90, 20, true);
+    control.runInParallel(function () {
+        MANIP_MOTOR1.run(-10, 150, MoveUnit.Degrees); // Взять первый элемент
+    });
+    control.runInParallel(function () {
+        MANIP_MOTOR2.run(-10, 135, MoveUnit.Degrees); // Взять второй элемет
+    });
+    pause(800);
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop);
+    pause(50);
+    chassis.DistMove(60, 20, true);
+    pause(50);
+    chassis.SpinTurn(-90, 40);
+    motions.LineFollowToDistance(200, AfterMotion.NoStop, { speed: 40 });
+    motions.LineFollowToIntersection(AfterMotion.BreakStop);
 }
 
 Main(); // Вызов главной функции
