@@ -396,13 +396,15 @@ function Main() { // Определение главной функции
     chassis.SpinTurn(90, 40);
     pause(50);
 
-    motions.LineFollowToDistance(150, AfterMotion.NoStop);
-    motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.DecelRolling, { speed: 40, Kp: 0.25, Kd: 1.5 });
-    motions.LineFollowToIntersection(AfterMotion.BreakStop);
-    chassis.DistMove(100, 30, true);
-    chassis.PivotTurn(90, 40, WheelPivot.LeftWheel);
-
     // МИССИЯ С ПАРКОВЫМИ ЭЛЕМЕНТАМИ 3
+
+
+    // Вернутся домой
+    // motions.LineFollowToDistance(150, AfterMotion.NoStop);
+    // motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.DecelRolling, { speed: 40, Kp: 0.25, Kd: 1.5 });
+    // motions.LineFollowToIntersection(AfterMotion.BreakStop);
+    // chassis.DistMove(100, 30, true);
+    // chassis.PivotTurn(90, 40, WheelPivot.LeftWheel);
     
 
     // chassis.DistMove(-20, 30, true);
