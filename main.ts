@@ -397,7 +397,64 @@ function Main() { // Определение главной функции
     pause(50);
 
     // МИССИЯ С ПАРКОВЫМИ ЭЛЕМЕНТАМИ 3
+    motions.LineFollowToDistance(110, AfterMotion.BreakStop, { speed: 20 }); pause(50); // Подъезжаем по линии на расстояние к первому второму элементу
+    chassis.SpinTurn(-90, 30); // Поворачиваемся влево к парковым элементам
+    levelings.LineAlignment(VerticalLineLocation.Behind, 1000); // Выравниваемся на линии
+    chassis.DistMove(130, 20, true); // Подъехать, чтобы захватить
+    control.runInParallel(function () {
+        MANIP_MOTOR_LEFT.run(-10, 150, MoveUnit.Degrees); // Взять первый элемент
+        if (parkElements[0] == 2 || parkElements[0] == 3) leftClawElement = 2; // Записываем левому манипулятору синий элемент
+        else leftClawElement = 1; // Иначе чёрный
+    });
+    control.runInParallel(function () {
+        MANIP_MOTOR_RIGHT.run(-10, 150, MoveUnit.Degrees); // Взять второй элемет
+        if (parkElements[1] == 2 || parkElements[1] == 3) rightClawElement = 2; // Записываем правому манипулятору синий элемент
+        else rightClawElement = 1; // Иначе чёрный
+    });
+    pause(900); // Время, чтобы манипуляторы отработали
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop); pause(50); // Объезжаем назад к линии
+    chassis.DistMove(60, 20, true); pause(50); // Вперёд, чтобы стать колёсами на линию
+    chassis.SpinTurn(-90, 40); // Поворачиваем к перекрёстку у парковой зоны B
+    motions.LineFollowToDistance(200, AfterMotion.NoStop, { speed: 40 });
+    motions.LineFollowToIntersection(AfterMotion.BreakStop); pause(50); // Двигаемся до перекрёстка у парковой зоны B
+    chassis.DistMove(-10, 30, true); pause(50); // Отъезжаем назад
+    chassis.SpinTurn(90, 40);
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop); pause(50); // Объезжаем назад к линии
+    levelings.LineAlignment(VerticalLineLocation.Behind, 1000); // Выравниваемся на линии
+    levelings.LineAlignment(VerticalLineLocation.Front, 1000); // Выравниваемся на линии
+    chassis.DistMove(470, 40, true); pause(50); // Задним ходом назад
+    chassis.SpinTurn(-90, 30); pause(50); // Поворот на право
+    chassis.DistMove(550, 40, true); pause(50); // Вперёд, чтобы подъехать к парковой зоне A
+    chassis.SpinTurn(90, 30); pause(50); // Поворачиваем к парковой зоне A
+    chassis.DistMove(80, 40, true); pause(50); // Вперёд в парковую зону A
+    // Левый манипулятор
+    if (parkZoneA.indexOf(2) != -1) { // Если в зоне A уже есть синия фигура
+        control.runInParallel(function () { // Ставим фигуру в левом манипуляторе
+            SetManipulatorPosition(MANIP_MOTOR_LEFT, ClawState.Open, 15);
+            parkZoneA.push(leftClawElement);
+            leftClawElement = 0;
+        });
+    }
+    // Правый манипулятор
+    if (parkZoneA.indexOf(2) != -1) { // Если в зоне A уже есть синия фигура
+        control.runInParallel(function () {
+            SetManipulatorPosition(MANIP_MOTOR_RIGHT, ClawState.Open, 15);
+            parkZoneA.push(rightClawElement);
+            rightClawElement = 0;
+        });
+    }
+    pause(900); // Время, чтобы манипуляторы отработали
+    chassis.DistMove(-80, 40, true); pause(50); // Отъезжаем назад от парковой зоны А
+    chassis.SpinTurn(90, 30); pause(50); // Поворачиваем обратно
+    chassis.DistMove(450, 40, true); pause(50); // Едем обратно
+    chassis.SpinTurn(90, 30); pause(50); // Поворачиваем к линии
+    chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, 40, AfterMotion.BreakStop); pause(50); // Едем обратно на линию
+    levelings.LineAlignment(VerticalLineLocation.Front, 1000); // Выравниваемся на линии
+    chassis.DistMove(50, 40, true); pause(50); // Становимся на линию колёсами
+    chassis.SpinTurn(90, 30); pause(50); // Поворачиваемся влево к парковым элементам
 
+    motions.LineFollowToDistance(200, AfterMotion.NoStop); // Едем двемя датчиками на дистанцию без команды торможения
+    motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.DecelRolling, { speed: 40, Kp: 0.2, Kd: 1.5 }); pause(50); // Едем до перекрёстка справа
 
     // Вернутся домой
     // motions.LineFollowToDistance(150, AfterMotion.NoStop);
