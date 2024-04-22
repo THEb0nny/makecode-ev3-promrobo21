@@ -262,7 +262,11 @@ function Main() { // Определение главной функции
 
         // Если парковая зона B не заполнена 3-я элементами
         if (parkZoneB.length < 3) {
-            chassis.DistMove(-10, 30, true); pause(50); // Отъезжаем назад, чтобы поставить фигурку в B
+            if (parkZoneB.length == 0) {
+                chassis.DistMove(-10, 30, true); pause(50); // Отъезжаем назад, чтобы поставить фигурку в B
+            } else {
+                chassis.DistMove(-50, 30, true); pause(50); // Отъезжаем назад, чтобы поставить фигурку в B
+            }
             chassis.SpinTurn(90, 40); pause(50); // Поворачиваем к парковой зоне B
             chassis.DistMove(120, 30, true); pause(50); // Двигаемся вперёд на парковую зону B
             // Парковая зона B
@@ -282,7 +286,7 @@ function Main() { // Определение главной функции
                     rightClawElement = 0; // Манипулятор пуст
                 });
             }
-            pause(800); // Время, чтобы манипуляторы отработали
+            pause(800); // Время, чтобы манипулятор(ы) отработали
 
             chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop); // Отъезжаем назад к линии
             levelings.LineAlignment(VerticalLineLocation.Behind, 500); // Выравниваемся на линии
@@ -315,13 +319,14 @@ function Main() { // Определение главной функции
                 chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, 40, AfterMotion.BreakStop); pause(50); // Едем обратно на линию
                 levelings.LineAlignment(VerticalLineLocation.Behind, 500); // Выравниваемся на линии
             }
+
             chassis.DistMove(50, 40, true); pause(50); // Становимся на линию колёсами
             chassis.SpinTurn(90, 30); pause(50); // Поворачиваемся влево к парковым элементам
-        } else if (parkZoneA.length < 3) { // Иначе если парковая зона А не полностью заполнена
+        } else { // Иначе если парковая зона А не полностью заполнена
             chassis.SpinTurn(-90, 40); pause(50); // Поворачиваем к парковой зоне B
             chassis.MoveToRefZone(SensorSelection.LeftOrRight, LogicalOperators.Less, 20, 0, -30, AfterMotion.BreakStop); // Объезжаем назад к линии
-            levelings.LineAlignment(VerticalLineLocation.Front, 1000); // Выравниваемся на линии
-            chassis.DistMove(470, 40, true); pause(50); // Задним ходом назад
+            levelings.LineAlignment(VerticalLineLocation.Front, 750); // Выравниваемся на линии
+            chassis.DistMove(470, 40, true); pause(50); // Вперёд
             chassis.SpinTurn(-90, 30); pause(50); // Поворот на право
             chassis.DistMove(550, 40, true); pause(50); // Вперёд, чтобы подъехать к парковой зоне A
             chassis.SpinTurn(90, 30); pause(50); // Поворачиваем к парковой зоне A
@@ -330,16 +335,16 @@ function Main() { // Определение главной функции
             if (parkZoneA.indexOf(2) != -1) { // Если в зоне A уже есть синия фигура
                 control.runInParallel(function () { // Ставим фигуру в левом манипуляторе
                     SetManipulatorPosition(MANIP_MOTOR_LEFT, ClawState.Open, 15);
-                    parkZoneA.push(leftClawElement);
-                    leftClawElement = 0;
+                    parkZoneA.push(leftClawElement); // Записываем, что в парковой зоне оставили фигурку
+                    leftClawElement = 0; // В левом манипуляторе больше ничего нет
                 });
             }
             // Правый манипулятор
             if (parkZoneA.indexOf(2) != -1) { // Если в зоне A уже есть синия фигура
                 control.runInParallel(function () {
                     SetManipulatorPosition(MANIP_MOTOR_RIGHT, ClawState.Open, 15);
-                    parkZoneA.push(rightClawElement);
-                    rightClawElement = 0;
+                    parkZoneA.push(rightClawElement); // Записываем, что в парковой зоне оставили фигурку
+                    rightClawElement = 0; // В правом манипуляторе больше ничего нет
                 });
             }
             pause(900); // Время, чтобы манипуляторы отработали
@@ -363,7 +368,6 @@ function Main() { // Определение главной функции
     // motions.LineFollowToIntersection(AfterMotion.BreakStop);
     // chassis.DistMove(100, 30, true);
     // chassis.PivotTurn(90, 40, WheelPivot.LeftWheel);
-    
 
     // chassis.DistMove(-20, 30, true);
     // chassis.PivotTurn(90, 40, WheelPivot.RightWheel);
