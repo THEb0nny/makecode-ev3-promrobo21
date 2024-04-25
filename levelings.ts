@@ -97,7 +97,8 @@ namespace levelings {
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         // CHASSIS_MOTORS.setBrake(true);
         // CHASSIS_MOTORS.stop();
-        chassis.ChassisStop(true);
+        // chassis.ChassisStop(true);
+        chassis.stop(true);
     }
 
     /**
@@ -163,7 +164,8 @@ namespace levelings {
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         // CHASSIS_MOTORS.setBrake(true);
         // CHASSIS_MOTORS.stop();
-        chassis.ChassisStop(true);
+        // chassis.ChassisStop(true);
+        chassis.stop(true);
     }
 
     // /**

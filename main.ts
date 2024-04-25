@@ -64,8 +64,8 @@ function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: n
 // motions.LineFollowToLeftIntersection(LineLocation.Inside, AfterMotion.Rolling); // Движение по линии на правом датчике до перекрёстка слева со скоростью 50 и с прокаткой
 // motions.LineFollowToRightIntersection(LineLocation.Inside, AfterMotion.Rolling); // Движение по линии на левом датчике до перекрёстка справа со скоростью 60 и с прокаткой
 // motions.LineFollowToDist(400, AfterMotion.BreakStop); // Движение по линии на расстояние со скоростью 50 и жёстким торможением после
-// chassis.SpinTurn(90, 30); // Поворот на 90 градусов вправо на скорости 30
-// chassis.PivotTurn(90, 40, WheelPivot.LeftWheel); // Вращение на 90 градусов со скоростью 40 относительно левого мотора
+// chassis.spinTurn(90, 30); // Поворот на 90 градусов вправо на скорости 30
+// chassis.pivotTurn(90, 40, WheelPivot.LeftWheel); // Вращение на 90 градусов со скоростью 40 относительно левого мотора
 // Manipulator(ClawState.Close); // Закрыть манипулятор со скоростью по умолчанию
 // Manipulator(ClawState.Open, 60); // Открыть манипулятор с произвольной скоростью 60
 
@@ -112,7 +112,7 @@ function Main() { // Определение главной функции
     sensors.SetColorSensorMaxRgbValues(COLOR_DETECTION_CS, [204, 190, 243]); // Установить датчику определения фигур максимальные значения RGB
 
     chassis.setSeparatelyChassisMotors(motors.mediumB, motors.mediumC, true, false); // Установка моторов шасси и установка им реверсов
-    chassis.setRegulatorGains(0.01, 0, 0.5);
+    chassis.setRegulatorGains(0.01, 0, 0.5); // Установить коэффиценты синхронизации моторов
     chassis.setWheelRadius(62.4); // Диаметр колёс в мм
     chassis.setBaseLength(180); // Расстояние между центрами колёс в мм
 
@@ -145,7 +145,7 @@ function Main() { // Определение главной функции
 
     // chassis.spinTurn(90, 30);
     // chassis.DistMove(500, 30, true);
-    chassis.RampDistMove(500, 100, 100, 50);
+    chassis.RampDistMove(50, 300, 50, 50);
 
     /*
     //// Ваш код тут

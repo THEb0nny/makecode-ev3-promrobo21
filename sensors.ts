@@ -38,9 +38,7 @@ namespace sensors {
         if (newLeftLineSensor !== newRightLineSensor) { // Если сенсоры установили не одинаковые
             leftLineSensor = newLeftLineSensor;
             rightLineSensor = newRightLineSensor;
-        } else {
-            control.assert(false, 1);
-        }
+        } else control.assert(false, 1);
     }
 
     /**
