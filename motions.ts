@@ -94,8 +94,8 @@ namespace chassis {
      * @param decelDist расстояние замедления в мм, eg: 100
      */
     //% blockId="RampDistMove"
-    //% block="distance moving $totalDist| acceleration distance $accelDist| deceleration $decelDist| at speed $speed|\\%"
-    //% block.loc.ru="движение на расстояние $totalDist| c расстоянием ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    //% block="distance moving $totalDist| acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
+    //% block.loc.ru="движение на расстояние $totalDist| ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="88"
