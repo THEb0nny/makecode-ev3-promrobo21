@@ -1,6 +1,7 @@
 namespace chassis {
 
     /**
+     * Chassis motor control.
      * Управление моторами шасси.
      * @param dir направление поворота, eg: 0
      * @param speed скорость движения, eg: 80
@@ -61,7 +62,8 @@ namespace chassis {
     }
 
     /**
-     * Движение на расстояние в мм.
+     * Movement over a distance in mm at a constant speed.
+     * Движение на расстояние в мм с постоянной скоростью.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
      * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
@@ -83,6 +85,7 @@ namespace chassis {
     }
 
     /**
+     * Movement over a given distance with acceleration and deceleration in mm.
      * Движение на заданное расстояние с ускорением и замедлением в мм.
      * @param speed скорость движения, eg: 60
      * @param totalDist общее расстояние в мм, eg: 300
@@ -103,7 +106,8 @@ namespace chassis {
     }
 
     /**
-     * Движение вперёд до зоны с определённым отражением.
+     * Moving in a direction with a constant speed to a zone with a certain reflection.
+     * Движение по направлению с постоянной скоростью до зоны с определённым отражением.
      * @param dir нпарвление движения, eg: 0
      * @param SensorSelection определение датчиками, eg: SensorSelection.LeftAndRight
      * @param refCondition отражение больше или меньше, eg: Condition.Larger

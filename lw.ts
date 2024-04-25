@@ -28,6 +28,7 @@ namespace motions {
     export let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
 
     /**
+     * Set the reflection threshold value for the line.
      * Установить пороговое значение отражения для линии.
      * @param reflection значение отражения, eg: 50
      */
@@ -42,6 +43,7 @@ namespace motions {
     }
 
     /**
+     * Set the reflection threshold value when moving along the line.
      * Установить пороговое значение отражения при движении по линии.
      * @param reflection значение отражения, eg: 35
      */
@@ -56,6 +58,7 @@ namespace motions {
     }
 
     /**
+     * Set the setpoint (average value) of reflection for movement along the line.
      * Установить уставку (среднее значение) отражения для движения по линии.
      * @param reflectionSetPoint значение уставки движения по линии, eg: 50
      */
@@ -70,6 +73,7 @@ namespace motions {
     }
 
     /**
+     * Set the maximum error of the driving condition with one sensor along the line.
      * Установить максимальную ошибку условия движения одним датчиком по линии.
      * @param maxErr максимальное значение ошибки движения по линии, eg: 30
      */
@@ -84,6 +88,7 @@ namespace motions {
     }
 
     /**
+     * Set the driving distance after determining the intersection for rolling in mm.
      * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
      * @param dist дистанция прокатки после перекрёстка, eg: 50
      */
@@ -98,6 +103,7 @@ namespace motions {
     }
 
     /**
+     * Set the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
      * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      * @param dist дистанция прокатки после перекрёстка, eg: 20
      */
@@ -112,6 +118,7 @@ namespace motions {
     }
 
     /**
+     * The function of moving along the line to the intersection.
      * Функция движения по линии до перекрёстка.
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
@@ -168,6 +175,7 @@ namespace motions {
     }
 
     /**
+     * Movement along the line for a distance. A very crude method.
      * Движение по линии на расстояние. Очень грубый метод.
      * @param dist скорость движения, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
@@ -229,6 +237,7 @@ namespace motions {
     }
 
     /**
+     * Movement along the line for a distance with the left sensor. A very crude method.
      * Движение по линии на расстояние левым датчиком. Очень грубый метод.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist скорость движения, eg: 250
@@ -293,6 +302,7 @@ namespace motions {
     }
 
     /**
+     * Movement along the line for a distance with the right sensor. A very crude method.
      * Движение по линии на расстояние правым датчиком. Очень грубый метод.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist скорость движения, eg: 250
@@ -357,6 +367,7 @@ namespace motions {
     }
 
     /**
+     * The function of moving along the line to determine the intersection on the left with the right sensor.
      * Функция движения по линии для определения перекрёстка слева правым датчиком.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
@@ -416,6 +427,7 @@ namespace motions {
     }
 
     /**
+     * The function of moving along the line to determine the intersection on the right with the left sensor.
      * Функция движения по линии для определения перекрёстка справа левым датчиком.
      * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling

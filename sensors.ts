@@ -20,6 +20,7 @@ namespace sensors {
     export let maxRgbColorSensor4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
 
     /**
+     * The method of installing sensors for movement and working with the line.
      * Метод установки датчиков для движения и работы с линией.
      */
     //% blockId="SetLineSensors"
@@ -42,6 +43,7 @@ namespace sensors {
     }
 
     /**
+     * The method of setting the sensor line of raw values on black and white.
      * Метод установки датчику линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorRawValue"
@@ -61,6 +63,7 @@ namespace sensors {
     }
 
     /**
+     * A method for obtaining a raw reflection value from a line sensor.
      * Метод получения с датчика линии сырого значения отражения.
      */
     //% blockId="GetLineSensorRawValue"
@@ -79,6 +82,7 @@ namespace sensors {
     }
 
     /**
+     * A method for obtaining a normalized reflection value for a line sensor from raw values.
      * Метод получения нормализованного значения отражения для датчика линии из сырых значений.
      * @param refRawValCS текущее сырое значение отражения, eg: 0
      * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
@@ -112,6 +116,7 @@ namespace sensors {
     }
 
     /**
+     * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
      * @param maxRgbArr массив с тремя значениями rgb
      */
@@ -132,6 +137,7 @@ namespace sensors {
     }
 
     /**
+     * Set the maximum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить максимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
      * @param maxRgbArr массив с тремя значениями rgb
      */
@@ -152,6 +158,7 @@ namespace sensors {
     }
 
     /**
+     * Convert HSV to a color code. The resulting color codes correspond to the LEGO codes.
      * Перевести HSV в код цвета. Получаемые коды цвета соотвествуют кодам LEGO.
      * @param hsvl массив значений hsvl
      */
@@ -178,6 +185,7 @@ namespace sensors {
 
     /**
      * Поиск максимальных значений RGB датчика цвета, т.е. это максимальные значения на белом.
+     * Search for the maximum RGB values of the color sensor, i.e. these are the maximum values on white.
      */
     //% blockId="SearchRgbMaxColorSensors"
     //% block="show max RGB color sensors"
@@ -227,6 +235,7 @@ namespace sensors {
 
     /**
      * Перевод значений цветового пространства rgb в hsvl.
+     * Converting rgb color space values to hsvl.
      * @param refRawValCS текущее сырое значение отражения, eg: 0
      * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
      * @param wRefRawValCS сырое значение отражения на белом, eg: 650

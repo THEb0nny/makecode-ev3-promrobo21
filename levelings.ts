@@ -20,6 +20,7 @@ namespace levelings {
     export let linePositioningN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
 
     /**
+     * The alignment on the line is perpendicular.
      * Выравнивание на линии перпендикулярно.
      * @param MovementOnLine наезжать спереди на линию или двигаться назад на линию, eg: MovementOnLine.Front
      * @param regulatorTime время дорегулирования, eg: 500
@@ -102,6 +103,7 @@ namespace levelings {
     }
 
     /**
+     * Positioning (alignment) by sensors on the line.
      * Позиционирование (выравнивание) датчиками на линии.
      * @param regTime время регулирования, eg: 500
      * @param debug отладка, eg: false
@@ -169,6 +171,7 @@ namespace levelings {
     }
 
     // /**
+    //  * Alignment on the line in motion.
     //  * Выравнивание на линии в движении.
     //  * @param speed скорость движения, eg: 40
     //  * @param actionAfterMotion действие после, eg: AfterMotionShort.BreakStop

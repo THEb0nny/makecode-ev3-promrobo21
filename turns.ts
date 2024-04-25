@@ -40,6 +40,7 @@ namespace chassis {
     }
 
     /**
+     * Rotation relative to the center of the wheels with a regulator.
      * Поворот относительно центра колёс c регулятором.
      * @param deg угол в градусах поворота в градусах, где положительное число - вправо, а отрицательное влево, eg: 90
      * @param speed максимальная скорость поворота, eg: 60
@@ -113,6 +114,7 @@ namespace chassis {
     }
 
     /**
+     * Turn relative to the left or right wheel with a regulator.
      * Поворот относительно левого или правого колеса c регулятором.
      * @param deg угол в градусах поворота, где положительное число - вправо, а отрицательное влево, eg: 90
      * @param speed максимальная скорость поворота, eg: 60

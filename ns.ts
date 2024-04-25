@@ -27,15 +27,6 @@ namespace automation {
 }
 
 /**
- * Повороты.
- */
-// block="Turns"
-// block.loc.ru="Повороты"
-// color="#d9b500" weight="89" icon="\uf021"
-// namespace turns {
-// }
-
-/**
  * Выравнивания.
  */
 //% block="Levelings"
