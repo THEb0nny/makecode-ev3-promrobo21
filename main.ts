@@ -16,6 +16,55 @@ let colorDetectionCSParams = {
     blueBoundary: 260
 };
 
+let leftClawElement = 0; // Какого цвета парковый элемент захватчен левым манипулятором
+let rightClawElement = 0; // Какого цвета парковый элемент захватчен правым манипулятором
+let parkZoneB: number[] = []; // Парковая зона B, ближняя к линии
+let parkZoneA: number[] = []; // Парковая зона A, дальняя
+
+// Установка коэффицентов умного поворота
+chassis.smartSpinTurnSpeed = 60;
+chassis.smartSpinTurnKp = 0.25;
+chassis.smartSpinTurnKd = 2;
+chassis.smartPivotTurnSpeed = 50;
+chassis.smartSpinTurnKp = 0.4;
+chassis.smartSpinTurnKd = 2;
+
+// Коэффиценты для выравнивания на линии
+levelings.lineAlignmentMaxSpeed = 40;
+levelings.lineAlignmentLeftSideKp = 0.2;
+levelings.lineAlignmentLeftSideKd = 0.3;
+levelings.lineAlignmentRightSideKp = 0.2;
+levelings.lineAlignmentRightSideKd = 0.3;
+
+// Коэффиценты для позиционирования на линии
+levelings.linePositioningMaxSpeed = 50;
+levelings.linePositioningKp = 0.175;
+levelings.linePositioningKd = 2;
+
+sensors.SetLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
+
+motions.SetDistRollingAfterInsetsection(50); // Дистанция для проезда после опредения перекрёстка для прокатки в мм
+motions.SetDistRollingAfterIntersectionMoveOut(20); // Дистанция для прокатки без торможения на перекрёстке в мм
+
+motions.SetLineFollowConditionMaxErr(50); // Максимальная ошибка при движении одним датчиком для определения перекрёстка
+
+sensors.SetLineSensorRawValue(LineSensor.Left, 632, 459); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
+sensors.SetLineSensorRawValue(LineSensor.Right, 621, 479); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
+
+sensors.SetColorSensorMinRgbValues(COLOR_DETECTION_CS, [0, 1, 2]); // Установить датчику определения фигур минимальные значения RGB
+
+sensors.SetColorSensorMaxRgbValues(sensors.leftLineSensor, [273, 297, 355]); // Установить левому датчику линии максималальные значения RGB
+sensors.SetColorSensorMaxRgbValues(sensors.rightLineSensor, [230, 224, 178]); // Установить правому датчику линии максималальные значения RGB
+sensors.SetColorSensorMaxRgbValues(COLOR_DETECTION_CS, [204, 190, 243]); // Установить датчику определения фигур максимальные значения RGB
+
+chassis.setSeparatelyChassisMotors(motors.mediumB, motors.mediumC, true, false); // Установка моторов шасси и установка им реверсов
+chassis.setRegulatorGains(0.02, 0, 0.5); // Установить коэффиценты синхронизации моторов
+chassis.setWheelRadius(62.4); // Диаметр колёс в мм
+chassis.setBaseLength(180); // Расстояние между центрами колёс в мм
+
+MANIP_MOTOR_LEFT.setInverted(true); MANIP_MOTOR_RIGHT.setInverted(false); // Установить инверсию для манипулятора, если требуется
+MANIP_MOTOR_LEFT.setBrake(true); MANIP_MOTOR_RIGHT.setBrake(true); // Удержание моторов манипуляторов
+
 function RgbToHsvlToColorConvert(debug: boolean = false): number {
     let rgbCS = COLOR_DETECTION_CS.rgbRaw();
     for (let i = 0; i < 3; i++) { // Нормализуем значения с датчика
@@ -69,56 +118,7 @@ function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: n
 // Manipulator(ClawState.Close); // Закрыть манипулятор со скоростью по умолчанию
 // Manipulator(ClawState.Open, 60); // Открыть манипулятор с произвольной скоростью 60
 
-let leftClawElement = 0; // Какого цвета парковый элемент захватчен левым манипулятором
-let rightClawElement = 0; // Какого цвета парковый элемент захватчен правым манипулятором
-let parkZoneB: number[] = []; // Парковая зона B, ближняя к линии
-let parkZoneA: number[] = []; // Парковая зона A, дальняя
-
 function Main() { // Определение главной функции
-    // Установка коэффицентов умного поворота
-    chassis.smartSpinTurnSpeed = 60;
-    chassis.smartSpinTurnKp = 0.25;
-    chassis.smartSpinTurnKd = 2;
-    chassis.smartPivotTurnSpeed = 50;
-    chassis.smartSpinTurnKp = 0.4;
-    chassis.smartSpinTurnKd = 2;
-
-    // Коэффиценты для выравнивания на линии
-    levelings.lineAlignmentMaxSpeed = 40;
-    levelings.lineAlignmentLeftSideKp = 0.2;
-    levelings.lineAlignmentLeftSideKd = 0.3;
-    levelings.lineAlignmentRightSideKp = 0.2;
-    levelings.lineAlignmentRightSideKd = 0.3;
-
-    // Коэффиценты для позиционирования на линии
-    levelings.linePositioningMaxSpeed = 50;
-    levelings.linePositioningKp = 0.175;
-    levelings.linePositioningKd = 2;
-
-    sensors.SetLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
-
-    motions.SetDistRollingAfterInsetsection(50); // Дистанция для проезда после опредения перекрёстка для прокатки в мм
-    motions.SetDistRollingAfterIntersectionMoveOut(20); // Дистанция для прокатки без торможения на перекрёстке в мм
-
-    motions.SetLineFollowConditionMaxErr(50); // Максимальная ошибка при движении одним датчиком для определения перекрёстка
-
-    sensors.SetLineSensorRawValue(LineSensor.Left, 632, 459); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
-    sensors.SetLineSensorRawValue(LineSensor.Right, 621, 479); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
-
-    sensors.SetColorSensorMinRgbValues(COLOR_DETECTION_CS, [0, 1, 2]); // Установить датчику определения фигур минимальные значения RGB
-
-    sensors.SetColorSensorMaxRgbValues(sensors.leftLineSensor, [273, 297, 355]); // Установить левому датчику линии максималальные значения RGB
-    sensors.SetColorSensorMaxRgbValues(sensors.rightLineSensor, [230, 224, 178]); // Установить правому датчику линии максималальные значения RGB
-    sensors.SetColorSensorMaxRgbValues(COLOR_DETECTION_CS, [204, 190, 243]); // Установить датчику определения фигур максимальные значения RGB
-
-    chassis.setSeparatelyChassisMotors(motors.mediumB, motors.mediumC, true, false); // Установка моторов шасси и установка им реверсов
-    chassis.setRegulatorGains(0.01, 0, 0.5); // Установить коэффиценты синхронизации моторов
-    chassis.setWheelRadius(62.4); // Диаметр колёс в мм
-    chassis.setBaseLength(180); // Расстояние между центрами колёс в мм
-
-    MANIP_MOTOR_LEFT.setInverted(true); MANIP_MOTOR_RIGHT.setInverted(false); // Установить инверсию для манипулятора, если требуется
-    MANIP_MOTOR_LEFT.setBrake(true); MANIP_MOTOR_RIGHT.setBrake(true); // Удержание моторов манипуляторов
-
     // Опрашиваем какое-то количество раз датчики, чтобы они включились перед стартом по нажатию кнопки
     for (let i = 0; i < 50; i++) {
         sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw);
