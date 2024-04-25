@@ -81,7 +81,7 @@ namespace levelings {
             let uR = automation.pid4.compute(dt, 0) * regulatorMultiplier; // Регулятор правой стороны
             uL = Math.constrain(uL, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость левой стороны
             uR = Math.constrain(uR, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость правой стороны
-            CHASSIS_L_MOTOR.run(uL); CHASSIS_R_MOTOR.run(uR); // Передаём управляющее воздействие на моторы
+            chassis.leftMotor.run(uL); chassis.rightMotor.run(uR); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
                 brick.showValue("refLCS", refLCS, 1);
@@ -149,7 +149,7 @@ namespace levelings {
             automation.pid1.setPoint(error); // Устанавливаем ошибку в регулятор
             let u = automation.pid1.compute(dt, 0); // Вычисляем и записываем значение с регулятора
             u = Math.constrain(u, -linePositioningMaxSpeed, linePositioningMaxSpeed); // Ограничиваем скорость
-            CHASSIS_L_MOTOR.run(u); CHASSIS_R_MOTOR.run(-u); // Передаём управляющее воздействие на моторы
+            chassis.leftMotor.run(u); chassis.rightMotor.run(-u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
                 brick.showValue("refLCS", refLCS, 1);
@@ -197,11 +197,11 @@ namespace levelings {
             let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             if (refLCS <= motions.lineRefTreshold) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
-                encC1 = CHASSIS_R_MOTOR.angle(); // Считываем угол
+                encC1 = chassis.rightMotor.angle(); // Считываем угол
                 break;
             } else if (refRCS <= motions.lineRefTreshold) { // Правый датчик первый нашёл линию
                 firstSide = "RIGHT_SIDE";
-                encB1 = CHASSIS_L_MOTOR.angle(); // Считываем угол
+                encB1 = chassis.leftMotor.angle(); // Считываем угол
                 break;
             }
             control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
@@ -216,7 +216,7 @@ namespace levelings {
                 let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
                 let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
                 if (refRCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
-                    encC2 = CHASSIS_R_MOTOR.angle(); // Считываем угол по новой
+                    encC2 = chassis.rightMotor.angle(); // Считываем угол по новой
                     a = encC2 - encC1; // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
@@ -224,7 +224,7 @@ namespace levelings {
                 let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
                 let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
                 if (refLCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
-                    encB2 = CHASSIS_L_MOTOR.angle(); // Считываем угол по новой
+                    encB2 = chassis.leftMotor.angle(); // Считываем угол по новой
                     a = encB2 - encB1; // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }

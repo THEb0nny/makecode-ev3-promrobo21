@@ -1,7 +1,3 @@
-//let CHASSIS_MOTORS = motors.largeBC; // Ссылка на объект моторов в шасси
-let CHASSIS_L_MOTOR = motors.mediumB; // Ссылка на объект левого мотора в шасси
-let CHASSIS_R_MOTOR = motors.mediumC; // Ссылка на объект правого мотора в шасси
-
 let MANIP_MOTOR_LEFT: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
 let MANIP_MOTOR_RIGHT: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
 
@@ -118,9 +114,7 @@ function Main() { // Определение главной функции
     sensors.SetColorSensorMaxRgbValues(sensors.rightLineSensor, [230, 224, 178]); // Установить правому датчику линии максималальные значения RGB
     sensors.SetColorSensorMaxRgbValues(COLOR_DETECTION_CS, [204, 190, 243]); // Установить датчику определения фигур максимальные значения RGB
 
-    CHASSIS_L_MOTOR.setInverted(true); CHASSIS_R_MOTOR.setInverted(false); // Установка реверсов в шасси
-    CHASSIS_L_MOTOR.setPauseOnRun(true); CHASSIS_R_MOTOR.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
-    CHASSIS_L_MOTOR.setBrakeSettleTime(10); CHASSIS_R_MOTOR.setBrakeSettleTime(10); // Установить у моторов время ожидание после торможения
+    chassis.setSeparatelyChassisMotors(motors.mediumB, motors.mediumC, true, false); // Установка моторов шасси и установка им реверсов
 
     MANIP_MOTOR_LEFT.setInverted(true); MANIP_MOTOR_RIGHT.setInverted(false); // Установить инверсию для манипулятора, если требуется
     MANIP_MOTOR_LEFT.setBrake(true); MANIP_MOTOR_RIGHT.setBrake(true); // Удержание моторов манипуляторов
@@ -158,15 +152,15 @@ function Main() { // Определение главной функции
         SetManipulatorPosition(MANIP_MOTOR_RIGHT, ClawState.Open, 5, 500);
     });
     chassis.PivotTurn(90, 40, WheelPivot.RightWheel); pause(50); // Поворачиваем к линии
-    const startEncLeftMot = CHASSIS_L_MOTOR.angle(); // Запоминаем значение с энкодера левого мотора перед стартом  поиска парковых элементов
-    const startEncRightMot = CHASSIS_R_MOTOR.angle(); // Запоминаем значенис с энкодера правого мотора
+    const startEncLeftMot = chassis.leftMotor.angle(); // Запоминаем значение с энкодера левого мотора перед стартом  поиска парковых элементов
+    const startEncRightMot = chassis.rightMotor.angle(); // Запоминаем значенис с энкодера правого мотора
     // Запускаем функцию определения цвета парковых элементов в параллельной задаче
     control.runInParallel(function () {
         brick.setStatusLightInBackground(StatusLight.Red, 250); // Светим светодиодом, что мы закончили считывание
         while (true) {
             let currTime = control.millis(); // Текущее время
             let color = RgbToHsvlToColorConvert(); // Узнаём цвет переведя RGB в HSVL и получив код цвета
-            let averageEnc = ((CHASSIS_L_MOTOR.angle() - startEncLeftMot) + (CHASSIS_R_MOTOR.angle() - startEncRightMot)) / 2; // Среднее значение с энкодеров
+            let averageEnc = ((chassis.leftMotor.angle() - startEncLeftMot) + (chassis.rightMotor.angle() - startEncRightMot)) / 2; // Среднее значение с энкодеров
             if (280 <= averageEnc && averageEnc <= 400) parkElements[5] = color; // Считываем на зоне 6
             else if (averageEnc <= 550) parkElements[4] = color; // Считываем на зоне 5
             else if (averageEnc <= 730) parkElements[3] = color; // Считываем на зоне 4
