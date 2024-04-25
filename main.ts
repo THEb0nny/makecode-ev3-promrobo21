@@ -3,9 +3,6 @@ let MANIP_MOTOR_RIGHT: motors.Motor = motors.mediumD; // Ссылка на об�
 
 let COLOR_DETECTION_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
 
-let WHEELS_D = 62.4; // Диаметр колёс в мм
-let WHEELS_W = 180; // Расстояние между центрами колёс в мм
-
 let parkElements: number[] = [0, 0, 0, 0, 0, 0]; // Парковые элементы
 
 let colorDetectionCSParams = {
@@ -115,6 +112,9 @@ function Main() { // Определение главной функции
     sensors.SetColorSensorMaxRgbValues(COLOR_DETECTION_CS, [204, 190, 243]); // Установить датчику определения фигур максимальные значения RGB
 
     chassis.setSeparatelyChassisMotors(motors.mediumB, motors.mediumC, true, false); // Установка моторов шасси и установка им реверсов
+    chassis.setRegulatorGains(0.01, 0, 0.5);
+    chassis.setWheelRadius(62.4); // Диаметр колёс в мм
+    chassis.setBaseLength(180); // Расстояние между центрами колёс в мм
 
     MANIP_MOTOR_LEFT.setInverted(true); MANIP_MOTOR_RIGHT.setInverted(false); // Установить инверсию для манипулятора, если требуется
     MANIP_MOTOR_LEFT.setBrake(true); MANIP_MOTOR_RIGHT.setBrake(true); // Удержание моторов манипуляторов
@@ -123,7 +123,7 @@ function Main() { // Определение главной функции
     for (let i = 0; i < 50; i++) {
         sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw);
         sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw);
-        COLOR_DETECTION_CS.rgbRaw();
+        // COLOR_DETECTION_CS.rgbRaw();
         loops.pause(5);
     }
 
@@ -143,6 +143,9 @@ function Main() { // Определение главной функции
     }
     brick.clearScreen(); // Очистить экрана
 
+    chassis.spinTurn(90, 30);
+
+    /*
     //// Ваш код тут
     // Закрываем манипуляторы прижимая кабель
     control.runInParallel(function () {
@@ -355,6 +358,7 @@ function Main() { // Определение главной функции
         motions.LineFollowToDistance(200, AfterMotion.NoStop); // Едем двемя датчиками на дистанцию без команды торможения
         motions.LineFollowToRightIntersection(HorizontalLineLocation.Inside, AfterMotion.DecelRolling, { speed: 40, Kp: 0.2, Kd: 1.5 }); pause(50); // Едем до перекрёстка справа
     }
+    */
 
     // Вернутся домой
     // motions.LineFollowToDistance(150, AfterMotion.NoStop);

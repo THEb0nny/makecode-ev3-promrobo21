@@ -64,7 +64,7 @@ namespace chassis {
 
         let lMotEncPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
         let rMotEncPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
-        let calcMotRot = Math.round(deg * WHEELS_W / WHEELS_D); // Расчёт угла поворота моторов для поворота
+        let calcMotRot = Math.round(deg * chassis.getBaseLength() / chassis.getWheelRadius()); // Расчёт угла поворота моторов для поворота
 
         automation.pid2.setGains(smartSpinTurnKp, smartSpinTurnKi, smartSpinTurnKd); // Установка коэффициентов ПИД регулятора
         automation.pid2.setDerivativeFilter(smartSpinTurnN); // Установить фильтр дифференциального регулятора
@@ -146,7 +146,7 @@ namespace chassis {
             chassis.rightMotor.stop(); // Тормоз на мотор
             motEncPrev = chassis.leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
         }
-        let calcMotRot = Math.round(((deg * WHEELS_W) / WHEELS_D) * 2); // Рассчитываем сколько градусов вращать мотор
+        let calcMotRot = Math.round(((deg * chassis.getBaseLength()) / chassis.getWheelRadius()) * 2); // Рассчитываем сколько градусов вращать мотор
         
         automation.pid2.setGains(smartPivotTurnKp, smartPivotTurnKi, smartPivotTurnKd); // Устанавливаем коэффиценты ПИД регулятора
         automation.pid2.setDerivativeFilter(smartPivotTurnN); // Установить фильтр дифференциального регулятора
@@ -188,72 +188,6 @@ namespace chassis {
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
         chassis.leftMotor.stop(); chassis.rightMotor.stop(); // Остановить моторы
-    }
-
-    /**
-     * Поворот относительно центра колёс на угол в градусах.
-     * @param deg угол градуса поворота, где положительное число - вправо, а отрицательное влево, eg: 90
-     * @param speed скорость поворота, eg: 60
-     */
-    //% blockId="SpinTurn"
-    //% block="поворот на $deg|° с $speed|\\% относительно центра колёс"
-    //% block.loc.ru="поворот на $deg|° с $speed|\\% относительно центра колёс"
-    //% inlineInputMode="inline"
-    //% expandableArgumentMode="toggle"
-    //% speed.shadow="motorSpeedPicker"
-    //% weight="99"
-    //% group="Обычные повороты"
-    export function SpinTurn(deg: number, speed: number) {
-        if (deg == 0 || speed == 0) {
-            //CHASSIS_MOTORS.stop();
-            chassis.ChassisStop(true);
-            return;
-        }
-        // CHASSIS_MOTORS.setBrake(true); // Удерживать при тормозе
-        // let calcMotRot = (deg * WHEELS_W) / WHEELS_D; // Расчёт значения угла для поворота
-        // CHASSIS_MOTORS.tank(speed, -speed, calcMotRot, MoveUnit.Degrees);
-        chassis.leftMotor.pauseUntilReady(); chassis.rightMotor.pauseUntilReady(); // Ждём выполнения моторами команды ?????
-        chassis.leftMotor.setBrake(true); chassis.rightMotor.setBrake(true); // Удерживать при тормозе
-        const calcMotRot = (deg * WHEELS_W) / WHEELS_D; // Расчитать градусы для поворота в градусы для мотора
-        chassis.leftMotor.setPauseOnRun(false); chassis.rightMotor.setPauseOnRun(false); // Отключаем у моторов ожидание выполнения
-        chassis.leftMotor.run(speed, calcMotRot, MoveUnit.Degrees); // Передаём команду движения левый мотор
-        chassis.rightMotor.run(-speed, calcMotRot, MoveUnit.Degrees); // Передаём команду движения правый мотор
-        chassis.leftMotor.pauseUntilReady(); chassis.rightMotor.pauseUntilReady(); // Ждём выполнения моторами команды
-        chassis.leftMotor.stop(); chassis.rightMotor.stop(); // Остановить моторы для защиты, если будет calcMotRot = 0, то моторы будут вращаться бесконечно
-        chassis.leftMotor.setPauseOnRun(true); chassis.rightMotor.setPauseOnRun(true); // Включаем у моторов ожидание выполнения
-    }
-
-    /**
-     * Повороты относительно левого или правого колеса на угол в градусах.
-     * @param deg угол в градусах для поворота, где положительное число - вправо, а отрицательное влево, eg: 90
-     * @param speed скорость поворота, eg: 80
-     * @param wheelPivot относительно колеса, eg: WheelPivot.LeftWheel
-     */
-    //% blockId="PivotTurn"
-    //% block="turn to $deg|° with $speed|\\% relatively $wheelPivot| wheel"
-    //% block.loc.ru="поворот на $deg|° с $speed|\\% относительно $wheelPivot| колеса"
-    //% inlineInputMode="inline"
-    //% expandableArgumentMode="toggle"
-    //% speed.shadow="motorSpeedPicker"
-    //% weight="98"
-    //% group="Обычные повороты"
-    export function PivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
-        if (deg == 0 || speed == 0) {
-            //CHASSIS_MOTORS.stop();
-            chassis.ChassisStop(true);
-            return;
-        }
-        chassis.leftMotor.pauseUntilReady(); chassis.rightMotor.pauseUntilReady(); // Ждём выполнения моторами команды ??????
-        // CHASSIS_MOTORS.setBrake(true); // Удерживать при тормозе
-        chassis.leftMotor.setBrake(true); chassis.rightMotor.setBrake(true); // Удерживать при тормозе
-        let calcMotRot = ((deg * WHEELS_W) / WHEELS_D) * 2; // Расчёт значения угла для поворота
-        if (wheelPivot == WheelPivot.LeftWheel) {
-            chassis.leftMotor.stop(); // Остановить левый мотор
-            chassis.rightMotor.run(speed, calcMotRot, MoveUnit.Degrees);
-        } else if (wheelPivot == WheelPivot.RightWheel) {
-            chassis.rightMotor.stop(); // Остановить правый мотор
-            chassis.leftMotor.run(speed, calcMotRot, MoveUnit.Degrees);
-        }
     }
     
 }

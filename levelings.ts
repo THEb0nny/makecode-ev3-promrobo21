@@ -166,94 +166,94 @@ namespace levelings {
         chassis.ChassisStop(true);
     }
 
-    /**
-     * Выравнивание на линии в движении.
-     * @param speed скорость движения, eg: 40
-     * @param actionAfterMotion действие после, eg: AfterMotionShort.BreakStop
-     * @param debug отладка, eg: false
-     */
-    //% blockId="LineAlignmentInMotion"
-    //% block="выравниться на линии в движении на $speed|\\% c действием после $actionAfterMotion|| отладка $debug"
-    //% expandableArgumentMode="toggle"
-    //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
-    //% weight="97"
-    //% group="Линия"
-    export function LineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
-        let DIST_BETWEEN_CS = 25; // Расстояние между датчиками цвета в мм
+    // /**
+    //  * Выравнивание на линии в движении.
+    //  * @param speed скорость движения, eg: 40
+    //  * @param actionAfterMotion действие после, eg: AfterMotionShort.BreakStop
+    //  * @param debug отладка, eg: false
+    //  */
+    // //% blockId="LineAlignmentInMotion"
+    // //% block="выравниться на линии в движении на $speed|\\% c действием после $actionAfterMotion|| отладка $debug"
+    // //% expandableArgumentMode="toggle"
+    // //% inlineInputMode="inline"
+    // //% speed.shadow="motorSpeedPicker"
+    // //% weight="97"
+    // //% group="Линия"
+    // export function LineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
+    //     let DIST_BETWEEN_CS = 25; // Расстояние между датчиками цвета в мм
 
-        chassis.ChassisControl(0, speed); // Команда двигаться вперёд
-        let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
-        let encB1 = 0, encB2 = 0, encC1 = 0, encC2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
-        let a = 0, b = DIST_BETWEEN_CS, c = 0;
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
-            let currTime = control.millis();
-            let loopTime = currTime - prevTime;
-            prevTime = currTime;
-            let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
-            let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
-            let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            if (refLCS <= motions.lineRefTreshold) { // Левый датчик первый нашёл линию
-                firstSide = "LEFT_SIDE";
-                encC1 = chassis.rightMotor.angle(); // Считываем угол
-                break;
-            } else if (refRCS <= motions.lineRefTreshold) { // Правый датчик первый нашёл линию
-                firstSide = "RIGHT_SIDE";
-                encB1 = chassis.leftMotor.angle(); // Считываем угол
-                break;
-            }
-            control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
-        }
-        control.runInParallel(function () { music.playTone(Note.D, 250); }); // Сигнал для понимация, что вышли из первого цикла
-        prevTime = 0; // Переменная предыдущего времения для цикла регулирования
-        while (true) { // Ждём, чтобы датчик с другой стороны нашёл линию
-            let currTime = control.millis();
-            let loopTime = currTime - prevTime;
-            prevTime = currTime;
-            if (firstSide == "LEFT_SIDE") {
-                let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
-                let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-                if (refRCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
-                    encC2 = chassis.rightMotor.angle(); // Считываем угол по новой
-                    a = encC2 - encC1; // Рассчитываем длину стороны a в тиках энкодера
-                    break;
-                }
-            } else if (firstSide == "RIGHT_SIDE") {
-                let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-                let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
-                if (refLCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
-                    encB2 = chassis.leftMotor.angle(); // Считываем угол по новой
-                    a = encB2 - encB1; // Рассчитываем длину стороны a в тиках энкодера
-                    break;
-                }
-            }
-            control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
-        }
-        control.runInParallel(function () { music.playTone(Note.D, 250); }); // Сигнал для понимация, что вышли из цикла
-        //ChassisStop(true); // Жёсткое торможение для теста
-        //pause(1000);
-        a = (a / 360) * Math.PI * WHEELS_D; // Перевести в мм пройденное значение
-        c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)); // Рассчитываем гипотенузу 
-        let alpha = Math.sin(a / c) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
-        //let beta = Math.asin(b / c) * (180.0 / Math.PI); // Рассчитываем угол бета в радианах и переводим в градусы
-        if (firstSide == "LEFT_SIDE") chassis.PivotTurn(alpha, speed, WheelPivot.LeftWheel);
-        else if (firstSide == "RIGHT_SIDE") chassis.PivotTurn(alpha, speed, WheelPivot.RightWheel);
-        if (debug) { // Выводим на экран расчёты
-            brick.clearScreen();
-            brick.printValue("encB1", encB1, 1);
-            brick.printValue("encB2", encB2, 2);
-            brick.printValue("encC1", encC1, 3);
-            brick.printValue("encC2", encC2, 4);
-            brick.printValue("a", a, 5);
-            brick.printValue("b", b, 6);
-            brick.printValue("c", c, 7);
-            brick.printValue("alpha", alpha, 8);
-            //brick.printValue("beta", beta, 9);
-        }
-        control.runInParallel(function () { music.playTone(Note.D, 500); }); // Сигнал для понимация
-        chassis.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
-    }
+    //     chassis.ChassisControl(0, speed); // Команда двигаться вперёд
+    //     let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
+    //     let encB1 = 0, encB2 = 0, encC1 = 0, encC2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
+    //     let a = 0, b = DIST_BETWEEN_CS, c = 0;
+    //     let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+    //     while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
+    //         let currTime = control.millis();
+    //         let loopTime = currTime - prevTime;
+    //         prevTime = currTime;
+    //         let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+    //         let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+    //         let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
+    //         let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
+    //         if (refLCS <= motions.lineRefTreshold) { // Левый датчик первый нашёл линию
+    //             firstSide = "LEFT_SIDE";
+    //             encC1 = chassis.rightMotor.angle(); // Считываем угол
+    //             break;
+    //         } else if (refRCS <= motions.lineRefTreshold) { // Правый датчик первый нашёл линию
+    //             firstSide = "RIGHT_SIDE";
+    //             encB1 = chassis.leftMotor.angle(); // Считываем угол
+    //             break;
+    //         }
+    //         control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
+    //     }
+    //     control.runInParallel(function () { music.playTone(Note.D, 250); }); // Сигнал для понимация, что вышли из первого цикла
+    //     prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+    //     while (true) { // Ждём, чтобы датчик с другой стороны нашёл линию
+    //         let currTime = control.millis();
+    //         let loopTime = currTime - prevTime;
+    //         prevTime = currTime;
+    //         if (firstSide == "LEFT_SIDE") {
+    //             let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+    //             let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
+    //             if (refRCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
+    //                 encC2 = chassis.rightMotor.angle(); // Считываем угол по новой
+    //                 a = encC2 - encC1; // Рассчитываем длину стороны a в тиках энкодера
+    //                 break;
+    //             }
+    //         } else if (firstSide == "RIGHT_SIDE") {
+    //             let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+    //             let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
+    //             if (refLCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
+    //                 encB2 = chassis.leftMotor.angle(); // Считываем угол по новой
+    //                 a = encB2 - encB1; // Рассчитываем длину стороны a в тиках энкодера
+    //                 break;
+    //             }
+    //         }
+    //         control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
+    //     }
+    //     control.runInParallel(function () { music.playTone(Note.D, 250); }); // Сигнал для понимация, что вышли из цикла
+    //     //ChassisStop(true); // Жёсткое торможение для теста
+    //     //pause(1000);
+    //     a = (a / 360) * Math.PI * chassis.getWheelRadius(); // Перевести в мм пройденное значение
+    //     c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)); // Рассчитываем гипотенузу 
+    //     let alpha = Math.sin(a / c) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
+    //     //let beta = Math.asin(b / c) * (180.0 / Math.PI); // Рассчитываем угол бета в радианах и переводим в градусы
+    //     if (firstSide == "LEFT_SIDE") chassis.PivotTurn(alpha, speed, WheelPivot.LeftWheel);
+    //     else if (firstSide == "RIGHT_SIDE") chassis.PivotTurn(alpha, speed, WheelPivot.RightWheel);
+    //     if (debug) { // Выводим на экран расчёты
+    //         brick.clearScreen();
+    //         brick.printValue("encB1", encB1, 1);
+    //         brick.printValue("encB2", encB2, 2);
+    //         brick.printValue("encC1", encC1, 3);
+    //         brick.printValue("encC2", encC2, 4);
+    //         brick.printValue("a", a, 5);
+    //         brick.printValue("b", b, 6);
+    //         brick.printValue("c", c, 7);
+    //         brick.printValue("alpha", alpha, 8);
+    //         //brick.printValue("beta", beta, 9);
+    //     }
+    //     control.runInParallel(function () { music.playTone(Note.D, 500); }); // Сигнал для понимация
+    //     chassis.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
+    // }
     
 }

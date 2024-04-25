@@ -68,7 +68,7 @@ namespace chassis {
             return;
         }
         let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = (dist / (Math.PI * WHEELS_D)) * 360; // Дистанция в мм, которую нужно пройти
+        let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно пройти
         //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
         ChassisControl(0, speed);
 
@@ -105,11 +105,11 @@ namespace chassis {
         }
         
         // CHASSIS_MOTORS.setBrake(setBreak); // Удерживать при тормозе
-        // let mRotCalc = (dist / (Math.PI * WHEELS_D)) * 360; // Подсчёт по формуле
+        // let mRotCalc = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Подсчёт по формуле
         // CHASSIS_MOTORS.tank(speed, speed, mRotCalc, MoveUnit.Degrees); // Передаём команду моторам
         chassis.leftMotor.pauseUntilReady(); chassis.rightMotor.pauseUntilReady(); // Ждём выполнения моторами команды
         chassis.leftMotor.setBrake(setBreak); chassis.rightMotor.setBrake(setBreak); // Установить жёсткий тип торможения
-        const mRotCalc = (dist / (Math.PI * WHEELS_D)) * 360; // Расчёт угла поворота на дистанцию
+        const mRotCalc = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчёт угла поворота на дистанцию
         chassis.leftMotor.setPauseOnRun(false); chassis.rightMotor.setPauseOnRun(false); // Отключаем у моторов ожидание выполнения
         chassis.leftMotor.run(speed, mRotCalc, MoveUnit.Degrees); chassis.rightMotor.run(speed, mRotCalc, MoveUnit.Degrees); // Передаём команды движения на моторы
         chassis.leftMotor.pauseUntilReady(); chassis.rightMotor.pauseUntilReady(); // Ждём выполнения моторами команды
@@ -132,9 +132,9 @@ namespace chassis {
     export function RampDistMove(totalDist: number, accelDist: number, decelDist: number, speed: number) {
         // chassis.leftMotor.pauseUntilReady(); chassis.rightMotor.pauseUntilReady(); // Ждём выполнения моторами команды ???????
         chassis.leftMotor.setBrake(true); chassis.rightMotor.setBrake(true); // Установить торможение с удержанием
-        let mRotAccelCalc = (accelDist == 0 ? 0 : Math.round((accelDist / (Math.PI * WHEELS_D)) * 360)); // Расчитываем расстояние ускорения
-        let mRotDecelCalc = (decelDist == 0 ? 0 : Math.round((decelDist / (Math.PI * WHEELS_D)) * 360)); // Расчитываем расстояние замедления
-        let mRotNormCalc = Math.round((totalDist / (Math.PI * WHEELS_D)) * 360) - mRotAccelCalc - mRotDecelCalc; // Рассчитываем общюю дистанцию
+        let mRotAccelCalc = (accelDist == 0 ? 0 : Math.round((accelDist / (Math.PI * chassis.getWheelRadius())) * 360)); // Расчитываем расстояние ускорения
+        let mRotDecelCalc = (decelDist == 0 ? 0 : Math.round((decelDist / (Math.PI * chassis.getWheelRadius())) * 360)); // Расчитываем расстояние замедления
+        let mRotNormCalc = Math.round((totalDist / (Math.PI * chassis.getWheelRadius())) * 360) - mRotAccelCalc - mRotDecelCalc; // Рассчитываем общюю дистанцию
         chassis.leftMotor.setPauseOnRun(false); chassis.rightMotor.setPauseOnRun(false); // Отключаем у моторов ожидание выполнения
         // Передаём команды движения на моторы
         chassis.leftMotor.ramp(speed, mRotNormCalc, MoveUnit.Degrees, mRotAccelCalc, mRotDecelCalc);
