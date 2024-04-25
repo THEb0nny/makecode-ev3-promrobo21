@@ -69,7 +69,8 @@ namespace chassis {
      * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
      */
     //% blockId="DistMove"
-    //% block="движение на расстояние $dist|на $speed|\\%| тормоз с удержанием $setBreak"
+    //% block="distance moving $dist| at $speed|\\%| brake $setBreak"
+    //% block.loc.ru="движение на расстояние $dist| на $speed|\\%| тормоз с удержанием $setBreak"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% setBreak.shadow="toggleOnOff"
@@ -93,7 +94,8 @@ namespace chassis {
      * @param decelDist расстояние замедления в мм, eg: 100
      */
     //% blockId="RampDistMove"
-    //% block="движение на расстояние $totalDist| c расстоянием ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    //% block="distance moving $totalDist| acceleration distance $accelDist| deceleration $decelDist| at speed $speed|\\%"
+    //% block.loc.ru="движение на расстояние $totalDist| c расстоянием ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="88"
