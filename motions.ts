@@ -98,8 +98,8 @@ namespace chassis {
     export function RampDistMove(speed: number, totalDist: number, accelDist: number, decelDist: number) {
         let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
         let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
-        // let mRotNormCalc = Math.round((totalDist / (Math.PI * chassis.getWheelRadius())) * 360) - mRotAccelCalc - mRotDecelCalc; // Рассчитываем общюю дистанцию
-        chassis.syncRampMovement(5, speed, totalDist, mRotAccelCalc, mRotDecelCalc);
+        let mRotTotalCalc = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Рассчитываем общюю дистанцию
+        chassis.syncRampMovement(5, speed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
     /**
