@@ -79,14 +79,14 @@ const enum AfterMotionShort {
 }
 
 // Перечисление о типах относительных поворотов
-const enum WheelPivot {
-    //% block="left"
-    //% block.loc.ru="левого"
-    LeftWheel,
-    //% block="right"
-    //% block.loc.ru="правого"
-    RightWheel
-}
+// const enum WheelPivot {
+//     //% block="left"
+//     //% block.loc.ru="левого"
+//     LeftWheel,
+//     //% block="right"
+//     //% block.loc.ru="правого"
+//     RightWheel
+// }
 
 // Перечисление о расположении линии при движении по линии
 const enum HorizontalLineLocation {

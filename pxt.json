@@ -6,7 +6,7 @@
         "ev3": "*",
         "automation": "github:microsoft/pxt-automation#v0.0.3",
         "nxt-light-sensor": "*",
-        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#38bd3be39d648ad28dcbefcb8d61367fe59acf6b"
+        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#c358d2ab2ba49c197cc234c55ecf6091464bf163"
     },
     "files": [
         "main.ts",

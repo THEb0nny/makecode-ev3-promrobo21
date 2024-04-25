@@ -99,15 +99,15 @@ namespace chassis {
         let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
         let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
         // let mRotNormCalc = Math.round((totalDist / (Math.PI * chassis.getWheelRadius())) * 360) - mRotAccelCalc - mRotDecelCalc; // Рассчитываем общюю дистанцию
-        chassis.syncRampMovement(5, speed, mRotAccelCalc, mRotDecelCalc, totalDist);
+        chassis.syncRampMovement(5, speed, totalDist, mRotAccelCalc, mRotDecelCalc);
     }
 
     /**
      * Движение вперёд до зоны с определённым отражением.
+     * @param dir нпарвление движения, eg: 0
      * @param SensorSelection определение датчиками, eg: SensorSelection.LeftAndRight
      * @param refCondition отражение больше или меньше, eg: Condition.Larger
      * @param refTreshold пороговое значение отражения света, eg: 50
-     * @param dir нпарвление движения, eg: 0
      * @param speed скорость движения, eg: 80
      * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
      * @param debug отладка, eg: false
