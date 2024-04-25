@@ -126,7 +126,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="90" blockGap="8"
     //% group="Color Sensor"
-    export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor, minRgbArr: number[]) {
+    export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor | sensors.NXTLightSensor, minRgbArr: number[]) {
         if (sensor.port() == 1) minRgbColorSensor1 = minRgbArr;
         else if (sensor.port() == 2) minRgbColorSensor2 = minRgbArr;
         else if (sensor.port() == 3) minRgbColorSensor3 = minRgbArr;
@@ -146,7 +146,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="90" blockGap="8"
     //% group="Color Sensor"
-    export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxRgbArr: number[]) {
+    export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor | sensors.NXTLightSensor, maxRgbArr: number[]) {
         if (sensor.port() == 1) maxRgbColorSensor1 = maxRgbArr;
         else if (sensor.port() == 2) maxRgbColorSensor2 = maxRgbArr;
         else if (sensor.port() == 3) maxRgbColorSensor3 = maxRgbArr;
