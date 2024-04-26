@@ -143,10 +143,6 @@ function Main() { // Определение главной функции
     }
     brick.clearScreen(); // Очистить экрана
 
-    // chassis.spinTurn(90, 30);
-    // chassis.DistMove(500, 30, true);
-    // chassis.RampDistMove(50, 200, 50, 50);
-
     /*
     //// Ваш код тут
     // Закрываем манипуляторы прижимая кабель
