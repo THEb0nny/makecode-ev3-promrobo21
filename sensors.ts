@@ -115,6 +115,19 @@ namespace sensors {
         blueBoundary: number;
     }
 
+    export function SetHSVLColorNumParams(newColorBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): HsvlToColorNum {
+        return {
+            colorBoundary: 65,
+            whiteBoundary: 10,
+            blackBoundary: 1,
+            redBoundary: 25,
+            brownBoundary: 50,
+            yellowBoundary: 100,
+            greenBoundary: 180,
+            blueBoundary: 260
+        }
+    }
+
     /**
      * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
