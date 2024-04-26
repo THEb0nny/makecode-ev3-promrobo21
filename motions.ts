@@ -1,12 +1,12 @@
 namespace chassis {
 
     /**
-     * Chassis motor control.
-     * Управление моторами шасси.
+     * Chassis motor control command.
+     * Команда управления моторами шасси.
      * @param dir направление поворота, eg: 0
      * @param speed скорость движения, eg: 80
      */
-    //% blockId="ChassisControl"
+    //% blockId="ChassisControlCommand"
     //% block="движение по направлению $dir| на $speed|\\%"
     //% inlineInputMode="inline"
     //% dir.shadow="motorTurnRatioPicker"
@@ -14,7 +14,7 @@ namespace chassis {
     //% speed.shadow="motorSpeedPicker"
     //% weight="99"
     //% group="Move"
-    export function ChassisControl(dir: number, speed: number) {
+    export function ChassisControlCommand(dir: number, speed: number) {
         let mB = speed + dir, mC = speed - dir;
         // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
         // mB *= z; mC *= z;
@@ -24,9 +24,9 @@ namespace chassis {
     // Функция, которая выполняет действие после цикла с движением
     export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
-            chassis.DistMove(motions.distRollingAfterIntersection, speed, true);
+            chassis.StraightDistMove(motions.distRollingAfterIntersection, speed, true);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            chassis.RampDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
+            chassis.RampStraightDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             chassis.RollingMoveOut(motions.distRollingAfterIntersectionMoveOut, speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением (удержанием)
@@ -35,7 +35,7 @@ namespace chassis {
             chassis.stop(false);
         } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             // CHASSIS_MOTORS.steer(0, speed);
-            chassis.ChassisControl(0, speed);
+            chassis.ChassisControlCommand(0, speed);
         }
     }
 
@@ -48,7 +48,7 @@ namespace chassis {
         let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно пройти
         //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
-        ChassisControl(0, speed); // Команда вперёд
+        ChassisControlCommand(0, speed); // Команда вперёд
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
             let currTime = control.millis(); // Текущее время
@@ -62,13 +62,13 @@ namespace chassis {
     }
 
     /**
-     * Movement over a distance in mm at a constant speed.
-     * Движение на расстояние в мм с постоянной скоростью.
+     * Straight movement over a distance in mm at a constant speed.
+     * Прямолинейное движение на расстояние в мм с постоянной скоростью.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
      * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
      */
-    //% blockId="DistMove"
+    //% blockId="StraightDistMove"
     //% block="distance moving $dist| at $speed|\\%| brake $setBreak"
     //% block.loc.ru="движение на расстояние $dist| на $speed|\\%| тормоз с удержанием $setBreak"
     //% inlineInputMode="inline"
@@ -76,7 +76,7 @@ namespace chassis {
     //% setBreak.shadow="toggleOnOff"
     //% weight="89"
     //% group="Move"
-    export function DistMove(dist: number, speed: number, setBreak: boolean = true) {
+    export function StraightDistMove(dist: number, speed: number, setBreak: boolean = true) {
         if (dist == 0 || speed == 0) {
             chassis.stop(true);
             return;
@@ -86,21 +86,21 @@ namespace chassis {
     }
 
     /**
-     * Movement over a given distance with acceleration and deceleration in mm.
-     * Движение на заданное расстояние с ускорением и замедлением в мм.
+     * Straight movement over a given distance with acceleration and deceleration in mm.
+     * Прямолинейное движение на заданное расстояние с ускорением и замедлением в мм.
      * @param speed скорость движения, eg: 60
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 100
      */
-    //% blockId="RampDistMove"
+    //% blockId="RampStraightDistMove"
     //% block="distance moving $totalDist| acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
     //% block.loc.ru="движение на расстояние $totalDist| ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="88"
     //% group="Move"
-    export function RampDistMove(speed: number, totalDist: number, accelDist: number, decelDist: number) {
+    export function RampStraightDistMove(speed: number, totalDist: number, accelDist: number, decelDist: number) {
         let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
         let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
         let mRotTotalCalc = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Рассчитываем общюю дистанцию
@@ -129,7 +129,7 @@ namespace chassis {
     //% weight="79"
     //% group="Move"
     export function MoveToRefZone(sensorsCondition: SensorSelection, refCondition: LogicalOperators, refTreshold: number, dir: number, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        ChassisControl(dir, speed); // Команда двигаться по направлению и скоростью
+        ChassisControlCommand(dir, speed); // Команда двигаться по направлению и скоростью
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
             let currTime = control.millis();
@@ -164,7 +164,7 @@ namespace chassis {
                 else if (refCondition == LogicalOperators.LessOrEqual && refRightLS <= refTreshold) break; // Меньше или равно
                 else if (refCondition == LogicalOperators.Equal && refRightLS == refTreshold) break; // Равно
             }
-            ChassisControl(dir, speed); // Дублирую команду двигаться по направлению и скоростью
+            ChassisControlCommand(dir, speed); // Дублирую команду двигаться по направлению и скоростью
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);

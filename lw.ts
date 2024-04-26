@@ -159,7 +159,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            chassis.ChassisControl(U, lineFollow2SensorSpeed);
+            chassis.ChassisControlCommand(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
@@ -221,7 +221,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            chassis.ChassisControl(U, lineFollow2SensorSpeed);
+            chassis.ChassisControlCommand(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -286,7 +286,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
-            chassis.ChassisControl(U, lineFollowLeftSensorSpeed);
+            chassis.ChassisControlCommand(U, lineFollowLeftSensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -351,7 +351,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            chassis.ChassisControl(U, lineFollow2SensorSpeed);
+            chassis.ChassisControlCommand(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -411,7 +411,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
-            chassis.ChassisControl(U, lineFollowRightSensorSpeed);
+            chassis.ChassisControlCommand(U, lineFollowRightSensorSpeed);
             brick.clearScreen(); // Очистка экрана
             if (debug) {
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -471,7 +471,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
-            chassis.ChassisControl(U, lineFollowLeftSensorSpeed);
+            chassis.ChassisControlCommand(U, lineFollowLeftSensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
