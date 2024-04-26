@@ -1,12 +1,12 @@
 {
     "name": "Promrobo21",
-    "version": "0.25.9",
+    "version": "0.25.10",
     "description": "Methods (blocks) for working with ev3 to participate in competitions.",
     "dependencies": {
         "ev3": "*",
         "automation": "github:microsoft/pxt-automation#v0.0.3",
         "nxt-light-sensor": "*",
-        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#3756d6c78dd5b30cab87423187064ba0468de51e"
+        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#be251c6f072880d21182453e1c03c9cf473560bf"
     },
     "files": [
         "main.ts",
