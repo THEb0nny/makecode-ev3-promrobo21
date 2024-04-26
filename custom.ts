@@ -1,6 +1,7 @@
 namespace music {
 
     /**
+     * A function to trigger a tone in the background (parallel task).
      * Функция для запуска тона в фоне (паралельной задачи).
      * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
      * @param ms tone duration in milliseconds(ms), eg: BeatFraction.Half
@@ -23,6 +24,7 @@ namespace music {
 namespace brick {
 
     /**
+     * A function for setting the color pattern indicator in the background (parallel task).
      * Функция для установки индикатору шаблона цвета в фоне (паралельной задачи).
      * @param pattern the lights pattern to use. eg: StatusLight.Orange
      * @param duration in milliseconds(ms), eg: 100

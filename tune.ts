@@ -1,6 +1,7 @@
 namespace custom {
 
     /**
+     * Setting function parameters.
      * Настройка параметров функций.
      * @param startupScreen экран при старте, eg: 0
      * @param debug отладка, eg: false

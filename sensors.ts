@@ -184,8 +184,8 @@ namespace sensors {
     }
 
     /**
-     * Поиск максимальных значений RGB датчика цвета, т.е. это максимальные значения на белом.
      * Search for the maximum RGB values of the color sensor, i.e. these are the maximum values on white.
+     * Поиск максимальных значений RGB датчика цвета, т.е. это максимальные значения на белом.
      */
     //% blockId="SearchRgbMaxColorSensors"
     //% block="show max RGB color sensors"
@@ -234,8 +234,8 @@ namespace sensors {
     }
 
     /**
-     * Перевод значений цветового пространства rgb в hsvl.
      * Converting rgb color space values to hsvl.
+     * Перевод значений цветового пространства rgb в hsvl.
      * @param refRawValCS текущее сырое значение отражения, eg: 0
      * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
      * @param wRefRawValCS сырое значение отражения на белом, eg: 650

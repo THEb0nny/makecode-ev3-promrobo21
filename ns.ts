@@ -1,4 +1,5 @@
 /**
+ * Custom methods (blocks).
  * Пользовательские методы (блоки).
  */
 //% block="Custom"
@@ -8,6 +9,7 @@ namespace custom {
 }
 
 /**
+ * Movements.
  * Движения.
  */
 //% block="Motions"
@@ -27,6 +29,7 @@ namespace automation {
 }
 
 /**
+ * Alignments.
  * Выравнивания.
  */
 //% block="Levelings"

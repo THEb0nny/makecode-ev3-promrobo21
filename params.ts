@@ -32,6 +32,7 @@ namespace custom {
     }
 
     /**
+     * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
      */
     //% blockId="SetEmptyParams"
@@ -46,7 +47,8 @@ namespace custom {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
+     * Parameters for an algorithm with a regulator with the ability to set the speed.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость.
      */
     //% blockId="Set1Params"
     //% block="speed = $newSpeed\\%"
@@ -63,6 +65,7 @@ namespace custom {
     }
 
     /**
+     * Parameters for an algorithm with a regulator with the ability to set the speed, Kp.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
      */
     //% blockId="Set2Params"
@@ -81,6 +84,7 @@ namespace custom {
     }
 
     /**
+     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="Set4Params"
@@ -102,6 +106,7 @@ namespace custom {
     }
 
     /**
+     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetAllParams"
