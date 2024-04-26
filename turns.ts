@@ -19,22 +19,67 @@ namespace chassis {
     export let smartPivotTurnKd = 2; // Переменная для хранения коэффицента дифференциального регулятора при повороте относительно колеса
     export let smartPivotTurnN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при повороте относительно колеса
 
+    /**
+     * Установить значение максимального времени умного поворота относительно центра колёс в мсек.
+     * @param timeOut максимальное время в мс, eg: 1000
+     */
+    //% blockId="SetSmartSpinTurnTimeOut"
+    //% block="максимальное время поворота относительно центра $timeOut|мс"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Повороты с регулятором"
     export function SetSmartSpinTurnTimeOut(timeOut: number) {
         smartSpinTurnTimeOut = timeOut;
     }
 
+    /**
+     * Установить значение максимального времени умного поворота относительно колёса в мсек.
+     * @param timeOut максимальное время в мс, eg: 1000
+     */
+    //% blockId="SetSmartPivotTurnTimeOut"
+    //% block="максимальное время поворота относительно колеса $timeOut|мс"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Повороты с регулятором"
     export function SetSmartPivotTurnTimeOut(timeOut: number) {
         smartPivotTurnTimeOut = timeOut;
     }
 
+    /**
+     * Установить значение времени дорегулирования при умном повороте в мс.
+     * @param timeOut максимальное время в мс, eg: 200
+     */
+    //% blockId="SetSmartTurnDeregTimeOut"
+    //% block="максимальное время дорегулирования умного поворота $timeOut|мс"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Повороты с регулятором"
     export function SetSmartTurnDeregTimeOut(timeOut: number) {
         smartTurnDeregTimeOut = timeOut;
     }
 
+    /**
+     * Установить значение условия ошибки при умном повороте.
+     * @param maxErr максимальная ошибка, eg: 10
+     */
+    //% blockId="SetSmartTurnConditionErrDifference"
+    //% block="максимальная ошибка при умном повороте $maxErr| определения окончания"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Повороты с регулятором"
     export function SetSmartTurnConditionErrDifference(maxErr: number) {
         smartTurnConditionErrDifference = maxErr;
     }
 
+    /**
+     * Установить значение условия управляющего воздействия регулятора при умном повороте.
+     * @param maxU максимальное управляющее воздействие, eg: 10
+     */
+    //% blockId="SetSmartTurnConditionErrDifference"
+    //% block="максимальное значение управляющего воздействия при умном повороте $maxU| определения окончания"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Повороты с регулятором"
     export function SetSmartTurnConditionRegDifference(maxU: number) {
         smartTurnConditionRegDifference = maxU;
     }
