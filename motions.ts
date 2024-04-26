@@ -24,9 +24,9 @@ namespace chassis {
     // Функция, которая выполняет действие после цикла с движением
     export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
-            chassis.StraightDistMove(motions.distRollingAfterIntersection, speed, true);
+            chassis.LinearDistMove(motions.distRollingAfterIntersection, speed, true);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            chassis.RampStraightDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
+            chassis.RampLinearDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             chassis.RollingMoveOut(motions.distRollingAfterIntersectionMoveOut, speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением (удержанием)
@@ -68,7 +68,7 @@ namespace chassis {
      * @param speed скорость движения, eg: 60
      * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
      */
-    //% blockId="StraightDistMove"
+    //% blockId="LinearDistMove"
     //% block="distance moving $dist| at $speed|\\%| brake $setBreak"
     //% block.loc.ru="движение на расстояние $dist| на $speed|\\%| тормоз с удержанием $setBreak"
     //% inlineInputMode="inline"
@@ -76,7 +76,7 @@ namespace chassis {
     //% setBreak.shadow="toggleOnOff"
     //% weight="89"
     //% group="Move"
-    export function StraightDistMove(dist: number, speed: number, setBreak: boolean = true) {
+    export function LinearDistMove(dist: number, speed: number, setBreak: boolean = true) {
         if (dist == 0 || speed == 0) {
             chassis.stop(true);
             return;
@@ -93,14 +93,14 @@ namespace chassis {
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 100
      */
-    //% blockId="RampStraightDistMove"
+    //% blockId="RampLinearDistMove"
     //% block="distance moving $totalDist| acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
     //% block.loc.ru="движение на расстояние $totalDist| ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="88"
     //% group="Move"
-    export function RampStraightDistMove(speed: number, totalDist: number, accelDist: number, decelDist: number) {
+    export function RampLinearDistMove(speed: number, totalDist: number, accelDist: number, decelDist: number) {
         let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
         let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
         let mRotTotalCalc = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Рассчитываем общюю дистанцию
