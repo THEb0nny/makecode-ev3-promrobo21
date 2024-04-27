@@ -150,20 +150,20 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
-            let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
-            let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
-            if (refLCS < motions.lineFollowRefTreshold && refRCS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток
-            let error = refLCS - refRCS; // Ошибка регулирования
+            let refRawLeftLS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRightLS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
+            let refLeftLS = sensors.GetNormRefCS(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.GetNormRefCS(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
+            if (refLeftLS < motions.lineFollowRefTreshold && refRightLS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток
+            let error = refLeftLS - refRightLS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
             chassis.ChassisControlCommand(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
-                brick.printValue("refLCS", refLCS, 1);
-                brick.printValue("refRCS", refRCS, 2);
+                brick.printValue("refLeftLS", refLeftLS, 1);
+                brick.printValue("refRightLS", refRightLS, 2);
                 brick.printValue("error", error, 3);
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
@@ -213,8 +213,8 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            let refRawLeftLS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика линии
-            let refRawRightLS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика линии
+            let refRawLeftLS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRightLS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLeftLS = sensors.GetNormRefCS(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormRefCS(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
@@ -277,8 +277,8 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            let refRawLeftLS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика линии
-            let refRawRightLS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика линии
+            let refRawLeftLS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRightLS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLeftLS = sensors.GetNormRefCS(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormRefCS(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
             if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.lineFollowSetPoint; // Ошибка регулирования
@@ -342,8 +342,8 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            let refRawLeftLS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика линии
-            let refRawRightLS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика линии
+            let refRawLeftLS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRightLS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLeftLS = sensors.GetNormRefCS(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormRefCS(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
             if (lineLocation == HorizontalLineLocation.Inside) error = motions.lineFollowSetPoint - refRightLS; // Ошибка регулирования
@@ -401,8 +401,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLeftLS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика линии
-            let refRawRightLS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика линии
+            let refRawLeftLS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRightLS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLeftLS = sensors.GetNormRefCS(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormRefCS(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
             if (lineLocation == HorizontalLineLocation.Inside) error = motions.lineFollowSetPoint - refRightLS; // Ошибка регулирования
@@ -461,8 +461,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLeftLS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика линии
-            let refRawRightLS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика линии
+            let refRawLeftLS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRightLS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLeftLS = sensors.GetNormRefCS(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormRefCS(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
             if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.lineFollowSetPoint; // Ошибка регулирования

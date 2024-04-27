@@ -1,7 +1,7 @@
 namespace sensors {
 
-    export let leftLineSensor: sensors.ColorSensor; // Левый датчик для движения по линии
-    export let rightLineSensor: sensors.ColorSensor; // Правый датчик для движения по линии
+    export let leftLineSensor: sensors.ColorSensor | sensors.NXTLightSensor; // Левый датчик для движения по линии
+    export let rightLineSensor: sensors.ColorSensor | sensors.NXTLightSensor; // Правый датчик для движения по линии
 
     export let bRefRawLeftLineSensor: number; // Сырые значения на чёрном для левого датчика линии
     export let wRefRawLeftLineSensor: number; // Сырые значения на белом для левого датчика линии
@@ -35,7 +35,7 @@ namespace sensors {
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="99"
     //% group="Line Sensor"
-    export function SetLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
+    export function SetLineSensors(newLeftLineSensor: sensors.ColorSensor | sensors.NXTLightSensor, newRightLineSensor: sensors.ColorSensor | sensors.NXTLightSensor) {
         if (newLeftLineSensor !== newRightLineSensor) { // Если сенсоры установили не одинаковые
             leftLineSensor = newLeftLineSensor;
             rightLineSensor = newRightLineSensor;
@@ -74,9 +74,17 @@ namespace sensors {
     //% group="Line Sensor"
     export function GetLineSensorRawValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
-            return leftLineSensor.light(LightIntensityMode.ReflectedRaw);
-        } else if (sensor == LineSensor.Right) {
-            return rightLineSensor.light(LightIntensityMode.ReflectedRaw);
+            if (leftLineSensor instanceof sensors.ColorSensor){
+                return (leftLineSensor as sensors.ColorSensor).light(LightIntensityMode.ReflectedRaw);
+            } else if (leftLineSensor instanceof sensors.NXTLightSensor) {
+                return (rightLineSensor as sensors.NXTLightSensor).light(NXTLightIntensityMode.ReflectedRaw);
+            }
+        } else if (sensor == LineSensor.Right) { 
+            if (rightLineSensor instanceof sensors.ColorSensor) {
+                return (rightLineSensor as sensors.ColorSensor).light(LightIntensityMode.ReflectedRaw);
+            } else if (rightLineSensor instanceof sensors.NXTLightSensor) {
+                return (rightLineSensor as sensors.NXTLightSensor).light(NXTLightIntensityMode.ReflectedRaw);
+            }
         }
         return 0;
     }

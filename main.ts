@@ -121,8 +121,8 @@ function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: n
 function Main() { // Определение главной функции
     // Опрашиваем какое-то количество раз датчики, чтобы они включились перед стартом по нажатию кнопки
     for (let i = 0; i < 50; i++) {
-        sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw);
-        sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw);
+        sensors.GetLineSensorRawValue(LineSensor.Left);
+        sensors.GetLineSensorRawValue(LineSensor.Right);
         // COLOR_DETECTION_CS.rgbRaw();
         loops.pause(5);
     }

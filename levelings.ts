@@ -67,8 +67,8 @@ namespace levelings {
             let dt = currTime - prevTime;
             prevTime = currTime;
             if (isOnLine && control.timer8.millis() >= regulatorTime) break; // Условие выхода из цикла при дорегулировании
-            let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refRawLCS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRCS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             let errorL = motions.lineFollowSetPoint - refLCS, errorR = motions.lineFollowSetPoint - refRCS; // Вычисляем ошибки регулирования
@@ -139,8 +139,8 @@ namespace levelings {
             let dt = currTime - prevTime;
             prevTime = currTime;
             if (isOnLine && control.timer8.millis() >= regTime) break; // Условие выхода из цикла при дорегулировании
-            let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refRawLCS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRCS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLCS = sensors.GetNormRefCS(refRawLCS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRefCS(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             let error = refLCS - refRCS; // Находим ошибку
