@@ -22,12 +22,12 @@ let parkZoneB: number[] = []; // Парковая зона B, ближняя к 
 let parkZoneA: number[] = []; // Парковая зона A, дальняя
 
 // Установка коэффицентов умного поворота
-chassis.smartSpinTurnSpeed = 60;
-chassis.smartSpinTurnKp = 0.25;
+chassis.smartSpinTurnSpeed = 50;
+chassis.smartSpinTurnKp = 0.3;
 chassis.smartSpinTurnKd = 2;
-chassis.smartPivotTurnSpeed = 50;
-chassis.smartSpinTurnKp = 0.4;
-chassis.smartSpinTurnKd = 2;
+chassis.smartPivotTurnSpeed = 70;
+chassis.smartPivotTurnKp = 0.5;
+chassis.smartPivotTurnKd = 2;
 
 // Коэффиценты для выравнивания на линии
 levelings.lineAlignmentMaxSpeed = 40;
@@ -142,6 +142,8 @@ function Main() { // Определение главной функции
         loops.pause(0.001);
     }
     brick.clearScreen(); // Очистить экрана
+
+    chassis.SmartSpinTurn(90, {}, true);
 
     /*
     //// Ваш код тут

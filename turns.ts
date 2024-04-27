@@ -2,7 +2,7 @@ namespace chassis {
 
     export let smartSpinTurnTimeOut = 800; // Максимальное время умного поворота относительно центра в мм
     export let smartPivotTurnTimeOut = 1000; // Максимальное время умного поворота относительно колеса в мм
-    export let smartTurnDeregTimeOut = 150; // Время дорегулирования в умном повороте
+    export let smartTurnDeregTimeOut = 200; // Время дорегулирования в умном повороте
 
     export let smartTurnConditionErrDifference = 10; // Пороговое значения ошибки для регулятора умного поворота, что поворот выполнен
     export let smartTurnConditionRegDifference = 10; // Пороговое значение регулятора (мощности регулятора) умного поворота для определения выполненного поворота
@@ -13,8 +13,8 @@ namespace chassis {
     export let smartSpinTurnKd = 2; // Переменная для хранения коэффицента дифференциального регулятора при повороте относительно центра оси
     export let smartSpinTurnN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при повороте относительно центра оси
 
-    export let smartPivotTurnSpeed = 50; // Переменная для хранения скорости при повороте относительно колеса
-    export let smartPivotTurnKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при повороте относительно колеса
+    export let smartPivotTurnSpeed = 60; // Переменная для хранения скорости при повороте относительно колеса
+    export let smartPivotTurnKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при повороте относительно колеса
     export let smartPivotTurnKi = 0; // Переменная для хранения коэффицента интегорального регулятора при повороте относительно колеса
     export let smartPivotTurnKd = 2; // Переменная для хранения коэффицента дифференциального регулятора при повороте относительно колеса
     export let smartPivotTurnN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при повороте относительно колеса
@@ -40,7 +40,7 @@ namespace chassis {
     //% block="максимальное время поворота относительно колеса $timeOut|мс"
     //% inlineInputMode="inline"
     //% weight="99"
-    //% group="Повороты с регулятором"
+    //% group="Свойства поворотов с регулятором"
     export function SetSmartPivotTurnTimeOut(timeOut: number) {
         smartPivotTurnTimeOut = timeOut;
     }
@@ -53,7 +53,7 @@ namespace chassis {
     //% block="максимальное время дорегулирования умного поворота $timeOut|мс"
     //% inlineInputMode="inline"
     //% weight="99"
-    //% group="Повороты с регулятором"
+    //% group="Свойства поворотов с регулятором"
     export function SetSmartTurnDeregTimeOut(timeOut: number) {
         smartTurnDeregTimeOut = timeOut;
     }
@@ -66,7 +66,7 @@ namespace chassis {
     //% block="максимальная ошибка при умном повороте $maxErr| определения окончания"
     //% inlineInputMode="inline"
     //% weight="99"
-    //% group="Повороты с регулятором"
+    //% group="Свойства поворотов с регулятором"
     export function SetSmartTurnConditionErrDifference(maxErr: number) {
         smartTurnConditionErrDifference = maxErr;
     }
@@ -79,7 +79,7 @@ namespace chassis {
     //% block="максимальное значение управляющего воздействия при умном повороте $maxU| определения окончания"
     //% inlineInputMode="inline"
     //% weight="99"
-    //% group="Повороты с регулятором"
+    //% group="Свойства поворотов с регулятором"
     export function SetSmartTurnConditionRegDifference(maxU: number) {
         smartTurnConditionRegDifference = maxU;
     }
@@ -92,7 +92,7 @@ namespace chassis {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartSpinTurn"
-    //% block="умный поворот на $deg|° с $speed|\\% относительно центра колёс||параметры = $params| отдалка $debug"
+    //% block="умный поворот на $deg|° с $speed|\\% относительно центра колёс|| параметры = $params| отдалка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
@@ -100,6 +100,7 @@ namespace chassis {
     //% weight="99"
     //% group="Повороты с регулятором"
     export function SmartSpinTurn(deg: number, params?: custom.LineFollowInterface, debug: boolean = false) {
+        if (deg == 0) return;
         if (params) {
             if (params.speed) smartSpinTurnSpeed = params.speed;
             if (params.Kp) smartSpinTurnKp = params.Kp;
@@ -125,10 +126,11 @@ namespace chassis {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время выполнения итерации цикла
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
+            if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartSpinTurnTimeOut) break; // Дорегулируемся
             let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev; // Значение энкодера с левого мотора в текущий момент
             let rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значение энкодера с правого мотора в текущий момент
             let errorL = calcMotRot - lMotEnc; // Ошибки регулирования левой стороны
-            let errorR = calcMotRot - rMotEnc; // Ошибки регулирования правой стороны
+            let errorR = calcMotRot * -1 - rMotEnc; // Ошибки регулирования правой стороны
             let error = errorL - errorR; // Расчитываем общую ошибку
             automation.pid2.setPoint(error); // Передаём ошибку регулятору
             let u = automation.pid2.compute(dt, 0); // Вычисляем и записываем значение с регулятора
@@ -138,7 +140,6 @@ namespace chassis {
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
                 music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
             }
-            if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartSpinTurnTimeOut) break; // Дорегулируемся
             chassis.leftMotor.run(u); chassis.rightMotor.run(-u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
@@ -153,7 +154,7 @@ namespace chassis {
             }
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(622, 50); // Издаём сигнал завершения дорегулирования
+        music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
         chassis.leftMotor.setBrake(true); chassis.rightMotor.setBrake(true); // Установка тормоз с удержанием на моторы
         chassis.leftMotor.stop(); chassis.rightMotor.stop(); // Остановка моторов
     }
@@ -167,8 +168,8 @@ namespace chassis {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartPivotTurn"
-    //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса||параметры = $params| отладка %debug"
-    //% block.loc.ru="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса||параметры = $params| отладка %debug"
+    //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса|| параметры = $params| отладка %debug"
+    //% block.loc.ru="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса|| параметры = $params| отладка %debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
@@ -176,6 +177,7 @@ namespace chassis {
     //% weight="98"
     //% group="Повороты с регулятором"
     export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: custom.LineFollowInterface, debug: boolean = false) {
+        if (deg == 0) return;
         if (params) {
             if (params.speed) smartPivotTurnSpeed = params.speed;
             if (params.Kp) smartPivotTurnKp = params.Kp;
@@ -209,8 +211,8 @@ namespace chassis {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время выполнения итерации цикла
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
-            if (wheelPivot == WheelPivot.LeftWheel) motEnc = chassis.leftMotor.angle() - motEncPrev; // Значение левого энкодера мотора в текущий момент
-            else if (wheelPivot == WheelPivot.RightWheel) motEnc = chassis.rightMotor.angle() - motEncPrev; // Значение правого энкодера мотора в текущий момент
+            if (wheelPivot == WheelPivot.LeftWheel) motEnc = chassis.rightMotor.angle() - motEncPrev; // Значение левого энкодера мотора в текущий момент
+            else if (wheelPivot == WheelPivot.RightWheel) motEnc = chassis.leftMotor.angle() - motEncPrev; // Значение правого энкодера мотора в текущий момент
             let error = calcMotRot - motEnc; // Ошибка регулирования
             if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartPivotTurnTimeOut) break; // Дорегулируемся
             automation.pid2.setPoint(error); // Передаём ошибку регулятору
@@ -221,8 +223,8 @@ namespace chassis {
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
                 music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
             }
-            if (wheelPivot == WheelPivot.LeftWheel) chassis.leftMotor.run(U); // Передаём правому мотору управляющее воздействие
-            else if (wheelPivot == WheelPivot.RightWheel) chassis.rightMotor.run(U); // Передаём левому мотору управляющее воздействие
+            if (wheelPivot == WheelPivot.LeftWheel) chassis.rightMotor.run(U); // Передаём правому мотору управляющее воздействие
+            else if (wheelPivot == WheelPivot.RightWheel) chassis.leftMotor.run(U); // Передаём левому мотору управляющее воздействие
             if (debug) { // Выводим для отладки на экран
                 brick.clearScreen();
                 brick.showValue("calcMotRot", calcMotRot, 1);
