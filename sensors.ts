@@ -92,20 +92,20 @@ namespace sensors {
     /**
      * A method for obtaining a normalized reflection value for a line sensor from raw values.
      * Метод получения нормализованного значения отражения для датчика линии из сырых значений.
-     * @param refRawValCS текущее сырое значение отражения, eg: 0
-     * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
-     * @param wRefRawValCS сырое значение отражения на белом, eg: 650
+     * @param refRawVal текущее сырое значение отражения, eg: 0
+     * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
+     * @param wRefRawVal сырое значение отражения на белом, eg: 650
      */
-    //% blockId="GetNormRefCS"
-    //% block="normalize reflection $refRawValCS| at black $bRefRawValCS| white $wRefRawValCS"
-    //% block.loc.ru="нормализовать отраж-е $refRawValCS| при чёрном $bRefRawValCS| белом $wRefRawValCS"
+    //% blockId="GetNormRef"
+    //% block="normalize reflection $refRawVal| at black $bRefRawVal| white $wRefRawVal"
+    //% block.loc.ru="нормализовать отражение $refRawVal| при чёрном $bRefRawVal| белом $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="88" blockGap="8"
     //% group="Line Sensor"
-    export function GetNormRefCS(refRawValCS: number, bRefRawValCS: number, wRefRawValCS: number): number {
-        let refValCS = Math.map(refRawValCS, bRefRawValCS, wRefRawValCS, 0, 100);
-        refValCS = Math.constrain(refValCS, 0, 100);
-        return refValCS;
+    export function GetNormRef(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
+        let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
+        refVal = Math.constrain(refVal, 0, 100);
+        return refVal;
     }
 
 }
