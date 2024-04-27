@@ -1,7 +1,7 @@
 let MANIP_MOTOR_LEFT: motors.Motor = motors.mediumA; // Ссылка на объект мотора манипулятора
 let MANIP_MOTOR_RIGHT: motors.Motor = motors.mediumD; // Ссылка на объект мотора манипулятора
 
-let COLOR_DETECTION_CS = sensors.color4; // Ссылка на объект датчика цвета для определения цвета предмета
+let COLOR_DETECTION_CS = sensors.color2; // Ссылка на объект датчика цвета для определения цвета предмета
 
 let parkElements: number[] = [0, 0, 0, 0, 0, 0]; // Парковые элементы
 
@@ -41,7 +41,7 @@ levelings.linePositioningMaxSpeed = 50;
 levelings.linePositioningKp = 0.175;
 levelings.linePositioningKd = 2;
 
-sensors.SetLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
+sensors.SetLineSensors(sensors.nxtLight1, sensors.nxtLight4); // Установить датчики цвета в качестве датчиков линии
 
 motions.SetDistRollingAfterInsetsection(50); // Дистанция для проезда после опредения перекрёстка для прокатки в мм
 motions.SetDistRollingAfterIntersectionMoveOut(20); // Дистанция для прокатки без торможения на перекрёстке в мм
