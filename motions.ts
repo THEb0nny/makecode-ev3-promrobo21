@@ -108,6 +108,30 @@ namespace chassis {
     }
 
     /**
+     * Movement over a given distance with acceleration and deceleration in mm.
+     * Движение на заданное расстояние с ускорением и замедлением в мм.
+     * @param speed скорость движения, eg: 60
+     * @param totalDist общее расстояние в мм, eg: 300
+     * @param accelDist расстояние ускорения в мм, eg: 100
+     * @param decelDist расстояние замедления в мм, eg: 100
+     */
+    //% blockId="RampDistMove"
+    //% block="distance moving $totalDist| acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
+    //% block.loc.ru="движение на расстояние $totalDist| ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="87"
+    //% group="Move"
+    //% blockHidden="true"
+    export function RampDistMove(speedLeft: number, speedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+        // let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
+        // let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
+        // let mRotTotalCalc = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Рассчитываем общюю дистанцию
+        // chassis.syncRampMovement(5, speedLeft, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
+    }
+
+
+    /**
      * Moving in a direction with a constant speed to a zone with a certain reflection.
      * Движение по направлению с постоянной скоростью до зоны с определённым отражением.
      * @param dir нпарвление движения, eg: 0
