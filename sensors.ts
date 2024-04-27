@@ -46,13 +46,13 @@ namespace sensors {
      * The method of setting the sensor line of raw values on black and white.
      * Метод установки датчику линии сырых значений на чёрном и белом.
      */
-    //% blockId="SetLineSensorRawValue"
+    //% blockId="SetLineSensorRawRefValue"
     //% block="set $sensor| line sensor white $wRefRawVal| black $bRefRawVal| raw values"
     //% block.loc.ru="установить датчику линии $sensor| сырые значения чёрного $bRefRawVal| белого $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="89" blockGap="8"
     //% group="Line Sensor"
-    export function SetLineSensorRawValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
+    export function SetLineSensorRawRefValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
         if (sensor == LineSensor.Left) {
             bRefRawLeftLineSensor = bRefRawVal;
             wRefRawLeftLineSensor = wRefRawVal;
@@ -66,13 +66,13 @@ namespace sensors {
      * A method for obtaining a raw reflection value from a line sensor.
      * Метод получения с датчика линии сырого значения отражения.
      */
-    //% blockId="GetLineSensorRawValue"
+    //% blockId="GetLineSensorRawRefValue"
     //% block="line sensor $sensor| raw value"
     //% block.loc.ru="сырое значение датчика линии $sensor"
     //% inlineInputMode="inline"
     //% weight="87" blockGap="8"
     //% group="Line Sensor"
-    export function GetLineSensorRawValue(sensor: LineSensor): number {
+    export function GetLineSensorRawRefValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
             if (leftLineSensor instanceof sensors.ColorSensor){
                 return (leftLineSensor as sensors.ColorSensor).light(LightIntensityMode.ReflectedRaw);

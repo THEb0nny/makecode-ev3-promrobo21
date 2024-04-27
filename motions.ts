@@ -135,8 +135,8 @@ namespace chassis {
             let currTime = control.millis();
             let dt = currTime - prevTime;
             prevTime = currTime;
-            let refRawLeftLS = sensors.GetLineSensorRawValue(LineSensor.Left); // Сырое значение с левого датчика цвета
-            let refRawRightLS = sensors.GetLineSensorRawValue(LineSensor.Right); // Сырое значение с правого датчика цвета
+            let refRawLeftLS = sensors.GetLineSensorRawRefValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRightLS = sensors.GetLineSensorRawRefValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLeftLS = sensors.GetNormRefCS(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormRefCS(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
             if (sensorsCondition == SensorSelection.LeftAndRight) { // Левый и правый датчик

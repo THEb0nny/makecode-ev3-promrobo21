@@ -48,8 +48,8 @@ motions.SetDistRollingAfterIntersectionMoveOut(20); // Дистанция для
 
 motions.SetLineFollowConditionMaxErr(50); // Максимальная ошибка при движении одним датчиком для определения перекрёстка
 
-sensors.SetLineSensorRawValue(LineSensor.Left, 632, 459); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
-sensors.SetLineSensorRawValue(LineSensor.Right, 621, 479); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
+sensors.SetLineSensorRawRefValue(LineSensor.Left, 632, 459); // Установить левому датчику линии (цвета) сырые значения чёрного и белого
+sensors.SetLineSensorRawRefValue(LineSensor.Right, 621, 479); // Установить правому датчику линии (цвета) сырые значения чёрного и белого
 
 sensors.SetColorSensorMinRgbValues(COLOR_DETECTION_CS, [0, 1, 2]); // Установить датчику определения фигур минимальные значения RGB
 
@@ -121,8 +121,8 @@ function SetManipulatorPosition(motor: motors.Motor, state: ClawState, speed?: n
 function Main() { // Определение главной функции
     // Опрашиваем какое-то количество раз датчики, чтобы они включились перед стартом по нажатию кнопки
     for (let i = 0; i < 50; i++) {
-        sensors.GetLineSensorRawValue(LineSensor.Left);
-        sensors.GetLineSensorRawValue(LineSensor.Right);
+        sensors.GetLineSensorRawRefValue(LineSensor.Left);
+        sensors.GetLineSensorRawRefValue(LineSensor.Right);
         // COLOR_DETECTION_CS.rgbRaw();
         loops.pause(5);
     }
