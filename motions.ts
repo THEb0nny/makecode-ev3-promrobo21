@@ -62,15 +62,15 @@ namespace chassis {
     }
 
     /**
-     * Straight movement over a distance in mm at a constant speed.
-     * Прямолинейное движение на расстояние в мм с постоянной скоростью.
+     * Linear movement over a distance in mm at a constant speed.
+     * Линейное движение на расстояние в мм с постоянной скоростью.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
      * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
      */
     //% blockId="LinearDistMove"
-    //% block="distance moving $dist| at $speed|\\%| brake $setBreak"
-    //% block.loc.ru="движение на расстояние $dist| на $speed|\\%| тормоз с удержанием $setBreak"
+    //% block="linear distance moving $dist| at $speed|\\%| brake $setBreak"
+    //% block.loc.ru="линейное движение на расстояние $dist| на $speed|\\%| тормоз с удержанием $setBreak"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% setBreak.shadow="toggleOnOff"
@@ -86,16 +86,16 @@ namespace chassis {
     }
 
     /**
-     * Straight movement over a given distance with acceleration and deceleration in mm.
-     * Прямолинейное движение на заданное расстояние с ускорением и замедлением в мм.
+     * Linear movement over a given distance with acceleration and deceleration in mm.
+     * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
      * @param speed скорость движения, eg: 60
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 100
      */
     //% blockId="RampLinearDistMove"
-    //% block="distance moving $totalDist| acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
-    //% block.loc.ru="движение на расстояние $totalDist| ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    //% block="linear distance moving $totalDist| acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist| ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="88"
