@@ -75,7 +75,7 @@ namespace chassis {
      * Установить значение условия управляющего воздействия регулятора при умном повороте.
      * @param maxU максимальное управляющее воздействие, eg: 10
      */
-    //% blockId="SetSmartTurnConditionErrDifference"
+    //% blockId="SetSmartTurnConditionRegDifference"
     //% block="максимальное значение управляющего воздействия при умном повороте $maxU| определения окончания"
     //% inlineInputMode="inline"
     //% weight="99"
