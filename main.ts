@@ -53,8 +53,6 @@ sensors.SetLineSensorRawRefValue(LineSensor.Right, 621, 479); // Установ�
 
 sensors.SetColorSensorMinRgbValues(COLOR_DETECTION_CS, [0, 1, 2]); // Установить датчику определения фигур минимальные значения RGB
 
-sensors.SetColorSensorMaxRgbValues(sensors.leftLineSensor, [273, 297, 355]); // Установить левому датчику линии максималальные значения RGB
-sensors.SetColorSensorMaxRgbValues(sensors.rightLineSensor, [230, 224, 178]); // Установить правому датчику линии максималальные значения RGB
 sensors.SetColorSensorMaxRgbValues(COLOR_DETECTION_CS, [204, 190, 243]); // Установить датчику определения фигур максимальные значения RGB
 
 chassis.setSeparatelyChassisMotors(motors.mediumB, motors.mediumC, true, false); // Установка моторов шасси и установка им реверсов
