@@ -7,7 +7,7 @@ namespace custom {
      * @param debug отладка, eg: false
      */
     //% blockId="FunctionsTune"
-    //% block="проверка функций|| начальный экран $screen| отладка $debug"
+    //% block="проверка функций|| начальный экран $startupScreen| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% weight="99"
     //% group="Дополнительно"

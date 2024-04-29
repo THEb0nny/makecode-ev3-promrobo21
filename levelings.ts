@@ -22,13 +22,13 @@ namespace levelings {
     /**
      * The alignment on the line is perpendicular.
      * Выравнивание на линии перпендикулярно.
-     * @param MovementOnLine наезжать спереди на линию или двигаться назад на линию, eg: MovementOnLine.Front
+     * @param lineLocation наезжать спереди на линию или двигаться назад на линию, eg: MovementOnLine.Front
      * @param regulatorTime время дорегулирования, eg: 500
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignment"
-    //% block="line alignment $movementOnLine|at $regulatorTime|ms|| debug $debug"
-    //% block.loc.ru="выравнивание на линии $movementOnLine|за $regulatorTime|мс|| отладка $debug"
+    //% block="line alignment $lineLocation| at $regulatorTime|ms|| debug $debug"
+    //% block.loc.ru="выравнивание на линии $lineLocation| за $regulatorTime|мс|| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"

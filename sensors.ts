@@ -27,10 +27,10 @@ namespace sensors {
     //% block="set left $newLeftLineSensor| right $newRightLineSensor| line sensors"
     //% block.loc.ru="установить левый $newLeftLineSensor| правый $newRightLineSensor| датчики линии"
     //% inlineInputMode="inline"
-    //% newLeftLineSensor.fieldEditor="images"
+    //% newLeftLineSensor.fieldEditor="ports"
     //% newLeftLineSensor.fieldOptions.columns="4"
     //% newLeftLineSensor.fieldOptions.width="300"
-    //% newRightLineSensor.fieldEditor="images"
+    //% newRightLineSensor.fieldEditor="ports"
     //% newRightLineSensor.fieldOptions.columns="4"
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="99"
@@ -42,16 +42,16 @@ namespace sensors {
         } else control.assert(false, 1);
     }
 
-    /**
-     * The method of setting the sensor line of raw values on black and white.
-     * Метод установки датчику линии сырых значений на чёрном и белом.
-     */
-    //% blockId="SetLineSensorRawRefValue"
-    //% block="set $sensor| line sensor white $wRefRawVal| black $bRefRawVal| raw values"
-    //% block.loc.ru="установить датчику линии $sensor| сырые значения чёрного $bRefRawVal| белого $wRefRawVal"
-    //% inlineInputMode="inline"
-    //% weight="89" blockGap="8"
-    //% group="Line Sensor"
+    // /**
+    //  * The method of setting the sensor line of raw values on black and white.
+    //  * Метод установки датчику линии сырых значений на чёрном и белом.
+    //  */
+    // //% blockId="SetLineSensorRawRefValue"
+    // //% block="set $sensor| line sensor black $bRefRawVal| white $wRefRawVal| raw values"
+    // //% block.loc.ru="установить датчику линии $sensor| сырые значения чёрного $bRefRawVal| белого $wRefRawVal"
+    // //% inlineInputMode="inline"
+    // //% weight="89" blockGap="8"
+    // //% group="Line Sensor"
     export function SetLineSensorRawRefValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
         if (sensor == LineSensor.Left) {
             bRefRawLeftLineSensor = bRefRawVal;
@@ -62,16 +62,16 @@ namespace sensors {
         }
     }
 
-    /**
-     * A method for obtaining a raw reflection value from a line sensor.
-     * Метод получения с датчика линии сырого значения отражения.
-     */
-    //% blockId="GetLineSensorRawRefValue"
-    //% block="line sensor $sensor| raw value"
-    //% block.loc.ru="сырое значение датчика линии $sensor"
-    //% inlineInputMode="inline"
-    //% weight="87" blockGap="8"
-    //% group="Line Sensor"
+    // /**
+    //  * A method for obtaining a raw reflection value from a line sensor.
+    //  * Метод получения с датчика линии сырого значения отражения.
+    //  */
+    // //% blockId="GetLineSensorRawRefValue"
+    // //% block="line sensor $sensor| raw value"
+    // //% block.loc.ru="сырое значение датчика линии $sensor"
+    // //% inlineInputMode="inline"
+    // //% weight="87" blockGap="8"
+    // //% group="Line Sensor"
     export function GetLineSensorRawRefValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
             if (leftLineSensor instanceof sensors.ColorSensor){
@@ -89,19 +89,19 @@ namespace sensors {
         return 0;
     }
 
-    /**
-     * A method for obtaining a normalized reflection value for a line sensor from raw values.
-     * Метод получения нормализованного значения отражения для датчика линии из сырых значений.
-     * @param refRawVal текущее сырое значение отражения, eg: 0
-     * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
-     * @param wRefRawVal сырое значение отражения на белом, eg: 650
-     */
-    //% blockId="GetNormRef"
-    //% block="normalize reflection $refRawVal| at black $bRefRawVal| white $wRefRawVal"
-    //% block.loc.ru="нормализовать отражение $refRawVal| при чёрном $bRefRawVal| белом $wRefRawVal"
-    //% inlineInputMode="inline"
-    //% weight="88" blockGap="8"
-    //% group="Line Sensor"
+    // /**
+    //  * A method for obtaining a normalized reflection value for a line sensor from raw values.
+    //  * Метод получения нормализованного значения отражения для датчика линии из сырых значений.
+    //  * @param refRawVal текущее сырое значение отражения, eg: 0
+    //  * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
+    //  * @param wRefRawVal сырое значение отражения на белом, eg: 650
+    //  */
+    // //% blockId="GetNormRef"
+    // //% block="normalize reflection $refRawVal| at black $bRefRawVal| white $wRefRawVal"
+    // //% block.loc.ru="нормализовать отражение $refRawVal| при чёрном $bRefRawVal| белом $wRefRawVal"
+    // //% inlineInputMode="inline"
+    // //% weight="88" blockGap="8"
+    // //% group="Line Sensor"
     export function GetNormRef(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
         let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
         refVal = Math.constrain(refVal, 0, 100);
@@ -136,20 +136,18 @@ namespace sensors {
         }
     }
 
-    /**
-     * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
-     * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
-     * @param maxRgbArr массив с тремя значениями rgb
-     */
-    //% blockId="SetColorSensorMinRgbValues"
-    //% block="set $sensor| color sensor min RGB values $maxRgbArr"
-    //% block.loc.ru="установить $sensor| датчику цвета минимальные значения RGB $maxRgbArr"
-    //% inlineInputMode="inline"
-    //% sensor.fieldEditor="images"
-    //% sensor.fieldOptions.columns="4"
-    //% sensor.fieldOptions.width="300"
-    //% weight="90" blockGap="8"
-    //% group="Color Sensor"
+    // /**
+    //  * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
+    //  * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
+    //  * @param maxRgbArr массив с тремя значениями rgb
+    //  */
+    // //% blockId="SetColorSensorMinRgbValues"
+    // //% block="set $sensor| color sensor min RGB values $maxRgbArr"
+    // //% block.loc.ru="установить $sensor| датчику цвета минимальные значения RGB $maxRgbArr"
+    // //% inlineInputMode="inline"
+    // //% sensor.fieldEditor="ports"
+    // //% weight="90" blockGap="8"
+    // //% group="Color Sensor"
     export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor | sensors.NXTLightSensor, minRgbArr: number[]) {
         if (sensor.port() == 1) minRgbColorSensor1 = minRgbArr;
         else if (sensor.port() == 2) minRgbColorSensor2 = minRgbArr;
@@ -157,20 +155,18 @@ namespace sensors {
         else if (sensor.port() == 4) minRgbColorSensor4 = minRgbArr;
     }
 
-    /**
-     * Set the maximum RGB values for the color sensor. The maximum values are obtained on white.
-     * Установить максимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
-     * @param maxRgbArr массив с тремя значениями rgb
-     */
-    //% blockId="SetColorSensorMaxRgbValues"
-    //% block="set $sensor| color sensor max RGB values $maxRgbArr"
-    //% block.loc.ru="установить $sensor| датчику цвета максимальные значения RGB $maxRgbArr"
-    //% inlineInputMode="inline"
-    //% sensor.fieldEditor="images"
-    //% sensor.fieldOptions.columns="4"
-    //% sensor.fieldOptions.width="300"
-    //% weight="90" blockGap="8"
-    //% group="Color Sensor"
+    // /**
+    //  * Set the maximum RGB values for the color sensor. The maximum values are obtained on white.
+    //  * Установить максимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
+    //  * @param maxRgbArr массив с тремя значениями rgb
+    //  */
+    // //% blockId="SetColorSensorMaxRgbValues"
+    // //% block="set $sensor| color sensor max RGB values $maxRgbArr"
+    // //% block.loc.ru="установить $sensor| датчику цвета максимальные значения RGB $maxRgbArr"
+    // //% inlineInputMode="inline"
+    // //% sensor.fieldEditor="ports"
+    // //% weight="90" blockGap="8"
+    // //% group="Color Sensor"
     export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor | sensors.NXTLightSensor, maxRgbArr: number[]) {
         if (sensor.port() == 1) maxRgbColorSensor1 = maxRgbArr;
         else if (sensor.port() == 2) maxRgbColorSensor2 = maxRgbArr;

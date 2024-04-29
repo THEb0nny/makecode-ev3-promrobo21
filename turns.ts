@@ -88,14 +88,13 @@ namespace chassis {
      * Rotation relative to the center of the wheels with a regulator.
      * Поворот относительно центра колёс c регулятором.
      * @param deg угол в градусах поворота в градусах, где положительное число - вправо, а отрицательное влево, eg: 90
-     * @param speed максимальная скорость поворота, eg: 60
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartSpinTurn"
-    //% block="умный поворот на $deg|° с $speed|\\% относительно центра колёс|| параметры = $params| отдалка $debug"
+    //% block="smart turn at $deg|° relative center of wheels|| params = $params| debug $debug"
+    //% block.loc.ru="умный поворот на $deg|° относительно центра колёс|| параметры = $params| отдалка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% weight="99"
     //% group="Повороты с регулятором"
@@ -163,16 +162,14 @@ namespace chassis {
      * Turn relative to the left or right wheel with a regulator.
      * Поворот относительно левого или правого колеса c регулятором.
      * @param deg угол в градусах поворота, где положительное число - вправо, а отрицательное влево, eg: 90
-     * @param speed максимальная скорость поворота, eg: 60
      * @param wheelPivot относительно колеса, eg: WheelPivot.LeftWheel
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartPivotTurn"
-    //% block="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса|| параметры = $params| отладка %debug"
-    //% block.loc.ru="умный поворот на $deg|° с $speed|\\% относительно $wheelPivot|колеса|| параметры = $params| отладка %debug"
+    //% block="smart turn at $deg|° relative $wheelPivot| wheel|| params = $params| debug %debug"
+    //% block.loc.ru="умный поворот на $deg|° относительно $wheelPivot| колеса|| параметры = $params| отладка %debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% weight="98"
     //% group="Повороты с регулятором"
