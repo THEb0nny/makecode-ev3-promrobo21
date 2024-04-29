@@ -20,28 +20,52 @@ namespace sensors {
     export let maxRgbColorSensor4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
 
     /**
-     * The method of installing sensors for movement and working with the line.
-     * Метод установки датчиков для движения и работы с линией.
+     * Method for installing color sensors as motion and line sensors. Line sensors only need to be installed once!
+     * Метод установки датчиков цвета в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
      */
-    //% blockId="SetLineSensors"
-    //% block="set left $newLeftLineSensor| right $newRightLineSensor| line sensors"
-    //% block.loc.ru="установить левый $newLeftLineSensor| правый $newRightLineSensor| датчики линии"
+    //% blockId="SetColorSensorsAsLineSensors"
+    //% block="set color sensors as line sensors left $newLeftLineSensor| right $newRightLineSensor"
+    //% block.loc.ru="установить датчик цвета в качестве датчика линии левый $newLeftLineSensor| правый $newRightLineSensor"
     //% inlineInputMode="inline"
-    //% newLeftLineSensor.fieldOptions.decompileLiterals=1
-    //% newLeftLineSensor.fieldEditor="ports"
+    //% newLeftLineSensor.fieldEditor="images"
     //% newLeftLineSensor.fieldOptions.columns="4"
     //% newLeftLineSensor.fieldOptions.width="300"
-    //% newRightLineSensor.fieldOptions.decompileLiterals=1
-    //% newRightLineSensor.fieldEditor="ports"
+    //% newRightLineSensor.fieldEditor="images"
     //% newRightLineSensor.fieldOptions.columns="4"
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="99"
     //% group="Line Sensor"
-    export function SetLineSensors(newLeftLineSensor: sensors.ColorSensor | sensors.NXTLightSensor, newRightLineSensor: sensors.ColorSensor | sensors.NXTLightSensor) {
-        if (newLeftLineSensor !== newRightLineSensor) { // Если сенсоры установили не одинаковые
-            leftLineSensor = newLeftLineSensor;
-            rightLineSensor = newRightLineSensor;
-        } else control.assert(false, 1);
+    export function SetColorSensorsAsLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
+        SetLineSensor(newLeftLineSensor, newRightLineSensor);
+    }
+
+    /**
+     * Method for installing nxt reflection sensors as motion and line sensors. Line sensors only need to be installed once!
+     * Метод установки nxt датчиков отражения в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
+     */
+    //% blockId="SetNxtLightSensorsAsLineSensors"
+    //% block="set nxt light sensors as line sensors left $newLeftLineSensor| right $newRightLineSensor"
+    //% block.loc.ru="установить nxt датчик отражения в качестве датчика линии левый $newLeftLineSensor| правый $newRightLineSensor"
+    //% inlineInputMode="inline"
+    //% newLeftLineSensor.fieldEditor="images"
+    //% newLeftLineSensor.fieldOptions.columns="4"
+    //% newLeftLineSensor.fieldOptions.width="300"
+    //% newRightLineSensor.fieldEditor="images"
+    //% newRightLineSensor.fieldOptions.columns="4"
+    //% newRightLineSensor.fieldOptions.width="300"
+    //% weight="98"
+    //% group="Line Sensor"
+    export function SetNxtLightSensorsAsLineSensors(newLeftLineSensor: sensors.NXTLightSensor, newRightLineSensor: sensors.NXTLightSensor) {
+        SetLineSensor(newLeftLineSensor, newRightLineSensor);
+    }
+
+    function SetLineSensor(newLeftLineSensor: sensors.ColorSensor | sensors.NXTLightSensor, newRightLineSensor: sensors.ColorSensor | sensors.NXTLightSensor) {
+        if (!leftLineSensor && !rightLineSensor) { // Если датчики до этого не были установлены
+            if (newLeftLineSensor !== newRightLineSensor) { // Если сенсоры установили не одинаковые
+                leftLineSensor = newLeftLineSensor;
+                rightLineSensor = newRightLineSensor;
+            } else control.assert(false, 1);
+        } else control.assert(false, 2);
     }
 
     /**
@@ -141,14 +165,15 @@ namespace sensors {
     /**
      * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
-     * @param maxRgbArr массив с тремя значениями rgb
+     * @param minRgbArr массив с тремя значениями rgb
      */
     //% blockId="SetColorSensorMinRgbValues"
-    //% block="set $sensor| color sensor min RGB values $maxRgbArr"
-    //% block.loc.ru="установить $sensor| датчику цвета минимальные значения RGB $maxRgbArr"
+    //% block="set $sensor| color sensor min RGB values $minRgbArr"
+    //% block.loc.ru="установить $sensor| датчику цвета минимальные значения RGB $minRgbArr"
     //% inlineInputMode="inline"
-    //% sensor.fieldOptions.decompileLiterals=1
-    //% sensor.fieldEditor="ports"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
     //% weight="90" blockGap="8"
     //% group="Color Sensor"
     export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor, minRgbArr: number[]) {
@@ -167,8 +192,9 @@ namespace sensors {
     //% block="set $sensor| color sensor max RGB values $maxRgbArr"
     //% block.loc.ru="установить $sensor| датчику цвета максимальные значения RGB $maxRgbArr"
     //% inlineInputMode="inline"
-    //% sensor.fieldOptions.decompileLiterals=1
-    //% sensor.fieldEditor="ports"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
     //% weight="90" blockGap="8"
     //% group="Color Sensor"
     export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxRgbArr: number[]) {

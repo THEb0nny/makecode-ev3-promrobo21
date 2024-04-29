@@ -41,7 +41,7 @@ levelings.linePositioningMaxSpeed = 50;
 levelings.linePositioningKp = 0.175;
 levelings.linePositioningKd = 2;
 
-sensors.SetLineSensors(sensors.nxtLight1, sensors.nxtLight4); // Установить датчики цвета в качестве датчиков линии
+// sensors.SetNxtLightSensorsAsLineSensors(sensors.nxtLight1, sensors.nxtLight4); // Установить датчики цвета в качестве датчиков линии
 
 motions.SetDistRollingAfterInsetsection(50); // Дистанция для проезда после опредения перекрёстка для прокатки в мм
 motions.SetDistRollingAfterIntersectionMoveOut(20); // Дистанция для прокатки без торможения на перекрёстке в мм
