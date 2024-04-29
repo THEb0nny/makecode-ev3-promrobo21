@@ -26,8 +26,8 @@ namespace chassis {
     //% blockId="SetSmartSpinTurnTimeOut"
     //% block="максимальное время поворота относительно центра $timeOut|мс"
     //% inlineInputMode="inline"
-    //% weight="99"
-    //% group="Повороты с регулятором"
+    //% weight="99" blockGap="8"
+    //% group="Свойства умных поворотов"
     export function SetSmartSpinTurnTimeOut(timeOut: number) {
         smartSpinTurnTimeOut = timeOut;
     }
@@ -39,8 +39,8 @@ namespace chassis {
     //% blockId="SetSmartPivotTurnTimeOut"
     //% block="максимальное время поворота относительно колеса $timeOut|мс"
     //% inlineInputMode="inline"
-    //% weight="99"
-    //% group="Свойства поворотов с регулятором"
+    //% weight="98" blockGap="8"
+    //% group="Свойства умных поворотов"
     export function SetSmartPivotTurnTimeOut(timeOut: number) {
         smartPivotTurnTimeOut = timeOut;
     }
@@ -52,8 +52,8 @@ namespace chassis {
     //% blockId="SetSmartTurnDeregTimeOut"
     //% block="максимальное время дорегулирования умного поворота $timeOut|мс"
     //% inlineInputMode="inline"
-    //% weight="99"
-    //% group="Свойства поворотов с регулятором"
+    //% weight="97" blockGap="8"
+    //% group="Свойства умных поворотов"
     export function SetSmartTurnDeregTimeOut(timeOut: number) {
         smartTurnDeregTimeOut = timeOut;
     }
@@ -65,8 +65,8 @@ namespace chassis {
     //% blockId="SetSmartTurnConditionErrDifference"
     //% block="максимальная ошибка при умном повороте $maxErr| определения окончания"
     //% inlineInputMode="inline"
-    //% weight="99"
-    //% group="Свойства поворотов с регулятором"
+    //% weight="96" blockGap="8"
+    //% group="Свойства умных поворотов"
     export function SetSmartTurnConditionErrDifference(maxErr: number) {
         smartTurnConditionErrDifference = maxErr;
     }
@@ -78,8 +78,8 @@ namespace chassis {
     //% blockId="SetSmartTurnConditionRegDifference"
     //% block="максимальное значение управляющего воздействия при умном повороте $maxU| определения окончания"
     //% inlineInputMode="inline"
-    //% weight="99"
-    //% group="Свойства поворотов с регулятором"
+    //% weight="96" blockGap="8"
+    //% group="Свойства умных поворотов"
     export function SetSmartTurnConditionRegDifference(maxU: number) {
         smartTurnConditionRegDifference = maxU;
     }
@@ -96,8 +96,8 @@ namespace chassis {
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"
-    //% weight="99"
-    //% group="Повороты с регулятором"
+    //% weight="99" blockGap="8"
+    //% group="Умные повороты с регулятором"
     export function SmartSpinTurn(deg: number, params?: custom.LineFollowInterface, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
@@ -172,7 +172,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"
     //% weight="98"
-    //% group="Повороты с регулятором"
+    //% group="Умные повороты с регулятором"
     export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: custom.LineFollowInterface, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {

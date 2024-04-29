@@ -27,11 +27,12 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignment"
-    //% block="line alignment $lineLocation| at $regulatorTime|ms|| debug $debug"
-    //% block.loc.ru="выравнивание на линии $lineLocation| за $regulatorTime|мс|| отладка $debug"
+    //% block="line alignment $lineLocation| at $regulatorTime|ms|| params = $params| debug $debug"
+    //% block.loc.ru="выравнивание на линии $lineLocation| за $regulatorTime|мс|| параметры = $params| отладка $debug"
     //% inlineInputMode="inline"
-    //% expandableArgumentMode="toggle"
+    //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
+    //% params.shadow="SetEmptyLineAlignmentParams"
     //% weight="99"
     //% group="Линия"
     export function LineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, params?: custom.LineAlignmentInterface, debug: boolean = false) {
@@ -112,8 +113,9 @@ namespace levelings {
     //% block="positioning on line at $regTime|ms|| debug $debug"
     //% block.loc.ru="спозиционироваться на линии за время $regTime|мс|| отладка $debug"
     //% inlineInputMode="inline"
-    //% expandableArgumentMode="toggle"
+    //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
+    //% params.shadow="SetEmptyLineAlignmentParams"
     //% weight="98"
     //% group="Линия"
     export function LinePositioning(regTime: number, params?: custom.LinePositioningInterface, debug: boolean = false) {
@@ -179,7 +181,7 @@ namespace levelings {
     //  */
     // //% blockId="LineAlignmentInMotion"
     // //% block="выравниться на линии в движении на $speed|\\% c действием после $actionAfterMotion|| отладка $debug"
-    // //% expandableArgumentMode="toggle"
+    // //% expandableArgumentMode="enabled"
     // //% inlineInputMode="inline"
     // //% speed.shadow="motorSpeedPicker"
     // //% weight="97"

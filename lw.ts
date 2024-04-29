@@ -28,6 +28,36 @@ namespace motions {
     export let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
 
     /**
+     * Set the driving distance after determining the intersection for rolling in mm.
+     * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
+     * @param dist дистанция прокатки после перекрёстка, eg: 50
+     */
+    //% blockId="SetDistRollingAfterInsetsection"
+    //% block="set distance $dist| rolling after intersection"
+    //% block.loc.ru="установить дистанцию $dist прокатки после перекрёстка"
+    //% inlineInputMode="inline"
+    //% weight="99" blockGap="8"
+    //% group="Параметры"
+    export function SetDistRollingAfterInsetsection(dist: number) {
+        distRollingAfterIntersection = dist;
+    }
+
+    /**
+     * Set the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
+     * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
+     * @param dist дистанция прокатки после перекрёстка, eg: 20
+     */
+    //% blockId="SetDistRollingAfterIntersectionMoveOut"
+    //% block="set distance $dist| rolling exit an intersection"
+    //% block.loc.ru="установить дистанцию $dist| прокатки съезда с перекрёстка"
+    //% inlineInputMode="inline"
+    //% weight="98"
+    //% group="Параметры"
+    export function SetDistRollingAfterIntersectionMoveOut(dist: number) {
+        distRollingAfterIntersectionMoveOut = dist;
+    }
+
+    /**
      * Set the reflection threshold value for the line.
      * Установить пороговое значение отражения для линии.
      * @param reflection значение отражения, eg: 50
@@ -36,7 +66,7 @@ namespace motions {
     //% block="set reflection $reflection| treshold"
     //% block.loc.ru="установить пороговое значение $reflection| отражения"
     //% inlineInputMode="inline"
-    //% weight="89"
+    //% weight="89" blockGap="8"
     //% group="Параметры"
     export function SetLineRefTreshold(reflection: number) {
         lineRefTreshold = reflection;
@@ -51,7 +81,7 @@ namespace motions {
     //% block="set line follow reflection $reflection| treshold"
     //% block.loc.ru="установить пороговое значение $reflection| отражения движения по линии"
     //% inlineInputMode="inline"
-    //% weight="88"
+    //% weight="88" blockGap="8"
     //% group="Параметры"
     export function SetLineFollowRefTreshold(reflection: number) {
         lineFollowRefTreshold = reflection;
@@ -81,40 +111,10 @@ namespace motions {
     //% block="set line follow max error $maxErr"
     //% block.loc.ru="установить максимальую ошибку $maxErr| движения по линии"
     //% inlineInputMode="inline"
-    //% weight="79"
+    //% weight="79" blockGap="8"
     //% group="Параметры"
     export function SetLineFollowConditionMaxErr(maxErr: number) {
         lineFollowWithOneSensorConditionMaxErr = maxErr;
-    }
-
-    /**
-     * Set the driving distance after determining the intersection for rolling in mm.
-     * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
-     * @param dist дистанция прокатки после перекрёстка, eg: 50
-     */
-    //% blockId="SetDistRollingAfterInsetsection"
-    //% block="set distance $dist| rolling after intersection"
-    //% block.loc.ru="установить дистанцию $dist прокатки после перекрёстка"
-    //% inlineInputMode="inline"
-    //% weight="99"
-    //% group="Параметры"
-    export function SetDistRollingAfterInsetsection(dist: number) {
-        distRollingAfterIntersection = dist;
-    }
-
-    /**
-     * Set the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
-     * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
-     * @param dist дистанция прокатки после перекрёстка, eg: 20
-     */
-    //% blockId="SetDistRollingAfterIntersectionMoveOut"
-    //% block="set distance $dist| rolling exit an intersection"
-    //% block.loc.ru="установить дистанцию $dist| прокатки съезда с перекрёстка"
-    //% inlineInputMode="inline"
-    //% weight="98"
-    //% group="Параметры"
-    export function SetDistRollingAfterIntersectionMoveOut(dist: number) {
-        distRollingAfterIntersectionMoveOut = dist;
     }
 
     /**
@@ -124,12 +124,12 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToIntersection"
-    //% block="движение по линии до перекрёстка с действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% block="движение по линии до перекрёстка с действием после $actionAfterMotion|| параметры = $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyParams"
-    //% weight="99"
+    //% params.shadow="SetEmptyLineFollowParams"
+    //% weight="99" blockGap="8"
     //% group="Движение по линии"
     export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
@@ -159,7 +159,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            chassis.ChassisControlCommand(U, lineFollow2SensorSpeed);
+            motions.ChassisControlCommand(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -171,7 +171,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -182,11 +182,11 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistance"
-    //% block="движение по линии на расстояние $dist|мм с действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% block="движение по линии на расстояние $dist|мм с действием после $actionAfterMotion|| параметры = $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyParams"
+    //% params.shadow="SetEmptyLineFollowParams"
     //% weight="89"
     //% group="Движение по линии"
     export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
@@ -221,7 +221,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            chassis.ChassisControlCommand(U, lineFollow2SensorSpeed);
+            motions.ChassisControlCommand(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -233,7 +233,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -245,11 +245,11 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithLeftSensor"
-    //% block="движение по линии левым датчиком на расстояние $dist|мм $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% block="движение по линии левым датчиком на расстояние $dist|мм $lineLocation| c действием после $actionAfterMotion|| параметры = $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyParams"
+    //% params.shadow="SetEmptyLineFollowParams"
     //% weight="88"
     //% group="Движение по линии"
     export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
@@ -286,7 +286,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
-            chassis.ChassisControlCommand(U, lineFollowLeftSensorSpeed);
+            motions.ChassisControlCommand(U, lineFollowLeftSensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -298,7 +298,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -310,12 +310,12 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithRightSensor"
-    //% block="движение по линии правым датчиком на расстояние $dist|мм $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% block="движение по линии правым датчиком на расстояние $dist|мм $lineLocation| c действием после $actionAfterMotion|| параметры = $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyParams"
-    //% weight="88"
+    //% params.shadow="SetEmptyLineFollowParams"
+    //% weight="88" blockGap="8"
     //% group="Движение по линии"
     export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
@@ -351,7 +351,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            chassis.ChassisControlCommand(U, lineFollow2SensorSpeed);
+            motions.ChassisControlCommand(U, lineFollow2SensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -363,7 +363,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        chassis.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -374,12 +374,12 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToLeftIntersaction"
-    //% block="движение по линии до перекрёстка слева $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% block="движение по линии до перекрёстка слева $lineLocation| c действием после $actionAfterMotion|| параметры = $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyParams"
-    //% weight="79"
+    //% params.shadow="SetEmptyLineFollowParams"
+    //% weight="79" blockGap="8"
     //% group="Движение по линии"
     export function LineFollowToLeftIntersaction(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
@@ -411,7 +411,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
-            chassis.ChassisControlCommand(U, lineFollowRightSensorSpeed);
+            motions.ChassisControlCommand(U, lineFollowRightSensorSpeed);
             brick.clearScreen(); // Очистка экрана
             if (debug) {
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -423,7 +423,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        chassis.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -434,11 +434,11 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToRightIntersection"
-    //% block="движение по линии до перекрёстка справа $lineLocation| c действием после $actionAfterMotion||параметры = $params| отладка $debug"
+    //% block="движение по линии до перекрёстка справа $lineLocation| c действием после $actionAfterMotion|| параметры = $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyParams"
+    //% params.shadow="SetEmptyLineFollowParams"
     //% weight="78"
     //% group="Движение по линии"
     export function LineFollowToRightIntersection(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
@@ -471,7 +471,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
-            chassis.ChassisControlCommand(U, lineFollowLeftSensorSpeed);
+            motions.ChassisControlCommand(U, lineFollowLeftSensorSpeed);
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -483,7 +483,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        chassis.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     // export function LineFollow3Sensor(params?: automation.LineFollowInterface, debug: boolean = false) {
