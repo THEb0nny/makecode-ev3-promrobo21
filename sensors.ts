@@ -22,6 +22,8 @@ namespace sensors {
     /**
      * Method for installing color sensors as motion and line sensors. Line sensors only need to be installed once!
      * Метод установки датчиков цвета в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
+     * @param newLeftLineSensor левый датчик цвета, eg: sensors.color2
+     * @param newRightLineSensor правый датчик цвета, eg: sensors.color3
      */
     //% blockId="SetColorSensorsAsLineSensors"
     //% block="set color sensors as line sensors left $newLeftLineSensor| right $newRightLineSensor"
@@ -42,6 +44,8 @@ namespace sensors {
     /**
      * Method for installing nxt reflection sensors as motion and line sensors. Line sensors only need to be installed once!
      * Метод установки nxt датчиков отражения в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
+     * @param newLeftLineSensor левый nxt датчик отражения, eg: sensors.nxtLight1
+     * @param newRightLineSensor правый nxt датчик отражения, eg: sensors.nxtLight4
      */
     //% blockId="SetNxtLightSensorsAsLineSensors"
     //% block="set nxt light sensors as line sensors left $newLeftLineSensor| right $newRightLineSensor"
