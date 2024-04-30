@@ -107,7 +107,7 @@ namespace sensors {
             if (leftLineSensor instanceof sensors.ColorSensor) {
                 return (leftLineSensor as sensors.ColorSensor).light(LightIntensityMode.ReflectedRaw);
             } else if (leftLineSensor instanceof sensors.NXTLightSensor) {
-                return (rightLineSensor as sensors.NXTLightSensor).light(NXTLightIntensityMode.ReflectedRaw);
+                return (leftLineSensor as sensors.NXTLightSensor).light(NXTLightIntensityMode.ReflectedRaw);
             }
         } else if (sensor == LineSensor.Right) {
             if (rightLineSensor instanceof sensors.ColorSensor) {
