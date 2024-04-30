@@ -9,6 +9,8 @@ namespace motions {
 
     export let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
+    export let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
+
     export let lineFollow2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
     export let lineFollow2SensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     export let lineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
@@ -202,6 +204,21 @@ namespace motions {
     }
 
     /**
+     * Set dt for line motion control cycles and line sensor operation..
+     * Установить dt для циклов регулирования движения по линии и работы с датчиком линии.
+     * @param dt время, за которое цикл регулирования должен выполняться, eg: 10
+     */
+    //% blockId="SetLineFollowLoopDt"
+    //% block="set dt = $dt| for loops line follow"
+    //% block.loc.ru="установить dt = $dt| для циклов движения по линии"
+    //% inlineInputMode="inline"
+    //% weight="69"
+    //% group="Параметры"
+    export function SetLineFollowLoopDt(dt: number) {
+        lineFollowLoopDt = dt;
+    }
+
+    /**
      * The function of moving along the line to the intersection.
      * Функция движения по линии до перекрёстка.
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
@@ -252,7 +269,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -314,7 +331,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -379,7 +396,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -444,7 +461,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -504,7 +521,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -564,7 +581,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -628,7 +645,7 @@ namespace motions {
     //             brick.printValue("U", U, 5);
     //             brick.printValue("dt", dt, 12);
     //         }
-    //         control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+    //         control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
     //     }
     // }
 

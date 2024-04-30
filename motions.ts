@@ -111,9 +111,9 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
-        let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
-        let mRotTotalCalc = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Рассчитываем общюю дистанцию
+        let mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
+        let mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
+        let mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
         chassis.syncRampMovement(5, speedLeft, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
@@ -248,7 +248,7 @@ namespace motions {
                 brick.printValue("refRightLS", refRightLS, 2);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём 10 мс выполнения итерации цикла
         }
         music.playToneInBackground(277, 500); // Сигнал о завершении
         motions.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления

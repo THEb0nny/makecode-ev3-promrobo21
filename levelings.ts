@@ -94,7 +94,7 @@ namespace levelings {
                 brick.showValue("uR", uR, 6);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         // CHASSIS_MOTORS.setBrake(true);
@@ -163,7 +163,7 @@ namespace levelings {
                 brick.showValue("u", u, 4);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         // CHASSIS_MOTORS.setBrake(true);
@@ -211,7 +211,7 @@ namespace levelings {
     //             encB1 = chassis.leftMotor.angle(); // Считываем угол
     //             break;
     //         }
-    //         control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
+    //         control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём 10 мс выполнения итерации цикла
     //     }
     //     control.runInParallel(function () { music.playTone(Note.D, 250); }); // Сигнал для понимация, что вышли из первого цикла
     //     prevTime = 0; // Переменная предыдущего времения для цикла регулирования
@@ -236,7 +236,7 @@ namespace levelings {
     //                 break;
     //             }
     //         }
-    //         control.pauseUntilTime(currTime, 10); // Ждём 10 мс выполнения итерации цикла
+    //         control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём 10 мс выполнения итерации цикла
     //     }
     //     control.runInParallel(function () { music.playTone(Note.D, 250); }); // Сигнал для понимация, что вышли из цикла
     //     //ChassisStop(true); // Жёсткое торможение для теста
