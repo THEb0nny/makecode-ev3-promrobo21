@@ -86,7 +86,6 @@ namespace chassis {
         let mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
         let mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
         chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
-        // ВНИМАНИЕ, если minSpeed скорость 0, а maxSpeed < 0, тогда моторы крутятся всё-равно вперёд!!!
     }
 
     /**
