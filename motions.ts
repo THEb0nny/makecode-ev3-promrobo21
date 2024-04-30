@@ -1,8 +1,8 @@
 namespace chassis {
 
     /**
-     * Linear movement over a distance in mm at a constant speed.
-     * Линейное движение на расстояние в мм с постоянной скоростью.
+     * Linear movement over a distance in mm at a constant speed. The sign of the distance and speed values must match!
+     * Линейное движение на расстояние в мм с постоянной скоростью. Знак значений дистанции и скорости должны совпадать!
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
      * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
@@ -16,8 +16,9 @@ namespace chassis {
     //% weight="79" blockGap="8"
     //% group="Move"
     export function LinearDistMove(dist: number, speed: number, setBreak: boolean = true) {
-        if (dist == 0 || speed == 0) {
+        if (dist == 0 || speed == 0 || speed > 0 && dist < 0 || speed < 0 && dist > 0) {
             chassis.stop(true);
+            music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
         const mRotCalc = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчёт угла поворота на дистанцию
@@ -25,31 +26,39 @@ namespace chassis {
     }
 
     /**
-     * Linear movement over a given distance with acceleration and deceleration in mm.
-     * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
-     * @param speed скорость движения, eg: 60
+     * Linear movement over a given distance with acceleration and deceleration in mm. It is not recommended to use a minimum speed of less than 10.
+     * Линейное движение на заданное расстояние с ускорением и замедлением в мм. Не рекомендуется использоваться минимальную скорость меньше 10.
+     * @param minSpeed начальная скорость движения, eg: 10
+     * @param maxSpeed максимальная скорость движения, eg: 50
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 100
      */
     //% blockId="RampLinearDistMove"
-    //% block="linear distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    //% block="linear distance moving $totalDist|mm at acceleration $accelDist| deceleration $decelDist| min speed $minSpeed|\\%| max $maxSpeed|\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist|мм при ускорении $accelDist| замедлении $decelDist| c мин скоростью $minSpeed|\\%| макс $maxSpeed|\\%"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% minSpeed.shadow="motorSpeedPicker"
+    //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="78"
     //% group="Move"
-    export function RampLinearDistMove(speed: number, totalDist: number, accelDist: number, decelDist: number) {
+    export function RampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
+        if (maxSpeed == 0 || totalDist == 0) {
+            chassis.stop(true);
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            return;
+        }
         let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
         let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
         let mRotTotalCalc = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Рассчитываем общюю дистанцию
-        chassis.syncRampMovement(5, speed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
+        chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
     /**
      * Movement over a given distance with acceleration and deceleration in mm.
      * Движение на заданное расстояние с ускорением и замедлением в мм.
-     * @param speed скорость движения, eg: 60
+     * @param speedLeft скорость движения, eg: 50
+     * @param speedRight скорость движения, eg: 50
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 100
@@ -63,6 +72,11 @@ namespace chassis {
     //% group="Move"
     //% blockHidden="true"
     export function RampDistMove(speedLeft: number, speedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+        if (speedLeft == 0 || speedRight == 0) {
+            chassis.stop(true);
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            return;
+        }
         let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
         let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
         let mRotTotalCalc = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Рассчитываем общюю дистанцию
@@ -78,7 +92,8 @@ namespace motions {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
             chassis.LinearDistMove(motions.distRollingAfterIntersection, speed, true);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            chassis.RampLinearDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
+            // chassis.RampLinearDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
+            chassis.RampLinearDistMove(5, speed, motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2);
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             motions.RollingMoveOut(motions.distRollingAfterIntersectionMoveOut, speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением (удержанием)
