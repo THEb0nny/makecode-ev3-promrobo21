@@ -52,7 +52,7 @@ namespace chassis {
     //% blockId="SetSmartTurnDeregTimeOut"
     //% block="максимальное время дорегулирования умного поворота $timeOut|мс"
     //% inlineInputMode="inline"
-    //% weight="97" blockGap="8"
+    //% weight="97"
     //% group="Свойства умных поворотов"
     export function SetSmartTurnDeregTimeOut(timeOut: number) {
         smartTurnDeregTimeOut = timeOut;
@@ -98,7 +98,7 @@ namespace chassis {
     //% debug.shadow="toggleOnOff"
     //% weight="99" blockGap="8"
     //% group="Умные повороты с регулятором"
-    export function SmartSpinTurn(deg: number, params?: custom.LineFollowInterface, debug: boolean = false) {
+    export function SmartSpinTurn(deg: number, params?: params.LineFollowInterface, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
             if (params.speed) smartSpinTurnSpeed = params.speed;
@@ -173,7 +173,7 @@ namespace chassis {
     //% debug.shadow="toggleOnOff"
     //% weight="98"
     //% group="Умные повороты с регулятором"
-    export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: custom.LineFollowInterface, debug: boolean = false) {
+    export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: params.LineFollowInterface, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
             if (params.speed) smartPivotTurnSpeed = params.speed;

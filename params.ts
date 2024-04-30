@@ -1,4 +1,4 @@
-namespace custom {
+namespace params {
 
     // Интерфейс перадачи параметров для алгоритма движения по линии
     export interface LineFollowInterface {
@@ -18,6 +18,48 @@ namespace custom {
         N?: number;
     }
 
+    // export let lineFollow2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
+    // export let lineFollow2SensorKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
+    // export let lineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
+    // export let lineFollow2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
+    // export let lineFollow2SensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
+
+    /*
+    if (!newSpeed && !newKp && !newKi && !newKd && !newN) {
+        return null;
+    } else if (newSpeed && !newKp && !newKi && !newKd && !newN) {
+        return { speed: newSpeed };
+    } else if (newSpeed && newKp && !newKi && !newKd && !newN) {
+        return { speed: newSpeed, Kp: newKp };
+    } else if (newSpeed && newKp && newKi && !newKd && !newN) {
+        return { speed: newSpeed, Kp: newKp, Ki: newKi };
+    } else if (newSpeed && newKp && newKi && newKd && !newN) {
+        return { speed: newSpeed, Kp: newKp, Ki: newKi, Kd: newKd };
+    }
+    return { speed: newSpeed, Kp: newKp, Ki: newKi, Kd: newKd, N: newN };
+    */
+
+    /**
+     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
+     */
+    //% blockId="SetLineFollowParams"
+    //% block="speed = $newSpeed\\%|| Kp = $newKp| Ki = $newKi| Kd = $newKd| N = $newN"
+    //% block.loc.ru="скорость = $newSpeed\\%|| Kp = $newKp| Ki = $newKi| Kd = $newKd| N = $newN"
+    //% expandableArgumentMode="enabled"
+    //% inlineInputMode="inline"
+    //% newSpeed.defl="50"
+    //% newKp.defl="1"
+    //% weight="99"
+    //% group="Параметры линии"
+    export function SetLineFollowParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
+        if (newSpeed) motions.lineFollow2SensorSpeed = newSpeed;
+        if (newKp) motions.lineFollow2SensorKp = newSpeed;
+        if (newKi) motions.lineFollow2SensorKi = newSpeed;
+        if (newKd) motions.lineFollow2SensorKd = newSpeed;
+        if (newN) motions.lineFollow2SensorN = newSpeed;
+    }
+
     /**
      * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
@@ -27,7 +69,7 @@ namespace custom {
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"
     //% blockHidden="true"
-    //% weight="99"
+    //% weight="98"
     //% group="Параметры линии"
     export function SetEmptyLineFollowParams(): LineFollowInterface {
         return null;
@@ -42,7 +84,7 @@ namespace custom {
     //% block.loc.ru="скорость = $newSpeed\\%"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
-    //% weight="98"
+    //% weight="97"
     //% group="Параметры линии"
     export function SetOneLineFollowParams(newSpeed?: number): LineFollowInterface {
         return {
@@ -60,7 +102,7 @@ namespace custom {
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% newKp.defl="1"
-    //% weight="97"
+    //% weight="96"
     //% group="Параметры линии"
     export function SetTwoLineFollowParams(newSpeed?: number, newKp?: number): LineFollowInterface {
         return {
@@ -80,7 +122,7 @@ namespace custom {
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% newKp.defl="1"
-    //% weight="96"
+    //% weight="95"
     //% group="Параметры линии"
     export function SetFourLineFollowParams(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
@@ -102,7 +144,7 @@ namespace custom {
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% newKp.defl="1"
-    //% weight="95"
+    //% weight="94"
     //% group="Параметры линии"
     export function SetAllLineFollowParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
@@ -116,7 +158,7 @@ namespace custom {
 
 }
 
-namespace custom {
+namespace params {
 
     // Интерфейс перадачи параметров для алгоритма выравнивания на линии
     export interface LineAlignmentInterface {

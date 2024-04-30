@@ -43,6 +43,20 @@ namespace motions {
     }
 
     /**
+     * Get the driving distance after determining the intersection for rolling in mm.
+     * Получить дистанцию проезда после определения перекрёстка для прокатки в мм.
+     */
+    //% blockId="GetDistRollingAfterInsetsection"
+    //% block="get distance rolling after intersection"
+    //% block.loc.ru="дистанция прокатки после перекрёстка"
+    //% inlineInputMode="inline"
+    //% weight="98"
+    //% group="Параметры"
+    export function GetDistRollingAfterInsetsection(): number {
+        return distRollingAfterIntersection;
+    }
+
+    /**
      * Set the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
      * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      * @param dist дистанция прокатки после перекрёстка, eg: 20
@@ -51,10 +65,24 @@ namespace motions {
     //% block="set distance $dist| rolling exit an intersection"
     //% block.loc.ru="установить дистанцию $dist| прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
-    //% weight="98"
+    //% weight="97" blockGap="8"
     //% group="Параметры"
     export function SetDistRollingAfterIntersectionMoveOut(dist: number) {
         distRollingAfterIntersectionMoveOut = dist;
+    }
+
+    /**
+     * Get the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
+     * Получить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
+     */
+    //% blockId="GetDistRollingAfterIntersectionMoveOut"
+    //% block="get distance rolling exit an intersection"
+    //% block.loc.ru="дистанция прокатки съезда с перекрёстка"
+    //% inlineInputMode="inline"
+    //% weight="96"
+    //% group="Параметры"
+    export function GetDistRollingAfterIntersectionMoveOut() {
+        return distRollingAfterIntersectionMoveOut;
     }
 
     /**
@@ -73,6 +101,20 @@ namespace motions {
     }
 
     /**
+     * Get the reflection threshold value for the line.
+     * Получить пороговое значение отражения для линии.
+     */
+    //% blockId="GetLineRefTreshold"
+    //% block="get reflection treshold"
+    //% block.loc.ru="пороговое значение отражения"
+    //% inlineInputMode="inline"
+    //% weight="88"
+    //% group="Параметры"
+    export function GetLineRefTreshold(): number {
+        return lineRefTreshold
+    }
+
+    /**
      * Set the reflection threshold value when moving along the line.
      * Установить пороговое значение отражения при движении по линии.
      * @param reflection значение отражения, eg: 35
@@ -81,10 +123,24 @@ namespace motions {
     //% block="set line follow reflection $reflection| treshold"
     //% block.loc.ru="установить пороговое значение $reflection| отражения движения по линии"
     //% inlineInputMode="inline"
-    //% weight="88" blockGap="8"
+    //% weight="87" blockGap="8"
     //% group="Параметры"
     export function SetLineFollowRefTreshold(reflection: number) {
         lineFollowRefTreshold = reflection;
+    }
+
+    /**
+     * Get the reflection threshold value when moving along the line.
+     * Получить пороговое значение отражения при движении по линии.
+     */
+    //% blockId="GetLineFollowRefTreshold"
+    //% block="get line follow reflection treshold"
+    //% block.loc.ru="пороговое значение отражения движения по линии"
+    //% inlineInputMode="inline"
+    //% weight="86"
+    //% group="Параметры"
+    export function GetLineFollowRefTreshold(): number {
+        return lineFollowRefTreshold;
     }
 
     /**
@@ -96,10 +152,24 @@ namespace motions {
     //% block="set line follow set point $reflectionSetPoint| reflection"
     //% block.loc.ru="установить уставку $reflectionSetPoint| движения по линии"
     //% inlineInputMode="inline"
-    //% weight="87"
+    //% weight="85" blockGap="8"
     //% group="Параметры"
     export function SetLineFollowSetPoint(reflectionSetPoint: number) {
         lineFollowSetPoint = reflectionSetPoint;
+    }
+
+    /**
+     * Get the setpoint (average value) of reflection for movement along the line.
+     * Получить уставку (среднее значение) отражения для движения по линии.
+     */
+    //% blockId="GetLineFollowSetPoint"
+    //% block="get line follow set point"
+    //% block.loc.ru="уставка движения по линии"
+    //% inlineInputMode="inline"
+    //% weight="84"
+    //% group="Параметры"
+    export function GetLineFollowSetPoint(): number {
+        return lineFollowSetPoint;
     }
 
     /**
@@ -118,6 +188,20 @@ namespace motions {
     }
 
     /**
+     * Get the maximum error of the driving condition with one sensor along the line.
+     * Получить максимальную ошибку условия движения одним датчиком по линии.
+     */
+    //% blockId="GetLineFollowConditionMaxErr"
+    //% block="get line follow max error"
+    //% block.loc.ru="максимальая ошибка при движении по линии"
+    //% inlineInputMode="inline"
+    //% weight="78"
+    //% group="Параметры"
+    export function GetLineFollowConditionMaxErr(): number {
+        return lineFollowWithOneSensorConditionMaxErr;
+    }
+
+    /**
      * The function of moving along the line to the intersection.
      * Функция движения по линии до перекрёстка.
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
@@ -131,7 +215,7 @@ namespace motions {
     //% params.shadow="SetEmptyLineFollowParams"
     //% weight="99" blockGap="8"
     //% group="Движение по линии"
-    export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollow2SensorKp = params.Kp;
@@ -189,7 +273,7 @@ namespace motions {
     //% params.shadow="SetEmptyLineFollowParams"
     //% weight="89"
     //% group="Движение по линии"
-    export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollow2SensorKp = params.Kp;
@@ -252,7 +336,7 @@ namespace motions {
     //% params.shadow="SetEmptyLineFollowParams"
     //% weight="88"
     //% group="Движение по линии"
-    export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowLeftSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowLeftSensorKp = params.Kp;
@@ -317,7 +401,7 @@ namespace motions {
     //% params.shadow="SetEmptyLineFollowParams"
     //% weight="88" blockGap="8"
     //% group="Движение по линии"
-    export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowRightSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowRightSensorKp = params.Kp;
@@ -381,7 +465,7 @@ namespace motions {
     //% params.shadow="SetEmptyLineFollowParams"
     //% weight="79" blockGap="8"
     //% group="Движение по линии"
-    export function LineFollowToLeftIntersaction(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToLeftIntersaction(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowRightSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowRightSensorKp = params.Kp;
@@ -441,7 +525,7 @@ namespace motions {
     //% params.shadow="SetEmptyLineFollowParams"
     //% weight="78"
     //% group="Движение по линии"
-    export function LineFollowToRightIntersection(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: custom.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToRightIntersection(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowLeftSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowLeftSensorKp = params.Kp;

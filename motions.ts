@@ -115,21 +115,21 @@ namespace motions {
 
     /**
      * Chassis motor control command.
-     * Команда управления моторами шасси.
-     * @param dir направление поворота, eg: 0
+     * Команда управления моторами шасси. Предназначена для регуляторов.
+     * @param u управляющее воздействие, eg: 0
      * @param speed скорость движения, eg: 80
      */
     //% blockId="ChassisControlCommand"
-    //% block="direction command $dir| на $speed|\\%"
-    //% block.loc.ru="команда движения по направлению $dir| на $speed|\\%"
+    //% block="direction command u = $unit| speed = $speed|\\%"
+    //% block.loc.ru="команда движения по u = $u| скорость = $speed|\\%"
     //% inlineInputMode="inline"
-    //% dir.shadow="motorTurnRatioPicker"
-    //% dir.min="-200" dir.max="200"
+    //% u.shadow="motorTurnRatioPicker"
+    //% u.min="-200" u.max="200"
     //% speed.shadow="motorSpeedPicker"
     //% weight="99"
     //% group="Move"
-    export function ChassisControlCommand(dir: number, speed: number) {
-        let mB = speed + dir, mC = speed - dir;
+    export function ChassisControlCommand(u: number, speed: number) {
+        let mB = speed + u, mC = speed - u;
         // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
         // mB *= z; mC *= z;
         chassis.leftMotor.run(mB); chassis.rightMotor.run(mC);
