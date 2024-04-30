@@ -1,8 +1,10 @@
 namespace chassis {
 
     /**
-     * Linear movement over a distance in mm at a constant speed. The sign of the distance and speed values must match!
-     * Линейное движение на расстояние в мм с постоянной скоростью. Знак значений дистанции и скорости должны совпадать!
+     * Linear movement over a distance in mm at a constant speed.
+     * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
+     * Линейное движение на расстояние в мм с постоянной скоростью.
+     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
      * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
@@ -16,18 +18,50 @@ namespace chassis {
     //% weight="79" blockGap="8"
     //% group="Move"
     export function LinearDistMove(dist: number, speed: number, setBreak: boolean = true) {
-        if (dist == 0 || speed == 0 || speed > 0 && dist < 0 || speed < 0 && dist > 0) {
+        if (dist <= 0 || speed == 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчёт угла поворота на дистанцию
+        const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, setBreak);
     }
 
     /**
+     * Movement over a distance in mm with independent speeds on motors.
+     * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
+     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
+     * Движение на расстояние в мм с независимыми скоростями на моторы.
+     * @param dist дистанция движения в мм, eg: 100
+     * @param speed скорость движения, eg: 60
+     * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
+     */
+    //% blockId="DistMove"
+    //% block="distance moving $dist|mm at $speedLeft|\\%| $speedRight|\\%| brake $setBreak"
+    //% block.loc.ru="движение на расстояние $dist|мм на $speedLeft|\\%| $speedRight|\\%| тормоз с удержанием $setBreak"
+    //% inlineInputMode="inline"
+    //% speedLeft.shadow="motorSpeedPicker"
+    //% speedRight.shadow="motorSpeedPicker"
+    //% setBreak.shadow="toggleOnOff"
+    //% weight="78"
+    //% group="Move"
+    export function DistMove(dist: number, speedLeft: number, speedRight: number, setBreak: boolean = true) {
+        if (dist <= 0 || speedLeft == 0 && speedRight == 0) {
+            chassis.stop(true);
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            return;
+        }
+        const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
+        chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, setBreak);
+    }
+
+    /**
      * Linear movement over a given distance with acceleration and deceleration in mm. It is not recommended to use a minimum speed of less than 10.
+     * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
+     * The speed values must have the same sign!
      * Линейное движение на заданное расстояние с ускорением и замедлением в мм. Не рекомендуется использоваться минимальную скорость меньше 10.
+     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
+     * Значения скоростей должны иметь одинаковый знак!
      * @param minSpeed начальная скорость движения, eg: 10
      * @param maxSpeed максимальная скорость движения, eg: 50
      * @param totalDist общее расстояние в мм, eg: 300
@@ -40,18 +74,19 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="78"
+    //% weight="77" blockGap="8"
     //% group="Move"
     export function RampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
-        if (maxSpeed == 0 || totalDist == 0) {
+        if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        let mRotAccelCalc = (accelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние ускорения
-        let mRotDecelCalc = (decelDist / (Math.PI * chassis.getWheelRadius())) * 360; // Расчитываем расстояние замедления
-        let mRotTotalCalc = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Рассчитываем общюю дистанцию
+        let mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
+        let mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
+        let mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
         chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
+        // ВНИМАНИЕ, если minSpeed скорость 0, а maxSpeed < 0, тогда моторы крутятся всё-равно вперёд!!!
     }
 
     /**
@@ -68,7 +103,7 @@ namespace chassis {
     //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="77"
+    //% weight="76"
     //% group="Move"
     //% blockHidden="true"
     export function RampDistMove(speedLeft: number, speedRight: number, totalDist: number, accelDist: number, decelDist: number) {
