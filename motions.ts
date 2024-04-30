@@ -16,7 +16,7 @@ namespace chassis {
     //% speed.shadow="motorSpeedPicker"
     //% setBreak.shadow="toggleOnOff"
     //% weight="79" blockGap="8"
-    //% group="Move"
+    //% group="Синхронизированное движение"
     export function LinearDistMove(dist: number, speed: number, setBreak: boolean = true) {
         if (dist <= 0 || speed == 0) {
             chassis.stop(true);
@@ -44,7 +44,7 @@ namespace chassis {
     //% speedRight.shadow="motorSpeedPicker"
     //% setBreak.shadow="toggleOnOff"
     //% weight="78"
-    //% group="Move"
+    //% group="Синхронизированное движение"
     export function DistMove(dist: number, speedLeft: number, speedRight: number, setBreak: boolean = true) {
         if (dist <= 0 || speedLeft == 0 && speedRight == 0) {
             chassis.stop(true);
@@ -75,7 +75,7 @@ namespace chassis {
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="77" blockGap="8"
-    //% group="Move"
+    //% group="Синхронизированное движение"
     export function RampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
         if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
@@ -103,7 +103,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="76"
-    //% group="Move"
+    //% group="Синхронизированное движение"
     //% blockHidden="true"
     export function RampDistMove(speedLeft: number, speedRight: number, totalDist: number, accelDist: number, decelDist: number) {
         if (speedLeft == 0 || speedRight == 0) {
@@ -196,8 +196,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="MoveToRefZone"
-    //% block="move in direction $dir| before determining reflection $sensorsCondition|$refCondition|$refTreshold at $speed|\\%| action after $actionAfterMotion|| debug $debug"
-    //% block.loc.ru="двигаться по направлению $dir| до отражения $sensorsCondition|$refCondition|$refTreshold на $speed|\\%| действие после $actionAfterMotion|| отладка $debug"
+    //% block="move in direction $dir| before determining reflection $sensorsCondition| $refCondition| $refTreshold at $speed|\\%| action after $actionAfterMotion|| debug $debug"
+    //% block.loc.ru="двигаться по направлению $dir| до отражения $sensorsCondition| $refCondition| $refTreshold на $speed|\\%| действие после $actionAfterMotion|| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% dir.shadow="motorTurnRatioPicker"

@@ -204,7 +204,7 @@ namespace motions {
     }
 
     /**
-     * Set dt for line motion control cycles and line sensor operation..
+     * Set dt for line motion control cycles and line sensor operation.
      * Установить dt для циклов регулирования движения по линии и работы с датчиком линии.
      * @param dt время, за которое цикл регулирования должен выполняться, eg: 10
      */
