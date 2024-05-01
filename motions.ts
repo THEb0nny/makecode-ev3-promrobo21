@@ -105,7 +105,7 @@ namespace chassis {
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="76"
-    //% group="Синхронизированное движение 2"
+    //% group="Синхронизированное движение"
     export function RampLinearDistMoveWithoutBraking(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {
@@ -225,7 +225,7 @@ namespace motions {
      * @param speed скорость движения, eg: 60
      */
     //% blockId="ChassisControlCommand"
-    //% block="direction command u = $unit| speed = $speed|\\%"
+    //% block="direction command u = $u| speed = $speed|\\%"
     //% block.loc.ru="команда движения по u = $u| скорость = $speed|\\%"
     //% inlineInputMode="inline"
     //% u.shadow="motorTurnRatioPicker"
