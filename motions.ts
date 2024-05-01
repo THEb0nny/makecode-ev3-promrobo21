@@ -33,7 +33,8 @@ namespace chassis {
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Движение на расстояние в мм с независимыми скоростями на моторы.
      * @param dist дистанция движения в мм, eg: 100
-     * @param speed скорость движения, eg: 60
+     * @param speedLeft скорость левого мотора, eg: 50
+     * @param speedRight скорость правого мотора, eg: 50
      * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="DistMove"
@@ -104,7 +105,7 @@ namespace chassis {
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="76"
-    //% group="Синхронизированное движение"
+    //% group="Синхронизированное движение 2"
     export function RampLinearDistMoveWithoutBraking(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {
@@ -140,34 +141,34 @@ namespace chassis {
         // Без команды торможения
     }
 
-    /**
-     * Movement over a given distance with acceleration and deceleration in mm. It is not recommended to set the minimum speed to less than 10.
-     * Движение на заданное расстояние с ускорением и замедлением в мм. Не рекомендуется устанавливать минимальную скорость меньше 10.
-     * @param speedLeft скорость движения, eg: 50
-     * @param speedRight скорость движения, eg: 50
-     * @param totalDist общее расстояние в мм, eg: 300
-     * @param accelDist расстояние ускорения в мм, eg: 100
-     * @param decelDist расстояние замедления в мм, eg: 100
-     */
-    //% blockId="RampDistMove"
-    //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
-    //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
-    //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
-    //% weight="76"
-    //% group="Синхронизированное движение"
-    //% blockHidden="true"
-    export function RampDistMove(speedLeft: number, speedRight: number, totalDist: number, accelDist: number, decelDist: number) {
-        if (speedLeft == 0 || speedRight == 0) {
-            chassis.stop(true);
-            music.playSoundEffect(sounds.systemGeneralAlert);
-            pause(2000);
-            return;
-        }
-        let mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
-        let mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
-        let mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
-    }
+    // /**
+    //  * Movement over a given distance with acceleration and deceleration in mm. It is not recommended to set the minimum speed to less than 10.
+    //  * Движение на заданное расстояние с ускорением и замедлением в мм. Не рекомендуется устанавливать минимальную скорость меньше 10.
+    //  * @param speedLeft скорость движения, eg: 50
+    //  * @param speedRight скорость движения, eg: 50
+    //  * @param totalDist общее расстояние в мм, eg: 300
+    //  * @param accelDist расстояние ускорения в мм, eg: 100
+    //  * @param decelDist расстояние замедления в мм, eg: 100
+    //  */
+    // //% blockId="RampDistMove"
+    // //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
+    // //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    // //% inlineInputMode="inline"
+    // //% speed.shadow="motorSpeedPicker"
+    // //% weight="76"
+    // //% group="Синхронизированное движение"
+    // //% blockHidden="true"
+    // export function RampDistMove(speedLeft: number, speedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+    //     if (speedLeft == 0 || speedRight == 0) {
+    //         chassis.stop(true);
+    //         music.playSoundEffect(sounds.systemGeneralAlert);
+    //         pause(2000);
+    //         return;
+    //     }
+    //     let mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
+    //     let mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
+    //     let mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
+    // }
 
 }
 
@@ -221,7 +222,7 @@ namespace motions {
      * Chassis motor control command.
      * Команда управления моторами шасси. Предназначена для регуляторов.
      * @param u управляющее воздействие, eg: 0
-     * @param speed скорость движения, eg: 80
+     * @param speed скорость движения, eg: 60
      */
     //% blockId="ChassisControlCommand"
     //% block="direction command u = $unit| speed = $speed|\\%"
