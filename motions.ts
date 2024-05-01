@@ -7,24 +7,24 @@ namespace chassis {
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
-     * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
+    * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="LinearDistMove"
-    //% block="linear distance moving $dist|mm at $speed|\\%| brake $setBreak"
-    //% block.loc.ru="линейное движение на расстояние $dist|мм на $speed|\\%| тормоз с удержанием $setBreak"
+    //% block="linear distance moving $dist|mm at $speed|\\%| braking $braking"
+    //% block.loc.ru="линейное движение на расстояние $dist|мм на $speed|\\%| торможение $braking"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
-    //% setBreak.shadow="toggleOnOff"
     //% weight="79" blockGap="8"
     //% group="Синхронизированное движение"
-    export function LinearDistMove(dist: number, speed: number, setBreak: boolean = true) {
+    export function LinearDistMove(dist: number, speed: number, braking: Braking = Braking.Hold) {
         if (dist <= 0 || speed == 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
             return;
         }
         const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
-        chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, setBreak);
+        chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, Braking.Hold);
     }
 
     /**
@@ -34,25 +34,25 @@ namespace chassis {
      * Движение на расстояние в мм с независимыми скоростями на моторы.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
-     * @param setBreak тип торможения, с удержанием позиции при истине, eg: true
+     * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="DistMove"
-    //% block="distance moving $dist|mm at $speedLeft|\\%| $speedRight|\\%| brake $setBreak"
-    //% block.loc.ru="движение на расстояние $dist|мм на $speedLeft|\\%| $speedRight|\\%| тормоз с удержанием $setBreak"
+    //% block="distance moving $dist|mm at $speedLeft|\\%| $speedRight|\\%| braking $braking"
+    //% block.loc.ru="движение на расстояние $dist|мм на $speedLeft|\\%| $speedRight|\\%| торможение $braking"
     //% inlineInputMode="inline"
     //% speedLeft.shadow="motorSpeedPicker"
     //% speedRight.shadow="motorSpeedPicker"
-    //% setBreak.shadow="toggleOnOff"
     //% weight="78"
     //% group="Синхронизированное движение"
-    export function DistMove(dist: number, speedLeft: number, speedRight: number, setBreak: boolean = true) {
+    export function DistMove(dist: number, speedLeft: number, speedRight: number, braking: Braking = Braking.Hold) {
         if (dist <= 0 || speedLeft == 0 && speedRight == 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
             return;
         }
         const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
-        chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, setBreak);
+        chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, Braking.Hold);
     }
 
     /**
@@ -80,6 +80,7 @@ namespace chassis {
         if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
             return;
         }
         let mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
@@ -109,12 +110,12 @@ namespace chassis {
         if (speedLeft == 0 || speedRight == 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
             return;
         }
         let mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
         let mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
         let mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
-        chassis.syncRampMovement(5, speedLeft, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
 }
@@ -124,10 +125,11 @@ namespace motions {
     // Функция, которая выполняет действие после цикла с движением
     export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
-            chassis.LinearDistMove(motions.distRollingAfterIntersection, speed, true);
+            chassis.LinearDistMove(motions.distRollingAfterIntersection, speed, Braking.Hold);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
             // chassis.RampLinearDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
-            chassis.RampLinearDistMove(5, speed, motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2);
+            // chassis.RampLinearDistMove(5, speed, motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2);
+            chassis.RampLinearDistMove(5, speed, motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection);
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             motions.RollingMoveOut(motions.distRollingAfterIntersectionMoveOut, speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением (удержанием)
@@ -144,6 +146,8 @@ namespace motions {
     export function RollingMoveOut(dist: number, speed: number) {
         if (dist == 0 || speed == 0) {
             chassis.stop(true);
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
             return;
         }
         let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
@@ -200,13 +204,14 @@ namespace motions {
     //% block.loc.ru="двигаться по направлению $dir| до отражения $sensorsCondition| $refCondition| $refTreshold на $speed|\\%| действие после $actionAfterMotion|| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
+    //% debug.shadow="toggleOnOff"
     //% dir.shadow="motorTurnRatioPicker"
     //% dir.min="-100" dir.max="100"
     //% speed.shadow="motorSpeedPicker"
     //% weight="89"
     //% group="Move"
     export function MoveToRefZone(sensorsCondition: SensorSelection, refCondition: LogicalOperators, refTreshold: number, dir: number, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        motions.ChassisControlCommand(dir, speed); // Команда двигаться по направлению и скоростью
+        // motions.ChassisControlCommand(dir, speed); // Команда двигаться по направлению и скоростью
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
             let currTime = control.millis();
@@ -226,7 +231,7 @@ namespace motions {
                 if (refCondition == LogicalOperators.Greater && (refLeftLS > refTreshold || refRightLS > refTreshold)) break; // Больше
                 else if (refCondition == LogicalOperators.GreaterOrEqual && (refLeftLS >= refTreshold || refRightLS >= refTreshold)) break; // Больше или равно
                 else if (refCondition == LogicalOperators.Less && (refLeftLS < refTreshold || refRightLS < refTreshold)) break; // Меньше
-                else if (refCondition == LogicalOperators.LessOrEqual || (refLeftLS <= refTreshold || refRightLS <= refTreshold)) break; // Меньше или равно
+                else if (refCondition == LogicalOperators.LessOrEqual && (refLeftLS <= refTreshold || refRightLS <= refTreshold)) break; // Меньше или равно
                 else if (refCondition == LogicalOperators.Equal && (refLeftLS == refTreshold || refRightLS == refTreshold)) break; // Равно
             } else if (sensorsCondition == SensorSelection.OnlyLeft) { // Только левый датчик
                 if (refCondition == LogicalOperators.Greater && refLeftLS > refTreshold) break; // Больше
@@ -248,9 +253,9 @@ namespace motions {
                 brick.printValue("refRightLS", refRightLS, 2);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём 10 мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём N мс выполнения итерации цикла
         }
-        music.playToneInBackground(277, 500); // Сигнал о завершении
+        music.playToneInBackground(277, 200); // Сигнал о завершении
         motions.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
     }
 
