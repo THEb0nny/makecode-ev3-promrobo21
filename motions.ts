@@ -24,7 +24,7 @@ namespace chassis {
             return;
         }
         const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
-        chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, Braking.Hold);
+        chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, braking);
     }
 
     /**
@@ -52,7 +52,7 @@ namespace chassis {
             return;
         }
         const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
-        chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, Braking.Hold);
+        chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, braking);
     }
 
     /**
