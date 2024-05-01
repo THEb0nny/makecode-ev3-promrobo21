@@ -7,7 +7,7 @@ namespace chassis {
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость движения, eg: 60
-    * @param braking тип торможения, eg: Braking.Hold
+     * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="LinearDistMove"
     //% block="linear distance moving $dist|mm at $speed|\\%| braking $braking"
@@ -90,8 +90,59 @@ namespace chassis {
     }
 
     /**
-     * Movement over a given distance with acceleration and deceleration in mm.
-     * Движение на заданное расстояние с ускорением и замедлением в мм.
+     * Synchronization with smooth acceleration in straight-line motion without braking. It is not recommended to set the minimum speed to less than 10.
+     * Синхронизация с плавным ускорением при прямолинейном движении без торможения. Не рекомендуется устанавливать минимальную скорость меньше 10.
+     * @param minSpeed start motor speed, eg. 10
+     * @param maxSpeed max motor speed, eg. 50
+     * @param totalDist total length encoder value at, eg. 500
+     * @param accelDist accelerate length encoder value, eg. 50
+     */
+    //% blockId="RampLinearDistMoveWithoutBraking"
+    //% block="linear distance moving $totalDist|mm at acceleration $accelDist| min speed $minSpeed|\\%| max $maxSpeed|\\%| without braking"
+    //% block.loc.ru="линейное движение на расстояние $totalDist|мм при ускорении $accelDist| c мин скоростью $minSpeed|\\%| макс $maxSpeed|\\%| без торможения"
+    //% inlineInputMode="inline"
+    //% minSpeed.shadow="motorSpeedPicker"
+    //% maxSpeed.shadow="motorSpeedPicker"
+    //% weight="76"
+    //% group="Синхронизированное движение"
+    export function RampLinearDistMoveWithoutBraking(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
+        //if (!motorsPair) return;
+        if (maxSpeed == 0 || totalDist == 0) {
+            stop(true);
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
+            return;
+        }
+        const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
+        const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
+        advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, accelDist, 0, totalDist);
+        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
+        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
+        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        pidChassisSync.reset(); // Сбросить ПИД регулятор
+        let prevTime = 0;
+        while (true) {
+            let currTime = control.millis();
+            let dt = currTime - prevTime;
+            prevTime = currTime;
+            let eml = leftMotor.angle() - emlPrev;
+            let emr = rightMotor.angle() - emrPrev;
+            let out = advmotctrls.accTwoEnc(eml, emr);
+            if (out.isDone) break;
+            let error = advmotctrls.getErrorSyncMotorsInPwr(eml, emr, out.pwrOut, out.pwrOut);
+            pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
+            chassis.leftMotor.run(powers.pwrLeft);
+            chassis.rightMotor.run(powers.pwrRight);
+            control.pauseUntilTime(currTime, 5);
+        }
+        // Без команды торможения
+    }
+
+    /**
+     * Movement over a given distance with acceleration and deceleration in mm. It is not recommended to set the minimum speed to less than 10.
+     * Движение на заданное расстояние с ускорением и замедлением в мм. Не рекомендуется устанавливать минимальную скорость меньше 10.
      * @param speedLeft скорость движения, eg: 50
      * @param speedRight скорость движения, eg: 50
      * @param totalDist общее расстояние в мм, eg: 300
