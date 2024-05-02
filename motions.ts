@@ -243,11 +243,11 @@ namespace motions {
     /**
      * Moving in a direction with a constant speed to a zone with a certain reflection.
      * Движение по направлению с постоянной скоростью до зоны с определённым отражением.
-     * @param dir нпарвление движения, eg: 0
+     * @param dir направление движения, eg: 0
      * @param SensorSelection определение датчиками, eg: SensorSelection.LeftAndRight
      * @param refCondition отражение больше или меньше, eg: Condition.Larger
      * @param refTreshold пороговое значение отражения света, eg: 50
-     * @param speed скорость движения, eg: 60
+     * @param speed скорость движения, eg: 50
      * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
      * @param debug отладка, eg: false
      */
