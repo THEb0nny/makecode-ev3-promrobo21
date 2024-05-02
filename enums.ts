@@ -30,16 +30,16 @@ const enum LogicalOperators {
 // Перечисление о вариантах выбора датчиков для реагирования
 const enum SensorSelection {
     //% block="left and right sensor"
-    //% block.loc.ru="левым и правым датчиком"
+    //% block.loc.ru="левым и правым датчиком линии"
     LeftAndRight,
     //% block="left or right sensor"
-    //% block.loc.ru="левым или правым датчиком"
+    //% block.loc.ru="левым или правым датчиком линии"
     LeftOrRight,
     //% block="left sensor"
-    //% block.loc.ru="левым датчиком"
+    //% block.loc.ru="левым датчиком линии"
     OnlyLeft,
     //% block="right sensor"
-    //% block.loc.ru="правым датчиком"
+    //% block.loc.ru="правым датчиком линии"
     OnlyRight
 }
 

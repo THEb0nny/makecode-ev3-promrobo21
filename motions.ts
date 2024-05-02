@@ -253,7 +253,7 @@ namespace motions {
      */
     //% blockId="MoveToRefZone"
     //% block="move in direction $dir| before determining reflection $sensorsCondition| $refCondition| $refTreshold at $speed|\\%| action after $actionAfterMotion|| debug $debug"
-    //% block.loc.ru="двигаться по направлению $dir| до отражения $sensorsCondition| $refCondition| $refTreshold на $speed|\\%| действие после $actionAfterMotion|| отладка $debug"
+    //% block.loc.ru="двигаться по направлению $dir| до определения отражения $sensorsCondition| $refCondition| $refTreshold на $speed|\\%| действие после $actionAfterMotion|| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"
