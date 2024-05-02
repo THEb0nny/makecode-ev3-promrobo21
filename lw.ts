@@ -35,8 +35,8 @@ namespace motions {
      * @param dist дистанция прокатки после перекрёстка, eg: 50
      */
     //% blockId="SetDistRollingAfterInsetsection"
-    //% block="set distance $dist| rolling after intersection"
-    //% block.loc.ru="установить дистанцию $dist прокатки после перекрёстка"
+    //% block="set distance $dist|mm rolling after intersection"
+    //% block.loc.ru="установить дистанцию $dist|мм прокатки после перекрёстка"
     //% inlineInputMode="inline"
     //% weight="99" blockGap="8"
     //% group="Параметры"
@@ -64,8 +64,8 @@ namespace motions {
      * @param dist дистанция прокатки после перекрёстка, eg: 20
      */
     //% blockId="SetDistRollingAfterIntersectionMoveOut"
-    //% block="set distance $dist| rolling exit an intersection"
-    //% block.loc.ru="установить дистанцию $dist| прокатки съезда с перекрёстка"
+    //% block="set distance $dist|mm rolling exit an intersection"
+    //% block.loc.ru="установить дистанцию $dist|мм прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
     //% group="Параметры"
