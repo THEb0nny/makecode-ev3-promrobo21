@@ -9,15 +9,15 @@ namespace sensors {
     export let bRefRawRightLineSensor: number; // Сырые значения на чёрном для правого датчика линии
     export let wRefRawRightLineSensor: number; // Сырые значения на белом для правого датчика линии
 
-    export let minRgbColorSensor1: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в первом порту
-    export let minRgbColorSensor2: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета во втором порту
-    export let minRgbColorSensor3: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в третьем порту
-    export let minRgbColorSensor4: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в четвёртом порту
+    let minRgbColorSensor1: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в первом порту
+    let minRgbColorSensor2: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета во втором порту
+    let minRgbColorSensor3: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в третьем порту
+    let minRgbColorSensor4: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в четвёртом порту
 
-    export let maxRgbColorSensor1: number[]; // Максимальные значения RGB для датчика цвета в первом порту
-    export let maxRgbColorSensor2: number[]; // Максимальные значения RGB для датчика цвета во втором порту
-    export let maxRgbColorSensor3: number[]; // Максимальные значения RGB для датчика цвета в третьем порту
-    export let maxRgbColorSensor4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
+    let maxRgbColorSensor1: number[]; // Максимальные значения RGB для датчика цвета в первом порту
+    let maxRgbColorSensor2: number[]; // Максимальные значения RGB для датчика цвета во втором порту
+    let maxRgbColorSensor3: number[]; // Максимальные значения RGB для датчика цвета в третьем порту
+    let maxRgbColorSensor4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
 
     /**
      * Method for installing color sensors as motion and line sensors. Line sensors only need to be installed once!
@@ -138,34 +138,6 @@ namespace sensors {
         return refVal;
     }
 
-}
-
-namespace sensors {
-
-    interface HsvlToColorNum {
-        colorBoundary: number;
-        whiteBoundary: number;
-        blackBoundary: number;
-        redBoundary: number;
-        brownBoundary: number;
-        yellowBoundary: number;
-        greenBoundary: number;
-        blueBoundary: number;
-    }
-
-    export function SetHSVLColorNumParams(newColorBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): HsvlToColorNum {
-        return {
-            colorBoundary: 65,
-            whiteBoundary: 10,
-            blackBoundary: 1,
-            redBoundary: 25,
-            brownBoundary: 50,
-            yellowBoundary: 100,
-            greenBoundary: 180,
-            blueBoundary: 260
-        }
-    }
-
     /**
      * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
@@ -178,7 +150,7 @@ namespace sensors {
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
     //% sensor.fieldOptions.width="300"
-    //% weight="89" blockGap="8"
+    //% weight="88" blockGap="8"
     //% group="Color Sensor"
     export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor, minRgbArr: number[]) {
         if (sensor.port() == 1) minRgbColorSensor1 = minRgbArr;
@@ -199,7 +171,7 @@ namespace sensors {
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
     //% sensor.fieldOptions.width="300"
-    //% weight="88" blockGap="8"
+    //% weight="87" blockGap="8"
     //% group="Color Sensor"
     export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxRgbArr: number[]) {
         if (sensor.port() == 1) maxRgbColorSensor1 = maxRgbArr;
@@ -219,7 +191,7 @@ namespace sensors {
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
     //% sensor.fieldOptions.width="300"
-    //% weight="87" blockGap="8"
+    //% weight="86" blockGap="8"
     //% group="Color Sensor"
     export function GetMinRgbColorSensor(sensor: sensors.ColorSensor): number[] {
         if (sensor.port() == 1) return minRgbColorSensor1;
@@ -240,7 +212,7 @@ namespace sensors {
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
     //% sensor.fieldOptions.width="300"
-    //% weight="86"
+    //% weight="85"
     //% group="Color Sensor"
     export function GetMaxRgbColorSensor(sensor: sensors.ColorSensor): number[] {
         if (sensor.port() == 1) return maxRgbColorSensor1;
@@ -248,6 +220,48 @@ namespace sensors {
         else if (sensor.port() == 3) return maxRgbColorSensor3;
         else if (sensor.port() == 4) return maxRgbColorSensor4;
         return [0, 0, 0];
+    }
+
+    interface HsvlToColorNumInterface {
+        colorBoundary: number;
+        whiteBoundary: number;
+        blackBoundary: number;
+        redBoundary: number;
+        brownBoundary: number;
+        yellowBoundary: number;
+        greenBoundary: number;
+        blueBoundary: number;
+    }
+
+    /**
+     * HSVL conversion values to color codes.
+     * Значения перевода HSVL в цветовые коды.
+     * @param newColorBoundary значение границы цветности, eg. 50
+     * @param newWhiteBoundary значение границы белого, eg. 10
+     * @param newBlackBoundary значение границы чёрного, eg. 1
+     * @param newRedBoundary значение границы красного, eg. 25
+     * @param newBrownBoundary значение границы коричневого, eg. 40
+     * @param newYellowBoundary значение границы жёлтого, eg. 100
+     * @param newGreenBoundary значение границы зелёного, eg. 180
+     * @param newBlueBoundary значение границы синего, после которого до 360 снова идёт красный, eg. 260
+     */
+    //% blockId="HsvlToColorNumParams"
+    //% block="parameters for converting HSVL **sensor color** to a color code $newColorBoundary| $newWhiteBoundary| $newBlackBoundary| $newRedBoundary| $newBrownBoundary| $newYellowBoundary| $newGreenBoundary| $newBlueBoundary"
+    //% block.loc.ru="параметры перевода HSVL **датчика цвет** в цветовой код $newColorBoundary| $newWhiteBoundary| $newBlackBoundary| $newRedBoundary| $newBrownBoundary| $newYellowBoundary| $newGreenBoundary| $newBlueBoundary"
+    //% inlineInputMode="inline"
+    //% weight="84" blockGap="8"
+    //% group="Color Sensor"
+    export function HsvlToColorNumParams(newColorBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): HsvlToColorNumInterface {
+        return {
+            colorBoundary: newColorBoundary,
+            whiteBoundary: newWhiteBoundary,
+            blackBoundary: newBlackBoundary,
+            redBoundary: newRedBoundary,
+            brownBoundary: newBrownBoundary,
+            yellowBoundary: newYellowBoundary,
+            greenBoundary: newGreenBoundary,
+            blueBoundary: newBlueBoundary
+        }
     }
 
     /**
@@ -259,9 +273,9 @@ namespace sensors {
     //% block="convert $hsvl| to color code at params $params"
     //% block.loc.ru="перевести $hsvl| в цветовой код при параметрах $params"
     //% inlineInputMode="inline"
-    //% weight="85" blockGap="8"
+    //% weight="83" blockGap="8"
     //% group="Color Sensor"
-    export function HsvlToColorNum(hsvl: number[], params: HsvlToColorNum): number {
+    export function HsvlToColorNum(hsvl: number[], params: HsvlToColorNumInterface): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
         if (S > params.colorBoundary) { // Граница цветности
             if (H < params.redBoundary) return 5; // red
