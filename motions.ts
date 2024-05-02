@@ -93,10 +93,10 @@ namespace chassis {
     /**
      * Synchronization with smooth acceleration in straight-line motion without braking. It is not recommended to set the minimum speed to less than 10.
      * Синхронизация с плавным ускорением при прямолинейном движении без торможения. Не рекомендуется устанавливать минимальную скорость меньше 10.
-     * @param minSpeed start motor speed, eg. 10
-     * @param maxSpeed max motor speed, eg. 50
      * @param totalDist total length encoder value at, eg. 500
      * @param accelDist accelerate length encoder value, eg. 50
+     * @param minSpeed start motor speed, eg. 10
+     * @param maxSpeed max motor speed, eg. 50
      */
     //% blockId="RampLinearDistMoveWithoutBraking"
     //% block="linear distance moving $totalDist|mm at acceleration $accelDist| min speed $minSpeed|\\%| max $maxSpeed|\\%| without braking"
