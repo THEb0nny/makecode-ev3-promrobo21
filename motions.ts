@@ -247,7 +247,7 @@ namespace motions {
      * @param SensorSelection определение датчиками, eg: SensorSelection.LeftAndRight
      * @param refCondition отражение больше или меньше, eg: Condition.Larger
      * @param refTreshold пороговое значение отражения света, eg: 50
-     * @param speed скорость движения, eg: 80
+     * @param speed скорость движения, eg: 60
      * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
      * @param debug отладка, eg: false
      */
