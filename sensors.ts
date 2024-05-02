@@ -236,18 +236,18 @@ namespace sensors {
     /**
      * HSVL conversion values to color codes.
      * Значения перевода HSVL в цветовые коды.
-     * @param newColorBoundary значение границы цветности, eg. 50
-     * @param newWhiteBoundary значение границы белого, eg. 10
-     * @param newBlackBoundary значение границы чёрного, eg. 1
-     * @param newRedBoundary значение границы красного, eg. 25
-     * @param newBrownBoundary значение границы коричневого, eg. 40
-     * @param newYellowBoundary значение границы жёлтого, eg. 100
-     * @param newGreenBoundary значение границы зелёного, eg. 180
-     * @param newBlueBoundary значение границы синего, после которого до 360 снова идёт красный, eg. 260
+     * @param newColorBoundary значение границы цветности, eg: 50
+     * @param newWhiteBoundary значение границы белого, eg: 10
+     * @param newBlackBoundary значение границы чёрного, eg: 1
+     * @param newRedBoundary значение границы красного, eg: 25
+     * @param newBrownBoundary значение границы коричневого, eg: 40
+     * @param newYellowBoundary значение границы жёлтого, eg: 100
+     * @param newGreenBoundary значение границы зелёного, eg: 180
+     * @param newBlueBoundary значение границы синего, после которого до 360 снова идёт красный, eg: 260
      */
     //% blockId="HsvlToColorNumParams"
-    //% block="parameters for converting HSVL **sensor color** to a color code $newColorBoundary| $newWhiteBoundary| $newBlackBoundary| $newRedBoundary| $newBrownBoundary| $newYellowBoundary| $newGreenBoundary| $newBlueBoundary"
-    //% block.loc.ru="параметры перевода HSVL **датчика цвет** в цветовой код $newColorBoundary| $newWhiteBoundary| $newBlackBoundary| $newRedBoundary| $newBrownBoundary| $newYellowBoundary| $newGreenBoundary| $newBlueBoundary"
+    //% block="converting params HSVL **color sensor** to color code| boundars chroma  = $newColorBoundary| white = $newWhiteBoundary| black = $newBlackBoundary| red = $newRedBoundary| brown = $newBrownBoundary| yellow = $newYellowBoundary| green = $newGreenBoundary| blue = $newBlueBoundary"
+    //% block.loc.ru="параметры перевода HSVL **датчика цвета** в цветовой код| границы цветности = $newColorBoundary| белого = $newWhiteBoundary| чёрного = $newBlackBoundary| красного = $newRedBoundary| коричневого = $newBrownBoundary| жёлтого = $newYellowBoundary| зелеёного = $newGreenBoundary| синего = $newBlueBoundary"
     //% inlineInputMode="inline"
     //% weight="84" blockGap="8"
     //% group="Color Sensor"
