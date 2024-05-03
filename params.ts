@@ -210,8 +210,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
      */
     //% blockId="SetTwoLineSetThreeLineAlignmentParamsAlignmentParams"
-    //% block="speed = $newSpeed\\%| leftKp = $newLeftKp| rightKp = $newRightKp"
-    //% block.loc.ru="скорость = $newSpeed\\%| leftKp = $newLeftKp| rightKp = $newRightKp"
+    //% block="speed = $newSpeed\\%| left Kp = $newLeftKp| right Kp = $newRightKp"
+    //% block.loc.ru="скорость = $newSpeed\\%| левая Kp = $newLeftKp| правая Kp = $newRightKp"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% newLeftKp.defl="1"
@@ -231,8 +231,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetSevenLineAlignmentParams"
-    //% block="speed = $newSpeed\\%| leftKp = $newLeftKp| rightKp = $newRightKp| leftKd = $newLeftKd| rightKd = $newRightKd|| leftN = $newLeftN| rightN = $newLeftN"
-    //% block.loc.ru="скорость = $newSpeed\\%| leftKp = $newLeftKp| rightKp = $newRightKp| leftKd = $newLeftKd| rightKd = $newRightKd|| leftN = $newLeftN| rightN = $newLeftN"
+    //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp| Kd = $newLeftKd| N = $newLeftN| right Kp = $newRightKp| Kd = $newRightKd| N = $newLeftN"
+    //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp| Kd = $newLeftKd| N = $newLeftN| правая Kp = $newRightKp| Kd = $newRightKd| N = $newLeftN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -257,8 +257,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetAllLineAlignmentParams"
-    //% block="speed = $newSpeed\\%| leftKp = $newLeftKp| rightKp = $newRightKp| leftKi = $newLeftKi| rightKi = $newRightKi| leftKd = $newLeftKd| rightKd = $newRightKd|| leftN = $newLeftN| rightN = $newLeftN"
-    //% block.loc.ru="скорость = $newSpeed\\%| leftKp = $newLeftKp| rightKp = $newRightKp| leftKi = $newLeftKi| rightKi = $newRightKi| leftKd = $newLeftKd| rightKd = $newRightKd|| leftN = $newLeftN| rightN = $newLeftN"
+    //% block="speed = $newSpeed\\%|| left side Kp = $newLeftKp| Ki = $newLeftKi| Kd = $newLeftKd| N = $newLeftN| right Kp = $newRightKp| Ki = $newRightKi| Kd = $newRightKd| N = $newLeftN"
+    //% block.loc.ru="скорость = $newSpeed\\%|| левая сторона Kp = $newLeftKp| Ki = $newLeftKi| Kd = $newLeftKd| N = $newLeftN| правая Kp = $newRightKp| Ki = $newRightKi| Kd = $newRightKd| N = $newLeftN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
