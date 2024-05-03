@@ -257,8 +257,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetAllLineAlignmentParams"
-    //% block="speed = $newSpeed\\%|| left side Kp = $newLeftKp| Ki = $newLeftKi| Kd = $newLeftKd| N = $newLeftN| right Kp = $newRightKp| Ki = $newRightKi| Kd = $newRightKd| N = $newLeftN"
-    //% block.loc.ru="скорость = $newSpeed\\%|| левая сторона Kp = $newLeftKp| Ki = $newLeftKi| Kd = $newLeftKd| N = $newLeftN| правая Kp = $newRightKp| Ki = $newRightKi| Kd = $newRightKd| N = $newLeftN"
+    //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp| Ki = $newLeftKi| Kd = $newLeftKd| N = $newLeftN| right Kp = $newRightKp| Ki = $newRightKi| Kd = $newRightKd| N = $newRightN"
+    //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp| Ki = $newLeftKi| Kd = $newLeftKd| N = $newLeftN| правая Kp = $newRightKp| Ki = $newRightKi| Kd = $newRightKd| N = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
