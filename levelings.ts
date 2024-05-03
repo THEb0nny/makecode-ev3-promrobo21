@@ -27,8 +27,8 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignment"
-    //% block="line alignment $lineLocation| at $regulatorTime|ms|| params = $params| debug $debug"
-    //% block.loc.ru="выравнивание на линии $lineLocation| за $regulatorTime|мс|| параметры = $params| отладка $debug"
+    //% block="line alignment $lineLocation| at $regulatorTime|ms|| params: $params| debug $debug"
+    //% block.loc.ru="выравнивание на линии $lineLocation| за $regulatorTime|мс|| параметры: $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
