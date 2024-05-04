@@ -10,8 +10,8 @@ namespace chassis {
      * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="LinearDistMove"
-    //% block="linear distance moving $dist|mm at $speed|\\%| braking $braking"
-    //% block.loc.ru="линейное движение на расстояние $dist|мм на $speed|\\%| торможение $braking"
+    //% block="linear distance moving $dist mm at $speed\\% braking $braking"
+    //% block.loc.ru="линейное движение на расстояние $dist мм на $speed\\% торможение $braking"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="79" blockGap="8"
@@ -38,8 +38,8 @@ namespace chassis {
      * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="DistMove"
-    //% block="distance moving $dist|mm at $speedLeft|\\%| $speedRight|\\%| braking $braking"
-    //% block.loc.ru="движение на расстояние $dist|мм на $speedLeft|\\%| $speedRight|\\%| торможение $braking"
+    //% block="distance moving $dist mm at $speedLeft\\% $speedRight\\% braking $braking"
+    //% block.loc.ru="движение на расстояние $dist мм на $speedLeft\\% $speedRight\\% торможение $braking"
     //% inlineInputMode="inline"
     //% speedLeft.shadow="motorSpeedPicker"
     //% speedRight.shadow="motorSpeedPicker"
@@ -70,8 +70,8 @@ namespace chassis {
      * @param decelDist расстояние замедления в мм, eg: 100
      */
     //% blockId="RampLinearDistMove"
-    //% block="linear distance moving $totalDist|mm at acceleration $accelDist| deceleration $decelDist| min speed $minSpeed|\\%| max $maxSpeed|\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist|мм при ускорении $accelDist| замедлении $decelDist| c мин скоростью $minSpeed|\\%| макс $maxSpeed|\\%"
+    //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|min speed $minSpeed\\% max $maxSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c мин скоростью $minSpeed\\% макс $maxSpeed\\%"
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
@@ -99,8 +99,8 @@ namespace chassis {
      * @param maxSpeed max motor speed, eg. 50
      */
     //% blockId="RampLinearDistMoveWithoutBraking"
-    //% block="linear distance moving $totalDist|mm at acceleration $accelDist| min speed $minSpeed|\\%| max $maxSpeed|\\%| without braking"
-    //% block.loc.ru="линейное движение на расстояние $totalDist|мм при ускорении $accelDist| c мин скоростью $minSpeed|\\%| макс $maxSpeed|\\%| без торможения"
+    //% block="linear distance moving $totalDist mm at acceleration $accelDist|min speed $minSpeed\\% max $maxSpeed\\% without braking"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм при ускорении $accelDist|c мин скоростью $minSpeed\\% макс $maxSpeed\\% без торможения"
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
