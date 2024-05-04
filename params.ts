@@ -44,8 +44,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetLineFollowParams"
-    //% block="speed = $newSpeed\\%|| Kp = $newKp| Ki = $newKi| Kd = $newKd| N = $newN"
-    //% block.loc.ru="скорость = $newSpeed\\%|| Kp = $newKp| Ki = $newKi| Kd = $newKd| N = $newN"
+    //% block="speed = $newSpeed\\%|| Kp = $newKp Ki = $newKi Kd = $newKd| N = $newN"
+    //% block.loc.ru="скорость = $newSpeed\\%|| Kp = $newKp Ki = $newKi Kd = $newKd| N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -97,8 +97,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
      */
     //% blockId="SetTwoLineFollowParams"
-    //% block="speed = $newSpeed\\%| Kp = $newKp"
-    //% block.loc.ru="скорость = $newSpeed\\%| Kp = $newKp"
+    //% block="speed = $newSpeed\\% Kp = $newKp"
+    //% block.loc.ru="скорость = $newSpeed\\% Kp = $newKp"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% newKp.defl="1"
@@ -116,8 +116,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetFourLineFollowParams"
-    //% block="speed = $newSpeed\\%| Kp = $newKp| Kd = $newKd|| N = $newN"
-    //% block.loc.ru="скорость = $newSpeed\\%| Kp = $newKp| Kd = $newKd|| N = $newN"
+    //% block="speed = $newSpeed\\%| Kp = $newKp Kd = $newKd || N = $newN"
+    //% block.loc.ru="скорость = $newSpeed\\%| Kp = $newKp Kd = $newKd || N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -138,8 +138,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetAllLineFollowParams"
-    //% block="speed = $newSpeed\\%| Kp = $newKp| Ki = $newKi| Kd = $newKd|| N = $newN"
-    //% block.loc.ru="скорость = $newSpeed\\%| Kp = $newKp| Ki = $newKi| Kd = $newKd|| N = $newN"
+    //% block="speed = $newSpeed\\%| Kp = $newKp Ki = $newKi Kd = $newKd || N = $newN"
+    //% block.loc.ru="скорость = $newSpeed\\%| Kp = $newKp Ki = $newKi Kd = $newKd || N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -209,9 +209,9 @@ namespace params {
      * Parameters for an algorithm with a regulator with the ability to set the speed, Kp.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
      */
-    //% blockId="SetTwoLineSetThreeLineAlignmentParamsAlignmentParams"
-    //% block="speed = $newSpeed\\%| left Kp = $newLeftKp| right Kp = $newRightKp"
-    //% block.loc.ru="скорость = $newSpeed\\%| левая Kp = $newLeftKp| правая Kp = $newRightKp"
+    //% blockId="SetThreeLineAlignmentParams"
+    //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp| right Kp = $newRightKp"
+    //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp| правая Kp = $newRightKp"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% newLeftKp.defl="1"
@@ -231,8 +231,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetSevenLineAlignmentParams"
-    //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp| Kd = $newLeftKd| N = $newLeftN| right Kp = $newRightKp| Kd = $newRightKd| N = $newLeftN"
-    //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp| Kd = $newLeftKd| N = $newLeftN| правая Kp = $newRightKp| Kd = $newRightKd| N = $newLeftN"
+    //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp Kd = $newLeftKd N = $newLeftN| right Kp = $newRightKp Kd = $newRightKd N = $newLeftN"
+    //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp Kd = $newLeftKd N = $newLeftN| правая Kp = $newRightKp Kd = $newRightKd N = $newLeftN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -257,8 +257,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetAllLineAlignmentParams"
-    //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp| Ki = $newLeftKi| Kd = $newLeftKd| N = $newLeftN| right Kp = $newRightKp| Ki = $newRightKi| Kd = $newRightKd| N = $newRightN"
-    //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp| Ki = $newLeftKi| Kd = $newLeftKd| N = $newLeftN| правая Kp = $newRightKp| Ki = $newRightKi| Kd = $newRightKd| N = $newRightN"
+    //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd| N = $newLeftN right Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
+    //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd| N = $newLeftN| правая Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
