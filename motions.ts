@@ -254,15 +254,15 @@ namespace motions {
     //% blockId="MoveToRefZone"
     //% block="move in direction $dir at $speed\\%| before determining reflection $sensorsCondition $refCondition $refTreshold|action after $actionAfterMotion|| debug $debug"
     //% block.loc.ru="двигаться по направлению $dir на $speed\\%| до определения отражения $sensorsCondition $refCondition $refTreshold|действие после $actionAfterMotion|| отладка $debug"
+    //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
-    //% inlineInputMode="external"
     //% debug.shadow="toggleOnOff"
     //% dir.shadow="motorTurnRatioPicker"
     //% dir.min="-100" dir.max="100"
     //% speed.shadow="motorSpeedPicker"
     //% weight="89"
     //% group="Move"
-    export function MoveToRefZone(sensorsCondition: LineSensorSelection, refCondition: LogicalOperators, refTreshold: number, dir: number, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    export function MoveToRefZone(dir: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: LogicalOperators, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         // motions.ChassisControlCommand(dir, speed); // Команда двигаться по направлению и скоростью
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
