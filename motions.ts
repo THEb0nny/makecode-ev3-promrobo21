@@ -225,8 +225,8 @@ namespace motions {
      * @param speed скорость движения, eg: 60
      */
     //% blockId="ChassisControlCommand"
-    //% block="direction command u = $u| speed = $speed|\\%"
-    //% block.loc.ru="команда движения по u = $u| скорость = $speed|\\%"
+    //% block="direction command u = $u speed = $speed\\%"
+    //% block.loc.ru="команда движения по u = $u скорость = $speed\\%"
     //% inlineInputMode="inline"
     //% u.shadow="motorTurnRatioPicker"
     //% u.min="-200" u.max="200"

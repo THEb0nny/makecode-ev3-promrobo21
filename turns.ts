@@ -24,7 +24,7 @@ namespace chassis {
      * @param timeOut максимальное время в мс, eg: 1000
      */
     //% blockId="SetSmartSpinTurnTimeOut"
-    //% block="максимальное время поворота относительно центра $timeOut|мс"
+    //% block="максимальное время поворота относительно центра $timeOut мс"
     //% inlineInputMode="inline"
     //% weight="99" blockGap="8"
     //% group="Свойства умных поворотов"
@@ -37,7 +37,7 @@ namespace chassis {
      * @param timeOut максимальное время в мс, eg: 1000
      */
     //% blockId="SetSmartPivotTurnTimeOut"
-    //% block="максимальное время поворота относительно колеса $timeOut|мс"
+    //% block="максимальное время поворота относительно колеса $timeOut мс"
     //% inlineInputMode="inline"
     //% weight="98" blockGap="8"
     //% group="Свойства умных поворотов"
@@ -50,7 +50,7 @@ namespace chassis {
      * @param timeOut максимальное время в мс, eg: 200
      */
     //% blockId="SetSmartTurnDeregTimeOut"
-    //% block="максимальное время дорегулирования умного поворота $timeOut|мс"
+    //% block="максимальное время дорегулирования умного поворота $timeOut мс"
     //% inlineInputMode="inline"
     //% weight="97"
     //% group="Свойства умных поворотов"
@@ -63,7 +63,7 @@ namespace chassis {
      * @param maxErr максимальная ошибка, eg: 10
      */
     //% blockId="SetSmartTurnConditionErrDifference"
-    //% block="максимальная ошибка при умном повороте $maxErr| определения окончания"
+    //% block="максимальная ошибка при умном повороте $maxErr определения окончания"
     //% inlineInputMode="inline"
     //% weight="96" blockGap="8"
     //% group="Свойства умных поворотов"
@@ -76,7 +76,7 @@ namespace chassis {
      * @param maxU максимальное управляющее воздействие, eg: 10
      */
     //% blockId="SetSmartTurnConditionRegDifference"
-    //% block="максимальное значение управляющего воздействия при умном повороте $maxU| определения окончания"
+    //% block="максимальное значение управляющего воздействия при умном повороте $maxU определения окончания"
     //% inlineInputMode="inline"
     //% weight="96" blockGap="8"
     //% group="Свойства умных поворотов"
@@ -91,8 +91,8 @@ namespace chassis {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartSpinTurn"
-    //% block="smart turn at $deg|° relative center of wheels|| params = $params| debug $debug"
-    //% block.loc.ru="умный поворот на $deg|° относительно центра колёс|| параметры = $params| отдалка $debug"
+    //% block="smart turn at $deg ° relative center of wheels || params = $params| debug $debug"
+    //% block.loc.ru="умный поворот на $deg ° относительно центра колёс || параметры = $params| отдалка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"
@@ -166,8 +166,8 @@ namespace chassis {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartPivotTurn"
-    //% block="smart turn at $deg|° relative $wheelPivot| wheel|| params = $params| debug %debug"
-    //% block.loc.ru="умный поворот на $deg|° относительно $wheelPivot| колеса|| параметры = $params| отладка %debug"
+    //% block="smart turn at $deg ° relative $wheelPivot wheel || params = $params| debug %debug"
+    //% block.loc.ru="умный поворот на $deg ° относительно $wheelPivot колеса || параметры = $params| отладка %debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"

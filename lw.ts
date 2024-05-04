@@ -64,8 +64,8 @@ namespace motions {
      * @param dist дистанция прокатки после перекрёстка, eg: 20
      */
     //% blockId="SetDistRollingAfterIntersectionMoveOut"
-    //% block="set distance $dist|mm rolling exit an intersection"
-    //% block.loc.ru="установить дистанцию $dist|мм прокатки съезда с перекрёстка"
+    //% block="set distance $dist mm rolling exit an intersection"
+    //% block.loc.ru="установить дистанцию $dist мм прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
     //% group="Параметры"
@@ -93,8 +93,8 @@ namespace motions {
      * @param reflection значение отражения, eg: 50
      */
     //% blockId="SetLineRefTreshold"
-    //% block="set reflection $reflection| treshold"
-    //% block.loc.ru="установить пороговое значение $reflection| отражения"
+    //% block="set reflection $reflection treshold"
+    //% block.loc.ru="установить пороговое значение $reflection отражения"
     //% inlineInputMode="inline"
     //% weight="89" blockGap="8"
     //% group="Параметры"
@@ -122,8 +122,8 @@ namespace motions {
      * @param reflection значение отражения, eg: 35
      */
     //% blockId="SetLineFollowRefTreshold"
-    //% block="set line follow reflection $reflection| treshold"
-    //% block.loc.ru="установить пороговое значение $reflection| отражения движения по линии"
+    //% block="set line follow $reflection reflection treshold"
+    //% block.loc.ru="установить пороговое значение $reflection отражения движения по линии"
     //% inlineInputMode="inline"
     //% weight="87" blockGap="8"
     //% group="Параметры"
@@ -151,8 +151,8 @@ namespace motions {
      * @param reflectionSetPoint значение уставки движения по линии, eg: 50
      */
     //% blockId="SetLineFollowSetPoint"
-    //% block="set line follow set point $reflectionSetPoint| reflection"
-    //% block.loc.ru="установить уставку $reflectionSetPoint| движения по линии"
+    //% block="set line follow set point $reflectionSetPoint reflection"
+    //% block.loc.ru="установить уставку $reflectionSetPoint движения по линии"
     //% inlineInputMode="inline"
     //% weight="85" blockGap="8"
     //% group="Параметры"
@@ -181,7 +181,7 @@ namespace motions {
      */
     //% blockId="SetLineFollowConditionMaxErr"
     //% block="set line follow max error $maxErr"
-    //% block.loc.ru="установить максимальую ошибку $maxErr| движения по линии"
+    //% block.loc.ru="установить максимальую ошибку $maxErr движения по линии"
     //% inlineInputMode="inline"
     //% weight="79" blockGap="8"
     //% group="Параметры"
@@ -209,8 +209,8 @@ namespace motions {
      * @param dt время, за которое цикл регулирования должен выполняться, eg: 10
      */
     //% blockId="SetLineFollowLoopDt"
-    //% block="set dt = $dt| for loops line follow"
-    //% block.loc.ru="установить dt = $dt| для циклов движения по линии"
+    //% block="set dt = $dt for loops line follow"
+    //% block.loc.ru="установить dt = $dt для циклов движения по линии"
     //% inlineInputMode="inline"
     //% weight="69"
     //% group="Параметры"
@@ -283,7 +283,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistance"
-    //% block="движение по линии на расстояние $dist|мм с действием после $actionAfterMotion|| параметры: $params| отладка $debug"
+    //% block="движение по линии на расстояние $dist мм с действием после $actionAfterMotion|| параметры: $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -346,7 +346,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithLeftSensor"
-    //% block="движение по линии левым датчиком на расстояние $dist|мм $lineLocation| c действием после $actionAfterMotion|| параметры: $params| отладка $debug"
+    //% block="движение по линии левым датчиком на расстояние $dist мм| $lineLocation| c действием после $actionAfterMotion|| параметры: $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -411,7 +411,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithRightSensor"
-    //% block="движение по линии правым датчиком на расстояние $dist|мм $lineLocation| c действием после $actionAfterMotion|| параметры: $params| отладка $debug"
+    //% block="движение по линии правым датчиком на расстояние $dist мм| $lineLocation| c действием после $actionAfterMotion|| параметры: $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -475,7 +475,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToLeftIntersaction"
-    //% block="движение по линии до перекрёстка слева $lineLocation| c действием после $actionAfterMotion|| параметры: $params| отладка $debug"
+    //% block="движение по линии до перекрёстка слева $lineLocation c действием после $actionAfterMotion|| параметры: $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -535,7 +535,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToRightIntersection"
-    //% block="движение по линии до перекрёстка справа $lineLocation| c действием после $actionAfterMotion|| параметры: $params| отладка $debug"
+    //% block="движение по линии до перекрёстка справа $lineLocation c действием после $actionAfterMotion|| параметры: $params| отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"

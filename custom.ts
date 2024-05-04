@@ -7,8 +7,8 @@ namespace music {
      * @param ms tone duration in milliseconds(ms), eg: BeatFraction.Half
      */
     //% blockId="PlayToneInBackground"
-    //% block="play tone|at $frequency| for $duration| in the background"
-    //% block.loc.ru="проиграть тон $frequency| продолжительностью $duration| в фоне"
+    //% block="play tone at $frequency for $duration in the background"
+    //% block.loc.ru="проиграть тон $frequency продолжительностью $duration в фоне"
     //% frequency.shadow="device_note"
     //% duration.shadow="device_beat"
     //% weight="75" blockGap="8"
@@ -30,8 +30,8 @@ namespace brick {
      * @param duration in milliseconds(ms), eg: 100
      */
     //% blockId="SetStatusLightInBackground"
-    //% block="set status light to $pattern| at $duration| in the background"
-    //% block.loc.ru="установить индикатор $pattern| продолжительностью $duration| в фоне"
+    //% block="set status light to $pattern at $duration in the background"
+    //% block.loc.ru="установить индикатор $pattern продолжительностью $duration в фоне"
     //% help="brick/set-status-light"
     //% weight="98"
     //% group="Indicator"
@@ -52,7 +52,7 @@ namespace custom {
      * @param arr массив с элементами
      */
     //% blockId="MostFrequentNumber"
-    //% block="get the most common number from $arr| array"
+    //% block="get the most common number from $arr array"
     //% block.loc.ru="получить макс часто встречающийся элемент из массива $arr"
     //% weight="89"
     export function MostFrequentNumber(arr: number[]): number {

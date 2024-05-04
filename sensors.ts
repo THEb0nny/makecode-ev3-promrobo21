@@ -26,8 +26,8 @@ namespace sensors {
      * @param newRightLineSensor правый датчик цвета, eg: sensors.color3
      */
     //% blockId="SetColorSensorsAsLineSensors"
-    //% block="set **color sensors** as line sensors left $newLeftLineSensor| right $newRightLineSensor"
-    //% block.loc.ru="установить **датчик цвета** в качестве датчика линии левый $newLeftLineSensor| правый $newRightLineSensor"
+    //% block="set **color sensors** as line sensors left $newLeftLineSensor right $newRightLineSensor"
+    //% block.loc.ru="установить **датчик цвета** в качестве датчика линии левый $newLeftLineSensor правый $newRightLineSensor"
     //% inlineInputMode="inline"
     //% newLeftLineSensor.fieldEditor="images"
     //% newLeftLineSensor.fieldOptions.columns="4"
@@ -48,8 +48,8 @@ namespace sensors {
      * @param newRightLineSensor правый nxt датчик отражения, eg: sensors.nxtLight4
      */
     //% blockId="SetNxtLightSensorsAsLineSensors"
-    //% block="set **nxt light sensors** as line sensors left $newLeftLineSensor| right $newRightLineSensor"
-    //% block.loc.ru="установить **nxt датчик** отражения в качестве датчика линии левый $newLeftLineSensor| правый $newRightLineSensor"
+    //% block="set **nxt light sensors** as line sensors left $newLeftLineSensor right $newRightLineSensor"
+    //% block.loc.ru="установить **nxt датчик** отражения в качестве датчика линии левый $newLeftLineSensor правый $newRightLineSensor"
     //% inlineInputMode="inline"
     //% newLeftLineSensor.fieldEditor="images"
     //% newLeftLineSensor.fieldOptions.columns="4"
@@ -77,8 +77,8 @@ namespace sensors {
      * Метод установки датчику линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorRawRefValue"
-    //% block="set $sensor| **line sensor** black $bRefRawVal| white $wRefRawVal| raw values"
-    //% block.loc.ru="установить $sensor| **датчику линии** сырые значения чёрного $bRefRawVal| белого $wRefRawVal"
+    //% block="set $sensor **line sensor** black $bRefRawVal white $wRefRawVal raw values"
+    //% block.loc.ru="установить $sensor **датчику линии** сырые значения чёрного $bRefRawVal белого $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Line Sensor"
@@ -97,7 +97,7 @@ namespace sensors {
      * Метод получения с датчика линии сырого значения отражения.
      */
     //% blockId="GetLineSensorRawRefValue"
-    //% block="**line sensor** $sensor| raw value"
+    //% block="**line sensor** $sensor raw value"
     //% block.loc.ru="сырое значение **датчика линии** $sensor"
     //% inlineInputMode="inline"
     //% weight="88" blockGap="8"
@@ -127,8 +127,8 @@ namespace sensors {
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
      */
     //% blockId="GetNormRef"
-    //% block="normalize reflection $refRawVal| at black $bRefRawVal| white $wRefRawVal"
-    //% block.loc.ru="нормализовать отражение $refRawVal| при чёрном $bRefRawVal| белом $wRefRawVal"
+    //% block="normalize reflection $refRawVal at black $bRefRawVal white $wRefRawVal"
+    //% block.loc.ru="нормализовать отражение $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Line Sensor"
@@ -144,8 +144,8 @@ namespace sensors {
      * @param minRgbArr массив с тремя значениями rgb
      */
     //% blockId="SetColorSensorMinRgbValues"
-    //% block="set $sensor| **color sensor** min RGB values $minRgbArr"
-    //% block.loc.ru="установить $sensor| **датчику цвета** мин значения RGB $minRgbArr"
+    //% block="set $sensor **color sensor** min RGB values $minRgbArr"
+    //% block.loc.ru="установить $sensor **датчику цвета** мин значения RGB $minRgbArr"
     //% inlineInputMode="inline"
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
@@ -165,8 +165,8 @@ namespace sensors {
      * @param maxRgbArr массив с тремя значениями rgb
      */
     //% blockId="SetColorSensorMaxRgbValues"
-    //% block="set $sensor| color **sensor max** RGB values $maxRgbArr"
-    //% block.loc.ru="установить $sensor| **датчику цвета** макс значения RGB $maxRgbArr"
+    //% block="set $sensor color **sensor max** RGB values $maxRgbArr"
+    //% block.loc.ru="установить $sensor **датчику цвета** макс значения RGB $maxRgbArr"
     //% inlineInputMode="inline"
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
@@ -185,8 +185,8 @@ namespace sensors {
      * Получить минимальные значения RGB для датчика цвета.
      */
     //% blockId="GetMinRgbColorSensor"
-    //% block="get $sensor| **color sensor** min RGB values"
-    //% block.loc.ru="получить $sensor| **датчик цвета** мин значения RGB"
+    //% block="get $sensor **color sensor** min RGB values"
+    //% block.loc.ru="получить $sensor **датчик цвета** мин значения RGB"
     //% inlineInputMode="inline"
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
@@ -206,8 +206,8 @@ namespace sensors {
      * Получить максимальне значения RGB для датчика цвета.
      */
     //% blockId="GetMaxRgbColorSensor"
-    //% block="get $sensor| **color sensor** max RGB values"
-    //% block.loc.ru="получить $sensor| **датчик цвета** макс значения RGB"
+    //% block="get $sensor **color sensor** max RGB values"
+    //% block.loc.ru="получить $sensor **датчик цвета** макс значения RGB"
     //% inlineInputMode="inline"
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
@@ -246,8 +246,8 @@ namespace sensors {
      * @param newBlueBoundary значение границы синего, после которого до 360 снова идёт красный, eg: 260
      */
     //% blockId="HsvlToColorNumParams"
-    //% block="converting params HSVL **color sensor** to color code| at boundars chroma  = $newColorBoundary| white = $newWhiteBoundary| black = $newBlackBoundary| red = $newRedBoundary| brown = $newBrownBoundary| yellow = $newYellowBoundary| green = $newGreenBoundary| blue = $newBlueBoundary"
-    //% block.loc.ru="параметры перевода HSVL **датчика цвета** в цветовой код| при границе цветности = $newColorBoundary| белого = $newWhiteBoundary| чёрного = $newBlackBoundary| красного = $newRedBoundary| коричневого = $newBrownBoundary| жёлтого = $newYellowBoundary| зелеёного = $newGreenBoundary| синего = $newBlueBoundary"
+    //% block="converting params HSVL **color sensor** to color code| at boundars chroma  = $newColorBoundary| white = $newWhiteBoundary black = $newBlackBoundary| red = $newRedBoundary brown = $newBrownBoundary yellow = $newYellowBoundary green = $newGreenBoundary blue = $newBlueBoundary"
+    //% block.loc.ru="параметры перевода HSVL **датчика цвета** в цветовой код| при границе цветности = $newColorBoundary| белого = $newWhiteBoundary чёрного = $newBlackBoundary| красного = $newRedBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary зелёного = $newGreenBoundary синего = $newBlueBoundary"
     //% inlineInputMode="inline"
     //% weight="84" blockGap="8"
     //% group="Color Sensor"
@@ -270,8 +270,8 @@ namespace sensors {
      * @param hsvl массив значений hsvl
      */
     //% blockId="HsvlToColorNum"
-    //% block="convert $hsvl| to color code at params $params"
-    //% block.loc.ru="перевести $hsvl| в цветовой код при параметрах $params"
+    //% block="convert $hsvl to color code at params $params"
+    //% block.loc.ru="перевести $hsvl в цветовой код при параметрах $params"
     //% inlineInputMode="inline"
     //% weight="83" blockGap="8"
     //% group="Color Sensor"
@@ -348,8 +348,8 @@ namespace sensors {
      * @param wRefRawValCS сырое значение отражения на белом, eg: 650
      */
     //% blockId="RgbToHsvlConverter"
-    //% block="convert rgb $rgbArr| to hsvl"
-    //% block.loc.ru="перевести rgb $rgbArr| в hsvl"
+    //% block="convert rgb $rgbArr to hsvl"
+    //% block.loc.ru="перевести rgb $rgbArr в hsvl"
     //% inlineInputMode="inline"
     //% weight="89" blockGap="8"
     //% group="Color Sensor"
