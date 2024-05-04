@@ -252,8 +252,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="MoveToRefZone"
-    //% block="move in direction $dir| at $speed\\%| before determining reflection $sensorsCondition| $refCondition| $refTreshold  action after $actionAfterMotion|| debug $debug"
-    //% block.loc.ru="двигаться по направлению $dir| на $speed\\%| до определения отражения $sensorsCondition| $refCondition| $refTreshold действие после $actionAfterMotion|| отладка $debug"
+    //% block="move in direction $dir at $speed\\%| before determining reflection $sensorsCondition| $refCondition| $refTreshold  action after $actionAfterMotion|| debug $debug"
+    //% block.loc.ru="двигаться по направлению $dir на $speed\\%| до определения отражения $sensorsCondition| $refCondition| $refTreshold действие после $actionAfterMotion|| отладка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="external"
     //% debug.shadow="toggleOnOff"
