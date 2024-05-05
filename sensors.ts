@@ -141,43 +141,57 @@ namespace sensors {
     /**
      * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
-     * @param minRgbArr массив с тремя значениями rgb
+     * @param minR минимальное значение красного, eg: 0
+     * @param minG минимальное значение зелёного, eg: 0
+     * @param minB минимальное значение синего, eg: 0
      */
     //% blockId="SetColorSensorMinRgbValues"
-    //% block="set $sensor **color sensor** min RGB values $minRgbArr"
-    //% block.loc.ru="установить $sensor **датчику цвета** мин значения RGB $minRgbArr"
+    //% block="set $sensor **color sensor** min values R = $minR G = $minG B = $minB"
+    //% block.loc.ru="установить $sensor **датчику цвета** мин значения R = $minR G = $minG B = $minB"
     //% inlineInputMode="inline"
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
     //% sensor.fieldOptions.width="300"
     //% weight="88" blockGap="8"
     //% group="Color Sensor"
-    export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor, minRgbArr: number[]) {
-        if (sensor.port() == 1) minRgbColorSensor1 = minRgbArr;
-        else if (sensor.port() == 2) minRgbColorSensor2 = minRgbArr;
-        else if (sensor.port() == 3) minRgbColorSensor3 = minRgbArr;
-        else if (sensor.port() == 4) minRgbColorSensor4 = minRgbArr;
+    export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor, minR: number, minG: number, minB: number) {
+        if (minR < 0 || minG < 0 || minB < 0) {
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
+            control.panic(2);
+        }
+        if (sensor.port() == 1) minRgbColorSensor1 = [minR, minG, minB];
+        else if (sensor.port() == 2) minRgbColorSensor2 = [minR, minG, minB];
+        else if (sensor.port() == 3) minRgbColorSensor3 = [minR, minG, minB];
+        else if (sensor.port() == 4) minRgbColorSensor4 = [minR, minG, minB];
     }
 
     /**
      * Set the maximum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить максимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
-     * @param maxRgbArr массив с тремя значениями rgb
+     * @param maxR максимальное значение красного, eg: 255
+     * @param maxG максимальное значение зелёного, eg: 255
+     * @param maxB максимальное значение синего, eg: 255
      */
     //% blockId="SetColorSensorMaxRgbValues"
-    //% block="set $sensor color **sensor max** RGB values $maxRgbArr"
-    //% block.loc.ru="установить $sensor **датчику цвета** макс значения RGB $maxRgbArr"
+    //% block="set $sensor color **sensor max** RGB values R = $maxR G = $maxG B = $maxB"
+    //% block.loc.ru="установить $sensor **датчику цвета** макс значения R = $maxR G = $maxG B = $maxB"
     //% inlineInputMode="inline"
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
     //% sensor.fieldOptions.width="300"
     //% weight="87" blockGap="8"
     //% group="Color Sensor"
-    export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxRgbArr: number[]) {
-        if (sensor.port() == 1) maxRgbColorSensor1 = maxRgbArr;
-        else if (sensor.port() == 2) maxRgbColorSensor2 = maxRgbArr;
-        else if (sensor.port() == 3) maxRgbColorSensor3 = maxRgbArr;
-        else if (sensor.port() == 4) maxRgbColorSensor4 = maxRgbArr;
+    export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxR: number, maxG: number, maxB: number) {
+        if (maxR < 0 || maxG < 0 || maxB < 0) {
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
+            control.panic(2);
+        }
+        if (sensor.port() == 1) maxRgbColorSensor1 = [maxR, maxG, maxB];
+        else if (sensor.port() == 2) maxRgbColorSensor2 = [maxR, maxG, maxB];
+        else if (sensor.port() == 3) maxRgbColorSensor3 = [maxR, maxG, maxB];
+        else if (sensor.port() == 4) maxRgbColorSensor4 = [maxR, maxG, maxB];
     }
 
     /**
