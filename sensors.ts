@@ -284,8 +284,8 @@ namespace sensors {
      * @param hsvl массив значений hsvl
      */
     //% blockId="HsvlToColorNum"
-    //% block="convert $hsvl to color code at params $params"
-    //% block.loc.ru="перевести $hsvl в цветовой код при параметрах $params"
+    //% block="convert hsvl $hsvl to color code at params $params"
+    //% block.loc.ru="перевести hsvl $hsvl в цветовой код при параметрах $params"
     //% inlineInputMode="inline"
     //% weight="83" blockGap="8"
     //% group="Color Sensor"
