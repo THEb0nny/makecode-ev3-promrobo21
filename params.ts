@@ -163,6 +163,7 @@ namespace params {
     // Интерфейс перадачи параметров для алгоритма выравнивания на линии
     export interface LineAlignmentInterface {
         maxSpeed?: number;
+        timeOut?: number;
         leftKp?: number;
         rightKp?: number;
         leftKi?: number;

@@ -1,23 +1,40 @@
 namespace levelings {
 
-    export let lineAlignmentMaxSpeed = 50; // Переменная для хранения максимальной скорости при регулировании на линии
+    let lineAlignmentMaxSpeed = 50; // Переменная для хранения максимальной скорости при регулировании на линии
 
-    export let lineAlignmentLeftSideKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
-    export let lineAlignmentLeftSideKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
-    export let lineAlignmentLeftSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии левой стороны
-    export let lineAlignmentLeftSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
+    let lineAlignmentLeftSideKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
+    let lineAlignmentLeftSideKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
+    let lineAlignmentLeftSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии левой стороны
+    let lineAlignmentLeftSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
 
-    export let lineAlignmentRightSideKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии правой стороны
-    export let lineAlignmentRightSideKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии правой стороны
-    export let lineAlignmentRightSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии правой стороны
-    export let lineAlignmentRightSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии правой стороны
+    let lineAlignmentRightSideKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии правой стороны
+    let lineAlignmentRightSideKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии правой стороны
+    let lineAlignmentRightSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии правой стороны
+    let lineAlignmentRightSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии правой стороны
 
-    export let linePositioningMaxSpeed = 50; // Переменная для хранения максимальной скорости при позиционировании на линии
+    let linePositioningMaxSpeed = 50; // Переменная для хранения максимальной скорости при позиционировании на линии
 
-    export let linePositioningKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
-    export let linePositioningKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
-    export let linePositioningKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии левой стороны
-    export let linePositioningN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
+    let linePositioningKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
+    let linePositioningKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
+    let linePositioningKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии левой стороны
+    let linePositioningN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
+
+    let distanceBetweenLineSensors = 0; // Переменная для хранения расстояния между датчиками линии
+
+    /**
+     * Set the distance between the two line sensors in mm.
+     * Установить расстояние между двумя датчиками линии в мм.
+     * @param dist расстояние между датчиками в мм, eg. 31.88
+     */
+    //% blockId="SetDistanceBetweenLineSensors"
+    //% block="set distance $dist mm between line sensors"
+    //% block.loc.ru="установить расстояние между датчиками линии $dist мм"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Параметры"
+    export function SetDistanceBetweenLineSensors(dist: number) {
+        distanceBetweenLineSensors = dist;
+    }
 
     /**
      * The alignment on the line is perpendicular.
@@ -185,11 +202,16 @@ namespace levelings {
     //% group="Линия"
     export function LineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
         // https://www.youtube.com/watch?v=DOPXPuB7Xhs
-        const DIST_BETWEEN_CS = 25; // Расстояние между датчиками цвета в мм
+        if (distanceBetweenLineSensors == 0 || speed == 0) {
+            chassis.stop(true);
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            pause(2000);
+            return;
+        }
         motions.ChassisControlCommand(0, speed); // Команда двигаться вперёд
         let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
         let encB1 = 0, encB2 = 0, encC1 = 0, encC2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
-        let a = 0, b = DIST_BETWEEN_CS, c = 0;
+        let a = 0, b = distanceBetweenLineSensors, c = 0;
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         // Первая часть - датчик, который замечает линию первым
         while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
