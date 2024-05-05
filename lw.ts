@@ -204,13 +204,13 @@ namespace motions {
     }
 
     /**
-     * Set dt for line motion control cycles and line sensor operation.
-     * Установить dt для циклов регулирования движения по линии и работы с датчиком линии.
+     * Set dt for adjustment cycles when line follow.
+     * Установить dt для циклов регулирования при движении по линии.
      * @param dt время, за которое цикл регулирования должен выполняться, eg: 10
      */
     //% blockId="SetLineFollowLoopDt"
-    //% block="set dt = $dt for loops line follow"
-    //% block.loc.ru="установить dt = $dt для циклов движения по линии"
+    //% block="set dt = $dt for loops regulator at line follow"
+    //% block.loc.ru="установить dt = $dt для циклов регулирования движения по линии"
     //% inlineInputMode="inline"
     //% weight="69"
     //% group="Параметры"

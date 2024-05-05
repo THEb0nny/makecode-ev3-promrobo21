@@ -40,6 +40,20 @@ namespace params {
     */
 
     /**
+     * Empty parameters for the algorithm with a regulator.
+     * Пустые праметры для алгоритма с регулятором.
+     */
+    //% blockId="SetEmptyLineFollowParams"
+    //% block="empty"
+    //% block.loc.ru="пусто"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Параметры линии"
+    export function SetEmptyLineFollowParams(): LineFollowInterface {
+        return null;
+    }
+
+    /**
      * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      */
@@ -50,7 +64,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% newKp.defl="1"
-    //% weight="99"
+    //% weight="98"
     //% group="Параметры линии"
     export function SetLineFollowParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newSpeed) motions.lineFollow2SensorSpeed = newSpeed;
@@ -58,21 +72,6 @@ namespace params {
         if (newKi) motions.lineFollow2SensorKi = newSpeed;
         if (newKd) motions.lineFollow2SensorKd = newSpeed;
         if (newN) motions.lineFollow2SensorN = newSpeed;
-    }
-
-    /**
-     * Empty parameters for the algorithm with a regulator.
-     * Пустые праметры для алгоритма с регулятором.
-     */
-    //% blockId="SetEmptyLineFollowParams"
-    //% block="empty"
-    //% block.loc.ru="пусто"
-    //% inlineInputMode="inline"
-    //% blockHidden="true"
-    //% weight="98"
-    //% group="Параметры линии"
-    export function SetEmptyLineFollowParams(): LineFollowInterface {
-        return null;
     }
 
     /**
@@ -182,7 +181,6 @@ namespace params {
     //% block="empty"
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"
-    //% blockHidden="true"
     //% weight="99"
     //% group="Параметры перпендикулярного выравнивания на линии"
     export function SetEmptyLineAlignmentParams(): LineAlignmentInterface {
@@ -232,8 +230,8 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetSevenLineAlignmentParams"
-    //% block="speed = $newSpeed\\%|left side Kp = $newLeftKp Kd = $newLeftKd N = $newLeftN|right Kp = $newRightKp Kd = $newRightKd N = $newLeftN"
-    //% block.loc.ru="скорость = $newSpeed\\%|левая сторона Kp = $newLeftKp Kd = $newLeftKd N = $newLeftN|правая Kp = $newRightKp Kd = $newRightKd N = $newLeftN"
+    //% block="speed = $newSpeed\\%|left side Kp = $newLeftKp Kd = $newLeftKd N = $newLeftN|right Kp = $newRightKp Kd = $newRightKd N = $newRightN"
+    //% block.loc.ru="скорость = $newSpeed\\%|левая сторона Kp = $newLeftKp Kd = $newLeftKd N = $newLeftN|правая Kp = $newRightKp Kd = $newRightKd N = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -258,7 +256,7 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      */
     //% blockId="SetAllLineAlignmentParams"
-    //% block="speed = $newSpeed\\%|left side Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd|N = $newLeftN right Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
+    //% block="speed = $newSpeed\\%|left side Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd N = $newLeftN|right Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
     //% block.loc.ru="скорость = $newSpeed\\%|левая сторона Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd N = $newLeftN|правая Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"

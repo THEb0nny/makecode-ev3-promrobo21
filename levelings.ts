@@ -21,6 +21,23 @@ namespace levelings {
 
     let distanceBetweenLineSensors = 0; // Переменная для хранения расстояния между датчиками линии
 
+    let lineAlignmentOrPositioningLoopDt = 10; // Переменная для хренения времени в мс для итерирования цикла
+
+    /**
+     * Set dt for adjustment cycles during alignment and positioning.
+     * Установить dt для циклов регулирования при выравнивания и позиционирования.
+     * @param dt время, за которое цикл регулирования должен выполняться, eg: 10
+     */
+    //% blockId="SetLineAlignmentOrPositioningLoopDt"
+    //% block="set dt = $dt for line alignment and positioning adjustment loops"
+    //% block.loc.ru="установить dt = $dt для циклов регулирования выравнивания и позиционирования на линии"
+    //% inlineInputMode="inline"
+    //% weight="69"
+    //% group="Параметры"
+    export function SetLineAlignmentOrPositioningLoopDt(dt: number) {
+        lineAlignmentOrPositioningLoopDt = dt;
+    }
+
     /**
      * Set the distance between the two line sensors in mm.
      * Установить расстояние между двумя датчиками линии в мм.
@@ -111,7 +128,7 @@ namespace levelings {
                 brick.showValue("uR", uR, 6);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         // chassis.ChassisStop(true);
@@ -178,7 +195,7 @@ namespace levelings {
                 brick.showValue("u", u, 4);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         // chassis.ChassisStop(true);
@@ -231,7 +248,7 @@ namespace levelings {
                 encB1 = chassis.leftMotor.angle(); // Считываем угол
                 break;
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём 10 мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём 10 мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.D, 250); // Сигнал для понимация, что вышли из первого цикла
         prevTime = 0; // Переменная предыдущего времения для цикла регулирования
@@ -256,7 +273,7 @@ namespace levelings {
                     break;
                 }
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём 10 мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём 10 мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.D, 250); // Сигнал для понимация, что вышли из второго цикла
         // ChassisStop(true); // Жёсткое торможение для теста
