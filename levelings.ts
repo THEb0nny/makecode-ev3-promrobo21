@@ -44,8 +44,8 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignment"
-    //% block="line alignment $lineLocation at $regulatorTime ms || params: $params| debug $debug"
-    //% block.loc.ru="выравнивание на линии $lineLocation за $regulatorTimeмс || параметры: $params| отладка $debug"
+    //% block="line alignment $lineLocation at $regulatorTime ms||params: $params|debug $debug"
+    //% block.loc.ru="выравнивание на линии $lineLocation за $regulatorTimeмс||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -125,8 +125,8 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LinePositioning"
-    //% block="positioning on line at $regTime ms || debug $debug"
-    //% block.loc.ru="спозиционироваться на линии за время $regTime мс || отладка $debug"
+    //% block="positioning on line at $regTime ms||debug $debug"
+    //% block.loc.ru="спозиционироваться на линии за время $regTime мс||отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -193,7 +193,7 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignmentInMotion"
-    //% block="выравниться на линии в движении на $speed|\\% c действием после $actionAfterMotion|| отладка $debug"
+    //% block="выравниться на линии в движении на $speed|\\% c действием после $actionAfterMotion||отладка $debug"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"

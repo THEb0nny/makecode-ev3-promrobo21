@@ -246,8 +246,8 @@ namespace sensors {
      * @param newBlueBoundary значение границы синего, после которого до 360 снова идёт красный, eg: 260
      */
     //% blockId="HsvlToColorNumParams"
-    //% block="converting params HSVL **color sensor** to color code| at boundars chroma  = $newColorBoundary| white = $newWhiteBoundary black = $newBlackBoundary| red = $newRedBoundary brown = $newBrownBoundary yellow = $newYellowBoundary green = $newGreenBoundary blue = $newBlueBoundary"
-    //% block.loc.ru="параметры перевода HSVL **датчика цвета** в цветовой код| при границе цветности = $newColorBoundary| белого = $newWhiteBoundary чёрного = $newBlackBoundary| красного = $newRedBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary зелёного = $newGreenBoundary синего = $newBlueBoundary"
+    //% block="converting params HSVL **color sensor** to color code|at boundars chroma  = $newColorBoundary|white = $newWhiteBoundary black = $newBlackBoundary|red = $newRedBoundary brown = $newBrownBoundary yellow = $newYellowBoundary green = $newGreenBoundary blue = $newBlueBoundary"
+    //% block.loc.ru="параметры перевода HSVL **датчика цвета** в цветовой код|при границе цветности = $newColorBoundary|белого = $newWhiteBoundary чёрного = $newBlackBoundary|красного = $newRedBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary зелёного = $newGreenBoundary синего = $newBlueBoundary"
     //% inlineInputMode="inline"
     //% weight="84" blockGap="8"
     //% group="Color Sensor"

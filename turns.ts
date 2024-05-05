@@ -91,8 +91,8 @@ namespace chassis {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartSpinTurn"
-    //% block="smart turn at $deg ° relative center of wheels || params = $params| debug $debug"
-    //% block.loc.ru="умный поворот на $deg ° относительно центра колёс || параметры = $params| отдалка $debug"
+    //% block="smart turn at $deg\\° relative center of wheels||params = $params|debug $debug"
+    //% block.loc.ru="умный поворот на $deg\\° относительно центра колёс||параметры = $params|отдалка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"
@@ -166,8 +166,8 @@ namespace chassis {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartPivotTurn"
-    //% block="smart turn at $deg ° relative $wheelPivot wheel || params = $params| debug %debug"
-    //% block.loc.ru="умный поворот на $deg ° относительно $wheelPivot колеса || параметры = $params| отладка %debug"
+    //% block="smart turn at $deg\\° relative $wheelPivot wheel||params = $params|debug %debug"
+    //% block.loc.ru="умный поворот на $deg\\° относительно $wheelPivot колеса||параметры = $params|отладка %debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"

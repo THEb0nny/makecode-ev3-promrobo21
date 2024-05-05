@@ -20,7 +20,8 @@
         "ns.ts",
         "levelings.ts",
         "params.ts",
-        "tune.ts"
+        "tune.ts",
+        "chassis.ts"
     ],
     "testFiles": [],
     "targetVersions": {
