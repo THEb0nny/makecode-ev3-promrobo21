@@ -4,7 +4,7 @@
  */
 //% block="Custom"
 //% block.loc.ru="Кастомные"
-//% color="#a5625b" weight="90"
+//% color="#a5625b" weight="96"
 // #6D5BA5
 namespace custom {
 }
