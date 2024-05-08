@@ -15,7 +15,7 @@ namespace motions {
         } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             // CHASSIS_MOTORS.steer(0, speed);
             // motions.ChassisControlCommand(0, speed);
-            motions.ChassisSteerCommand(0, speed);
+            motions.ChassisSteeringCommand(0, speed);
         }
     }
 
@@ -47,10 +47,10 @@ namespace motions {
      * Chassis motor control command.
      * Команда управления моторами шасси. Предназначена для регуляторов.
      * @param u управляющее воздействие, eg: 0
-     * @param speed скорость движения, eg: 60
+     * @param speed скорость движения, eg: 50
      */
     //% blockId="ChassisControlCommand"
-    //% block="direction command u $u at $speed\\%"
+    //% block="u $u movement command at $speed\\%"
     //% block.loc.ru="команда движения по u $u на $speed\\%"
     //% inlineInputMode="inline"
     //% u.shadow="motorTurnRatioPicker"
@@ -68,19 +68,19 @@ namespace motions {
     /**
      * Chassis steer motor control command.
      * Команда рулевого управления моторами шасси.
-     * @param turnRatio рулевой параметр, eg: 0
-     * @param speed скорость движения, eg: 60
+     * @param turnRatio рулевой параметр, если больше 0 то поворачиваем вправо, а если меньше, то влево, eg: 0
+     * @param speed скорость движения, eg: 50
      */
-    //% blockId="ChassisSteerCommand"
-    //% block="steer command turnRatio $turnRatio at $speed\\%"
-    //% block.loc.ru="команда движения по turnRatio $turnRatio на $speed\\%"
+    //% blockId="ChassisSteeringCommand"
+    //% block=steering command $turnRatio at $speed\\%"
+    //% block.loc.ru="команда рулевого управления $turnRatio при движении на $speed\\%"
     //% inlineInputMode="inline"
     //% turnRatio.shadow="motorTurnRatioPicker"
     //% turnRatio.min="-200" turnRatio.max="200"
     //% speed.shadow="motorSpeedPicker"
     //% weight="98"
     //% group="Move"
-    export function ChassisSteerCommand(turnRatio: number, speed: number) {
+    export function ChassisSteeringCommand(turnRatio: number, speed: number) {
         speed = Math.clamp(-100, 100, speed >> 0);
         turnRatio = Math.floor(turnRatio);
         turnRatio = Math.clamp(-200, 200, turnRatio >> 0);
