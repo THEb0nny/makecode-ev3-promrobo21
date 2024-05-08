@@ -5,8 +5,6 @@ namespace motions {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
             chassis.LinearDistMove(motions.distRollingAfterIntersection, speed, Braking.Hold);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            // chassis.RampLinearDistMove(motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2, speed);
-            // chassis.RampLinearDistMove(5, speed, motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection / 2);
             chassis.RampLinearDistMove(5, speed, motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection);
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             motions.RollingMoveOut(motions.distRollingAfterIntersectionMoveOut, speed);
@@ -16,7 +14,8 @@ namespace motions {
             chassis.stop(false);
         } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             // CHASSIS_MOTORS.steer(0, speed);
-            motions.ChassisControlCommand(0, speed);
+            // motions.ChassisControlCommand(0, speed);
+            motions.ChassisSteerCommand(0, speed);
         }
     }
 
@@ -66,6 +65,37 @@ namespace motions {
         chassis.leftMotor.run(mB); chassis.rightMotor.run(mC);
     }
 
+    export function ChassisSteerCommand(turnRatio: number, speed: number) {
+        speed = Math.clamp(-100, 100, speed >> 0);
+        turnRatio = Math.floor(turnRatio);
+        turnRatio = Math.clamp(-200, 200, turnRatio >> 0);
+        let speedLeft = 0, speedRight = 0;
+        if (turnRatio > 0) { // Вправо
+            // Расчет speedLeft и speedRight для других значений turnRatio
+            if (turnRatio <= 100) { // До 100 включительно
+                speedLeft = speed;
+                speedRight = (100 - turnRatio) * speed / 100;
+            } else if (turnRatio > 100) { // Более 100
+                speedRight = Math.max(-speed, -(turnRatio - 100) * (speed / 100));
+                speedLeft = speed;
+            }
+        } else if (turnRatio < 0) { // Влево
+            if (turnRatio >= -100) { // До -100 включительно
+                speedLeft = (100 + turnRatio) * speed / 100;
+                speedRight = speed;
+            } else if (turnRatio < -100) { // Более -100
+                speedLeft = Math.max(-speed, (turnRatio + 100) * (speed / 100));
+                speedRight = speed;
+            }
+        } else { // Если turnRatio = 0
+            speedLeft = speed;
+            speedRight = speed;
+        }
+        chassis.leftMotor.run(speedLeft); chassis.rightMotor.run(speedRight);
+        // return { speedLeft, speedRight };
+        // console.log(`speedLeft: ${speedLeft}, speedRight: ${speedRight}`);
+    }
+
     /**
      * Moving in a direction with a constant speed to a zone with a certain reflection.
      * Движение по направлению с постоянной скоростью до зоны с определённым отражением.
@@ -78,18 +108,18 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="MoveToRefZone"
-    //% block="move in direction $dir at $speed\\%| before determining reflection $sensorsCondition $refCondition $refTreshold|action after $actionAfterMotion||debug $debug"
-    //% block.loc.ru="движение по направлению $dir на $speed\\%| до определения отражения $sensorsCondition $refCondition $refTreshold|действие после $actionAfterMotion||отладка $debug"
+    //% block="move in direction $turnRatio at $speed\\%| before determining reflection $sensorsCondition $refCondition $refTreshold|action after $actionAfterMotion||debug $debug"
+    //% block.loc.ru="движение по направлению $turnRatio на $speed\\%| до определения отражения $sensorsCondition $refCondition $refTreshold|действие после $actionAfterMotion||отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"
-    //% dir.shadow="motorTurnRatioPicker"
-    //% dir.min="-100" dir.max="100"
+    //% turnRatio.shadow="motorTurnRatioPicker"
+    //% turnRatio.min="-100" turnRatio.max="100"
     //% speed.shadow="motorSpeedPicker"
     //% weight="89"
     //% group="Move"
-    export function MoveToRefZone(dir: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: LogicalOperators, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        // motions.ChassisControlCommand(dir, speed); // Команда двигаться по направлению и скоростью
+    export function MoveToRefZone(turnRatio: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: LogicalOperators, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+        // motions.ChassisControlCommand(turnRatio, speed); // Команда двигаться по направлению и скоростью
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
             let currTime = control.millis();
@@ -124,7 +154,7 @@ namespace motions {
                 else if (refCondition == LogicalOperators.LessOrEqual && refRightLS <= refTreshold) break; // Меньше или равно
                 else if (refCondition == LogicalOperators.Equal && refRightLS == refTreshold) break; // Равно
             }
-            motions.ChassisControlCommand(dir, speed); // Дублирую команду двигаться по направлению и скоростью
+            motions.ChassisControlCommand(turnRatio, speed); // Дублирую команду двигаться по направлению и скоростью
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
