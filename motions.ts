@@ -50,8 +50,8 @@ namespace motions {
      * @param speed скорость движения, eg: 60
      */
     //% blockId="ChassisControlCommand"
-    //% block="direction command u = $u speed = $speed\\%"
-    //% block.loc.ru="команда движения по u = $u скорость = $speed\\%"
+    //% block="direction command u $u at $speed\\%"
+    //% block.loc.ru="команда движения по u $u на $speed\\%"
     //% inlineInputMode="inline"
     //% u.shadow="motorTurnRatioPicker"
     //% u.min="-200" u.max="200"
@@ -65,6 +65,21 @@ namespace motions {
         chassis.leftMotor.run(mB); chassis.rightMotor.run(mC);
     }
 
+    /**
+     * Chassis steer motor control command.
+     * Команда рулевого управления моторами шасси.
+     * @param turnRatio рулевой параметр, eg: 0
+     * @param speed скорость движения, eg: 60
+     */
+    //% blockId="ChassisSteerCommand"
+    //% block="steer command turnRatio $turnRatio at $speed\\%"
+    //% block.loc.ru="команда движения по turnRatio $turnRatio на $speed\\%"
+    //% inlineInputMode="inline"
+    //% turnRatio.shadow="motorTurnRatioPicker"
+    //% turnRatio.min="-200" turnRatio.max="200"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="98"
+    //% group="Move"
     export function ChassisSteerCommand(turnRatio: number, speed: number) {
         speed = Math.clamp(-100, 100, speed >> 0);
         turnRatio = Math.floor(turnRatio);
