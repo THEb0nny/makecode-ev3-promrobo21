@@ -87,20 +87,26 @@ namespace motions {
         let speedLeft = 0, speedRight = 0;
         if (turnRatio > 0) { // Вправо
             // Расчет speedLeft и speedRight для других значений turnRatio
-            if (turnRatio <= 100) { // До 100 включительно
+            if (turnRatio <= 100) {
                 speedLeft = speed;
                 speedRight = (100 - turnRatio) * speed / 100;
+                // console.log(`${turnRatio} <= 100`);
             } else if (turnRatio > 100) { // Более 100
-                speedRight = Math.max(-speed, -(turnRatio - 100) * (speed / 100));
                 speedLeft = speed;
+                //speedRight = Math.max(-speed, -(turnRatio - 100) * (speed / 100));
+                speedRight = -(turnRatio - 100) * (speed / 100);
+                //  console.log(`${turnRatio} > 100`);
             }
         } else if (turnRatio < 0) { // Влево
             if (turnRatio >= -100) { // До -100 включительно
                 speedLeft = (100 + turnRatio) * speed / 100;
                 speedRight = speed;
+                // console.log(`${turnRatio} >= -100`);
             } else if (turnRatio < -100) { // Более -100
-                speedLeft = Math.max(-speed, (turnRatio + 100) * (speed / 100));
+                //speedLeft = Math.max(-speed, (turnRatio + 100) * (speed / 100));
+                speedLeft = (turnRatio + 100) * (speed / 100);
                 speedRight = speed;
+                // console.log(`${turnRatio} < -100`);
             }
         } else { // Если turnRatio = 0
             speedLeft = speed;
