@@ -27,7 +27,7 @@ namespace sensors {
      */
     //% blockId="SetColorSensorsAsLineSensors"
     //% block="set **color sensors** as line sensors left $newLeftLineSensor right $newRightLineSensor"
-    //% block.loc.ru="установить **датчик цвета** в качестве датчика линии левый $newLeftLineSensor правый $newRightLineSensor"
+    //% block.loc.ru="установить **датчики цвета** в качестве датчиков линии левый $newLeftLineSensor правый $newRightLineSensor"
     //% inlineInputMode="inline"
     //% newLeftLineSensor.fieldEditor="images"
     //% newLeftLineSensor.fieldOptions.columns="4"
@@ -49,7 +49,7 @@ namespace sensors {
      */
     //% blockId="SetNxtLightSensorsAsLineSensors"
     //% block="set **nxt light sensors** as line sensors left $newLeftLineSensor right $newRightLineSensor"
-    //% block.loc.ru="установить **nxt датчик** отражения в качестве датчика линии левый $newLeftLineSensor правый $newRightLineSensor"
+    //% block.loc.ru="установить **nxt датчики** отражения в качестве датчиков линии левый $newLeftLineSensor правый $newRightLineSensor"
     //% inlineInputMode="inline"
     //% newLeftLineSensor.fieldEditor="images"
     //% newLeftLineSensor.fieldOptions.columns="4"
