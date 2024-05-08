@@ -15,7 +15,7 @@ namespace custom {
  */
 //% block="Motions"
 //% block.loc.ru="Движения"
-//% color="#00CD00" weight="89" icon="\uf018"
+//% color="#00CD00" weight="87" icon="\uf018"
 namespace motions {
 }
 
@@ -30,7 +30,7 @@ namespace automation {
  */
 //% block="Levelings"
 //% block.loc.ru="Выравнивания"
-//% color="#009e81" weight="89" icon="\uf0dc"
+//% color="#009e81" weight="86" icon="\uf0dc"
 namespace levelings {
 }
 
@@ -40,7 +40,7 @@ namespace levelings {
  */
 //% block="Params"
 //% block.loc.ru="Параметры"
-//% color="#8B008B" weight="89" icon="\uf12b"
+//% color="#8B008B" weight="85" icon="\uf12b"
 namespace params {
 
 }
