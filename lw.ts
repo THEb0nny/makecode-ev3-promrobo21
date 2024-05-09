@@ -49,8 +49,8 @@ namespace motions {
      * Получить дистанцию проезда после определения перекрёстка для прокатки в мм.
      */
     //% blockId="GetDistRollingAfterInsetsection"
-    //% block="get distance rolling after intersection"
-    //% block.loc.ru="дистанция прокатки после перекрёстка"
+    //% block="get distance rolling after intersection in mm"
+    //% block.loc.ru="дистанция прокатки после перекрёстка в мм"
     //% inlineInputMode="inline"
     //% weight="98"
     //% group="Параметры"
@@ -78,8 +78,8 @@ namespace motions {
      * Получить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      */
     //% blockId="GetDistRollingAfterIntersectionMoveOut"
-    //% block="get distance rolling exit an intersection"
-    //% block.loc.ru="дистанция прокатки съезда с перекрёстка"
+    //% block="get distance rolling exit an intersection in mm"
+    //% block.loc.ru="дистанция прокатки съезда с перекрёстка в мм"
     //% inlineInputMode="inline"
     //% weight="96"
     //% group="Параметры"
