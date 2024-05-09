@@ -229,7 +229,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyLineFollowParams"
+    //% params.shadow="EmptyLineFollowParams"
     //% weight="99" blockGap="8"
     //% group="Движение по линии"
     export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -287,7 +287,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyLineFollowParams"
+    //% params.shadow="EmptyLineFollowParams"
     //% weight="89"
     //% group="Движение по линии"
     export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -350,7 +350,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyLineFollowParams"
+    //% params.shadow="EmptyLineFollowParams"
     //% weight="88"
     //% group="Движение по линии"
     export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -415,7 +415,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyLineFollowParams"
+    //% params.shadow="EmptyLineFollowParams"
     //% weight="88" blockGap="8"
     //% group="Движение по линии"
     export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -479,7 +479,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyLineFollowParams"
+    //% params.shadow="EmptyLineFollowParams"
     //% weight="79" blockGap="8"
     //% group="Движение по линии"
     export function LineFollowToLeftIntersaction(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -539,7 +539,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyLineFollowParams"
+    //% params.shadow="EmptyLineFollowParams"
     //% weight="78"
     //% group="Движение по линии"
     export function LineFollowToRightIntersection(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
