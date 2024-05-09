@@ -246,7 +246,7 @@ namespace params {
     //% newSpeed.defl="50"
     //% newLeftKp.defl="1"
     //% newRightKp.defl="1"
-    //% weight="8878"
+    //% weight="87"
     //% group="Параметры перпендикулярного выравнивания на линии"
     export function ThreeLineAlignmentParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number): LineAlignmentInterface {
         return {
