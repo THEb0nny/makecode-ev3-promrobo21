@@ -212,7 +212,7 @@ namespace params {
     //% block="empty"
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"
-    //% weight="99"
+    //% weight="89"
     //% group="Параметры перпендикулярного выравнивания на линии"
     export function EmptyLineAlignmentParams(): LineAlignmentInterface {
         return null;
@@ -227,7 +227,7 @@ namespace params {
     //% block.loc.ru="скорость = $newSpeed\\%"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
-    //% weight="89"
+    //% weight="88"
     //% group="Параметры перпендикулярного выравнивания на линии"
     export function SetOneLineAlignmentParams(newSpeed?: number): LineAlignmentInterface {
         return {
@@ -246,7 +246,7 @@ namespace params {
     //% newSpeed.defl="50"
     //% newLeftKp.defl="1"
     //% newRightKp.defl="1"
-    //% weight="88"
+    //% weight="8878"
     //% group="Параметры перпендикулярного выравнивания на линии"
     export function ThreeLineAlignmentParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number): LineAlignmentInterface {
         return {
@@ -268,7 +268,7 @@ namespace params {
     //% newSpeed.defl="50"
     //% newLeftKp.defl="1"
     //% newRightKp.defl="1"
-    //% weight="87"
+    //% weight="86"
     //% group="Параметры перпендикулярного выравнивания на линии"
     export function SevenLineAlignmentParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
         return {
@@ -294,7 +294,7 @@ namespace params {
     //% newSpeed.defl="50"
     //% newLeftKp.defl="1"
     //% newRightKp.defl="1"
-    //% weight="86"
+    //% weight="85"
     //% group="Параметры перпендикулярного выравнивания на линии"
     export function AllLineAlignmentParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKi?: number, newRightKi?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
         return {
