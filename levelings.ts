@@ -147,7 +147,7 @@ namespace levelings {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyLineAlignmentParams"
+    //% params.shadow="EmptyLineAlignmentParams"
     //% weight="98"
     //% group="Линия"
     export function LinePositioning(regTime: number, params?: params.LinePositioningInterface, debug: boolean = false) {
