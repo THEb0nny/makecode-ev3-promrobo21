@@ -72,7 +72,7 @@ namespace motions {
      * @param speed скорость движения, eg: 50
      */
     //% blockId="ChassisSteeringCommand"
-    //% block=steering command $turnRatio at $speed\\%"
+    //% block="steering command $turnRatio at $speed\\%"
     //% block.loc.ru="команда рулевого управления $turnRatio при движении на $speed\\%"
     //% inlineInputMode="inline"
     //% turnRatio.shadow="motorTurnRatioPicker"
