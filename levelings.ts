@@ -66,7 +66,7 @@ namespace levelings {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="SetEmptyLineAlignmentParams"
+    //% params.shadow="EmptyLineAlignmentParams"
     //% weight="99"
     //% group="Линия"
     export function LineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, params?: params.LineAlignmentInterface, debug: boolean = false) {
