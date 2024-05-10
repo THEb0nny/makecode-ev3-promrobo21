@@ -90,9 +90,9 @@ namespace chassis {
             pause(2000);
             return;
         }
-        let mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
-        let mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
-        let mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
+        const mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
         chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
@@ -147,15 +147,7 @@ namespace chassis {
         // Без команды торможения
     }
 
-    // /**
-    //  * Movement over a given distance with acceleration and deceleration in mm. It is not recommended to set the minimum speed to less than 10.
-    //  * Движение на заданное расстояние с ускорением и замедлением в мм. Не рекомендуется устанавливать минимальную скорость меньше 10.
-    //  * @param speedLeft скорость движения, eg: 50
-    //  * @param speedRight скорость движения, eg: 50
-    //  * @param totalDist общее расстояние в мм, eg: 300
-    //  * @param accelDist расстояние ускорения в мм, eg: 100
-    //  * @param decelDist расстояние замедления в мм, eg: 100
-    //  */
+
     // //% blockId="RampDistMove"
     // //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
     // //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
@@ -164,16 +156,36 @@ namespace chassis {
     // //% weight="88"
     // //% group="Синхронизированное движение с ускорениями/замедлениями"
     // //% blockHidden="true"
-    // export function RampDistMove(speedLeft: number, speedRight: number, totalDist: number, accelDist: number, decelDist: number) {
-    //     if (speedLeft == 0 || speedRight == 0) {
-    //         chassis.stop(true);
-    //         music.playSoundEffect(sounds.systemGeneralAlert);
-    //         pause(2000);
-    //         return;
+    // export function RampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+    //     const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
+    //     const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
+    //     const mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
+    //     const mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
+    //     const mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
+
+    //     advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
+    //     advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, accelDist, 0, totalDist);
+    //     const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
+    //     pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
+    //     pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+    //     pidChassisSync.reset(); // Сбросить ПИД регулятор
+    //     let prevTime = 0;
+    //     while (true) {
+    //         let currTime = control.millis();
+    //         let dt = currTime - prevTime;
+    //         prevTime = currTime;
+    //         let encB = chassis.leftMotor.angle();
+    //         let encC = chassis.rightMotor.angle();
+    //         if ((encB + encC) / 2 >= totalDist) break;
+    //         let error = advmotctrls.getErrorSyncMotors(encB, encC);
+    //         pidChassisSync.setPoint(error);
+    //         let U = pidChassisSync.compute(dt, 0);
+    //         let powers = advmotctrls.getPwrSyncMotors(U);
+    //         chassis.leftMotor.run(powers.pwrLeft);
+    //         chassis.rightMotor.run(powers.pwrRight);
+    //         control.pauseUntilTime(currTime, 5);
     //     }
-    //     let mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
-    //     let mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
-    //     let mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
+    //     chassis.stop(true);
     // }
 
 }
