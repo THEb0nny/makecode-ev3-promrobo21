@@ -14,7 +14,6 @@ namespace motions {
             chassis.stop(false);
         } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             // CHASSIS_MOTORS.steer(0, speed);
-            // motions.ChassisControlCommand(0, speed);
             motions.ChassisSteeringCommand(0, speed);
         }
     }
@@ -30,7 +29,7 @@ namespace motions {
         let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно пройти
         //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
-        motions.ChassisControlCommand(0, speed); // Команда вперёд
+        motions.ChassisSteeringCommand(0, speed); // Команда вперёд
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
             let currTime = control.millis(); // Текущее время
