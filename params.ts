@@ -43,8 +43,8 @@ namespace params {
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="SetLineFollowParams"
-    //% block="set params line follow at speed = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
-    //% block.loc.ru="установить параметры движения по линии на скорости = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
+    //% block="set params line follow at speed = $newSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block.loc.ru="установить параметры движения по линии на скорости = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -185,8 +185,8 @@ namespace params {
      * @param newRightN коэффицент фильтрации дифференциального регулятора правой стороны, eg: 0
      */
     //% blockId="SetLineAlignmentParams"
-    //% block="speed = $newSpeed\\%||left side Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd N = $newLeftN|right Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
-    //% block.loc.ru="скорость = $newSpeed\\%||левая сторона Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd N = $newLeftN|правая Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
+    //% block="set line alignment params at speed = $newSpeed\\%||left side Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd N = $newLeftN|right Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
+    //% block.loc.ru="установить параметры выравнивания на линии со скоростью = $newSpeed\\%||левая сторона Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd N = $newLeftN|правая Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -324,13 +324,13 @@ namespace params {
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="SetLinePositioningParams"
-    //% block="set line positioning params at speed = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
-    //% block.loc.ru="установить параметры позиционирования на линии на скорости = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
+    //% block="set line positioning params at speed = $newSpeed\\% Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block.loc.ru="установить параметры позиционирования на линии на скорости = $newSpeed\\% Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% weight="99"
-    //% group="Параметры выравнивания на линии"
+    //% group="Параметры позицианирования на линии"
     export function SetLinePositioningParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newSpeed) levelings.linePositioningMaxSpeed = newSpeed;
         if (newKp) levelings.linePositioningKp = newKp;
