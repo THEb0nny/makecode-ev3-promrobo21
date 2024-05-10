@@ -203,8 +203,8 @@ namespace levelings {
     }
 
     /**
-     * Alignment on the line in motion.
-     * Выравнивание на линии в движении.
+     * Alignment on the line in motion. Experimental.
+     * Выравнивание на линии в движении. Экспериментальная.
      * @param speed скорость движения, eg: 30
      * @param actionAfterMotion действие после, eg: AfterMotionShort.BreakStop
      * @param debug отладка, eg: false
@@ -250,7 +250,7 @@ namespace levelings {
             }
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём 10 мс выполнения итерации цикла
         }
-        music.playToneInBackground(Note.D, 250); // Сигнал для понимация, что вышли из первого цикла
+        music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из первого цикла
         prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Ждём, чтобы датчик с другой стороны нашёл линию
             let currTime = control.millis();
@@ -275,7 +275,7 @@ namespace levelings {
             }
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём 10 мс выполнения итерации цикла
         }
-        music.playToneInBackground(Note.D, 250); // Сигнал для понимация, что вышли из второго цикла
+        music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из второго цикла
         // ChassisStop(true); // Жёсткое торможение для теста
         // pause(1000);
         a = (a / 360) * Math.PI * chassis.getWheelRadius(); // Перевести в мм пройденное значение
