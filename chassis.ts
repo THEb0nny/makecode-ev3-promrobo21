@@ -110,8 +110,8 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="76"
-    //% group="Синхронизированное движение"
+    //% weight="89"
+    //% group="Синхронизированное движение с ускорениями/замедлениями"
     export function RampLinearDistMoveWithoutBraking(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {
@@ -161,8 +161,8 @@ namespace chassis {
     // //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     // //% inlineInputMode="inline"
     // //% speed.shadow="motorSpeedPicker"
-    // //% weight="76"
-    // //% group="Синхронизированное движение"
+    // //% weight="88"
+    // //% group="Синхронизированное движение с ускорениями/замедлениями"
     // //% blockHidden="true"
     // export function RampDistMove(speedLeft: number, speedRight: number, totalDist: number, accelDist: number, decelDist: number) {
     //     if (speedLeft == 0 || speedRight == 0) {
