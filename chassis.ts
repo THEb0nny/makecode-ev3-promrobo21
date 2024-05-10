@@ -81,8 +81,8 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="77" blockGap="8"
-    //% group="Синхронизированное движение"
+    //% weight="89" blockGap="8"
+    //% group="Синхронизированное движение с ускорениями/замедлениями"
     export function RampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
         if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
@@ -110,7 +110,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="89"
+    //% weight="88"
     //% group="Синхронизированное движение с ускорениями/замедлениями"
     export function RampLinearDistMoveWithoutBraking(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
