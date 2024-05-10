@@ -175,7 +175,7 @@ namespace motions {
                 else if (refCondition == LogicalOperators.LessOrEqual && refRightLS <= refTreshold) break; // Меньше или равно
                 else if (refCondition == LogicalOperators.Equal && refRightLS == refTreshold) break; // Равно
             }
-            motions.ChassisControlCommand(turnRatio, speed); // Дублирую команду двигаться по направлению и скоростью
+            motions.ChassisSteeringCommand(turnRatio, 50) // Дублирую команду двигаться по направлению и скоростью
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
