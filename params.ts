@@ -27,15 +27,15 @@ namespace params {
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
-    //% blockId="SetLineFollowParams"
+    //% blockId="SetLineFollow2SensorParams"
     //% block="set line follow params at speed = $newSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
-    //% block.loc.ru="установить параметры движения по линии на скорости = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block.loc.ru="установить параметры движения по линии на скорости = $newSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
     //% weight="99"
     //% group="Параметры движения по линии двумя датчиками"
-    export function SetLineFollowParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
+    export function SetLineFollow2SensorParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newSpeed) motions.lineFollow2SensorSpeed = newSpeed;
         if (newKp) motions.lineFollow2SensorKp = newKp;
         if (newKi) motions.lineFollow2SensorKi = newKi;
