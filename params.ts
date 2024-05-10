@@ -43,8 +43,8 @@ namespace params {
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="SetLineFollowParams"
-    //% block="speed = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
-    //% block.loc.ru="скорость = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
+    //% block="set params line follow at speed = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
+    //% block.loc.ru="установить параметры движения по линии на скорости = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% newSpeed.defl="50"
@@ -52,10 +52,10 @@ namespace params {
     //% group="Параметры движения по линии двумя датчиками"
     export function SetLineFollowParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newSpeed) motions.lineFollow2SensorSpeed = newSpeed;
-        if (newKp) motions.lineFollow2SensorKp = newSpeed;
-        if (newKi) motions.lineFollow2SensorKi = newSpeed;
-        if (newKd) motions.lineFollow2SensorKd = newSpeed;
-        if (newN) motions.lineFollow2SensorN = newSpeed;
+        if (newKp) motions.lineFollow2SensorKp = newKp;
+        if (newKi) motions.lineFollow2SensorKi = newKi;
+        if (newKd) motions.lineFollow2SensorKd = newKd;
+        if (newN) motions.lineFollow2SensorN = newN;
     }
 
     /**
@@ -308,6 +308,35 @@ namespace params {
             leftN: newLeftN,
             rightN: newRightN
         };
+    }
+
+}
+
+namespace params {
+
+    /**
+     * Setting parameters for the positioning algorithm (alignment) on the line by line sensors with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
+     * Установка параметров для алгоритма позицианирования (выравнивание) на линии датчиками линии с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
+     * @param newSpeed максимальная скорость выравнивания, eg: 40
+     * @param newKp пропорциональный коэффицент, eg: 1
+     * @param newKi интегральный коэффицент, eg: 0
+     * @param newKd дифференциальный коэффицент, eg: 0
+     * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
+     */
+    //% blockId="SetLinePositioningParams"
+    //% block="set line positioning params at speed = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
+    //% block.loc.ru="установить параметры позиционирования на линии на скорости = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd|N = $newN"
+    //% expandableArgumentMode="enabled"
+    //% inlineInputMode="inline"
+    //% newSpeed.defl="50"
+    //% weight="99"
+    //% group="Параметры выравнивания на линии"
+    export function SetLinePositioningParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
+        if (newSpeed) levelings.linePositioningMaxSpeed = newSpeed;
+        if (newKp) levelings.linePositioningKp = newKp;
+        if (newKi) levelings.linePositioningKi = newKi;
+        if (newKd) levelings.linePositioningKd = newKd;
+        if (newN) levelings.linePositioningN = newN;
     }
 
 }
