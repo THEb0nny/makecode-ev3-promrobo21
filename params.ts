@@ -18,21 +18,6 @@ namespace params {
         N?: number;
     }
 
-    /*
-    if (!newSpeed && !newKp && !newKi && !newKd && !newN) {
-        return null;
-    } else if (newSpeed && !newKp && !newKi && !newKd && !newN) {
-        return { speed: newSpeed };
-    } else if (newSpeed && newKp && !newKi && !newKd && !newN) {
-        return { speed: newSpeed, Kp: newKp };
-    } else if (newSpeed && newKp && newKi && !newKd && !newN) {
-        return { speed: newSpeed, Kp: newKp, Ki: newKi };
-    } else if (newSpeed && newKp && newKi && newKd && !newN) {
-        return { speed: newSpeed, Kp: newKp, Ki: newKi, Kd: newKd };
-    }
-    return { speed: newSpeed, Kp: newKp, Ki: newKi, Kd: newKd, N: newN };
-    */
-
     /**
      * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
@@ -43,7 +28,7 @@ namespace params {
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="SetLineFollowParams"
-    //% block="set params line follow at speed = $newSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block="set line follow params at speed = $newSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
     //% block.loc.ru="установить параметры движения по линии на скорости = $newSpeed\\%||Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
