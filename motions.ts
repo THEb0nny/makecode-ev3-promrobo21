@@ -14,7 +14,7 @@ namespace motions {
             chassis.stop(false);
         } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             // CHASSIS_MOTORS.steer(0, speed);
-            motions.ChassisSteeringCommand(0, speed);
+            chassis.steeringCommand(0, speed);
         }
     }
 
@@ -29,7 +29,7 @@ namespace motions {
         let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно пройти
         //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
-        motions.ChassisSteeringCommand(0, speed); // Команда вперёд
+        chassis.steeringCommand(0, speed); // Команда вперёд
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
             let currTime = control.millis(); // Текущее время
@@ -62,58 +62,6 @@ namespace motions {
         // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
         // mB *= z; mC *= z;
         chassis.leftMotor.run(mB); chassis.rightMotor.run(mC);
-    }
-
-    /**
-     * Chassis steer motor control command.
-     * Команда рулевого управления моторами шасси.
-     * @param turnRatio рулевой параметр, если больше 0 то поворачиваем вправо, а если меньше, то влево, eg: 0
-     * @param speed скорость движения, eg: 50
-     */
-    //% blockId="ChassisSteeringCommand"
-    //% block="steering command $turnRatio at $speed\\%"
-    //% block.loc.ru="команда рулевого управления $turnRatio при движении на $speed\\%"
-    //% inlineInputMode="inline"
-    //% turnRatio.shadow="motorTurnRatioPicker"
-    //% turnRatio.min="-200" turnRatio.max="200"
-    //% speed.shadow="motorSpeedPicker"
-    //% weight="98"
-    //% group="Move"
-    export function ChassisSteeringCommand(turnRatio: number, speed: number) {
-        speed = Math.clamp(-100, 100, speed >> 0);
-        turnRatio = Math.floor(turnRatio);
-        turnRatio = Math.clamp(-200, 200, turnRatio >> 0);
-        let speedLeft = 0, speedRight = 0;
-        if (turnRatio > 0) { // Вправо
-            // Расчет speedLeft и speedRight для других значений turnRatio
-            if (turnRatio <= 100) {
-                speedLeft = speed;
-                speedRight = (100 - turnRatio) * speed / 100;
-                // console.log(`${turnRatio} <= 100`);
-            } else if (turnRatio > 100) { // Более 100
-                speedLeft = speed;
-                //speedRight = Math.max(-speed, -(turnRatio - 100) * (speed / 100));
-                speedRight = -(turnRatio - 100) * (speed / 100);
-                //  console.log(`${turnRatio} > 100`);
-            }
-        } else if (turnRatio < 0) { // Влево
-            if (turnRatio >= -100) { // До -100 включительно
-                speedLeft = (100 + turnRatio) * speed / 100;
-                speedRight = speed;
-                // console.log(`${turnRatio} >= -100`);
-            } else if (turnRatio < -100) { // Более -100
-                //speedLeft = Math.max(-speed, (turnRatio + 100) * (speed / 100));
-                speedLeft = (turnRatio + 100) * (speed / 100);
-                speedRight = speed;
-                // console.log(`${turnRatio} < -100`);
-            }
-        } else { // Если turnRatio = 0
-            speedLeft = speed;
-            speedRight = speed;
-        }
-        chassis.leftMotor.run(speedLeft); chassis.rightMotor.run(speedRight);
-        // return { speedLeft, speedRight };
-        // console.log(`speedLeft: ${speedLeft}, speedRight: ${speedRight}`);
     }
 
     /**
@@ -174,7 +122,7 @@ namespace motions {
                 else if (refCondition == LogicalOperators.LessOrEqual && refRightLS <= refTreshold) break; // Меньше или равно
                 else if (refCondition == LogicalOperators.Equal && refRightLS == refTreshold) break; // Равно
             }
-            motions.ChassisSteeringCommand(turnRatio, speed) // Дублирую команду двигаться по направлению и скоростью
+            chassis.steeringCommand(turnRatio, speed) // Дублирую команду двигаться по направлению и скоростью
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
