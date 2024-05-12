@@ -220,7 +220,7 @@ namespace custom {
                             Kd: methodScreens.LW_2S_TO_INTERSECTION.params.Kd.val,
                             N: methodScreens.LW_2S_TO_INTERSECTION.params.N.val
                         };
-                        motions.LineFollowToIntersection(AfterMotion.BreakStop, params, true);
+                        motions.LineFollowToCrossIntersection(AfterMotion.BreakStop, params, true);
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал

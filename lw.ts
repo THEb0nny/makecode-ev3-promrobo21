@@ -224,15 +224,15 @@ namespace motions {
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
-    //% blockId="LineFollowToIntersection"
+    //% blockId="LineFollowToCrossIntersection"
     //% block="движение по линии до перекрёстка с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="99" blockGap="8"
+    //% weight="99"
     //% group="Движение по линии"
-    export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToCrossIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollow2SensorKp = params.Kp;
@@ -286,12 +286,13 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToSideIntersection"
-    //% block="движение по линии до перекрёстка $junction $lineLocation с действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow to intersection $junction line $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии до перекрёстка $junction линия $lineLocation с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="99" blockGap="8"
+    //% weight="89"
     //% group="Движение по линии"
     export function LineFollowToSideIntersection(junction: SideJunctionType, lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (junction == SideJunctionType.Left) {
@@ -314,7 +315,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="79" blockGap="8"
+    //% weight="88" blockGap="8"
     //% group="Движение по линии"
     //% blockHidden="true"
     export function LineFollowToLeftIntersaction(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -375,7 +376,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="78"
+    //% weight="87"
     //% group="Движение по линии"
     //% blockHidden="true"
     export function LineFollowToRightIntersection(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -436,7 +437,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="89"
+    //% weight="79"
     //% group="Движение по линии"
     export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
@@ -486,21 +487,45 @@ namespace motions {
     }
 
     /**
-     * Movement along the line for a distance with the left sensor. A very crude method.
-     * Движение по линии на расстояние левым датчиком. Очень грубый метод.
-     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
+     * Движение по линии на расстояние одним из датчиков.
+     * @param lineSensor позиция линии для движения, eg: LineSensor.Left
+     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
      * @param dist скорость движения, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithLeftSensor"
-    //% block="движение по линии левым датчиком на расстояние $dist мм $lineLocation|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="движение по линии $lineSensor датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="88"
+    //% weight="79"
     //% group="Движение по линии"
+    export function LineFollowToDistanceWithOneSensor(lineSensor: LineSensor, lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+        if (lineSensor == LineSensor.Left) {
+            LineFollowToDistanceWithLeftSensor(lineLocation, dist, actionAfterMotion, params, debug);
+        } else if (lineSensor == LineSensor.Right) {
+            LineFollowToDistanceWithRightSensor(lineLocation, dist, actionAfterMotion, params, debug);
+        }
+    }
+
+    /**
+     * Движение по линии на расстояние левым датчиком. Очень грубый метод.
+     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
+     * @param dist скорость движения, eg: 250
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param debug отладка, eg: false
+     */
+    //% blockId="LineFollowToDistanceWithLeftSensor"
+    //% block="движение по линии левым датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
+    //% debug.shadow="toggleOnOff"
+    //% params.shadow="EmptyLineFollowParams"
+    //% weight="78"
+    //% group="Движение по линии"
+    //% blockHidden="true"
     export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowLeftSensorSpeed = Math.abs(params.speed);
@@ -551,21 +576,21 @@ namespace motions {
     }
 
     /**
-     * Movement along the line for a distance with the right sensor. A very crude method.
      * Движение по линии на расстояние правым датчиком. Очень грубый метод.
-     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
+     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
      * @param dist скорость движения, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithRightSensor"
-    //% block="движение по линии правым датчиком на расстояние $dist мм $lineLocation|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="движение по линии правым датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="88" blockGap="8"
+    //% weight="77" blockGap="8"
     //% group="Движение по линии"
+    //% blockHidden="true"
     export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowRightSensorSpeed = Math.abs(params.speed);
