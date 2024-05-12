@@ -225,30 +225,6 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToIntersection"
-    //% block="движение по линии до $junction с действием после $actionAfterMotion||параметры: $params|отладка $debug"
-    //% inlineInputMode="inline"
-    //% expandableArgumentMode="enabled"
-    //% debug.shadow="toggleOnOff"
-    //% params.shadow="EmptyLineFollowParams"
-    //% weight="99" blockGap="8"
-    //% group="Движение по линии"
-    export function LineFollowToIntersectionNew(junction: JunctionType, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
-        if (junction == JunctionType.Cross) {
-            LineFollowToIntersection(actionAfterMotion, params, debug);
-        } else if (junction == JunctionType.Left) {
-            LineFollowToLeftIntersaction(HorizontalLineLocation.Inside, actionAfterMotion, params, debug);
-        } else if (junction == JunctionType.Right) {
-            LineFollowToRightIntersection(HorizontalLineLocation.Inside, actionAfterMotion, params, debug);
-        }
-    }
-
-    /**
-     * The function of moving along the line to the intersection.
-     * Функция движения по линии до перекрёстка.
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
-     * @param debug отладка, eg: false
-     */
-    //% blockId="LineFollowToIntersection"
     //% block="движение по линии до перекрёстка с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
@@ -256,7 +232,6 @@ namespace motions {
     //% params.shadow="EmptyLineFollowParams"
     //% weight="99" blockGap="8"
     //% group="Движение по линии"
-    //% blockHidden="true"
     export function LineFollowToIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
@@ -302,7 +277,33 @@ namespace motions {
 
     /**
      * The function of moving along the line to determine the intersection on the left with the right sensor.
-     * Функция движения по линии для определения перекрёстка слева правым датчиком.
+     * Функция движения по линии до определения перекрёстка слева или справа.
+     * Если слева, тогда движение осуществляется правым датчиком и левый отвечает за определение.
+     * Если справа, тогда за движение отвечает левый датчик, а правый отвечает за определение перекрёстка.
+     * @param junction перекрёсток слева или справа, eg: SideJunctionType.Left
+     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param debug отладка, eg: false
+     */
+    //% blockId="LineFollowToSideIntersection"
+    //% block="движение по линии до перекрёстка $junction $lineLocation с действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
+    //% debug.shadow="toggleOnOff"
+    //% params.shadow="EmptyLineFollowParams"
+    //% weight="99" blockGap="8"
+    //% group="Движение по линии"
+    export function LineFollowToSideIntersection(junction: SideJunctionType, lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+        if (junction == SideJunctionType.Left) {
+            LineFollowToLeftIntersaction(lineLocation, actionAfterMotion, params, debug);
+        } else if (junction == SideJunctionType.Right) {
+            LineFollowToRightIntersection(lineLocation, actionAfterMotion, params, debug);
+        }
+    }
+
+    /**
+     * The function of moving along the line to determine the intersection on the left with the right sensor.
+     * Функция движения по линии до определения перекрёстка слева правым датчиком.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
@@ -363,7 +364,7 @@ namespace motions {
 
     /**
      * The function of moving along the line to determine the intersection on the right with the left sensor.
-     * Функция движения по линии для определения перекрёстка справа левым датчиком.
+     * Функция движения по линии до определения перекрёстка справа левым датчиком.
      * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false

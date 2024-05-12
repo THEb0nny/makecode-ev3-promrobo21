@@ -108,14 +108,12 @@ const enum LineSensor {
     Right
 }
 
-const enum JunctionType {
-    //% block="cross"
-    //% block.loc.ru="перекрёсток"
-    Cross,
+// Перечисление о перекрёстках
+const enum SideJunctionType {
     //% block="left"
-    //% block.loc.ru="левый перекрёсток"
+    //% block.loc.ru="слева"
     Left,
     //% block="right"
-    //% block.loc.ru="правый перекрёсток"
+    //% block.loc.ru="справа"
     Right
 }
