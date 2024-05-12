@@ -29,6 +29,9 @@ namespace custom {
                         min: 5,
                         max: 100
                     },
+                    debug: {
+                        val: 1
+                    },
                     Kp: {
                        val: motions.lineFollow2SensorKp,
                        changeStep: 0.05
@@ -46,8 +49,40 @@ namespace custom {
                         changeStep: 0.1
                     }
                 },
-                hrStrings: [1, 4]
-            }
+                hrStrings: [2]
+            },
+            LW_2S_TO_DISTANCE: {
+                params: {
+                    dist: {
+                        val: 150,
+                        changeStep: 5
+                    },
+                    speed: {
+                        val: motions.lineFollow2SensorSpeed,
+                        changeStep: 5
+                    },
+                    debug: {
+                        val: 1
+                    },
+                    Kp: {
+                        val: motions.lineFollow2SensorKp,
+                        changeStep: 0.05
+                    },
+                    Ki: {
+                        val: motions.lineFollow2SensorKi,
+                        changeStep: 0.001
+                    },
+                    Kd: {
+                        val: motions.lineFollow2SensorKd,
+                        changeStep: 0.1
+                    },
+                    N: {
+                        val: motions.lineFollow2SensorN,
+                        changeStep: 0.1
+                    }
+                },
+                hrStrings: [3]
+            },
         }
 
         const screensNums = Object.keys(methodScreens).length; // Количество экранов с регуляторами
@@ -65,8 +100,7 @@ namespace custom {
         // Цикл обработки интерфейса
         while (true) {
             brick.clearScreen(); // Очищаем экран
-            // console.log(`cursor: ${cursor}`);
-            // console.log(`scroll: ${scroll}`);
+            // console.log(`cursor: ${cursor}, scroll: ${scroll}`);
             const screenName = Object.keys(methodScreens)[screen];
             // console.log(`screenName: ${screenName}`);
             const screenParamsNum = Object.keys(methodScreens[screenName].params).length; // Количество параметров
@@ -132,9 +166,9 @@ namespace custom {
                 else if (brick.buttonRight.isPressed()) paramIncrease = true; // Нажатие вправо - увеличиваем число
                 else paramDecrease = false, paramIncrease = false; // Если нажатий нет
                 if (paramDecrease || paramIncrease) { // Изменяем коэффициент
-                    const paramName = Object.keys(methodScreens[screenName].params)[cursor - 1];
+                    let paramName = Object.keys(methodScreens[screenName].params)[cursor - 1];
                     console.log(`paramName: ${paramName}`);
-                    if (paramName != undefined) {
+                    if (paramName != undefined && paramName != "debug") { // Параметры функции
                         let changeStep = methodScreens[screenName].params[paramName].changeStep;
                         console.log(`changeStep: ${changeStep}`);
                         changeStep = (changeStep != undefined ? changeStep : 0.01);
@@ -147,18 +181,27 @@ namespace custom {
                         if (paramDecrease) methodScreens[screenName].params[paramName].val -= changeStep;
                         else if (paramIncrease) methodScreens[screenName].params[paramName].val += changeStep;
                         methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, minLimit, maxLimit);
+                    } else if (paramName == "debug") {
+                        if (paramDecrease) methodScreens[screenName].params[paramName].val -= 1;
+                        else if (paramIncrease) methodScreens[screenName].params[paramName].val += 1;
+                        methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, 0, 1);
                     } else { // Параметры шагов
-                        if (cursor == screenParamsNum + 2) { // Kp_step
-                            methodScreens[screenName].params.changeStepPID.Kp = 0;
-                            let changeStep = methodScreens[screenName].params.changeStepPID.Kp;
-                            if (changeStep == undefined) {
-                                methodScreens[screenName].params.changeStepPID.Kp = 0.01;
-                                changeStep = methodScreens[screenName].params.changeStepPID.Kp;
+
+                        function PidParamsStep(paramName: string, deflStep: number, changeStepValue: number, minVal: number, maxVal: number) {
+                            let changeStep = methodScreens[screenName].params[paramName].changeStep;
+                            console.log(`changeStep: ${changeStep}`);
+                            if (changeStep == undefined) { // Если шаг изменения параметра не был указан
+                                methodScreens[screenName].params[paramName].changeStep = deflStep; // Установить значение, на которое будет изменяться
                             }
-                            if (paramDecrease) methodScreens[screenName].params.Kp.changeStepPID -= 0.01;
-                            else if (paramIncrease) methodScreens[screenName].params.Kp.changeStepPID += 0.01;
-                            methodScreens[screenName].params[paramName].changeStepPID = Math.constrain(methodScreens[screenName].params[paramName].changeStepPID, 0.0001, 1);
+                            if (paramDecrease) methodScreens[screenName].params[paramName].changeStep -= changeStepValue; // Уменьшение
+                            else if (paramIncrease) methodScreens[screenName].params[paramName].changeStep += changeStepValue; // Увеличение
+                            methodScreens[screenName].params[paramName].changeStep = Math.constrain(methodScreens[screenName].params[paramName].changeStep, minVal, maxVal); // Ограничение диапазона возможного числа
                         }
+
+                        if (cursor == screenParamsNum + 2) PidParamsStep("Kp", 0.01, 0.001, 0.001, 1);
+                        else if (cursor == screenParamsNum + 3) PidParamsStep("Ki", 0.001, 0.0001, 0.0001, 100);
+                        else if (cursor == screenParamsNum + 4) PidParamsStep("Kd", 0.01, 0.001, 0.001, 100);
+                        else if (cursor == screenParamsNum + 5) PidParamsStep("N", 0.01, 0.001, 0.001, 100);
                     }
                     
                     loops.pause(BTN_PRESS_LOOP_DELAY);
@@ -211,16 +254,26 @@ namespace custom {
             if (brick.buttonEnter.wasPressed()) {
                 if (cursor == 0 || cursor == screenParamsNum + 1) { // Нажали на строку RUN TEST?
                     music.playToneInBackground(Note.D, 100); // Сигнал, что было запущено
+                    brick.clearScreen();
                     // Запускаем выполнение теста
                     if (screen == 0) {
                         const params = {
-                            speed: methodScreens.LW_2S_TO_INTERSECTION.params.speed.val,
-                            Kp: methodScreens.LW_2S_TO_INTERSECTION.params.Kp.val,
-                            Ki: methodScreens.LW_2S_TO_INTERSECTION.params.Ki.val,
-                            Kd: methodScreens.LW_2S_TO_INTERSECTION.params.Kd.val,
-                            N: methodScreens.LW_2S_TO_INTERSECTION.params.N.val
+                            speed: methodScreens[screenName].params.speed.val,
+                            Kp: methodScreens[screenName].params.Kp.val,
+                            Ki: methodScreens[screenName].params.Ki.val,
+                            Kd: methodScreens[screenName].params.Kd.val,
+                            N: methodScreens[screenName].params.N.val
                         };
-                        motions.LineFollowToCrossIntersection(AfterMotion.BreakStop, params, true);
+                        motions.LineFollowToCrossIntersection(AfterMotion.BreakStop, params, methodScreens[screenName].params.debug.val == 1 ? true : false);
+                    } else if (screen == 1) {
+                        const params = {
+                            speed: methodScreens[screenName].params.speed.val,
+                            Kp: methodScreens[screenName].params.Kp.val,
+                            Ki: methodScreens[screenName].params.Ki.val,
+                            Kd: methodScreens[screenName].params.Kd.val,
+                            N: methodScreens[screenName].params.N.val
+                        };
+                        motions.LineFollowToDistance(methodScreens[screenName].params.dist.val, AfterMotion.BreakStop, params, methodScreens[screenName].params.debug.val == 1 ? true : false);
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал
