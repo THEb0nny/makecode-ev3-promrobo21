@@ -219,8 +219,8 @@ namespace motions {
     }
 
     /**
-     * The function of moving along the line to the intersection.
-     * Функция движения по линии до перекрёстка.
+     * Function of moving along a line to an intersection using two sensors.
+     * Функция движения по линии до перекрёстка двумя датчиками.
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
@@ -500,7 +500,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="79"
+    //% weight="78"
     //% group="Движение по линии"
     export function LineFollowToDistanceWithOneSensor(lineSensor: LineSensor, lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (lineSensor == LineSensor.Left) {
@@ -523,7 +523,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="78"
+    //% weight="77"
     //% group="Движение по линии"
     //% blockHidden="true"
     export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -588,7 +588,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineFollowParams"
-    //% weight="77" blockGap="8"
+    //% weight="76" blockGap="8"
     //% group="Движение по линии"
     //% blockHidden="true"
     export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
