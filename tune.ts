@@ -17,8 +17,7 @@ namespace custom {
         const BTN_PRESS_LOOP_DELAY = 150; // Задержка в цикле при нажатии
         const REG_COEFFICIENT_STEP_NAMES: string[] = ["Kp_step", "Ki_step", "Kd_step", "N_step"];
 
-        let paramIncrease = false, paramDecrease = false; // Переменные состояния кнопок/влево вправо при изменении параметров
-    
+        let paramIncrease = false, paramDecrease = false; // Переменные состояния кнопок/влево вправо при изменении параметров    
         // Пользовательские значения
         let methodScreens: { [key: string]: { params: { [key: string]: { [key: string]: number } }, hrStrings: number[] } } = {
             LW_2S_TO_INTERSECTION: {
@@ -83,10 +82,41 @@ namespace custom {
                 },
                 hrStrings: [3]
             },
+            SMART_SPIN_TURN: {
+                params: {
+                    deg: {
+                        val: 90,
+                        changeStep: 1
+                    },
+                    speed: {
+                        val: chassis.smartSpinTurnSpeed,
+                        changeStep: 5
+                    },
+                    debug: {
+                        val: 1
+                    },
+                    Kp: {
+                        val: chassis.smartSpinTurnKp,
+                        changeStep: 0.05
+                    },
+                    Ki: {
+                        val: chassis.smartSpinTurnKi,
+                        changeStep: 0.001
+                    },
+                    Kd: {
+                        val: chassis.smartSpinTurnKd,
+                        changeStep: 0.1
+                    },
+                    N: {
+                        val: chassis.smartSpinTurnN,
+                        changeStep: 0.1
+                    }
+                },
+                hrStrings: [3]
+            },
         }
 
         const screensNums = Object.keys(methodScreens).length; // Количество экранов с регуляторами
-
         let screen = Math.constrain(startupScreen, 0, screensNums - 1);
         let cursor = 0; // Крусор (выделенная строка)
         let confirm = false; // Подтвержден ли курсор (строка) или нет
@@ -119,7 +149,6 @@ namespace custom {
             if (strPrint - scroll > 2) brick.showString("-----------------------------", strPrint - scroll);
             strPrint++;
             //console.log(`strPrint: ${strPrint}, scroll: ${scroll}`);
-
             const hrArr = methodScreens[screenName].hrStrings; // Массив разделителей
             for (let i = 0; i < screenParamsNum; i++) {
                 if (hrArr.indexOf(i) != -1 && strPrint - scroll > 2) { // Проверяем совпадает ли индекс со строкой в массиве разделителей
@@ -166,18 +195,17 @@ namespace custom {
                 else if (brick.buttonRight.isPressed()) paramIncrease = true; // Нажатие вправо - увеличиваем число
                 else paramDecrease = false, paramIncrease = false; // Если нажатий нет
                 if (paramDecrease || paramIncrease) { // Изменяем коэффициент
+                    music.playToneInBackground(Note.C, 20); // Сигнал о переключении экрана
                     let paramName = Object.keys(methodScreens[screenName].params)[cursor - 1];
-                    console.log(`paramName: ${paramName}`);
+                    // console.log(`paramName: ${paramName}`);
                     if (paramName != undefined && paramName != "debug") { // Параметры функции
                         let changeStep = methodScreens[screenName].params[paramName].changeStep;
-                        console.log(`changeStep: ${changeStep}`);
+                        // console.log(`changeStep: ${changeStep}`);
                         changeStep = (changeStep != undefined ? changeStep : 0.01);
-
                         let minLimit = methodScreens[screenName].params[paramName].min;
                         minLimit = (minLimit != undefined ? minLimit : 0);
                         let maxLimit = methodScreens[screenName].params[paramName].max;
                         maxLimit = (maxLimit != undefined ? maxLimit : 1000);
-
                         if (paramDecrease) methodScreens[screenName].params[paramName].val -= changeStep;
                         else if (paramIncrease) methodScreens[screenName].params[paramName].val += changeStep;
                         methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, minLimit, maxLimit);
@@ -186,18 +214,14 @@ namespace custom {
                         else if (paramIncrease) methodScreens[screenName].params[paramName].val += 1;
                         methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, 0, 1);
                     } else { // Параметры шагов
-
                         function PidParamsStep(paramName: string, deflStep: number, changeStepValue: number, minVal: number, maxVal: number) {
                             let changeStep = methodScreens[screenName].params[paramName].changeStep;
-                            console.log(`changeStep: ${changeStep}`);
-                            if (changeStep == undefined) { // Если шаг изменения параметра не был указан
-                                methodScreens[screenName].params[paramName].changeStep = deflStep; // Установить значение, на которое будет изменяться
-                            }
+                            console.log(`paramName: ${paramName}, changeStep: ${changeStep}`);
+                            if (changeStep == undefined) methodScreens[screenName].params[paramName].changeStep = deflStep; // Если шаг изменения параметра не был указан, тогда установить значение, на которое будет изменяться
                             if (paramDecrease) methodScreens[screenName].params[paramName].changeStep -= changeStepValue; // Уменьшение
                             else if (paramIncrease) methodScreens[screenName].params[paramName].changeStep += changeStepValue; // Увеличение
                             methodScreens[screenName].params[paramName].changeStep = Math.constrain(methodScreens[screenName].params[paramName].changeStep, minVal, maxVal); // Ограничение диапазона возможного числа
                         }
-
                         if (cursor == screenParamsNum + 2) PidParamsStep("Kp", 0.01, 0.001, 0.001, 1);
                         else if (cursor == screenParamsNum + 3) PidParamsStep("Ki", 0.001, 0.0001, 0.0001, 100);
                         else if (cursor == screenParamsNum + 4) PidParamsStep("Kd", 0.01, 0.001, 0.001, 100);
@@ -223,10 +247,7 @@ namespace custom {
 
             // Обрабатываем нажатия
             if (brick.buttonUp.wasPressed()) { // Если нажали кнопку вверх
-                if (confirm) { // Если изменение было активно
-                    confirm = !confirm; // Отключаем подтверждение изменения, если изменение было активно
-                    music.playToneInBackground(Note.F, 50); // Сигнал
-                }
+                if (confirm) confirm = !confirm; // Если изменение было активно, тогда отключаем подтверждение изменения
                 if (cursor > 0) { // Изменить курсор, если значение больше первой строке с числом на экране
                     cursor--;
                     if (cursor >= LINE_SCROLL_TRESHOLD) scroll--;
@@ -235,11 +256,9 @@ namespace custom {
                     cursor = totalStrNum - 1;
                     scroll = screenParamsNum + 1;
                 }
+                music.playToneInBackground(Note.F, 50); // Сигнал
             } else if (brick.buttonDown.wasPressed()) { // Если нажали кнопку вниз
-                if (confirm) { // Если изменение было активно
-                    confirm = !confirm; // Отключаем подтверждение изменения, если изменение было активно
-                    music.playToneInBackground(Note.F, 50); // Сигнал
-                }
+                if (confirm) confirm = !confirm; // Если изменение было активно, тогда отключаем подтверждение изменения
                 if (cursor < totalStrNum - 1) { // Изменить курсор, если значение меньше количеству строк с значениями на экране
                     cursor++;
                     if (cursor >= LINE_SCROLL_TRESHOLD) scroll++;
@@ -248,6 +267,7 @@ namespace custom {
                     cursor = 0;
                     scroll = 0;
                 }
+                music.playToneInBackground(Note.F, 50); // Сигнал
             }
 
             // Обрабатываем нажатие ENTER
@@ -274,6 +294,15 @@ namespace custom {
                             N: methodScreens[screenName].params.N.val
                         };
                         motions.LineFollowToDistance(methodScreens[screenName].params.dist.val, AfterMotion.BreakStop, params, methodScreens[screenName].params.debug.val == 1 ? true : false);
+                    } else if (screen == 2) {
+                        const params = {
+                            speed: methodScreens[screenName].params.speed.val,
+                            Kp: methodScreens[screenName].params.Kp.val,
+                            Ki: methodScreens[screenName].params.Ki.val,
+                            Kd: methodScreens[screenName].params.Kd.val,
+                            N: methodScreens[screenName].params.N.val
+                        };
+                        chassis.SmartSpinTurn(90, params, methodScreens[screenName].params.debug.val == 1 ? true : false);
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал
