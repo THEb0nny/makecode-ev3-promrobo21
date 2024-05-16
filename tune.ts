@@ -53,7 +53,7 @@ namespace custom {
             LW_2S_TO_DISTANCE: {
                 params: {
                     dist: {
-                        val: 150,
+                        val: 500,
                         changeStep: 5,
                         min: 0,
                         max: 5000
