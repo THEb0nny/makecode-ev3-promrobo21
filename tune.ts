@@ -22,14 +22,14 @@ namespace custom {
         let methodScreens: { [key: string]: { params: { [key: string]: { [key: string]: any } }, hrStrings: number[] } } = {
             LW_2S_TO_INTERSECTION: {
                 params: {
-                    speed: { 
+                    debug: {
+                        val: true
+                    },
+                    speed: {
                         val: motions.lineFollow2SensorSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
-                    },
-                    debug: {
-                        val: true
                     },
                     Kp: {
                        val: motions.lineFollow2SensorKp,
@@ -56,12 +56,12 @@ namespace custom {
                         val: 150,
                         changeStep: 5
                     },
+                    debug: {
+                        val: true
+                    },
                     speed: {
                         val: motions.lineFollow2SensorSpeed,
                         changeStep: 5
-                    },
-                    debug: {
-                        val: true
                     },
                     Kp: {
                         val: motions.lineFollow2SensorKp,
@@ -88,12 +88,12 @@ namespace custom {
                         val: 90,
                         changeStep: 1
                     },
+                    debug: {
+                        val: true
+                    },
                     speed: {
                         val: chassis.smartSpinTurnSpeed,
                         changeStep: 5
-                    },
-                    debug: {
-                        val: true
                     },
                     Kp: {
                         val: chassis.smartSpinTurnKp,
@@ -120,15 +120,15 @@ namespace custom {
                         val: 90,
                         changeStep: 1
                     },
-                    speed: {
-                        val: chassis.smartPivotTurnSpeed,
-                        changeStep: 5
-                    },
                     pivot: {
                         val: WheelPivot.LeftWheel
                     },
                     debug: {
                         val: true
+                    },
+                    speed: {
+                        val: chassis.smartPivotTurnSpeed,
+                        changeStep: 5
                     },
                     Kp: {
                         val: chassis.smartPivotTurnKp,
@@ -144,6 +144,61 @@ namespace custom {
                     },
                     N: {
                         val: chassis.smartPivotTurnN,
+                        changeStep: 0.1
+                    }
+                },
+                hrStrings: [4]
+            },
+            LINE_ALIGNMET: {
+                params: {
+                    location: {
+                        val: VerticalLineLocation.Front
+                    },
+                    time: {
+                        val: 2000,
+                        changeStep: 50
+                    },
+                    debug: {
+                        val: true
+                    },
+                    maxSpeed: {
+                        val: levelings.lineAlignmentMaxSpeed,
+                        changeStep: 5
+                    },
+                    timeOut: {
+                        val: levelings.lineAlignmentTimeOut,
+                        changeStep: 100
+                    },
+                    leftKp: {
+                        val: levelings.lineAlignmentLeftSideKp,
+                        changeStep: 0.05
+                    },
+                    rightKp: {
+                        val: levelings.lineAlignmentRightSideKp,
+                        changeStep: 0.05
+                    },
+                    leftKi: {
+                        val: levelings.lineAlignmentLeftSideKi,
+                        changeStep: 0.001
+                    },
+                    rightKi: {
+                        val: levelings.lineAlignmentRightSideKi,
+                        changeStep: 0.001
+                    },
+                    leftKd: {
+                        val: levelings.lineAlignmentLeftSideKd,
+                        changeStep: 0.1
+                    },
+                    rightKd: {
+                        val: levelings.lineAlignmentRightSideKd,
+                        changeStep: 0.1
+                    },
+                    leftN: {
+                        val: levelings.lineAlignmentLeftSideN,
+                        changeStep: 0.1
+                    },
+                    rightN: {
+                        val: levelings.lineAlignmentRightSideN,
                         changeStep: 0.1
                     }
                 },
@@ -359,6 +414,23 @@ namespace custom {
                             N: methodScreens[screenName].params.N.val
                         };
                         chassis.SmartPivotTurn(deg, pivot, params, debug);
+                    } else if (screenName == "LINE_ALIGNMET") {
+                        const location = methodScreens[screenName].params.location.val;
+                        const time = methodScreens[screenName].params.time.val;
+                        const debug = methodScreens[screenName].params.debug.val;
+                        const params = {
+                            maxSpeed: methodScreens[screenName].params.maxSpeed.val,
+                            timeOut: methodScreens[screenName].params.timeOut.val,
+                            leftKp: methodScreens[screenName].params.Kp.val,
+                            rightKp: methodScreens[screenName].params.Kp.val,
+                            leftKi: methodScreens[screenName].params.Ki.val,
+                            rightKi: methodScreens[screenName].params.Ki.val,
+                            leftKd: methodScreens[screenName].params.Kd.val,
+                            rightKd: methodScreens[screenName].params.Kd.val,
+                            leftN: methodScreens[screenName].params.N.val,
+                            rightN: methodScreens[screenName].params.N.val
+                        };
+                        levelings.LineAlignment(location, time, params, debug);
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал

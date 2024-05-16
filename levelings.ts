@@ -1,6 +1,7 @@
 namespace levelings {
 
     export let lineAlignmentMaxSpeed = 50; // Переменная для хранения максимальной скорости при регулировании на линии
+    export let lineAlignmentTimeOut = 1500; // Переменная для хранения максимального времени выравнивания
 
     export let lineAlignmentLeftSideKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
     export let lineAlignmentLeftSideKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
@@ -13,6 +14,7 @@ namespace levelings {
     export let lineAlignmentRightSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии правой стороны
 
     export let linePositioningMaxSpeed = 50; // Переменная для хранения максимальной скорости при позиционировании на линии
+    export let linePositioningTimeOut = 1000; // Переменная для хранения максимального времени позиционирования
 
     export let linePositioningKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
     export let linePositioningKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
@@ -72,6 +74,7 @@ namespace levelings {
     export function LineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, params?: params.LineAlignmentInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.timeOut) lineAlignmentTimeOut = Math.abs(params.timeOut);
             if (params.leftKp) lineAlignmentLeftSideKp = params.leftKp;
             if (params.leftKi) lineAlignmentLeftSideKi = params.leftKi;
             if (params.leftKd) lineAlignmentLeftSideKd = params.leftKd;
@@ -92,7 +95,7 @@ namespace levelings {
         automation.pid4.reset(); // Сброс регулятора правой стороны
 
         control.timer7.reset(); // Сброс таймера
-        const timeOut = (regulatorTime > 1000 ? regulatorTime : 1000); // Максимальное время регулирования для защиты
+        const timeOut = (regulatorTime > lineAlignmentTimeOut ? regulatorTime : lineAlignmentTimeOut); // Максимальное время регулирования для защиты
         const regulatorMultiplier = (lineLocation == VerticalLineLocation.Front ? -1 : 1); // MovementOnLine.Front - линия спереди, а MovementOnLine.Backword - назад
         
         let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
@@ -153,6 +156,7 @@ namespace levelings {
     export function LinePositioning(regTime: number, params?: params.LinePositioningInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) linePositioningMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.timeOut) linePositioningTimeOut = Math.abs(params.timeOut);
             if (params.Kp) linePositioningKp = params.Kp;
             if (params.Ki) linePositioningKi = params.Ki;
             if (params.Kd) linePositioningKd = params.Kd;
@@ -165,10 +169,10 @@ namespace levelings {
         automation.pid1.reset(); // Сброс ПИДа
         
         control.timer7.reset(); // Сброс таймера
-        const MAX_TIME_REG = (regTime > 1000 ? regTime : 1000); // Максимальное время регулирования для защиты
+        const timeOut = (regTime > linePositioningTimeOut ? regTime : linePositioningTimeOut); // Максимальное время регулирования для защиты
         let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (control.timer7.millis() < MAX_TIME_REG) { // Пока время не вышло
+        while (control.timer7.millis() < linePositioningTimeOut) { // Пока время не вышло
             let currTime = control.millis();
             let dt = currTime - prevTime;
             prevTime = currTime;

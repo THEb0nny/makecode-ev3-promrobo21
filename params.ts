@@ -12,6 +12,7 @@ namespace params {
     // Интерфейс перадачи параметров для алгоритма позиционирования на линии
     export interface LinePositioningInterface {
         maxSpeed?: number;
+        timeOut?: number;
         Kp?: number;
         Ki?: number;
         Kd?: number;
