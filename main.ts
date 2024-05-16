@@ -385,3 +385,4 @@
 // }
 
 // Main(); // Вызов главной функции
+custom.FunctionsTune(0, true);

@@ -19,7 +19,7 @@ namespace custom {
 
         let paramIncrease = false, paramDecrease = false; // Переменные состояния кнопок/влево вправо при изменении параметров    
         // Пользовательские значения
-        let methodScreens: { [key: string]: { params: { [key: string]: { [key: string]: any } }, hrStrings: number[] } } = {
+        let methodScreens: { [key: string]: { params: { [key: string]: { [key: string]: any } }, hrStrings: number[], showStepsReg: boolean } } = {
             LW_2S_TO_INTERSECTION: {
                 params: {
                     debug: {
@@ -48,7 +48,8 @@ namespace custom {
                         changeStep: 0.1
                     }
                 },
-                hrStrings: [2]
+                showStepsReg: true,
+                hrStrings: [2],
             },
             LW_2S_TO_DISTANCE: {
                 params: {
@@ -84,6 +85,68 @@ namespace custom {
                         changeStep: 0.1
                     }
                 },
+                showStepsReg: true,
+                hrStrings: [3]
+            },
+            LW_TO_SIDE_INTERSECTION: {
+                params: {
+                    junction: {
+                        val: SideJunctionType.Left
+                    },
+                    horizLineLoc: {
+                        val: HorizontalLineLocation.Inside
+                    },
+                    debug: {
+                        val: true
+                    },
+                    speed: {
+                        val: motions.lineFollow2SensorSpeed,
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
+                    },
+                    Kp: {
+                        val: motions.lineFollow2SensorKp,
+                        changeStep: 0.05
+                    },
+                    Ki: {
+                        val: motions.lineFollow2SensorKi,
+                        changeStep: 0.001
+                    },
+                    Kd: {
+                        val: motions.lineFollow2SensorKd,
+                        changeStep: 0.1
+                    },
+                    N: {
+                        val: motions.lineFollow2SensorN,
+                        changeStep: 0.1
+                    }
+                },
+                showStepsReg: true,
+                hrStrings: [3]
+            },
+            CHASSIS_SPIN_TURN: {
+                params: {
+                    deg: {
+                        val: 90,
+                        changeStep: 1,
+                        min: -360,
+                        max: 360
+                    },
+                    speed: {
+                        val: 40,
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
+                    },
+                    base_length: {
+                        val: chassis.getBaseLength(),
+                        changeStep: 1,
+                        min: 100,
+                        max: 250
+                    }
+                },
+                showStepsReg: false,
                 hrStrings: [3]
             },
             SMART_SPIN_TURN: {
@@ -126,6 +189,7 @@ namespace custom {
                         changeStep: 0.1
                     }
                 },
+                showStepsReg: true,
                 hrStrings: [3]
             },
             SMART_PIVOT_TURN: {
@@ -137,7 +201,8 @@ namespace custom {
                         max: 360
                     },
                     pivot: {
-                        val: WheelPivot.LeftWheel
+                        val: WheelPivot.LeftWheel,
+                        changeStep: 1
                     },
                     debug: {
                         val: true
@@ -171,6 +236,7 @@ namespace custom {
                         changeStep: 0.1
                     }
                 },
+                showStepsReg: true,
                 hrStrings: [4]
             },
             LINE_ALIGNMET: {
@@ -232,6 +298,7 @@ namespace custom {
                         changeStep: 0.1
                     }
                 },
+                showStepsReg: true,
                 hrStrings: [4]
             },
         }
@@ -254,7 +321,8 @@ namespace custom {
             const screenName = Object.keys(methodScreens)[screen];
             // console.log(`screenName: ${screenName}`);
             const screenParamsNum = Object.keys(methodScreens[screenName].params).length; // Количество параметров
-            const totalStrNum = screenParamsNum + REG_COEFFICIENT_STEP_NAMES.length + 2; // Общее количество кликабельных строк c параметрами
+            const regSteps = methodScreens[screenName].showStepsReg ? REG_COEFFICIENT_STEP_NAMES.length : 0;
+            const totalStrNum = screenParamsNum + regSteps + 2; // Общее количество кликабельных строк c параметрами
             // console.log(`totalStrNum: ${totalStrNum}`);
             // if (debug) console.log(`screenParamsNum: ${screenParamsNum}`);
             if (screenChanged) { // Экран на прошлой итеррации цикла был изменён?
@@ -286,6 +354,14 @@ namespace custom {
                         if (paramValue == 0) paramValue = "front";
                         else paramValue = "behind";
                         brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
+                    } else if (paramName == "junction") {
+                        if (paramValue == 0) paramValue = "left cross";
+                        else paramValue = "right cross";
+                        brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
+                    } else if (paramName == "horizLineLoc") {
+                        if (paramValue == 0) paramValue = "inside";
+                        else paramValue = "outside";
+                        brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
                     } else if (paramName == "debug") brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
                     else brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${Math.round(paramValue * 10000) / 10000}`, strPrint - scroll);
                 }
@@ -306,14 +382,16 @@ namespace custom {
             }
 
             // Печать параметров шагов
-            const paramsStepOffset = screenParamsNum - 4; // Отступ от начала для параметров шагов
-            for (let i = 0; i < REG_COEFFICIENT_STEP_NAMES.length; i++) {
-                if (strPrint - scroll > 2) {
-                    const paramName = Object.keys(methodScreens[screenName].params)[i + paramsStepOffset];
-                    let changeStep = methodScreens[screenName].params[paramName].changeStep;
-                    changeStep = (changeStep != undefined ? changeStep : 1);
-                    brick.showString(`${cursor == i + screenParamsNum + 2 ? (confirm ? ">>> " : "> ") : ""} ${REG_COEFFICIENT_STEP_NAMES[i]}: ${changeStep}`, strPrint - scroll);
-                    strPrint++;
+            if (regSteps > 0) {
+                const paramsStepOffset = screenParamsNum - 4; // Отступ от начала для параметров шагов
+                for (let i = 0; i < REG_COEFFICIENT_STEP_NAMES.length; i++) {
+                    if (strPrint - scroll > 2) {
+                        const paramName = Object.keys(methodScreens[screenName].params)[i + paramsStepOffset];
+                        let changeStep = methodScreens[screenName].params[paramName].changeStep;
+                        changeStep = (changeStep != undefined ? changeStep : 1);
+                        brick.showString(`${cursor == i + screenParamsNum + 2 ? (confirm ? ">>> " : "> ") : ""} ${REG_COEFFICIENT_STEP_NAMES[i]}: ${changeStep}`, strPrint - scroll);
+                        strPrint++;
+                    }
                 }
             }
 
@@ -327,7 +405,7 @@ namespace custom {
                     music.playToneInBackground(Note.C, 50); // Сигнал о переключении экрана
                     let paramName = Object.keys(methodScreens[screenName].params)[cursor - 1];
                     // console.log(`paramName: ${paramName}`);
-                    if (paramName != undefined && paramName != "debug" && paramName != "pivot") { // Параметры функции
+                    if (paramName != undefined && paramName != "debug" && paramName != "pivot" && paramName != "junction" && paramName != "horizLineLoc") { // Параметры функции
                         let changeStep = methodScreens[screenName].params[paramName].changeStep;
                         changeStep = (changeStep != undefined ? changeStep : 0.01);
                         let minLimit = methodScreens[screenName].params[paramName].min;
@@ -339,14 +417,13 @@ namespace custom {
                         methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, minLimit, maxLimit);
                     } else if (paramName == "debug") {
                         if (paramDecrease || paramIncrease) methodScreens[screenName].params[paramName].val = !methodScreens[screenName].params[paramName].val;
-                    } else if (paramName == "pivot") {
+                    } else if (paramName == "pivot" || paramName == "junction" || paramName == "horizLineLoc") {
                         if (paramDecrease) methodScreens[screenName].params[paramName].val -= 1;
                         else if (paramIncrease) methodScreens[screenName].params[paramName].val += 1;
                         methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, 0, 1);
                     } else { // Параметры шагов
                         function PidParamsStep(paramName: string, deflStep: number, changeStepValue: number, minVal: number, maxVal: number) {
                             let changeStep = methodScreens[screenName].params[paramName].changeStep;
-                            console.log(`paramName: ${paramName}, changeStep: ${changeStep}`);
                             if (changeStep == undefined) methodScreens[screenName].params[paramName].changeStep = deflStep; // Если шаг изменения параметра не был указан, тогда установить значение, на которое будет изменяться
                             if (paramDecrease) methodScreens[screenName].params[paramName].changeStep -= changeStepValue; // Уменьшение
                             else if (paramIncrease) methodScreens[screenName].params[paramName].changeStep += changeStepValue; // Увеличение
@@ -398,7 +475,6 @@ namespace custom {
                 }
                 music.playToneInBackground(Note.F, 50); // Сигнал
             }
-
             // Обрабатываем нажатие ENTER
             if (brick.buttonEnter.wasPressed()) {
                 if (cursor == 0 || cursor == screenParamsNum + 1) { // Нажали на строку RUN TEST?
@@ -426,6 +502,24 @@ namespace custom {
                             N: methodScreens[screenName].params.N.val
                         };
                         motions.LineFollowToDistance(dist, AfterMotion.BreakStop, params, debug);
+                    } else if (screenName == "LW_TO_SIDE_INTERSECTION") {
+                        const junction = methodScreens[screenName].params.junction.val;
+                        const lineLocation = methodScreens[screenName].params.lineLocation.val;
+                        const debug = methodScreens[screenName].params.debug.val;
+                        const params = {
+                            speed: methodScreens[screenName].params.speed.val,
+                            Kp: methodScreens[screenName].params.Kp.val,
+                            Ki: methodScreens[screenName].params.Ki.val,
+                            Kd: methodScreens[screenName].params.Kd.val,
+                            N: methodScreens[screenName].params.N.val
+                        };
+                        motions.LineFollowToSideIntersection(junction, lineLocation, AfterMotion.BreakStop, params, debug);
+                    } else if (screenName == "CHASSIS_SPIN_TURN") {
+                        const deg = methodScreens[screenName].params.deg.val;
+                        const speed = methodScreens[screenName].params.speed.val;
+                        const baseLength = methodScreens[screenName].params.base_length.val;
+                        chassis.setBaseLength(baseLength);
+                        chassis.spinTurn(deg, speed);
                     } else if (screenName == "SMART_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const debug = methodScreens[screenName].params.debug.val;
@@ -454,7 +548,7 @@ namespace custom {
                         };
                         chassis.SmartPivotTurn(deg, pivot, params, debug);
                     } else if (screenName == "LINE_ALIGNMET") {
-                        const location = methodScreens[screenName].params.location.val;
+                        const lineLocation = methodScreens[screenName].params.location.val;
                         const time = methodScreens[screenName].params.time.val;
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
@@ -469,7 +563,7 @@ namespace custom {
                             leftN: methodScreens[screenName].params.leftN.val,
                             rightN: methodScreens[screenName].params.rightN.val
                         };
-                        levelings.LineAlignment(location, time, params, debug);
+                        levelings.LineAlignment(lineLocation, time, params, debug);
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал

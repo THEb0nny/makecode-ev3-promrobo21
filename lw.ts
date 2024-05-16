@@ -494,7 +494,7 @@ namespace motions {
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
-    //% blockId="LineFollowToDistanceWithLeftSensor"
+    //% blockId="LineFollowToDistanceWithOneSensor"
     //% block="движение по линии $lineSensor датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
