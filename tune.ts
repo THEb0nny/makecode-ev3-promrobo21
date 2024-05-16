@@ -61,7 +61,9 @@ namespace custom {
                     },
                     speed: {
                         val: motions.lineFollow2SensorSpeed,
-                        changeStep: 5
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
                     },
                     Kp: {
                         val: motions.lineFollow2SensorKp,
@@ -93,7 +95,9 @@ namespace custom {
                     },
                     speed: {
                         val: chassis.smartSpinTurnSpeed,
-                        changeStep: 5
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
                     },
                     Kp: {
                         val: chassis.smartSpinTurnKp,
@@ -128,7 +132,9 @@ namespace custom {
                     },
                     speed: {
                         val: chassis.smartPivotTurnSpeed,
-                        changeStep: 5
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
                     },
                     Kp: {
                         val: chassis.smartPivotTurnKp,
@@ -163,7 +169,9 @@ namespace custom {
                     },
                     maxSpeed: {
                         val: levelings.lineAlignmentMaxSpeed,
-                        changeStep: 5
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
                     },
                     timeOut: {
                         val: levelings.lineAlignmentTimeOut,
@@ -290,7 +298,7 @@ namespace custom {
                 else if (brick.buttonRight.isPressed()) paramIncrease = true; // Нажатие вправо - увеличиваем число
                 else paramDecrease = false, paramIncrease = false; // Если нажатий нет
                 if (paramDecrease || paramIncrease) { // Изменяем коэффициент
-                    music.playToneInBackground(Note.C, 20); // Сигнал о переключении экрана
+                    music.playToneInBackground(Note.C, 50); // Сигнал о переключении экрана
                     let paramName = Object.keys(methodScreens[screenName].params)[cursor - 1];
                     // console.log(`paramName: ${paramName}`);
                     if (paramName != undefined && paramName != "debug" && paramName != "pivot") { // Параметры функции
