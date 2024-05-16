@@ -270,6 +270,10 @@ namespace custom {
                         if (paramValue == 0) paramValue = "left wheel";
                         else paramValue = "right wheel";
                         brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
+                    } else if (paramName == "location") {
+                        if (paramValue == 0) paramValue = "front";
+                        else paramValue = "behind";
+                        brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
                     } else if (paramName == "debug") brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
                     else brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${Math.round(paramValue * 10000) / 10000}`, strPrint - scroll);
                 }
