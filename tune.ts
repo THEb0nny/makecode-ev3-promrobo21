@@ -54,7 +54,9 @@ namespace custom {
                 params: {
                     dist: {
                         val: 150,
-                        changeStep: 5
+                        changeStep: 5,
+                        min: 0,
+                        max: 5000
                     },
                     debug: {
                         val: true
@@ -88,7 +90,9 @@ namespace custom {
                 params: {
                     deg: {
                         val: 90,
-                        changeStep: 1
+                        changeStep: 1,
+                        min: -360,
+                        max: 360
                     },
                     debug: {
                         val: true
@@ -122,7 +126,9 @@ namespace custom {
                 params: {
                     deg: {
                         val: 90,
-                        changeStep: 1
+                        changeStep: 1,
+                        min: 0,
+                        max: 360
                     },
                     pivot: {
                         val: WheelPivot.LeftWheel
@@ -162,7 +168,9 @@ namespace custom {
                     },
                     time: {
                         val: 2000,
-                        changeStep: 50
+                        changeStep: 50,
+                        min: 100,
+                        max: 5000
                     },
                     debug: {
                         val: true
@@ -175,7 +183,9 @@ namespace custom {
                     },
                     timeOut: {
                         val: levelings.lineAlignmentTimeOut,
-                        changeStep: 100
+                        changeStep: 100,
+                        min: 100,
+                        max: 10000
                     },
                     leftKp: {
                         val: levelings.lineAlignmentLeftSideKp,
@@ -429,14 +439,14 @@ namespace custom {
                         const params = {
                             maxSpeed: methodScreens[screenName].params.maxSpeed.val,
                             timeOut: methodScreens[screenName].params.timeOut.val,
-                            leftKp: methodScreens[screenName].params.Kp.val,
-                            rightKp: methodScreens[screenName].params.Kp.val,
-                            leftKi: methodScreens[screenName].params.Ki.val,
-                            rightKi: methodScreens[screenName].params.Ki.val,
-                            leftKd: methodScreens[screenName].params.Kd.val,
-                            rightKd: methodScreens[screenName].params.Kd.val,
-                            leftN: methodScreens[screenName].params.N.val,
-                            rightN: methodScreens[screenName].params.N.val
+                            leftKp: methodScreens[screenName].params.leftKp.val,
+                            rightKp: methodScreens[screenName].params.rightKp.val,
+                            leftKi: methodScreens[screenName].params.leftKi.val,
+                            rightKi: methodScreens[screenName].params.rightKi.val,
+                            leftKd: methodScreens[screenName].params.leftKd.val,
+                            rightKd: methodScreens[screenName].params.rightKd.val,
+                            leftN: methodScreens[screenName].params.leftN.val,
+                            rightN: methodScreens[screenName].params.rightN.val
                         };
                         levelings.LineAlignment(location, time, params, debug);
                     }
