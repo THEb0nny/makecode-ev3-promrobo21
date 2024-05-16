@@ -19,7 +19,7 @@ namespace custom {
 
         let paramIncrease = false, paramDecrease = false; // Переменные состояния кнопок/влево вправо при изменении параметров    
         // Пользовательские значения
-        let methodScreens: { [key: string]: { params: { [key: string]: { [key: string]: number } }, hrStrings: number[] } } = {
+        let methodScreens: { [key: string]: { params: { [key: string]: { [key: string]: any } }, hrStrings: number[] } } = {
             LW_2S_TO_INTERSECTION: {
                 params: {
                     speed: { 
@@ -29,7 +29,7 @@ namespace custom {
                         max: 100
                     },
                     debug: {
-                        val: 1
+                        val: true
                     },
                     Kp: {
                        val: motions.lineFollow2SensorKp,
@@ -61,7 +61,7 @@ namespace custom {
                         changeStep: 5
                     },
                     debug: {
-                        val: 1
+                        val: true
                     },
                     Kp: {
                         val: motions.lineFollow2SensorKp,
@@ -93,7 +93,7 @@ namespace custom {
                         changeStep: 5
                     },
                     debug: {
-                        val: 1
+                        val: true
                     },
                     Kp: {
                         val: chassis.smartSpinTurnKp,
@@ -113,6 +113,41 @@ namespace custom {
                     }
                 },
                 hrStrings: [3]
+            },
+            SMART_PIVOT_TURN: {
+                params: {
+                    deg: {
+                        val: 90,
+                        changeStep: 1
+                    },
+                    speed: {
+                        val: chassis.smartPivotTurnSpeed,
+                        changeStep: 5
+                    },
+                    pivot: {
+                        val: WheelPivot.LeftWheel
+                    },
+                    debug: {
+                        val: true
+                    },
+                    Kp: {
+                        val: chassis.smartPivotTurnKp,
+                        changeStep: 0.05
+                    },
+                    Ki: {
+                        val: chassis.smartPivotTurnKi,
+                        changeStep: 0.001
+                    },
+                    Kd: {
+                        val: chassis.smartPivotTurnKd,
+                        changeStep: 0.1
+                    },
+                    N: {
+                        val: chassis.smartPivotTurnN,
+                        changeStep: 0.1
+                    }
+                },
+                hrStrings: [4]
             },
         }
 
@@ -157,9 +192,13 @@ namespace custom {
                 }
                 if (strPrint - scroll > 2) {
                     const paramName = Object.keys(methodScreens[screenName].params)[i];
-                    const paramValue = methodScreens[screenName].params[paramName].val;
-                    //console.log(`paramName: ${paramName}, paramValue: ${paramValue}`);
-                    brick.showValue(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}`, paramValue, strPrint - scroll);
+                    let paramValue = methodScreens[screenName].params[paramName].val;
+                    if (paramName == "pivot") {
+                        if (paramValue == 0) paramValue = "left wheel";
+                        else paramValue = "right wheel";
+                        brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
+                    } else if (paramName == "debug") brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
+                    else brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${Math.round(paramValue * 10000) / 10000}`, strPrint - scroll);
                 }
                 strPrint++;
             }
@@ -178,12 +217,13 @@ namespace custom {
             }
 
             // Печать параметров шагов
+            const paramsStepOffset = screenParamsNum - 4; // Отступ от начала для параметров шагов
             for (let i = 0; i < REG_COEFFICIENT_STEP_NAMES.length; i++) {
                 if (strPrint - scroll > 2) {
-                    const paramName = Object.keys(methodScreens[screenName].params)[i + 1];
+                    const paramName = Object.keys(methodScreens[screenName].params)[i + paramsStepOffset];
                     let changeStep = methodScreens[screenName].params[paramName].changeStep;
                     changeStep = (changeStep != undefined ? changeStep : 1);
-                    brick.showValue(`${cursor == i + screenParamsNum + 2 ? (confirm ? ">>> " : "> ") : ""} ${REG_COEFFICIENT_STEP_NAMES[i]}`, changeStep, strPrint - scroll);
+                    brick.showString(`${cursor == i + screenParamsNum + 2 ? (confirm ? ">>> " : "> ") : ""} ${REG_COEFFICIENT_STEP_NAMES[i]}: ${changeStep}`, strPrint - scroll);
                     strPrint++;
                 }
             }
@@ -198,9 +238,8 @@ namespace custom {
                     music.playToneInBackground(Note.C, 20); // Сигнал о переключении экрана
                     let paramName = Object.keys(methodScreens[screenName].params)[cursor - 1];
                     // console.log(`paramName: ${paramName}`);
-                    if (paramName != undefined && paramName != "debug") { // Параметры функции
+                    if (paramName != undefined && paramName != "debug" && paramName != "pivot") { // Параметры функции
                         let changeStep = methodScreens[screenName].params[paramName].changeStep;
-                        // console.log(`changeStep: ${changeStep}`);
                         changeStep = (changeStep != undefined ? changeStep : 0.01);
                         let minLimit = methodScreens[screenName].params[paramName].min;
                         minLimit = (minLimit != undefined ? minLimit : 0);
@@ -210,6 +249,8 @@ namespace custom {
                         else if (paramIncrease) methodScreens[screenName].params[paramName].val += changeStep;
                         methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, minLimit, maxLimit);
                     } else if (paramName == "debug") {
+                        if (paramDecrease || paramIncrease) methodScreens[screenName].params[paramName].val = !methodScreens[screenName].params[paramName].val;
+                    } else if (paramName == "pivot") {
                         if (paramDecrease) methodScreens[screenName].params[paramName].val -= 1;
                         else if (paramIncrease) methodScreens[screenName].params[paramName].val += 1;
                         methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, 0, 1);
@@ -227,7 +268,6 @@ namespace custom {
                         else if (cursor == screenParamsNum + 4) PidParamsStep("Kd", 0.01, 0.001, 0.001, 100);
                         else if (cursor == screenParamsNum + 5) PidParamsStep("N", 0.01, 0.001, 0.001, 100);
                     }
-                    
                     loops.pause(BTN_PRESS_LOOP_DELAY);
                     continue;
                 }
@@ -276,7 +316,8 @@ namespace custom {
                     music.playToneInBackground(Note.D, 100); // Сигнал, что было запущено
                     brick.clearScreen();
                     // Запускаем выполнение теста
-                    if (screen == 0) {
+                    if (screenName == "LW_2S_TO_INTERSECTION") {
+                        const debug = methodScreens[screenName].params.debug.val;
                         const params = {
                             speed: methodScreens[screenName].params.speed.val,
                             Kp: methodScreens[screenName].params.Kp.val,
@@ -284,8 +325,10 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.LineFollowToCrossIntersection(AfterMotion.BreakStop, params, methodScreens[screenName].params.debug.val == 1 ? true : false);
-                    } else if (screen == 1) {
+                        motions.LineFollowToCrossIntersection(AfterMotion.BreakStop, params, debug);
+                    } else if (screenName == "LW_2S_TO_DISTANCE") {
+                        const dist = methodScreens[screenName].params.dist.val;
+                        const debug = methodScreens[screenName].params.debug.val;
                         const params = {
                             speed: methodScreens[screenName].params.speed.val,
                             Kp: methodScreens[screenName].params.Kp.val,
@@ -293,8 +336,9 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.LineFollowToDistance(methodScreens[screenName].params.dist.val, AfterMotion.BreakStop, params, methodScreens[screenName].params.debug.val == 1 ? true : false);
-                    } else if (screen == 2) {
+                        motions.LineFollowToDistance(dist, AfterMotion.BreakStop, params, debug);
+                    } else if (screenName == "SMART_SPIN_TURN") {
+                        const debug = methodScreens[screenName].params.debug.val;
                         const params = {
                             speed: methodScreens[screenName].params.speed.val,
                             Kp: methodScreens[screenName].params.Kp.val,
@@ -302,7 +346,19 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        chassis.SmartSpinTurn(90, params, methodScreens[screenName].params.debug.val == 1 ? true : false);
+                        chassis.SmartSpinTurn(90, params, debug);
+                    } else if (screenName == "SMART_PIVOT_TURN") {
+                        const deg = methodScreens[screenName].params.deg.val;
+                        const pivot = methodScreens[screenName].params.pivot.val;
+                        const debug = methodScreens[screenName].params.debug.val;
+                        const params = {
+                            speed: methodScreens[screenName].params.speed.val,
+                            Kp: methodScreens[screenName].params.Kp.val,
+                            Ki: methodScreens[screenName].params.Ki.val,
+                            Kd: methodScreens[screenName].params.Kd.val,
+                            N: methodScreens[screenName].params.N.val
+                        };
+                        chassis.SmartPivotTurn(deg, pivot, params, debug);
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал
