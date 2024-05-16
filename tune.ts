@@ -97,6 +97,12 @@ namespace custom {
                     debug: {
                         val: true
                     },
+                    base_length: {
+                        val: chassis.getBaseLength(),
+                        changeStep: 1,
+                        min: 100,
+                        max: 250
+                    },
                     speed: {
                         val: chassis.smartSpinTurnSpeed,
                         changeStep: 5,
@@ -135,6 +141,12 @@ namespace custom {
                     },
                     debug: {
                         val: true
+                    },
+                    base_length: {
+                        val: chassis.getBaseLength(),
+                        changeStep: 1,
+                        min: 100,
+                        max: 250
                     },
                     speed: {
                         val: chassis.smartPivotTurnSpeed,
@@ -415,7 +427,10 @@ namespace custom {
                         };
                         motions.LineFollowToDistance(dist, AfterMotion.BreakStop, params, debug);
                     } else if (screenName == "SMART_SPIN_TURN") {
+                        const deg = methodScreens[screenName].params.deg.val;
                         const debug = methodScreens[screenName].params.debug.val;
+                        const baseLength = methodScreens[screenName].params.base_length.val;
+                        chassis.setBaseLength(baseLength);
                         const params = {
                             speed: methodScreens[screenName].params.speed.val,
                             Kp: methodScreens[screenName].params.Kp.val,
@@ -423,11 +438,13 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        chassis.SmartSpinTurn(90, params, debug);
+                        chassis.SmartSpinTurn(deg, params, debug);
                     } else if (screenName == "SMART_PIVOT_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const pivot = methodScreens[screenName].params.pivot.val;
                         const debug = methodScreens[screenName].params.debug.val;
+                        const baseLength = methodScreens[screenName].params.base_length.val;
+                        chassis.setBaseLength(baseLength);
                         const params = {
                             speed: methodScreens[screenName].params.speed.val,
                             Kp: methodScreens[screenName].params.Kp.val,
