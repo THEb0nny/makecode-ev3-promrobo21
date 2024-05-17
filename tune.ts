@@ -20,6 +20,40 @@ namespace custom {
         let paramIncrease = false, paramDecrease = false; // Переменные состояния кнопок/влево вправо при изменении параметров    
         // Пользовательские значения
         let methodScreens: { [key: string]: { params: { [key: string]: { [key: string]: any } }, hrStrings: number[], showStepsReg: boolean } } = {
+            SYNC_DIST_MOVE: {
+                params: {
+                    dist: {
+                        val: 500,
+                        changeStep: 5,
+                        min: 0,
+                        max: 5000
+                    },
+                    speed: {
+                        val: motions.lineFollow2SensorSpeed,
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
+                    },
+                    Kp: {
+                        val: 0.02,
+                        changeStep: 0.01
+                    },
+                    Ki: {
+                        val: 0,
+                        changeStep: 0.001
+                    },
+                    Kd: {
+                        val: 0.5,
+                        changeStep: 0.1
+                    },
+                    N: {
+                        val: 0,
+                        changeStep: 0.1
+                    }
+                },
+                showStepsReg: true,
+                hrStrings: [2],
+            },
             LW_2S_TO_INTERSECTION: {
                 params: {
                     debug: {
@@ -481,7 +515,19 @@ namespace custom {
                     music.playToneInBackground(Note.D, 100); // Сигнал, что было запущено
                     brick.clearScreen();
                     // Запускаем выполнение теста
-                    if (screenName == "LW_2S_TO_INTERSECTION") {
+                    if (screenName == "SYNC_DIST_MOVE") {
+                        const dist = methodScreens[screenName].params.dist.val;
+                        const speed = methodScreens[screenName].params.speed.val;
+                        const params = {
+                            speed: methodScreens[screenName].params.speed.val,
+                            Kp: methodScreens[screenName].params.Kp.val,
+                            Ki: methodScreens[screenName].params.Ki.val,
+                            Kd: methodScreens[screenName].params.Kd.val,
+                            N: methodScreens[screenName].params.N.val
+                        };
+                        chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
+                        chassis.LinearDistMove(dist, speed, Braking.Hold);
+                    } else if (screenName == "LW_2S_TO_INTERSECTION") {
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
                             speed: methodScreens[screenName].params.speed.val,
