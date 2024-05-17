@@ -214,7 +214,8 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignmentInMotion"
-    //% block="выравниться на линии в движении на $speed|\\% c действием после $actionAfterMotion||отладка $debug"
+    //% block="align with the line while moving on $speed\\% after motion $actionAfterMotion||debug $debug"
+    //% block.loc.ru="выравниться на линии в движении на $speed\\% c действием после $actionAfterMotion||отладка $debug"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"

@@ -225,7 +225,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToCrossIntersection"
-    //% block="движение по линии до перекрёстка с действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow to intersection after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии до перекрёстка с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -310,7 +311,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToLeftIntersaction"
-    //% block="движение по линии до перекрёстка слева $lineLocation c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow to left intersection $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии до перекрёстка слева $lineLocation c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -371,7 +373,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToRightIntersection"
-    //% block="движение по линии до перекрёстка справа $lineLocation c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow to right intersection $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии до перекрёстка справа $lineLocation c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -432,7 +435,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistance"
-    //% block="движение по линии на расстояние $dist мм с действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow to distance $dist mm after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии на расстояние $dist мм с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -495,7 +499,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithOneSensor"
-    //% block="движение по линии $lineSensor датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow $lineSensor sensor at line $lineLocation to distance $dist mm|after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии $lineSensor датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -518,7 +523,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithLeftSensor"
-    //% block="движение по линии левым датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow left sensor at line $lineLocation to distance $dist mm|after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии левым датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -583,7 +589,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithRightSensor"
-    //% block="движение по линии правым датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow right sensor at line $lineLocation to distance $dist mm|after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии правым датчиком при линия $lineLocation на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -640,66 +647,68 @@ namespace motions {
         motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
-    // export function LineFollow3Sensor(params?: automation.LineFollowInterface, debug: boolean = false) {
-    //     // Движение по линии с волновым регулятором (PID + защита от слёта с линии)
-    //     if (M_COLOR_SEN == undefined) return; // Если центрального сенсора нет
+    /*
+    export function LineFollow3Sensor(params?: automation.LineFollowInterface, debug: boolean = false) {
+        // Движение по линии с волновым регулятором (PID + защита от слёта с линии)
+        if (M_COLOR_SEN == undefined) return; // Если центрального сенсора нет
         
-    //     if (params) { // Если были переданы параметры
-    //         if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
-    //         if (params.Kp) lineFollow2SensorKp = params.Kp;
-    //         if (params.Ki) lineFollow2SensorKi = params.Ki;
-    //         if (params.Kd) lineFollow2SensorKd = params.Kd;
-    //         if (params.N) lineFollow2SensorN = params.N;
-    //     }
+        if (params) { // Если были переданы параметры
+            if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollow2SensorKp = params.Kp;
+            if (params.Ki) lineFollow2SensorKi = params.Ki;
+            if (params.Kd) lineFollow2SensorKd = params.Kd;
+            if (params.N) lineFollow2SensorN = params.N;
+        }
 
-    //     automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов регулятора
-    //     automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
-    //     automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
-    //     automation.pid1.reset(); // Сброс регулятора
+        automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов регулятора
+        automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
+        automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
+        automation.pid1.reset(); // Сброс регулятора
 
-    //     control.timer1.reset();
-    //     let lastSensor = 2; // Переменная для хранения последнего сенсора, который видел линию, изначально центральный
-    //     let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-    //     while (brick.buttonEnter.wasPressed()) {
-    //         let currTime = control.millis(); // Текущее время
-    //         let dt = currTime - prevTime; // Время за которое выполнился цикл
-    //         prevTime = currTime; // Новое время в переменную предыдущего времени
-    //         let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-    //         let refRawMCS = M_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-    //         let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
-    //         let refLCS = sensors.GetNormRef(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
-    //         let refMCS = sensors.GetNormRef(refRawMCS, B_REF_RAW_MCS, W_REF_RAW_MCS); // Нормализованное значение с левого датчика цвета
-    //         let refRCS = sensors.GetNormRef(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
-    //         let error = refLCS - refRCS; // Ошибка регулирования
-    //         automation.pid1.setPoint(error); // Передать ошибку регулятору
-    //         let U = 0;
-    //         if (refLCS > LINE_REF_TRESHOLD) {
-    //             control.timer1.reset();
-    //             lastSensor = 1;
-    //         } else if (refMCS > LINE_REF_TRESHOLD) {
-    //             control.timer1.reset();
-    //             lastSensor = 2;
-    //         } else if (refRCS > LINE_REF_TRESHOLD) {
-    //             control.timer1.reset();
-    //             lastSensor = 3;
-    //         } else if (control.timer1.millis() > 100) {
-    //             U = (2 - lastSensor) * lineFollow2SensorSpeed;
-    //         } else {
-    //             U = automation.pid1.compute(dt, 0); // Управляющее воздействие
-    //         }
-    //         //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
-    //         chassis.ChassisControl(U, lineFollow2SensorSpeed);
-    //         if (debug) {
-    //             brick.clearScreen(); // Очистка экрана
-    //             brick.printValue("refLCS", refLCS, 1);
-    //             brick.printValue("refMCS", refMCS, 2);
-    //             brick.printValue("refRCS", refRCS, 3);
-    //             brick.printValue("error", error, 4);
-    //             brick.printValue("U", U, 5);
-    //             brick.printValue("dt", dt, 12);
-    //         }
-    //         control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
-    //     }
-    // }
+        control.timer1.reset();
+        let lastSensor = 2; // Переменная для хранения последнего сенсора, который видел линию, изначально центральный
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (brick.buttonEnter.wasPressed()) {
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawMCS = M_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
+            let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
+            let refLCS = sensors.GetNormRef(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
+            let refMCS = sensors.GetNormRef(refRawMCS, B_REF_RAW_MCS, W_REF_RAW_MCS); // Нормализованное значение с левого датчика цвета
+            let refRCS = sensors.GetNormRef(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
+            let error = refLCS - refRCS; // Ошибка регулирования
+            automation.pid1.setPoint(error); // Передать ошибку регулятору
+            let U = 0;
+            if (refLCS > LINE_REF_TRESHOLD) {
+                control.timer1.reset();
+                lastSensor = 1;
+            } else if (refMCS > LINE_REF_TRESHOLD) {
+                control.timer1.reset();
+                lastSensor = 2;
+            } else if (refRCS > LINE_REF_TRESHOLD) {
+                control.timer1.reset();
+                lastSensor = 3;
+            } else if (control.timer1.millis() > 100) {
+                U = (2 - lastSensor) * lineFollow2SensorSpeed;
+            } else {
+                U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            }
+            //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
+            chassis.ChassisControl(U, lineFollow2SensorSpeed);
+            if (debug) {
+                brick.clearScreen(); // Очистка экрана
+                brick.printValue("refLCS", refLCS, 1);
+                brick.printValue("refMCS", refMCS, 2);
+                brick.printValue("refRCS", refRCS, 3);
+                brick.printValue("error", error, 4);
+                brick.printValue("U", U, 5);
+                brick.printValue("dt", dt, 12);
+            }
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+        }
+    }
+    */
 
 }
