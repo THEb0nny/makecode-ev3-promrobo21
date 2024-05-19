@@ -249,12 +249,12 @@ namespace levelings {
             let refRCS = sensors.GetNormRef(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             if (refLCS <= motions.lineRefTreshold) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
-                encRightMot1 = chassis.rightMotor.angle() - lMotEncPrev; // Считываем угол
+                encRightMot1 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
                 break;
             } else if (refRCS <= motions.lineRefTreshold) { // Правый датчик первый нашёл линию
                 firstSide = "RIGHT_SIDE";
-                encLeftMot1 = chassis.leftMotor.angle() - rMotEncPrev; // Считываем угол
+                encLeftMot1 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
                 break;
             }
@@ -273,13 +273,13 @@ namespace levelings {
             if (firstSide == "LEFT_SIDE") {
                 if (refRCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
                     encRightMot2 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол по новой
-                    a = encRightMot2 - encRightMot1; // Рассчитываем длину стороны a в тиках энкодера
+                    a = Math.abs(encRightMot2 - encRightMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             } else if (firstSide == "RIGHT_SIDE") {
                 if (refLCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
                     encLeftMot2 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол по новой
-                    a = encLeftMot2 - encLeftMot1; // Рассчитываем длину стороны a в тиках энкодера
+                    a = Math.abs(encLeftMot2 - encLeftMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             }

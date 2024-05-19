@@ -340,7 +340,7 @@ namespace custom {
                     speed: {
                         val: 30,
                         changeStep: 5,
-                        min: 5,
+                        min: -100,
                         max: 100
                     }
                 },
