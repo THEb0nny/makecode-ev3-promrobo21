@@ -231,7 +231,7 @@ namespace levelings {
         if (distanceBetweenLineSensors == 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
-            control.panic(3);
+            control.panic(10);
         } else if (speed == 0) {
             chassis.stop(true);
             return;
@@ -295,9 +295,7 @@ namespace levelings {
             pause(1000);
         }
         a = (a / 360) * Math.PI * chassis.getWheelRadius(); // Перевести в мм пройденное значение
-        c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)); // Рассчитываем гипотенузу 
         const alpha = Math.atan(a / b) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
-        // const beta = Math.asin(b / c) * (180.0 / Math.PI); // Рассчитываем угол бета в радианах и переводим в градусы
         if (firstSide == "LEFT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.LeftWheel);
         else if (firstSide == "RIGHT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.RightWheel);
         if (debug) { // Выводим на экран расчёты
@@ -308,9 +306,7 @@ namespace levelings {
             brick.printValue("encRightMot2", encRightMot2, 4);
             brick.printValue("a", a, 5);
             brick.printValue("b", b, 6);
-            brick.printValue("c", c, 7);
-            brick.printValue("alpha", alpha, 8);
-            // brick.printValue("beta", beta, 9);
+            brick.printValue("alpha", alpha, 7);
         }
         music.playToneInBackground(Note.D, 250); // Сигнал для понимация завершения
         motions.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
