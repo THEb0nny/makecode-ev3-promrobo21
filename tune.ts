@@ -342,10 +342,13 @@ namespace custom {
                         changeStep: 5,
                         min: -100,
                         max: 100
-                    }
+                    },
+                    debug: {
+                        val: false
+                    },
                 },
                 showStepsReg: false,
-                hrStrings: [1]
+                hrStrings: [2]
             }
         }
 
@@ -624,7 +627,8 @@ namespace custom {
                         levelings.LineAlignment(lineLocation, time, params, debug);
                     } else if (screenName == "LINE_ALIGNMET_IN_MOTION") {
                         const speed = methodScreens[screenName].params.speed.val;
-                        levelings.LineAlignmentInMotion(speed, AfterMotionShort.BreakStop)
+                        const debug = methodScreens[screenName].params.debug.val;
+                        levelings.LineAlignmentInMotion(speed, AfterMotionShort.BreakStop, debug)
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал
