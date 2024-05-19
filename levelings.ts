@@ -224,16 +224,19 @@ namespace levelings {
     //% group="Линия"
     export function LineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
         // https://www.youtube.com/watch?v=DOPXPuB7Xhs
-        if (distanceBetweenLineSensors == 0 || speed == 0) {
+        if (distanceBetweenLineSensors == 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
-            pause(2000);
+            control.panic(3);
+        } else if (speed == 0) {
+            chassis.stop(true);
             return;
         }
-        motions.ChassisControlCommand(0, speed); // Команда двигаться вперёд
+        let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
-        let encB1 = 0, encB2 = 0, encC1 = 0, encC2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
+        let encLeftMot1 = 0, encLeftMot2 = 0, encRightMot1 = 0, encRightMot2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
         let a = 0, b = distanceBetweenLineSensors, c = 0;
+        motions.ChassisControlCommand(0, speed); // Команда двигаться вперёд
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         // Первая часть - датчик, который замечает линию первым
         while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
@@ -246,14 +249,16 @@ namespace levelings {
             let refRCS = sensors.GetNormRef(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             if (refLCS <= motions.lineRefTreshold) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
-                encC1 = chassis.rightMotor.angle(); // Считываем угол
+                encRightMot1 = chassis.rightMotor.angle() - lMotEncPrev; // Считываем угол
+                music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
                 break;
             } else if (refRCS <= motions.lineRefTreshold) { // Правый датчик первый нашёл линию
                 firstSide = "RIGHT_SIDE";
-                encB1 = chassis.leftMotor.angle(); // Считываем угол
+                encLeftMot1 = chassis.leftMotor.angle() - rMotEncPrev; // Считываем угол
+                music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
                 break;
             }
-            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём 10 мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из первого цикла
         prevTime = 0; // Переменная предыдущего времения для цикла регулирования
@@ -267,34 +272,34 @@ namespace levelings {
             let refRCS = sensors.GetNormRef(refRawRCS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика цвета
             if (firstSide == "LEFT_SIDE") {
                 if (refRCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
-                    encC2 = chassis.rightMotor.angle(); // Считываем угол по новой
-                    a = encC2 - encC1; // Рассчитываем длину стороны a в тиках энкодера
+                    encRightMot2 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол по новой
+                    a = Math.abs(encRightMot2 - encRightMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             } else if (firstSide == "RIGHT_SIDE") {
                 if (refLCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
-                    encB2 = chassis.leftMotor.angle(); // Считываем угол по новой
-                    a = encB2 - encB1; // Рассчитываем длину стороны a в тиках энкодера
+                    encLeftMot2 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол по новой
+                    a = Math.abs(encLeftMot2 - encLeftMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             }
-            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём 10 мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из второго цикла
         // ChassisStop(true); // Жёсткое торможение для теста
         // pause(1000);
         a = (a / 360) * Math.PI * chassis.getWheelRadius(); // Перевести в мм пройденное значение
         c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)); // Рассчитываем гипотенузу 
-        let alpha = Math.sin(a / c) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
-        //let beta = Math.asin(b / c) * (180.0 / Math.PI); // Рассчитываем угол бета в радианах и переводим в градусы
+        const alpha = Math.sin(a / c) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
+        // const beta = Math.asin(b / c) * (180.0 / Math.PI); // Рассчитываем угол бета в радианах и переводим в градусы
         if (firstSide == "LEFT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.LeftWheel);
         else if (firstSide == "RIGHT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.RightWheel);
         if (debug) { // Выводим на экран расчёты
             brick.clearScreen();
-            brick.printValue("encB1", encB1, 1);
-            brick.printValue("encB2", encB2, 2);
-            brick.printValue("encC1", encC1, 3);
-            brick.printValue("encC2", encC2, 4);
+            brick.printValue("encLeftMot1", encLeftMot1, 1);
+            brick.printValue("encLeftMot2", encLeftMot2, 2);
+            brick.printValue("encRightMot1", encRightMot1, 3);
+            brick.printValue("encRightMot2", encRightMot2, 4);
             brick.printValue("a", a, 5);
             brick.printValue("b", b, 6);
             brick.printValue("c", c, 7);
