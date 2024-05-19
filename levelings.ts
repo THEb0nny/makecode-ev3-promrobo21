@@ -208,11 +208,9 @@ namespace levelings {
 
     /**
      * Alignment on the line in motion.
-     * Do not use if the angle to the line is large.
-     * Alignment is also maintained when moving backwards.
+     * Don't use high speeds. Alignment is also maintained when moving backwards.
      * Выравнивание на линии в движении.
-     * Не использовать, если угол к линии будет большой.
-     * Поддерживается и выравнивание при движении назад.
+     * Не используйте большие скорости. Поддерживается и выравнивание при движении назад.
      * @param speed скорость движения, eg: 30
      * @param actionAfterMotion действие после, eg: AfterMotionShort.BreakStop
      * @param debug отладка, eg: false
