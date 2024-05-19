@@ -273,21 +273,21 @@ namespace levelings {
             if (firstSide == "LEFT_SIDE") {
                 if (refRCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
                     encRightMot2 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол по новой
-                    a = Math.abs(encRightMot2 - encRightMot1); // Рассчитываем длину стороны a в тиках энкодера
+                    a = encRightMot2 - encRightMot1; // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             } else if (firstSide == "RIGHT_SIDE") {
                 if (refLCS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
                     encLeftMot2 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол по новой
-                    a = Math.abs(encLeftMot2 - encLeftMot1); // Рассчитываем длину стороны a в тиках энкодера
+                    a = encLeftMot2 - encLeftMot1; // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             }
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из второго цикла
-        // ChassisStop(true); // Жёсткое торможение для теста
-        // pause(1000);
+        chassis.stop(true); // Жёсткое торможение для теста
+        pause(1000);
         a = (a / 360) * Math.PI * chassis.getWheelRadius(); // Перевести в мм пройденное значение
         c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)); // Рассчитываем гипотенузу 
         const alpha = Math.sin(a / c) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
