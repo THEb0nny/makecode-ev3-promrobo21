@@ -296,7 +296,7 @@ namespace levelings {
         }
         a = (a / 360) * Math.PI * chassis.getWheelRadius(); // Перевести в мм пройденное значение
         c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)); // Рассчитываем гипотенузу 
-        const alpha = Math.sin(a / c) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
+        const alpha = Math.atan(a / b) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
         // const beta = Math.asin(b / c) * (180.0 / Math.PI); // Рассчитываем угол бета в радианах и переводим в градусы
         if (firstSide == "LEFT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.LeftWheel);
         else if (firstSide == "RIGHT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.RightWheel);
@@ -310,10 +310,11 @@ namespace levelings {
             brick.printValue("b", b, 6);
             brick.printValue("c", c, 7);
             brick.printValue("alpha", alpha, 8);
-            //brick.printValue("beta", beta, 9);
+            // brick.printValue("beta", beta, 9);
         }
         music.playToneInBackground(Note.D, 250); // Сигнал для понимация завершения
         motions.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
+        if (debug) pause(3000);
     }
     
 }
