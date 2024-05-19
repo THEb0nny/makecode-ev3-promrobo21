@@ -207,8 +207,12 @@ namespace levelings {
     }
 
     /**
-     * Alignment on the line in motion. Experimental.
-     * Выравнивание на линии в движении. Экспериментальная.
+     * Alignment on the line in motion.
+     * Do not use if the angle to the line is large.
+     * Alignment is also maintained when moving backwards.
+     * Выравнивание на линии в движении.
+     * Не использовать, если угол к линии будет большой.
+     * Поддерживается и выравнивание при движении назад.
      * @param speed скорость движения, eg: 30
      * @param actionAfterMotion действие после, eg: AfterMotionShort.BreakStop
      * @param debug отладка, eg: false
@@ -286,8 +290,10 @@ namespace levelings {
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из второго цикла
-        chassis.stop(true); // Жёсткое торможение для теста
-        pause(1000);
+        if (debug) {
+            chassis.stop(true); // Жёсткое торможение для теста
+            pause(1000);
+        }
         a = (a / 360) * Math.PI * chassis.getWheelRadius(); // Перевести в мм пройденное значение
         c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)); // Рассчитываем гипотенузу 
         const alpha = Math.sin(a / c) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
