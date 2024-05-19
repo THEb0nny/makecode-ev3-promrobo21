@@ -333,8 +333,20 @@ namespace custom {
                     }
                 },
                 showStepsReg: true,
-                hrStrings: [4]
+                hrStrings: [5]
             },
+            LINE_ALIGNMET_IN_MOTION: {
+                params: {
+                    speed: {
+                        val: 30,
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
+                    }
+                },
+                showStepsReg: false,
+                hrStrings: [1]
+            }
         }
 
         const screensNums = Object.keys(methodScreens).length; // Количество экранов с регуляторами
@@ -610,6 +622,9 @@ namespace custom {
                             rightN: methodScreens[screenName].params.rightN.val
                         };
                         levelings.LineAlignment(lineLocation, time, params, debug);
+                    } else if (screenName == "LINE_ALIGNMET_IN_MOTION") {
+                        const speed = methodScreens[screenName].params.speed.val;
+                        levelings.LineAlignmentInMotion(speed, AfterMotionShort.BreakStop)
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал
