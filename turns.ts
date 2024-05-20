@@ -92,7 +92,7 @@ namespace chassis {
      */
     //% blockId="SmartSpinTurn"
     //% block="smart turn at $deg\\° relative center of wheels||params = $params|debug $debug"
-    //% block.loc.ru="умный поворот на $deg\\° относительно центра колёс||параметры = $params|отдалка $debug"
+    //% block.loc.ru="умный поворот на $deg\\° относительно центра оси колёс||параметры = $params|отдалка $debug"
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"
