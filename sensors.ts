@@ -216,7 +216,7 @@ namespace sensors {
     }
 
     /**
-     * Get the maximum RGB values for the color sensor..
+     * Get the maximum RGB values for the color sensor.
      * Получить максимальне значения RGB для датчика цвета.
      */
     //% blockId="GetMaxRgbColorSensor"

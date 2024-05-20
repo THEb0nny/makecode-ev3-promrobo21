@@ -43,7 +43,7 @@ namespace levelings {
     /**
      * Set the distance between the two line sensors in mm.
      * Установить расстояние между двумя датчиками линии в мм.
-     * @param dist расстояние между датчиками в мм, eg. 31.88
+     * @param dist расстояние между датчиками в мм, eg: 32
      */
     //% blockId="SetDistanceBetweenLineSensors"
     //% block="set distance $dist mm between line sensors"
