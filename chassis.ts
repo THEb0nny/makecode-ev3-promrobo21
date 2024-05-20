@@ -69,11 +69,11 @@ namespace chassis {
      * Линейное движение на заданное расстояние с ускорением и замедлением в мм. Не рекомендуется использоваться минимальную скорость меньше 10.
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей должны иметь одинаковый знак!
-     * @param minSpeed начальная скорость движения, eg: 10
-     * @param maxSpeed максимальная скорость движения, eg: 50
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 100
+     * @param minSpeed начальная скорость движения, eg: 10
+     * @param maxSpeed максимальная скорость движения, eg: 50
      */
     //% blockId="RampLinearDistMove"
     //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|min speed $minSpeed\\% max $maxSpeed\\%"
