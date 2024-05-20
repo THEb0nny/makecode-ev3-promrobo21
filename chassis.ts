@@ -11,7 +11,7 @@ namespace chassis {
      */
     //% blockId="LinearDistMove"
     //% block="linear distance moving $dist mm at $speed\\% braking $braking"
-    //% block.loc.ru="линейное движение на расстояние $dist мм на $speed\\% торможение $braking"
+    //% block.loc.ru="линейное движение на расстояние $dist мм с $speed\\% торможение $braking"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="79" blockGap="8"
@@ -42,7 +42,7 @@ namespace chassis {
      */
     //% blockId="DistMove"
     //% block="distance moving $dist mm at $speedLeft\\% $speedRight\\% braking $braking"
-    //% block.loc.ru="движение на расстояние $dist мм на $speedLeft\\% $speedRight\\% торможение $braking"
+    //% block.loc.ru="движение на расстояние $dist мм с $speedLeft\\% $speedRight\\% торможение $braking"
     //% inlineInputMode="inline"
     //% speedLeft.shadow="motorSpeedPicker"
     //% speedRight.shadow="motorSpeedPicker"
@@ -86,8 +86,6 @@ namespace chassis {
     export function RampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
         if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
-            music.playSoundEffect(sounds.systemGeneralAlert);
-            pause(2000);
             return;
         }
         const mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
@@ -116,8 +114,6 @@ namespace chassis {
         //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {
             stop(true);
-            music.playSoundEffect(sounds.systemGeneralAlert);
-            pause(2000);
             return;
         }
         const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
