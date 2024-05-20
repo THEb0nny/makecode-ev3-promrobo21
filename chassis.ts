@@ -71,7 +71,7 @@ namespace chassis {
      * Значения скоростей должны иметь одинаковый знак!
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
-     * @param decelDist расстояние замедления в мм, eg: 100
+     * @param decelDist расстояние замедления в мм, eg: 150
      * @param minSpeed начальная скорость движения, eg: 10
      * @param maxSpeed максимальная скорость движения, eg: 50
      */
