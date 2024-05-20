@@ -9,6 +9,16 @@ namespace params {
         N?: number;
     }
 
+    // Интерфейс перадачи параметров для алгоритма движения по линии с ускорениями и замедлениями
+    export interface RampLineFollowInterface {
+        minSpeed?: number;
+        maxSpeed?: number;
+        Kp?: number;
+        Ki?: number;
+        Kd?: number;
+        N?: number;
+    }
+
     // Интерфейс перадачи параметров для алгоритма позиционирования на линии
     export interface LinePositioningInterface {
         maxSpeed?: number;

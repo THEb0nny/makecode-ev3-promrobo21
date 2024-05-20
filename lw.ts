@@ -29,6 +29,13 @@ namespace motions {
     export let lineFollowRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком
     export let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
 
+    export let rampLineFollow2SensorMinSpeed = 10; // Переменная для хранения минимальной скорости при движения по линии двумя датчиками
+    export let rampLineFollow2SensorMaxSpeed = 50; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
+    export let rampLineFollow2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
+    export let rampLineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
+    export let rampLineFollow2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
+    export let rampLineFollow2SensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
+
     /**
      * Set the driving distance after determining the intersection for rolling in mm.
      * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
@@ -261,7 +268,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollow2SensorSpeed);
+            motions.ChassisControlCommand(U, lineFollow2SensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -350,7 +357,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowRightSensorSpeed);
+            motions.ChassisControlCommand(U, lineFollowRightSensorSpeed); // Команда моторам
             brick.clearScreen(); // Очистка экрана
             if (debug) {
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -412,7 +419,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowLeftSensorSpeed);
+            motions.ChassisControlCommand(U, lineFollowLeftSensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -475,7 +482,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollow2SensorSpeed);
+            motions.ChassisControlCommand(U, lineFollow2SensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -488,6 +495,64 @@ namespace motions {
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+    }
+
+    /**
+     * Movement along the line for a distance.
+     * Движение по линии на расстояние.
+     * @param totalDist общее расстояние движения в мм, eg: 400
+     * @param accelDist расстояние ускорения в мм, eg: 100
+     * @param decelDist расстояние замедления в мм, eg: 150
+     * @param debug отладка, eg: false
+     */
+    //% blockId="RampLineFollowToDistance"
+    //% block="ramp line follow to distance $totalDist mm acceleration $accelDist deceleration $decelDist||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist||параметры: $params|отладка $debug"
+    //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
+    //% debug.shadow="toggleOnOff"
+    //% params.shadow="EmptyLineFollowParams"
+    //% weight="79"
+    //% group="Движение по линии"
+    export function RampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, params?: params.RampLineFollowInterface, debug: boolean = false) {        
+        if (params) { // Если были переданы параметры
+            if (params.minSpeed) rampLineFollow2SensorMinSpeed = Math.abs(params.minSpeed);
+            if (params.maxSpeed) rampLineFollow2SensorMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.Kp) rampLineFollow2SensorKp = params.Kp;
+            if (params.Ki) rampLineFollow2SensorKi = params.Ki;
+            if (params.Kd) rampLineFollow2SensorKd = params.Kd;
+            if (params.N) rampLineFollow2SensorN = params.N;
+        }
+
+        let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        let calcMotRot = (totalDist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
+
+        advmotctrls.accTwoEncConfig(rampLineFollow2SensorMinSpeed, rampLineFollow2SensorMaxSpeed, accelDist, decelDist, totalDist);
+        automation.pid1.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов  ПИД регулятора
+        automation.pid1.setDerivativeFilter(rampLineFollow2SensorN); // Установить фильтр дифференциального регулятора
+        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        automation.pid1.reset(); // Сброс ПИД регулятора
+        
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) {
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev; // Значения с энкодеров моторы
+            let rMotEnc = chassis.rightMotor.angle() - rMotEncPrev;
+            let out = advmotctrls.accTwoEnc(lMotEnc, rMotEnc);
+            if (out.isDone) break;
+            let refRawLeftLS = sensors.GetLineSensorRawRefValue(LineSensor.Left); // Сырое значение с левого датчика цвета
+            let refRawRightLS = sensors.GetLineSensorRawRefValue(LineSensor.Right); // Сырое значение с правого датчика цвета
+            let refLeftLS = sensors.GetNormRef(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.GetNormRef(refRawRightLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
+            let error = refLeftLS - refRightLS; // Ошибка регулирования
+            automation.pid1.setPoint(error); // Передать ошибку регулятору
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+        }
+        chassis.stop(true); // Остановить моторы с удержанием
     }
 
     /**
@@ -566,7 +631,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowLeftSensorSpeed);
+            motions.ChassisControlCommand(U, lineFollowLeftSensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -632,7 +697,7 @@ namespace motions {
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollow2SensorSpeed);
+            motions.ChassisControlCommand(U, lineFollow2SensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -696,7 +761,7 @@ namespace motions {
                 U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             }
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
-            chassis.ChassisControl(U, lineFollow2SensorSpeed);
+            chassis.ChassisControl(U, lineFollow2SensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLCS", refLCS, 1);
