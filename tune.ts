@@ -4,14 +4,13 @@ namespace custom {
      * Setting function parameters.
      * Настройка параметров функций и методов.
      * @param startupScreen экран при старте, eg: 0
-     * @param debug отладка, eg: false
      */
     //% blockId="FunctionsTune"
-    //% block="проверка функций||начальный экран $startupScreen|отладка $debug"
+    //% block="проверка функций||начальный экран $startupScreen"
     //% expandableArgumentMode="toggle"
     //% weight="99"
     //% group="Дополнительно"
-    export function FunctionsTune(startupScreen: number = 0, debug: boolean = false) {
+    export function FunctionsTune(startupScreen: number = 0) {
         const LOOP_DELAY = 10; // Задержка цикла
         const LINE_SCROLL_TRESHOLD = 5; // Начинать скролл параметров с строки
         const BTN_PRESS_LOOP_DELAY = 150; // Задержка в цикле при нажатии
