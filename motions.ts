@@ -22,8 +22,6 @@ namespace motions {
     export function RollingMoveOut(dist: number, speed: number) {
         if (dist == 0 || speed == 0) {
             chassis.stop(true);
-            music.playSoundEffect(sounds.systemGeneralAlert);
-            pause(2000);
             return;
         }
         let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
@@ -90,9 +88,9 @@ namespace motions {
         // motions.ChassisControlCommand(turnRatio, speed); // Команда двигаться по направлению и скоростью
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
-            prevTime = currTime;
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
             let refRawLeftLS = sensors.GetLineSensorRawRefValue(LineSensor.Left); // Сырое значение с левого датчика цвета
             let refRawRightLS = sensors.GetLineSensorRawRefValue(LineSensor.Right); // Сырое значение с правого датчика цвета
             let refLeftLS = sensors.GetNormRef(refRawLeftLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
