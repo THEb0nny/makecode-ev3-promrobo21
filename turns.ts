@@ -108,9 +108,9 @@ namespace chassis {
             if (params.N) smartSpinTurnN = params.N;
         }
 
-        let lMotEncPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
-        let rMotEncPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
-        let calcMotRot = Math.round(deg * chassis.getBaseLength() / chassis.getWheelRadius()); // Расчёт угла поворота моторов для поворота
+        let lMotEncPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
+        let rMotEncPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
+        let calcMotRot = Math.round(deg * getBaseLength() / getWheelRadius()); // Расчёт угла поворота моторов для поворота
 
         automation.pid2.setGains(smartSpinTurnKp, smartSpinTurnKi, smartSpinTurnKd); // Установка коэффициентов ПИД регулятора
         automation.pid2.setDerivativeFilter(smartSpinTurnN); // Установить фильтр дифференциального регулятора
@@ -126,8 +126,8 @@ namespace chassis {
             let dt = currTime - prevTime; // Время выполнения итерации цикла
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
             if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartSpinTurnTimeOut) break; // Дорегулируемся
-            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev; // Значение энкодера с левого мотора в текущий момент
-            let rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значение энкодера с правого мотора в текущий момент
+            let lMotEnc = leftMotor.angle() - lMotEncPrev; // Значение энкодера с левого мотора в текущий момент
+            let rMotEnc = rightMotor.angle() - rMotEncPrev; // Значение энкодера с правого мотора в текущий момент
             let errorL = calcMotRot - lMotEnc; // Ошибки регулирования левой стороны
             let errorR = calcMotRot * -1 - rMotEnc; // Ошибки регулирования правой стороны
             let error = errorL - errorR; // Расчитываем общую ошибку
@@ -139,7 +139,7 @@ namespace chassis {
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
                 music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
             }
-            chassis.leftMotor.run(u); chassis.rightMotor.run(-u); // Передаём управляющее воздействие на моторы
+            leftMotor.run(u); rightMotor.run(-u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
                 brick.showValue("calcMotRot", calcMotRot, 1);
@@ -154,8 +154,8 @@ namespace chassis {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
-        chassis.leftMotor.setBrake(true); chassis.rightMotor.setBrake(true); // Установка тормоз с удержанием на моторы
-        chassis.leftMotor.stop(); chassis.rightMotor.stop(); // Остановка моторов
+        leftMotor.setBrake(true); rightMotor.setBrake(true); // Установка тормоз с удержанием на моторы
+        leftMotor.stop(); rightMotor.stop(); // Остановка моторов
     }
 
     /**
@@ -183,16 +183,16 @@ namespace chassis {
             if (params.N) smartPivotTurnN = params.N;
         }
 
-        chassis.leftMotor.setBrake(true); chassis.rightMotor.setBrake(true); // Установить жёсткий тормоз для моторов
+        leftMotor.setBrake(true); rightMotor.setBrake(true); // Установить жёсткий тормоз для моторов
         let motEncPrev = 0; // Инициализируем переменную хранения значения с энкодера мотора
         if (wheelPivot == WheelPivot.LeftWheel) { // Записываем текущее значение с энкодера нужного мотора и ставим тормоз нужному мотору
-            chassis.leftMotor.stop(); // Тормоз на мотор
-            motEncPrev = chassis.rightMotor.angle(); // Если вращаться нужно вокруг левого, тогда записываем с правого
+            leftMotor.stop(); // Тормоз на мотор
+            motEncPrev = rightMotor.angle(); // Если вращаться нужно вокруг левого, тогда записываем с правого
         } else if (wheelPivot == WheelPivot.RightWheel) {
-            chassis.rightMotor.stop(); // Тормоз на мотор
-            motEncPrev = chassis.leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
+            rightMotor.stop(); // Тормоз на мотор
+            motEncPrev = leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
         }
-        let calcMotRot = Math.round(((deg * chassis.getBaseLength()) / chassis.getWheelRadius()) * 2); // Рассчитываем сколько градусов вращать мотор
+        let calcMotRot = Math.round(((deg * getBaseLength()) / getWheelRadius()) * 2); // Рассчитываем сколько градусов вращать мотор
         
         automation.pid2.setGains(smartPivotTurnKp, smartPivotTurnKi, smartPivotTurnKd); // Устанавливаем коэффиценты ПИД регулятора
         automation.pid2.setDerivativeFilter(smartPivotTurnN); // Установить фильтр дифференциального регулятора
@@ -208,8 +208,8 @@ namespace chassis {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время выполнения итерации цикла
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
-            if (wheelPivot == WheelPivot.LeftWheel) motEnc = chassis.rightMotor.angle() - motEncPrev; // Значение левого энкодера мотора в текущий момент
-            else if (wheelPivot == WheelPivot.RightWheel) motEnc = chassis.leftMotor.angle() - motEncPrev; // Значение правого энкодера мотора в текущий момент
+            if (wheelPivot == WheelPivot.LeftWheel) motEnc = rightMotor.angle() - motEncPrev; // Значение левого энкодера мотора в текущий момент
+            else if (wheelPivot == WheelPivot.RightWheel) motEnc = leftMotor.angle() - motEncPrev; // Значение правого энкодера мотора в текущий момент
             let error = calcMotRot - motEnc; // Ошибка регулирования
             if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartPivotTurnTimeOut) break; // Дорегулируемся
             automation.pid2.setPoint(error); // Передаём ошибку регулятору
@@ -220,8 +220,8 @@ namespace chassis {
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
                 music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
             }
-            if (wheelPivot == WheelPivot.LeftWheel) chassis.rightMotor.run(U); // Передаём правому мотору управляющее воздействие
-            else if (wheelPivot == WheelPivot.RightWheel) chassis.leftMotor.run(U); // Передаём левому мотору управляющее воздействие
+            if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(U); // Передаём правому мотору управляющее воздействие
+            else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(U); // Передаём левому мотору управляющее воздействие
             if (debug) { // Выводим для отладки на экран
                 brick.clearScreen();
                 brick.showValue("calcMotRot", calcMotRot, 1);
@@ -233,7 +233,84 @@ namespace chassis {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
-        chassis.leftMotor.stop(); chassis.rightMotor.stop(); // Остановить моторы
+        leftMotor.stop(); rightMotor.stop(); // Остановить моторы
+    }
+
+    
+    /**
+     * Поворот на линию.
+     * @param rotateSide в какую сторону вращаться в поиске линии, eg: TurnRotateSide.Left
+     * @param speed скорость вращения, eg: 40
+     * @param debug отладка на экран, eg: false
+    */
+    //% blockId="SpinTurnToLine"
+    //% block="turn to line $rotateSide at $speed\\% relative to center of wheel axis||debug $debug"
+    //% block.loc.ru="поворот до линии $rotateSide на $speed\\% относительно центра оси колёс||отдалка $debug"
+    //% expandableArgumentMode="toggle"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Повороты на линию"
+    export function SpinTurnToLine(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+        let sensor: sensors.ColorSensor; // Инициализируем переменную сенсора
+        if (rotateSide == TurnRotateSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
+        else if (rotateSide == TurnRotateSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
+        sensor.rgbRaw(); // Обращаемся к режиму датчика заранее
+
+        const emlPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
+        const emrPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
+        let calcMotRot = Math.round(30 * getBaseLength() / getWheelRadius()); // Расчитать градусы для поворота в градусы для мотора
+
+        if (rotateSide == TurnRotateSide.Left) {
+            advmotctrls.syncMotorsConfig(-speed, speed);
+            calcMotRot *= -1; // Умножаем на -1, чтобы вращаться влево
+        } else if (rotateSide == TurnRotateSide.Right) {
+            advmotctrls.syncMotorsConfig(speed, -speed);
+        }
+
+        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
+        pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        while (true) { // Поворачиваем изначально, чтобы повернуться от линии
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время выполнения итерации цикла
+            prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
+            let eml = leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
+            let emr = rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
+            if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
+            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotors(U);
+            leftMotor.run(powers.pwrLeft);
+            rightMotor.run(powers.pwrRight);
+            control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
+        }
+        // Команда, чтобы продолжать поворот
+        if (rotateSide == TurnRotateSide.Left) chassis.steeringCommand(-200, speed);
+        else if (rotateSide == TurnRotateSide.Right) chassis.steeringCommand(200, speed);
+        
+        prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        for (let i = 0; i < 2; i++) { // Повторяем 2 раза, сначала ищем белый, а потом чёрный
+            while (true) {
+                let currTime = control.millis(); // Текущее время
+                let dt = currTime - prevTime; // Время выполнения итерации цикла
+                prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
+                const rgbCS = sensor.rgbRaw(); // Получаем от сенсора RGB
+                const hsvlCS = sensors.RgbToHsvlConverter(rgbCS); // Переводим RGB в HSV
+                const colorCS = sensors.HsvlToColorNum(hsvlCS, sensors.HsvlToColorNumParams(50, 10, 1, 25, 30, 100, 180, 260)); // Узнаём какой цвет
+                if (colorCS == (i == 0 ? 1 : 6)) break;
+                if (debug) { // Отладка
+                    brick.clearScreen();
+                    brick.showValue("colorCS", colorCS, 1);
+                    brick.showValue("loopTime", dt, 12);
+                }
+                control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            }
+        }
+        levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
     }
     
 }

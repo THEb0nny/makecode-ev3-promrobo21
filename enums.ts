@@ -117,3 +117,11 @@ const enum SideJunctionType {
     //% block.loc.ru="справа"
     Right
 }
+
+// Перечисление о поворотах в сторону
+enum TurnRotateSide {
+    //% block="влево"
+    Left,
+    //% block="вправо"
+    Right
+}
