@@ -101,7 +101,7 @@ namespace sensors {
     //% block="**line sensor** $sensor raw value"
     //% block.loc.ru="сырое значение **датчика линии** $sensor"
     //% inlineInputMode="inline"
-    //% weight="88" blockGap="8"
+    //% weight="88"
     //% group="Line Sensor"
     export function GetLineSensorRawRefValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
@@ -128,8 +128,8 @@ namespace sensors {
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
      */
     //% blockId="NormalizingReflectionValue"
-    //% block="normalize reflection $refRawVal at black $bRefRawVal white $wRefRawVal"
-    //% block.loc.ru="нормализовать отражение $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
+    //% block="normalize raw reflection $refRawVal at black $bRefRawVal white $wRefRawVal"
+    //% block.loc.ru="нормализовать сырое значения отражения $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Line Sensor"
@@ -147,8 +147,8 @@ namespace sensors {
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
      */
     //% blockId="GetNormalizedReflectionValue"
-    //% block="normalize reflection $sensor **line sensor**"
-    //% block.loc.ru="нормализовать отражение $sensor **датчика линии**"
+    //% block="normalized reflection $sensor **line sensor**"
+    //% block.loc.ru="нормализованное отражение $sensor **датчика линии**"
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Line Sensor"
