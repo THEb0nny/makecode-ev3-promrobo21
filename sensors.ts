@@ -99,7 +99,7 @@ namespace sensors {
      */
     //% blockId="GetLineSensorRawRefValue"
     //% block="**line sensor** $sensor raw value"
-    //% block.loc.ru="сырое значение **датчика линии** $sensor"
+    //% block.loc.ru="сырое значение отражения **датчика линии** $sensor"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Line Sensor"
@@ -147,8 +147,8 @@ namespace sensors {
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
      */
     //% blockId="GetNormalizedReflectionValue"
-    //% block="normalized reflection $sensor **line sensor**"
-    //% block.loc.ru="нормализованное отражение $sensor **датчика линии**"
+    //% block="normalized reflection **line sensor** $sensor"
+    //% block.loc.ru="нормализованное отражение **датчика линии** $sensor"
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Line Sensor"
