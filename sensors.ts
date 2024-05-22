@@ -95,6 +95,7 @@ namespace sensors {
     /**
      * A method for obtaining a raw reflection value from a line sensor.
      * Метод получения с датчика линии сырого значения отражения.
+     * @param sensor датчик линии, eg: LineSensor.Left
      */
     //% blockId="GetLineSensorRawRefValue"
     //% block="**line sensor** $sensor raw value"
@@ -120,22 +121,45 @@ namespace sensors {
     }
 
     /**
+     * A method for normalizing the reflectance value for a line sensor from raw values..
+     * Метод нормализации значения отражения для датчика линии из сырых значений.
+     * @param refRawVal текущее сырое значение отражения, eg: 0
+     * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
+     * @param wRefRawVal сырое значение отражения на белом, eg: 650
+     */
+    //% blockId="NormalizingReflectionValue"
+    //% block="normalize reflection $refRawVal at black $bRefRawVal white $wRefRawVal"
+    //% block.loc.ru="нормализовать отражение $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
+    //% inlineInputMode="inline"
+    //% weight="87"
+    //% group="Line Sensor"
+    export function NormalizingReflectionValue(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
+        let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
+        refVal = Math.constrain(refVal, 0, 100);
+        return refVal;
+    }
+
+    /**
      * A method for obtaining a normalized reflection value for a line sensor from raw values.
      * Метод получения нормализованного значения отражения для датчика линии из сырых значений.
      * @param refRawVal текущее сырое значение отражения, eg: 0
      * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
      */
-    //% blockId="GetNormRef"
-    //% block="normalize reflection $refRawVal at black $bRefRawVal white $wRefRawVal"
-    //% block.loc.ru="нормализовать отражение $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
+    //% blockId="GetNormalizedReflectionValue"
+    //% block="normalize reflection $sensor **line sensor**"
+    //% block.loc.ru="нормализовать отражение $sensor **датчика линии**"
     //% inlineInputMode="inline"
-    //% weight="87"
+    //% weight="86"
     //% group="Line Sensor"
-    export function GetNormRef(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
-        let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
-        refVal = Math.constrain(refVal, 0, 100);
-        return refVal;
+    export function GetNormalizedReflectionValue(sensor: LineSensor): number {
+        const refRawLS = sensors.GetLineSensorRawRefValue(sensor); // Сырое значение с датчика цвета
+        if (sensor == LineSensor.Left) {
+            return sensors.NormalizingReflectionValue(refRawLS, sensors.bRefRawLeftLineSensor, sensors.wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
+        } else if (sensor == LineSensor.Right) {
+            return sensors.NormalizingReflectionValue(refRawLS, sensors.bRefRawRightLineSensor, sensors.wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
+        }
+        return 0;
     }
 
     /**
