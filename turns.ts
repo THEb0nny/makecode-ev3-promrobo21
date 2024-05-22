@@ -236,7 +236,6 @@ namespace chassis {
         leftMotor.stop(); rightMotor.stop(); // Остановить моторы
     }
 
-    
     /**
      * Поворот на линию.
      * @param rotateSide в какую сторону вращаться в поиске линии, eg: TurnRotateSide.Left
@@ -254,7 +253,7 @@ namespace chassis {
         let sensor: sensors.ColorSensor; // Инициализируем переменную сенсора
         if (rotateSide == TurnRotateSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
         else if (rotateSide == TurnRotateSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
-        sensor.rgbRaw(); // Обращаемся к режиму датчика заранее
+        sensor.rgbRaw(); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
         const emlPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
         const emrPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
@@ -272,6 +271,8 @@ namespace chassis {
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
 
+        let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
+        let lineIsFound = false; // Переменная - флажок о том, что чёрная линия найдена
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Поворачиваем изначально, чтобы повернуться от линии
             let currTime = control.millis(); // Текущее время
@@ -279,7 +280,14 @@ namespace chassis {
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
             let eml = leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
             let emr = rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
-            if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
+            if (!preTurnIsDone && (Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) preTurnIsDone = true; // Если предвариательный поворот ещё не выполнен, то проверяем условия
+            if (preTurnIsDone) { // Если предварительный поворот выполнен
+                const rgbCS = sensor.rgbRaw(); // Получаем от сенсора RGB
+                const hsvlCS = sensors.RgbToHsvlConverter(rgbCS); // Переводим RGB в HSV
+                const colorCS = sensors.HsvlToColorNum(hsvlCS, sensors.HsvlToColorNumParams(50, 10, 1, 25, 30, 100, 180, 260)); // Узнаём какой цвет
+                if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
+                if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
+            }
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
             pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, 0);
@@ -287,28 +295,6 @@ namespace chassis {
             leftMotor.run(powers.pwrLeft);
             rightMotor.run(powers.pwrRight);
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
-        }
-        // Команда, чтобы продолжать поворот
-        if (rotateSide == TurnRotateSide.Left) chassis.steeringCommand(-200, speed);
-        else if (rotateSide == TurnRotateSide.Right) chassis.steeringCommand(200, speed);
-        
-        prevTime = 0; // Переменная предыдущего времения для цикла регулирования
-        for (let i = 0; i < 2; i++) { // Повторяем 2 раза, сначала ищем белый, а потом чёрный
-            while (true) {
-                let currTime = control.millis(); // Текущее время
-                let dt = currTime - prevTime; // Время выполнения итерации цикла
-                prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
-                const rgbCS = sensor.rgbRaw(); // Получаем от сенсора RGB
-                const hsvlCS = sensors.RgbToHsvlConverter(rgbCS); // Переводим RGB в HSV
-                const colorCS = sensors.HsvlToColorNum(hsvlCS, sensors.HsvlToColorNumParams(50, 10, 1, 25, 30, 100, 180, 260)); // Узнаём какой цвет
-                if (colorCS == (i == 0 ? 1 : 6)) break;
-                if (debug) { // Отладка
-                    brick.clearScreen();
-                    brick.showValue("colorCS", colorCS, 1);
-                    brick.showValue("loopTime", dt, 12);
-                }
-                control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
-            }
         }
         levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
     }
