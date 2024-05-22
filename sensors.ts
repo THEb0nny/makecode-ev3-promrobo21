@@ -98,7 +98,7 @@ namespace sensors {
      * @param sensor датчик линии, eg: LineSensor.Left
      */
     //% blockId="GetLineSensorRawRefValue"
-    //% block="**line sensor** $sensor raw value"
+    //% block="**line sensor** $sensor reflection raw"
     //% block.loc.ru="сырое значение отражения **датчика линии** $sensor"
     //% inlineInputMode="inline"
     //% weight="88"
