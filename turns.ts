@@ -308,10 +308,18 @@ namespace chassis {
     }
 
     function SpinTurnToLineAtNxtLightSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
-        let sensor: sensors.NXTLightSensor; // Инициализируем переменную сенсора
-        if (rotateSide == TurnRotateSide.Left) sensor = (sensors.leftLineSensor as sensors.NXTLightSensor);
-        else if (rotateSide == TurnRotateSide.Right) sensor = (sensors.rightLineSensor as sensors.NXTLightSensor);
-        sensor.light(NXTLightIntensityMode.ReflectedRaw); // Обращаемся к режиму датчика заранее, чтобы тот включился
+        let sensorSide: LineSensor; // Инициализируем переменную сенсора
+        let sensorBlackRefRaw = 0, sensorWhiteRefRaw = 0;
+        if (rotateSide == TurnRotateSide.Left) {
+            sensorSide = LineSensor.Left;
+            sensorBlackRefRaw = sensors.bRefRawLeftLineSensor;
+            sensorWhiteRefRaw = sensors.wRefRawLeftLineSensor;
+        } else if (rotateSide == TurnRotateSide.Right) {
+            sensorSide = LineSensor.Right;
+            sensorBlackRefRaw = sensors.bRefRawRightLineSensor;
+            sensorWhiteRefRaw = sensors.wRefRawRightLineSensor;
+        }
+        sensors.GetLineSensorRawRefValue(sensorSide); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
         const emlPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
         const emrPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
@@ -340,9 +348,10 @@ namespace chassis {
             let emr = rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             if (!preTurnIsDone && (Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) preTurnIsDone = true; // Если предвариательный поворот ещё не выполнен, то проверяем условия
             if (preTurnIsDone) { // Если предварительный поворот выполнен
-                // To Do
-                // if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
-                // if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
+                let refRaw = sensors.GetLineSensorRawRefValue(sensorSide); // Сырое значение с датчика линии
+                let refLeft = sensors.GetNormRef(refRaw, sensorBlackRefRaw, sensorWhiteRefRaw); // Нормализованное значение с датчика линии
+                if (!lineIsFound && refLeft <= 15) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
+                if (lineIsFound && refLeft >= 80) break; // Нашли белую часть посли линии
             }
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
             pidChassisSync.setPoint(error);
