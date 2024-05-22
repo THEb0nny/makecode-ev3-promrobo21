@@ -248,8 +248,16 @@ namespace chassis {
     //% expandableArgumentMode="toggle"
     //% inlineInputMode="inline"
     //% weight="99"
-    //% group="Повороты на линию"
+    //% group="Синхронизированные повороты на линию"
     export function SpinTurnToLine(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+        if (sensors.leftLineSensor instanceof sensors.ColorSensor && sensors.rightLineSensor instanceof sensors.ColorSensor) {
+            SpinTurnToLineAtColorSensor(rotateSide, speed, debug);
+        } else if (sensors.leftLineSensor instanceof sensors.NXTLightSensor && sensors.rightLineSensor instanceof sensors.NXTLightSensor) {
+            SpinTurnToLineAtNxtLightSensor(rotateSide, speed, debug);
+        }
+    }
+
+    function SpinTurnToLineAtColorSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
         let sensor: sensors.ColorSensor; // Инициализируем переменную сенсора
         if (rotateSide == TurnRotateSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
         else if (rotateSide == TurnRotateSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
@@ -287,6 +295,54 @@ namespace chassis {
                 const colorCS = sensors.HsvlToColorNum(hsvlCS, sensors.HsvlToColorNumParams(50, 10, 1, 25, 30, 100, 180, 260)); // Узнаём какой цвет
                 if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
+            }
+            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotors(U);
+            leftMotor.run(powers.pwrLeft);
+            rightMotor.run(powers.pwrRight);
+            control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
+        }
+        levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
+    }
+
+    function SpinTurnToLineAtNxtLightSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+        let sensor: sensors.NXTLightSensor; // Инициализируем переменную сенсора
+        if (rotateSide == TurnRotateSide.Left) sensor = (sensors.leftLineSensor as sensors.NXTLightSensor);
+        else if (rotateSide == TurnRotateSide.Right) sensor = (sensors.rightLineSensor as sensors.NXTLightSensor);
+        sensor.light(NXTLightIntensityMode.ReflectedRaw); // Обращаемся к режиму датчика заранее, чтобы тот включился
+
+        const emlPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
+        const emrPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
+        let calcMotRot = Math.round(30 * getBaseLength() / getWheelRadius()); // Расчитать градусы для поворота в градусы для мотора
+
+        if (rotateSide == TurnRotateSide.Left) {
+            advmotctrls.syncMotorsConfig(-speed, speed);
+            calcMotRot *= -1; // Умножаем на -1, чтобы вращаться влево
+        } else if (rotateSide == TurnRotateSide.Right) {
+            advmotctrls.syncMotorsConfig(speed, -speed);
+        }
+
+        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
+        pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
+        let lineIsFound = false; // Переменная - флажок о том, что чёрная линия найдена
+        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        while (true) { // Поворачиваем изначально, чтобы повернуться от линии
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время выполнения итерации цикла
+            prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
+            let eml = leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
+            let emr = rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
+            if (!preTurnIsDone && (Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) preTurnIsDone = true; // Если предвариательный поворот ещё не выполнен, то проверяем условия
+            if (preTurnIsDone) { // Если предварительный поворот выполнен
+                // To Do
+                // if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
+                // if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
             }
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
             pidChassisSync.setPoint(error);
