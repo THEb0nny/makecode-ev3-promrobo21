@@ -453,8 +453,8 @@ namespace motions {
             if (params.N) lineFollow2SensorN = params.N;
         }
 
-        let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
+        const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
 
         automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
         automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
@@ -466,9 +466,9 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            // let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторы
+            // let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторов
             // if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторы
+            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторов
             if (Math.abs(lMotEnc) >= Math.abs(calcMotRot) || Math.abs(rMotEnc) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -492,8 +492,8 @@ namespace motions {
     }
 
     /**
-     * Movement along the line for a distance.
-     * Движение по линии на расстояние.
+     * Moving along a line over a distance with acceleration and deceleration
+     * Движение по линии на расстояние с ускорением и замедлением.
      * @param totalDist общее расстояние движения в мм, eg: 400
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
@@ -506,7 +506,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="RampLineFollowEmptyParams"
-    //% weight="79"
+    //% weight="78"
     //% group="Движение по линии"
     export function RampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, params?: params.RampLineFollowInterface, debug: boolean = false) {        
         if (params) { // Если были переданы параметры
@@ -518,7 +518,7 @@ namespace motions {
             if (params.N) rampLineFollow2SensorN = params.N;
         }
 
-        let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
         const mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
@@ -534,8 +534,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторы
-            let out = advmotctrls.accTwoEnc(lMotEnc, rMotEnc); // 
+            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторов
+            let out = advmotctrls.accTwoEnc(lMotEnc, rMotEnc);
             if (out.isDone) break; // Проверка условия окончания
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -546,6 +546,59 @@ namespace motions {
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         chassis.stop(true); // Остановить моторы с удержанием
+    }
+
+    /**
+     * Start of movement along the line at an acceleration distance in mm.
+     * Старт движения по линии на расстояние ускорения в мм.
+     * @param accelDist расстояние ускорения в мм, eg: 100
+     * @param debug отладка, eg: false
+     */
+    //% blockId="AccelStartLineFollow"
+    //% block="start line follow to distance acceleration $accelDist mm||params: $params|debug $debug"
+    //% block.loc.ru="старт движения по линии на расстояние ускорения $accelDist мм||параметры: $params|отладка $debug"
+    //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
+    //% debug.shadow="toggleOnOff"
+    //% params.shadow="RampLineFollowEmptyParams"
+    //% weight="77"
+    //% group="Движение по линии"
+    export function AccelStartLineFollow(accelDist: number, params?: params.RampLineFollowInterface, debug: boolean = false) {
+        if (params) { // Если были переданы параметры
+            if (params.minSpeed) rampLineFollow2SensorMinSpeed = Math.abs(params.minSpeed);
+            if (params.maxSpeed) rampLineFollow2SensorMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.Kp) rampLineFollow2SensorKp = params.Kp;
+            if (params.Ki) rampLineFollow2SensorKi = params.Ki;
+            if (params.Kd) rampLineFollow2SensorKd = params.Kd;
+            if (params.N) rampLineFollow2SensorN = params.N;
+        }
+
+        const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
+
+        advmotctrls.accTwoEncConfig(rampLineFollow2SensorMinSpeed, rampLineFollow2SensorMaxSpeed, mRotAccelCalc, 0, mRotAccelCalc);
+        automation.pid1.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
+        automation.pid1.setDerivativeFilter(rampLineFollow2SensorN); // Установить фильтр дифференциального регулятора
+        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        automation.pid1.reset(); // Сброс ПИД регулятора
+
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) {
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторов
+            let out = advmotctrls.accTwoEnc(lMotEnc, rMotEnc);
+            if (out.isDone) break; // Проверка условия окончания
+            let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let error = refLeftLS - refRightLS; // Ошибка регулирования
+            automation.pid1.setPoint(error); // Передать ошибку регулятору
+            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+        }
+        // Без торможения для перехвата управления следущего метода движения по линии
     }
 
     /**
@@ -563,7 +616,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
-    //% weight="78"
+    //% weight="76"
     //% group="Движение по линии"
     export function LineFollowToDistanceWithOneSensor(lineSensor: LineSensor, lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (lineSensor == LineSensor.Left) {
@@ -587,7 +640,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
-    //% weight="77"
+    //% weight="75"
     //% group="Движение по линии"
     //% blockHidden="true"
     export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -599,8 +652,8 @@ namespace motions {
             if (params.N) lineFollowLeftSensorN = params.N;
         }
 
-        let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
+        const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
 
         automation.pid1.setGains(lineFollowLeftSensorKp, lineFollowLeftSensorKi, lineFollowLeftSensorKd); // Установка коэффицентов ПИД регулятора
         automation.pid1.setDerivativeFilter(lineFollowLeftSensorN); // Установить фильтр дифференциального регулятора
@@ -653,7 +706,7 @@ namespace motions {
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
-    //% weight="76" blockGap="8"
+    //% weight="74" blockGap="8"
     //% group="Движение по линии"
     //% blockHidden="true"
     export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
@@ -665,8 +718,8 @@ namespace motions {
             if (params.N) lineFollowRightSensorN = params.N;
         }
 
-        let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
+        const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
 
         automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
         automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
