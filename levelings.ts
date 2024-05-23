@@ -60,18 +60,19 @@ namespace levelings {
      * Выравнивание на линии перпендикулярно.
      * @param lineLocation наезжать спереди на линию или двигаться назад на линию, eg: MovementOnLine.Front
      * @param regulatorTime время дорегулирования, eg: 500
+     * @param recalibrate перекалибровка значений датчиков, eg: false
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignment"
-    //% block="line alignment $lineLocation at $regulatorTime ms||params: $params|debug $debug"
-    //% block.loc.ru="выравнивание на линии $lineLocation за $regulatorTimeмс||параметры: $params|отладка $debug"
+    //% block="line alignment $lineLocation at $regulatorTime ms||recalibrate $recalibrate|params: $params|debug $debug"
+    //% block.loc.ru="выравнивание на линии $lineLocation за $regulatorTimeмс||перекалибровать $recalibrate|параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="EmptyLineAlignmentParams"
     //% weight="99"
     //% group="Линия"
-    export function LineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, params?: params.LineAlignmentInterface, debug: boolean = false) {
+    export function LineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, recalibrate: boolean = false, params?: params.LineAlignmentInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
             if (params.timeOut) lineAlignmentTimeOut = Math.abs(params.timeOut);
@@ -87,8 +88,8 @@ namespace levelings {
 
         automation.pid3.setGains(lineAlignmentLeftSideKp, lineAlignmentLeftSideKi, lineAlignmentLeftSideKd); // Установка значений регулятору для левой стороны
         automation.pid4.setGains(lineAlignmentRightSideKp, lineAlignmentRightSideKi, lineAlignmentRightSideKd); // Установка значений регулятору для правой стороны
-        automation.pid3.setDerivativeFilter(lineAlignmentLeftSideN); // Установить фильтр дифференциального регулятора для правой стороны
-        automation.pid4.setDerivativeFilter(lineAlignmentRightSideN); // Установить фильтр дифференциального регулятора для левой стороны
+        automation.pid3.setDerivativeFilter(lineAlignmentLeftSideN); // Установить фильтр дифференциального регулятора для левой стороны
+        automation.pid4.setDerivativeFilter(lineAlignmentRightSideN); // Установить фильтр дифференциального регулятора для правой стороны
         automation.pid3.setControlSaturation(-100, 100); // Устанавливаем ограничения левому регулятору
         automation.pid4.setControlSaturation(-100, 100);// Устанавливаем ограничения правому регулятору
         automation.pid3.reset(); // Сброс регулятора левой стороны
@@ -98,17 +99,17 @@ namespace levelings {
         const timeOut = (regulatorTime > lineAlignmentTimeOut ? regulatorTime : lineAlignmentTimeOut); // Максимальное время регулирования для защиты
         const regulatorMultiplier = (lineLocation == VerticalLineLocation.Front ? -1 : 1); // MovementOnLine.Front - линия спереди, а MovementOnLine.Backword - назад
         
-        let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
+        let isOnLine = false; // Переменная флажок, что робот на линии датчиками для включения даймера дорегулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (control.timer7.millis() < timeOut) { // Цикл работает пока время не вышло
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
-            prevTime = currTime;
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
             if (isOnLine && control.timer8.millis() >= regulatorTime) break; // Условие выхода из цикла при дорегулировании
-            let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left, recalibrate); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right, recalibrate); // Нормализованное значение с правого датчика линии
             let errorL = motions.lineFollowSetPoint - refLeftLS, errorR = motions.lineFollowSetPoint - refRightLS; // Вычисляем ошибки регулирования
-            if (!isOnLine && Math.abs(errorL) >= (motions.lineFollowSetPoint - 10) && Math.abs(errorL) <= (motions.lineFollowSetPoint + 10) && Math.abs(errorR) >= (motions.lineFollowSetPoint - 10) && Math.abs(errorR) <= (motions.lineFollowSetPoint + 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
+            if (!isOnLine && Math.abs(errorL) <= motions.lineFollowSetPoint && Math.abs(errorR) <= motions.lineFollowSetPoint) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки (нахождения линии) достигнуто
@@ -171,14 +172,14 @@ namespace levelings {
         let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (control.timer7.millis() < linePositioningTimeOut) { // Пока время не вышло
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
-            prevTime = currTime;
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
             if (isOnLine && control.timer8.millis() >= regTime) break; // Условие выхода из цикла при дорегулировании
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Находим ошибку
-            if (!isOnLine && Math.abs(error) <= (motions.lineFollowSetPoint - 10)) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
+            if (!isOnLine && Math.abs(error) <= motions.lineFollowSetPoint) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
@@ -222,7 +223,7 @@ namespace levelings {
     //% group="Линия"
     export function LineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
         // https://www.youtube.com/watch?v=DOPXPuB7Xhs
-        if (distanceBetweenLineSensors == 0) {
+        if (distanceBetweenLineSensors <= 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
             control.panic(10);
@@ -238,9 +239,9 @@ namespace levelings {
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         // Первая часть - датчик, который замечает линию первым
         while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
-            prevTime = currTime;
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (refLeftLS <= motions.lineRefTreshold) { // Левый датчик первый нашёл линию
@@ -259,9 +260,9 @@ namespace levelings {
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из первого цикла
         prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Ждём, чтобы датчик с другой стороны нашёл линию
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
-            prevTime = currTime;
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (firstSide == "LEFT_SIDE") {

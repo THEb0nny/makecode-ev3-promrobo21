@@ -283,6 +283,9 @@ namespace custom {
                         min: 100,
                         max: 5000
                     },
+                    recalibrate: {
+                        val: true
+                    },
                     debug: {
                         val: true
                     },
@@ -410,7 +413,7 @@ namespace custom {
                         if (paramValue == 0) paramValue = "inside";
                         else paramValue = "outside";
                         brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
-                    } else if (paramName == "debug") brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
+                    } else if (paramName == "debug" || paramName == "recalibrate") brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${paramValue}`, strPrint - scroll);
                     else brick.showString(`${cursor == i + 1 ? (confirm ? ">>> " : "> ") : ""} ${paramName}: ${Math.round(paramValue * 10000) / 10000}`, strPrint - scroll);
                 }
                 strPrint++;
@@ -453,7 +456,7 @@ namespace custom {
                     music.playToneInBackground(Note.C, 50); // Сигнал о переключении экрана
                     let paramName = Object.keys(methodScreens[screenName].params)[cursor - 1];
                     // console.log(`paramName: ${paramName}`);
-                    if (paramName != undefined && paramName != "debug" && paramName != "pivot" && paramName != "junction" && paramName != "horizLineLoc") { // Параметры функции
+                    if (paramName != undefined && paramName != "debug" && paramName != "recalibrate" && paramName != "pivot" && paramName != "junction" && paramName != "horizLineLoc") { // Параметры функции
                         let changeStep = methodScreens[screenName].params[paramName].changeStep;
                         changeStep = (changeStep != undefined ? changeStep : 0.01);
                         let minLimit = methodScreens[screenName].params[paramName].min;
@@ -463,7 +466,7 @@ namespace custom {
                         if (paramDecrease) methodScreens[screenName].params[paramName].val -= changeStep;
                         else if (paramIncrease) methodScreens[screenName].params[paramName].val += changeStep;
                         methodScreens[screenName].params[paramName].val = Math.constrain(methodScreens[screenName].params[paramName].val, minLimit, maxLimit);
-                    } else if (paramName == "debug") {
+                    } else if (paramName == "debug" || paramName == "recalibrate") {
                         if (paramDecrease || paramIncrease) methodScreens[screenName].params[paramName].val = !methodScreens[screenName].params[paramName].val;
                     } else if (paramName == "pivot" || paramName == "junction" || paramName == "horizLineLoc") {
                         if (paramDecrease) methodScreens[screenName].params[paramName].val -= 1;
@@ -610,6 +613,7 @@ namespace custom {
                     } else if (screenName == "LINE_ALIGNMET") {
                         const lineLocation = methodScreens[screenName].params.location.val;
                         const time = methodScreens[screenName].params.time.val;
+                        const recalibrate = methodScreens[screenName].params.recalibrate.val;
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
                             maxSpeed: methodScreens[screenName].params.maxSpeed.val,
@@ -623,7 +627,7 @@ namespace custom {
                             leftN: methodScreens[screenName].params.leftN.val,
                             rightN: methodScreens[screenName].params.rightN.val
                         };
-                        levelings.LineAlignment(lineLocation, time, params, debug);
+                        levelings.LineAlignment(lineLocation, time, recalibrate, params, debug);
                     } else if (screenName == "LINE_ALIGNMET_IN_MOTION") {
                         const speed = methodScreens[screenName].params.speed.val;
                         const debug = methodScreens[screenName].params.debug.val;
