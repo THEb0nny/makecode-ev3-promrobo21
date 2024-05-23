@@ -177,7 +177,7 @@ namespace params {
      * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
      */
-    //% blockId="EmptyRampLineFollowParams"
+    //% blockId="RampLineFollowEmptyParams"
     //% block="empty"
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"
