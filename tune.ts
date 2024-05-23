@@ -55,17 +55,35 @@ namespace custom {
             },
             SYNC_RAMP_DIST_MOVE: {
                 params: {
-                    dist: {
-                        val: 500,
+                    minSpeed: {
+                        val: 10,
+                        changeStep: 5,
+                        min: -100,
+                        max: 100
+                    },
+                    maxSpeed: {
+                        val: 50,
+                        changeStep: 5,
+                        min: -100,
+                        max: 100
+                    },
+                    totalDist: {
+                        val: 300,
+                        changeStep: 5,
+                        min: 100,
+                        max: 10000
+                    },
+                    accelDist: {
+                        val: 100,
                         changeStep: 5,
                         min: 0,
-                        max: 5000
+                        max: 10000
                     },
-                    speed: {
-                        val: motions.lineFollow2SensorSpeed,
+                    decelDist: {
+                        val: 100,
                         changeStep: 5,
-                        min: 5,
-                        max: 100
+                        min: 0,
+                        max: 10000
                     },
                     Kp: {
                         val: 0.02,
@@ -85,7 +103,7 @@ namespace custom {
                     }
                 },
                 showStepsReg: true,
-                hrStrings: [2],
+                hrStrings: [5],
             },
             LW_2S_TO_INTERSECTION: {
                 params: {
@@ -578,6 +596,20 @@ namespace custom {
                         };
                         chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
                         chassis.LinearDistMove(dist, speed, Braking.Hold);
+                    } else if (screenName == "SYNC_RAMP_DIST_MOVE") {
+                        const minSpeed = methodScreens[screenName].params.minSpeed.val;
+                        const maxSpeed = methodScreens[screenName].params.maxSpeed.val;
+                        const totalDist = methodScreens[screenName].params.totalDist.val;
+                        const accelDist = methodScreens[screenName].params.accelDist.val;
+                        const decelDist = methodScreens[screenName].params.totalDist.val;
+                        const params = {
+                            Kp: methodScreens[screenName].params.Kp.val,
+                            Ki: methodScreens[screenName].params.Ki.val,
+                            Kd: methodScreens[screenName].params.Kd.val,
+                            N: methodScreens[screenName].params.N.val
+                        };
+                        chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
+                        chassis.RampLinearDistMove(minSpeed, maxSpeed, totalDist, accelDist, decelDist);
                     } else if (screenName == "LW_2S_TO_INTERSECTION") {
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
