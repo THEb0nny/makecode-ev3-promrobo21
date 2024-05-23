@@ -332,6 +332,34 @@ namespace params {
     }
 
     /**
+     * Setting parameters for the alignment algorithm on the line perpendicular with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
+     * Установка параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
+     * @param newSpeed скорость движения, eg: 50
+     * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
+     * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
+     * @param newLeftKd дифференциальный коэффицент левой стороны, eg: 0
+     * @param newRightKd дифференциальный коэффицент правой стороны, eg: 0
+     * @param newLeftN коэффицент фильтрации дифференциального регулятора левой стороны, eg: 0
+     * @param newRightN коэффицент фильтрации дифференциального регулятора правой стороны, eg: 0
+     */
+    //% blockId="SetLineAlignmentShortParams"
+    //% block="set line alignment params at speed = $newSpeed\\%||leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd|leftN = $newLeftN rightN = $newRightN"
+    //% block.loc.ru="установить параметры выравнивания на линии с макс скоростью = $newSpeed\\%||leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd|leftN = $newLeftN rightN = $newRightN"
+    //% expandableArgumentMode="enabled"
+    //% inlineInputMode="inline"
+    //% weight="98"
+    //% group="Параметры перпендикулярного выравнивания на линии"
+    export function SetLineAlignmentShortParams(newSpeed: number, newLeftKp?: number, newRightKp?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number) {
+        if (newSpeed) levelings.lineAlignmentMaxSpeed = newSpeed;
+        if (newLeftKp) levelings.lineAlignmentLeftSideKp = newLeftKp;
+        if (newRightKp) levelings.lineAlignmentRightSideKp = newRightKp;
+        if (newLeftKd) levelings.lineAlignmentLeftSideKd = newLeftKd;
+        if (newRightKd) levelings.lineAlignmentRightSideKd = newRightKd;
+        if (newLeftN) levelings.lineAlignmentLeftSideN = newLeftN;
+        if (newRightN) levelings.lineAlignmentRightSideN = newRightN;
+    }
+
+    /**
      * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
      */
