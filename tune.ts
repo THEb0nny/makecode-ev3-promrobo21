@@ -53,6 +53,40 @@ namespace custom {
                 showStepsReg: true,
                 hrStrings: [2],
             },
+            SYNC_RAMP_DIST_MOVE: {
+                params: {
+                    dist: {
+                        val: 500,
+                        changeStep: 5,
+                        min: 0,
+                        max: 5000
+                    },
+                    speed: {
+                        val: motions.lineFollow2SensorSpeed,
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
+                    },
+                    Kp: {
+                        val: 0.02,
+                        changeStep: 0.01
+                    },
+                    Ki: {
+                        val: 0,
+                        changeStep: 0.001
+                    },
+                    Kd: {
+                        val: 0.5,
+                        changeStep: 0.1
+                    },
+                    N: {
+                        val: 0,
+                        changeStep: 0.1
+                    }
+                },
+                showStepsReg: true,
+                hrStrings: [2],
+            },
             LW_2S_TO_INTERSECTION: {
                 params: {
                     debug: {
