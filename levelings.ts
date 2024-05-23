@@ -69,7 +69,7 @@ namespace levelings {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="EmptyLineAlignmentParams"
+    //% params.shadow="LineAlignmentEmptyParams"
     //% weight="99"
     //% group="Линия"
     export function LineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, recalibrate: boolean = false, params?: params.LineAlignmentInterface, debug: boolean = false) {
@@ -149,7 +149,7 @@ namespace levelings {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="EmptyLineAlignmentParams"
+    //% params.shadow="LineAlignmentEmptyParams"
     //% weight="98"
     //% group="Линия"
     export function LinePositioning(regTime: number, params?: params.LinePositioningInterface, debug: boolean = false) {
