@@ -37,13 +37,13 @@ namespace params {
      * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
      */
-    //% blockId="EmptyLineFollowParams"
+    //% blockId="LineFollowEmptyParams"
     //% block="empty"
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры движения по линии"
-    export function EmptyLineFollowParams(): LineFollowInterface {
+    export function LineFollowEmptyParams(): LineFollowInterface {
         return null;
     }
 
@@ -52,13 +52,13 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость.
      * @param newSpeed скорость движения, eg: 50
      */
-    //% blockId="OneLineFollowParams"
+    //% blockId="LineFollowOneParams"
     //% block="speed = $newSpeed\\%"
     //% block.loc.ru="скорость = $newSpeed\\%"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры движения по линии"
-    export function OneLineFollowParams(newSpeed?: number): LineFollowInterface {
+    export function LineFollowOneParams(newSpeed?: number): LineFollowInterface {
         return {
             speed: newSpeed
         };
@@ -70,13 +70,13 @@ namespace params {
      * @param newSpeed скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
      */
-    //% blockId="TwoLineFollowParams"
+    //% blockId="LineFollowTwoParams"
     //% block="speed = $newSpeed\\% Kp = $newKp"
     //% block.loc.ru="скорость = $newSpeed\\% Kp = $newKp"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры движения по линии"
-    export function TwoLineFollowParams(newSpeed?: number, newKp?: number): LineFollowInterface {
+    export function LineFollowTwoParams(newSpeed?: number, newKp?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp
@@ -91,14 +91,14 @@ namespace params {
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
-    //% blockId="SetFourLineFollowParams"
+    //% blockId="LineFollowFourParams"
     //% block="speed = $newSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
     //% block.loc.ru="скорость = $newSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Параметры движения по линии"
-    export function SetFourLineFollowParams(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInterface {
+    export function LineFollowFourParams(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp,
@@ -116,14 +116,14 @@ namespace params {
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
-    //% blockId="AllLineFollowParams"
+    //% blockId="LineFollowAllParams"
     //% block="speed = $newSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
     //% block.loc.ru="скорость = $newSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Параметры движения по линии"
-    export function AllLineFollowParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInterface {
+    export function LineFollowAllParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp,
@@ -183,7 +183,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function EmptyRampLineFollowParams(): RampLineFollowInterface {
+    export function RampLineFollowEmptyParams(): RampLineFollowInterface {
         return null;
     }
 
@@ -193,13 +193,13 @@ namespace params {
      * @param newMinSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
      */
-    //% blockId="OneRampLineFollowParams"
+    //% blockId="RampLineFollowTwoParams"
     //% block="min speed = $newMinSpeed\\% max = $newMaxSpeed\\%"
     //% block.loc.ru="мин скорость = $newMinSpeed\\% макс = $newMaxSpeed\\%"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function OneRampLineFollowParams(newMinSpeed: number, newMaxSpeed: number): RampLineFollowInterface {
+    export function RampLineFollowTwoParams(newMinSpeed: number, newMaxSpeed: number): RampLineFollowInterface {
         return {
             minSpeed: newMinSpeed,
             maxSpeed: newMaxSpeed
@@ -213,13 +213,13 @@ namespace params {
      * @param newMaxSpeed максимальная скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
      */
-    //% blockId="TwoRampLineFollowParams"
+    //% blockId="RampLineFollowThreeParams"
     //% block="min speed = $newMinSpeed\\% max = $newMaxSpeed\\% Kp = $newKp"
     //% block.loc.ru="мин скорость = $newMinSpeed\\% макс = $newMaxSpeed\\% Kp = $newKp"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function TwoRampLineFollowParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number): RampLineFollowInterface {
+    export function RampLineFollowThreeParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number): RampLineFollowInterface {
         return {
             minSpeed: newMinSpeed,
             maxSpeed: newMaxSpeed,
@@ -236,14 +236,14 @@ namespace params {
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
-    //% blockId="SetFourRampLineFollowParams"
+    //% blockId="RampLineFollowFiveParams"
     //% block="min speed = $newMinSpeed\\% max = $newMaxSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
     //% block.loc.ru="мин скорость = $newMinSpeed\\% макс = $newMaxSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function SetFourRampLineFollowParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number, newKd?: number, newN?: number): RampLineFollowInterface {
+    export function RampLineFollowFiveParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number, newKd?: number, newN?: number): RampLineFollowInterface {
         return {
             minSpeed: newMinSpeed,
             maxSpeed: newMaxSpeed,
@@ -263,14 +263,14 @@ namespace params {
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
-    //% blockId="AllRampLineFollowParams"
+    //% blockId="RampLineFollowAllParams"
     //% block="min speed = $newMinSpeed\\% max = $newMaxSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
     //% block.loc.ru="мин скорость = $newMinSpeed\\% макс = $newMaxSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function AllRampLineFollowParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): RampLineFollowInterface {
+    export function RampLineFollowAllParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): RampLineFollowInterface {
         return {
             minSpeed: newMinSpeed,
             maxSpeed: newMaxSpeed,
@@ -332,8 +332,8 @@ namespace params {
     }
 
     /**
-     * Setting parameters for the alignment algorithm on the line perpendicular with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
-     * Установка параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
+     * Setting sort parameters for the alignment algorithm on the line perpendicular with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
+     * Установка сокращённых параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed скорость движения, eg: 50
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
@@ -363,13 +363,13 @@ namespace params {
      * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
      */
-    //% blockId="EmptyLineAlignmentParams"
+    //% blockId="LineAlignmentEmptyParams"
     //% block="empty"
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function EmptyLineAlignmentParams(): LineAlignmentInterface {
+    export function LineAlignmentEmptyParams(): LineAlignmentInterface {
         return null;
     }
 
@@ -378,13 +378,13 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость.
      * @param newSpeed максимальная скорость выравнивания, eg: 40
      */
-    //% blockId="SetOneLineAlignmentParams"
+    //% blockId="LineAlignmentOneParams"
     //% block="speed = $newSpeed\\%"
     //% block.loc.ru="скорость = $newSpeed\\%"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function SetOneLineAlignmentParams(newSpeed?: number): LineAlignmentInterface {
+    export function LineAlignmentOneParams(newSpeed?: number): LineAlignmentInterface {
         return {
             maxSpeed: newSpeed
         };
@@ -397,13 +397,13 @@ namespace params {
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
      */
-    //% blockId="ThreeLineAlignmentParams"
+    //% blockId="LineAlignmentThreeParams"
     //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp|right Kp = $newRightKp"
     //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp|правая Kp = $newRightKp"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function ThreeLineAlignmentParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number): LineAlignmentInterface {
+    export function LineAlignmentThreeParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number): LineAlignmentInterface {
         return {
             maxSpeed: newSpeed,
             leftKp: newLeftKp,
@@ -418,14 +418,14 @@ namespace params {
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
      */
-    //% blockId="SevenLineAlignmentParams"
+    //% blockId="LineAlignmentSevenParams"
     //% block="speed = $newSpeed\\%|left side Kp = $newLeftKp Kd = $newLeftKd N = $newLeftN|right Kp = $newRightKp Kd = $newRightKd N = $newRightN"
     //% block.loc.ru="скорость = $newSpeed\\%|левая сторона Kp = $newLeftKp Kd = $newLeftKd N = $newLeftN|правая Kp = $newRightKp Kd = $newRightKd N = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function SevenLineAlignmentParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
+    export function LineAlignmentSevenParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
         return {
             maxSpeed: newSpeed,
             leftKp: newLeftKp,
@@ -444,14 +444,14 @@ namespace params {
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
      */
-    //% blockId="AllLineAlignmentParams"
+    //% blockId="LineAlignmentAllParams"
     //% block="speed = $newSpeed\\%|left side Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd N = $newLeftN|right Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
     //% block.loc.ru="скорость = $newSpeed\\%|левая сторона Kp = $newLeftKp Ki = $newLeftKi Kd = $newLeftKd N = $newLeftN|правая Kp = $newRightKp Ki = $newRightKi Kd = $newRightKd N = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function AllLineAlignmentParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKi?: number, newRightKi?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
+    export function LineAlignmentAllParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKi?: number, newRightKi?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
         return {
             maxSpeed: newSpeed,
             leftKp: newLeftKp,
