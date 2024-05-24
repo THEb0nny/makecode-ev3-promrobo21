@@ -497,18 +497,19 @@ namespace motions {
      * @param totalDist общее расстояние движения в мм, eg: 400
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
+     * @param braking тип торможения, eg: Braking.Hold
      * @param debug отладка, eg: false
      */
     //% blockId="RampLineFollowToDistance"
-    //% block="ramp line follow to distance $totalDist mm acceleration $accelDist deceleration $decelDist||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist||параметры: $params|отладка $debug"
+    //% block="ramp line follow to distance $totalDist mm acceleration $accelDist deceleration $decelDist||braking $braking|params: $params|debug $debug"
+    //% block.loc.ru="движение по линии на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist||торможение $braking|параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="RampLineFollowEmptyParams"
     //% weight="78"
     //% group="Движение по линии"
-    export function RampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, params?: params.RampLineFollowInterface, debug: boolean = false) {        
+    export function RampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking = Braking.Hold, params?: params.RampLineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.minSpeed) rampLineFollow2SensorMinSpeed = Math.abs(params.minSpeed);
             if (params.maxSpeed) rampLineFollow2SensorMaxSpeed = Math.abs(params.maxSpeed);
@@ -545,7 +546,10 @@ namespace motions {
             motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
-        chassis.stop(true); // Остановить моторы с удержанием
+        if (braking != Braking.NoStop) {
+            if (braking == Braking.Hold) chassis.stop(true); // Остановить моторы с удержанием
+            else chassis.stop(false); // Остановить моторы без удержания
+        }
     }
 
     /**
