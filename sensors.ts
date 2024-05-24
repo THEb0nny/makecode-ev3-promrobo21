@@ -19,6 +19,42 @@ namespace sensors {
     let maxRgbColorSensor3: number[]; // Максимальные значения RGB для датчика цвета в третьем порту
     let maxRgbColorSensor4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
 
+    let colorBoundaryColorSensor1: number;
+    let whiteBoundaryColorSensor1: number;
+    let blackBoundaryColorSensor1: number;
+    let redBoundaryColorSensor1: number;
+    let brownBoundaryColorSensor1: number;
+    let yellowBoundaryColorSensor1: number;
+    let greenBoundaryColorSensor1: number;
+    let blueBoundaryColorSensor1: number;
+
+    let colorBoundaryColorSensor2: number;
+    let whiteBoundaryColorSensor2: number;
+    let blackBoundaryColorSensor2: number;
+    let redBoundaryColorSensor2: number;
+    let brownBoundaryColorSensor2: number;
+    let yellowBoundaryColorSensor2: number;
+    let greenBoundaryColorSensor2: number;
+    let blueBoundaryColorSensor2: number;
+
+    let colorBoundaryColorSensor3: number;
+    let whiteBoundaryColorSensor3: number;
+    let blackBoundaryColorSensor3: number;
+    let redBoundaryColorSensor3: number;
+    let brownBoundaryColorSensor3: number;
+    let yellowBoundaryColorSensor3: number;
+    let greenBoundaryColorSensor3: number;
+    let blueBoundaryColorSensor3: number;
+
+    let colorBoundaryColorSensor4: number;
+    let whiteBoundaryColorSensor4: number;
+    let blackBoundaryColorSensor4: number;
+    let redBoundaryColorSensor4: number;
+    let brownBoundaryColorSensor4: number;
+    let yellowBoundaryColorSensor4: number;
+    let greenBoundaryColorSensor4: number;
+    let blueBoundaryColorSensor4: number;
+
     /**
      * Method for installing color sensors as motion and line sensors. Line sensors only need to be installed once!
      * Метод установки датчиков цвета в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
@@ -303,15 +339,80 @@ namespace sensors {
     //% group="Color Sensor"
     export function HsvlToColorNumParams(newColorBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): HsvlToColorNumInterface {
         return {
-            colorBoundary: newColorBoundary,
-            whiteBoundary: newWhiteBoundary,
-            blackBoundary: newBlackBoundary,
-            redBoundary: newRedBoundary,
-            brownBoundary: newBrownBoundary,
-            yellowBoundary: newYellowBoundary,
-            greenBoundary: newGreenBoundary,
-            blueBoundary: newBlueBoundary
+            colorBoundary: newColorBoundary, whiteBoundary: newWhiteBoundary, blackBoundary: newBlackBoundary, redBoundary: newRedBoundary, brownBoundary: newBrownBoundary, yellowBoundary: newYellowBoundary, greenBoundary: newGreenBoundary, blueBoundary: newBlueBoundary
         }
+    }
+
+    /**
+     * Set HSVL conversion values to color codes.
+     * Установить значения перевода HSVL в цветовые коды.
+     * @param params параметры перевода
+     */
+    //% blockId="SetHsvlToColorNumParams"
+    //% block="set converting params HSVL **color sensor** $sensor to color code $params"
+    //% block.loc.ru="установить параметры перевода HSVL **датчика цвета** $sensor в цветовой код $params"
+    //% inlineInputMode="inline"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
+    //% weight="83" blockGap="8"
+    //% group="Color Sensor"
+    export function SetHsvlToColorNumParams(sensor: sensors.ColorSensor, params: HsvlToColorNumInterface) {
+        if (sensor.port() == 1) {
+            colorBoundaryColorSensor1 = params.colorBoundary, whiteBoundaryColorSensor1 = params.whiteBoundary, blackBoundaryColorSensor1 = params.blackBoundary;
+            redBoundaryColorSensor1 = params.redBoundary, brownBoundaryColorSensor1 = params.brownBoundary, yellowBoundaryColorSensor1 = params.yellowBoundary;
+            greenBoundaryColorSensor1 = params.greenBoundary, blueBoundaryColorSensor1 = params.blueBoundary;
+        } else if (sensor.port() == 2) {
+            colorBoundaryColorSensor2 = params.colorBoundary, whiteBoundaryColorSensor2 = params.whiteBoundary, blackBoundaryColorSensor2 = params.blackBoundary;
+            redBoundaryColorSensor2 = params.redBoundary, brownBoundaryColorSensor2 = params.brownBoundary, yellowBoundaryColorSensor2 = params.yellowBoundary;
+            greenBoundaryColorSensor2 = params.greenBoundary, blueBoundaryColorSensor2 = params.blueBoundary;
+        } else if (sensor.port() == 3) {
+            colorBoundaryColorSensor3 = params.colorBoundary, whiteBoundaryColorSensor3 = params.whiteBoundary, blackBoundaryColorSensor3 = params.blackBoundary;
+            redBoundaryColorSensor3 = params.redBoundary, brownBoundaryColorSensor3 = params.brownBoundary, yellowBoundaryColorSensor3 = params.yellowBoundary;
+            greenBoundaryColorSensor3 = params.greenBoundary, blueBoundaryColorSensor3 = params.blueBoundary;
+        } else if (sensor.port() == 4) {
+            colorBoundaryColorSensor4 = params.colorBoundary, whiteBoundaryColorSensor4 = params.whiteBoundary, blackBoundaryColorSensor4 = params.blackBoundary;
+            redBoundaryColorSensor4 = params.redBoundary, brownBoundaryColorSensor4 = params.brownBoundary, yellowBoundaryColorSensor4 = params.yellowBoundary;
+            greenBoundaryColorSensor4 = params.greenBoundary, blueBoundaryColorSensor4 = params.blueBoundary;
+        }
+    }
+
+    /**
+     * Get HSVL conversion values to color codes.
+     * Получить значения перевода HSVL в цветовые коды.
+     */
+    //% blockId="GetHsvlToColorNumParams"
+    //% block="get converting params HSVL **color sensor** $sensor to color code"
+    //% block.loc.ru="получить параметры перевода HSVL **датчика цвета** $sensor в цветовой код"
+    //% inlineInputMode="inline"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
+    //% weight="82" blockGap="8"
+    //% group="Color Sensor"
+    export function GetHsvlToColorNumParams(sensor: sensors.ColorSensor): HsvlToColorNumInterface {
+        if (sensor.port() == 1) {
+            return {
+                colorBoundary: colorBoundaryColorSensor1, whiteBoundary: whiteBoundaryColorSensor1, blackBoundary: blackBoundaryColorSensor1, redBoundary: redBoundaryColorSensor1,
+                brownBoundary: brownBoundaryColorSensor1, yellowBoundary: yellowBoundaryColorSensor1, greenBoundary: greenBoundaryColorSensor1, blueBoundary: blueBoundaryColorSensor1
+            }
+        } else if (sensor.port() == 2) {
+            return {
+                colorBoundary: colorBoundaryColorSensor2, whiteBoundary: whiteBoundaryColorSensor2, blackBoundary: blackBoundaryColorSensor2, redBoundary: redBoundaryColorSensor2,
+                brownBoundary: brownBoundaryColorSensor2, yellowBoundary: yellowBoundaryColorSensor2, greenBoundary: greenBoundaryColorSensor2, blueBoundary: blueBoundaryColorSensor2
+            }
+        } else if (sensor.port() == 3) {
+            return {
+                colorBoundary: colorBoundaryColorSensor3, whiteBoundary: whiteBoundaryColorSensor3, blackBoundary: blackBoundaryColorSensor3, redBoundary: redBoundaryColorSensor3,
+                brownBoundary: brownBoundaryColorSensor3, yellowBoundary: yellowBoundaryColorSensor3, greenBoundary: greenBoundaryColorSensor3, blueBoundary: blueBoundaryColorSensor3
+            }
+        } else if (sensor.port() == 4) {
+            return {
+                colorBoundary: colorBoundaryColorSensor4, whiteBoundary: whiteBoundaryColorSensor4, blackBoundary: blackBoundaryColorSensor4, redBoundary: redBoundaryColorSensor4,
+                brownBoundary: brownBoundaryColorSensor4, yellowBoundary: yellowBoundaryColorSensor4, greenBoundary: greenBoundaryColorSensor4, blueBoundary: blueBoundaryColorSensor4
+            }
+        }
+        return { colorBoundary: 0, whiteBoundary: 0, blackBoundary: 0, redBoundary: 0, brownBoundary: 0, yellowBoundary: 0, greenBoundary: 0, blueBoundary: 0 }
     }
 
     /**
