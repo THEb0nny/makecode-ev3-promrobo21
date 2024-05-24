@@ -361,7 +361,7 @@ namespace sensors {
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
     //% sensor.fieldOptions.width="300"
-    //% weight="53" blockGap="8"
+    //% weight="53"
     //% group="Color Sensor"
     export function GetHsvlToColorNumParams(sensor: sensors.ColorSensor): HsvlToColorNumInterface {
         const index = sensor.port() - 1;
@@ -447,7 +447,7 @@ namespace sensors {
     //% block="convert HSVL $hsvl to color code at params $params"
     //% block.loc.ru="перевести HSVL $hsvl в цветовой код при параметрах $params"
     //% inlineInputMode="inline"
-    //% weight="51" blockGap="8"
+    //% weight="51"
     //% group="Color Sensor"
     export function HsvlToColorNum(hsvl: number[], params: HsvlToColorNumInterface): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
@@ -472,7 +472,7 @@ namespace sensors {
     //% block="show max RGB color sensors"
     //% block.loc.ru="показать максимальные RGB датчиков цвета"
     //% inlineInputMode="inline"
-    //% weight="49" blockGap="8"
+    //% weight="49"
     //% group="Color Sensor"
     export function SearchRgbMaxColorSensors() {
         let rgbMax: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
