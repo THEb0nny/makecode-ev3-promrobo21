@@ -234,6 +234,34 @@ namespace custom {
                 showStepsReg: false,
                 hrStrings: [3]
             },
+            CHASSIS_PIVOT_TURN: {
+                params: {
+                    deg: {
+                        val: 90,
+                        changeStep: 1,
+                        min: -360,
+                        max: 360
+                    },
+                    pivot: {
+                        val: WheelPivot.LeftWheel,
+                        changeStep: 1
+                    },
+                    speed: {
+                        val: 40,
+                        changeStep: 5,
+                        min: 5,
+                        max: 100
+                    },
+                    base_length: {
+                        val: chassis.getBaseLength(),
+                        changeStep: 1,
+                        min: 100,
+                        max: 250
+                    }
+                },
+                showStepsReg: false,
+                hrStrings: [3]
+            },
             SMART_SPIN_TURN: {
                 params: {
                     deg: {
@@ -649,6 +677,14 @@ namespace custom {
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
                         chassis.spinTurn(deg, speed);
+                    } else if (screenName == "CHASSIS_PIVOT_TURN") {
+                        const deg = methodScreens[screenName].params.deg.val;
+                        const pivot = methodScreens[screenName].params.pivot.val;
+                        const speed = methodScreens[screenName].params.speed.val;
+                        const debug = methodScreens[screenName].params.debug.val;
+                        const baseLength = methodScreens[screenName].params.base_length.val;
+                        chassis.setBaseLength(baseLength);
+                        chassis.pivotTurn(deg, speed, pivot);
                     } else if (screenName == "SMART_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const debug = methodScreens[screenName].params.debug.val;
