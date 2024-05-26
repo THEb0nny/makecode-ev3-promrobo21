@@ -10,16 +10,8 @@ namespace sensors {
     export let wRefRawRightLineSensor: number; // Сырые значения на белом для правого датчика линии
 
     let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
-    // let minRgbColorSensor1: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в первом порту
-    // let minRgbColorSensor2: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета во втором порту
-    // let minRgbColorSensor3: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в третьем порту
-    // let minRgbColorSensor4: number[] = [0, 0, 0]; // Минимальные значения RGB для датчика цвета в четвёртом порту
 
     let maxRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Максимальные значения RGB для датчиков цвета
-    // let maxRgbColorSensor1: number[]; // Максимальные значения RGB для датчика цвета в первом порту
-    // let maxRgbColorSensor2: number[]; // Максимальные значения RGB для датчика цвета во втором порту
-    // let maxRgbColorSensor3: number[]; // Максимальные значения RGB для датчика цвета в третьем порту
-    // let maxRgbColorSensor4: number[]; // Максимальные значения RGB для датчика цвета в четвёртом порту
 
     let colorBoundaryColorSensors: number[] = [0, 0, 0, 0];
     let whiteBoundaryColorSensors: number[] = [0, 0, 0, 0];
@@ -208,10 +200,6 @@ namespace sensors {
         }
         const index = sensor.port() - 1;
         minRgbColorSensors[index] = [minR, minG, minB];
-        // if (sensor.port() == 1) minRgbColorSensor1 = [minR, minG, minB];
-        // else if (sensor.port() == 2) minRgbColorSensor2 = [minR, minG, minB];
-        // else if (sensor.port() == 3) minRgbColorSensor3 = [minR, minG, minB];
-        // else if (sensor.port() == 4) minRgbColorSensor4 = [minR, minG, minB];
     }
 
     /**
@@ -237,10 +225,6 @@ namespace sensors {
         }
         const index = sensor.port() - 1;
         maxRgbColorSensors[index] = [maxR, maxG, maxB];
-        // if (sensor.port() == 1) maxRgbColorSensor1 = [maxR, maxG, maxB];
-        // else if (sensor.port() == 2) maxRgbColorSensor2 = [maxR, maxG, maxB];
-        // else if (sensor.port() == 3) maxRgbColorSensor3 = [maxR, maxG, maxB];
-        // else if (sensor.port() == 4) maxRgbColorSensor4 = [maxR, maxG, maxB];
     }
 
     /**
@@ -259,11 +243,6 @@ namespace sensors {
     export function GetMinRgbColorSensor(sensor: sensors.ColorSensor): number[] {
         const index = sensor.port() - 1;
         return minRgbColorSensors[index];
-        // if (sensor.port() == 1) return minRgbColorSensor1;
-        // else if (sensor.port() == 2) return minRgbColorSensor2;
-        // else if (sensor.port() == 3) return minRgbColorSensor3;
-        // else if (sensor.port() == 4) return minRgbColorSensor4;
-        // return [0, 0, 0];
     }
 
     /**
@@ -282,11 +261,6 @@ namespace sensors {
     export function GetMaxRgbColorSensor(sensor: sensors.ColorSensor): number[] {
         const index = sensor.port() - 1;
         return maxRgbColorSensors[index];
-        // if (sensor.port() == 1) return maxRgbColorSensor1;
-        // else if (sensor.port() == 2) return maxRgbColorSensor2;
-        // else if (sensor.port() == 3) return maxRgbColorSensor3;
-        // else if (sensor.port() == 4) return maxRgbColorSensor4;
-        // return [0, 0, 0];
     }
 
     interface HsvlToColorNumInterface {
@@ -495,9 +469,7 @@ namespace sensors {
             for (let i = 0; i < 4; i++) {
                 brick.printString(`RGB_${i + 1}: ${colorRgb[i][0]} ${colorRgb[i][1]} ${colorRgb[i][2]}`, i + 1, 12);
             }
-            if (btnPressed == 0) {
-                brick.showString("Press Enter to freeze", 12);
-            }
+            if (btnPressed == 0) brick.showString("Press Enter to freeze", 12);
             if (btnPressed == 1) {
                 for (let i = 0; i < 4; i++) {
                     for (let j = 0; j < 3; j++) {
