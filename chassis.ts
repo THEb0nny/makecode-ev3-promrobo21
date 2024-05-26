@@ -118,7 +118,7 @@ namespace chassis {
         }
         const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
         const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
-        advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, accelDist, 0, totalDist);
+        advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, accelDist, 0, totalDist);
         const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора

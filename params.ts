@@ -139,8 +139,9 @@ namespace params {
 
     // Интерфейс перадачи параметров для алгоритма движения по линии с ускорениями и замедлениями
     export interface RampLineFollowInterface {
-        minSpeed?: number;
+        minStartSpeed?: number;
         maxSpeed?: number;
+        minEndSpeed?: number;
         Kp?: number;
         Ki?: number;
         Kd?: number;
@@ -150,23 +151,25 @@ namespace params {
     /**
      * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
-     * @param newMinSpeed начальная скорость движения, eg: 10
+     * @param newMinStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
+     * @param newMinEndSpeed конечная скорость движения, eg: 10
      * @param newKp пропорциональный коэффицент, eg: 1
      * @param newKi интегральный коэффицент, eg: 0
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="SetRampLineFollow2SensorParams"
-    //% block="set line follow params at min speed = $newMinSpeed\\% max = $newMaxSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
-    //% block.loc.ru="установить параметры движения по линии при мин скорости = $newMinSpeed\\% макс = $newMaxSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block="set line follow params at start speed = $newMinStartSpeed\\% max = $newMaxSpeed\\% final = $newMinEndSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block.loc.ru="установить параметры движения по линии при стартовой скорости = $newMinStartSpeed\\% макс = $newMaxSpeed\\% конечной = $newMinEndSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function SetRampLineFollow2SensorParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
-        if (newMinSpeed) motions.rampLineFollow2SensorMinSpeed = newMinSpeed;
+    export function SetRampLineFollow2SensorParams(newMinStartSpeed: number, newMaxSpeed: number, newMinEndSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
+        if (newMinStartSpeed) motions.rampLineFollow2SensorMinStartSpeed = newMinStartSpeed;
         if (newMaxSpeed) motions.rampLineFollow2SensorMaxSpeed = newMaxSpeed;
+        if (newMinEndSpeed) motions.rampLineFollow2SensorMinStartSpeed = newMinEndSpeed;
         if (newKp) motions.rampLineFollow2SensorKp = newKp;
         if (newKi) motions.rampLineFollow2SensorKi = newKi;
         if (newKd) motions.rampLineFollow2SensorKd = newKd;
@@ -199,9 +202,9 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowTwoParams(newMinSpeed: number, newMaxSpeed: number): RampLineFollowInterface {
+    export function RampLineFollowTwoParams(newMinStartSpeed: number, newMaxSpeed: number): RampLineFollowInterface {
         return {
-            minSpeed: newMinSpeed,
+            minStartSpeed: newMinStartSpeed,
             maxSpeed: newMaxSpeed
         };
     }
@@ -219,9 +222,9 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowThreeParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number): RampLineFollowInterface {
+    export function RampLineFollowThreeParams(newMinStartSpeed: number, newMaxSpeed: number, newKp?: number): RampLineFollowInterface {
         return {
-            minSpeed: newMinSpeed,
+            minStartSpeed: newMinStartSpeed,
             maxSpeed: newMaxSpeed,
             Kp: newKp
         };
@@ -243,9 +246,9 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowFiveParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number, newKd?: number, newN?: number): RampLineFollowInterface {
+    export function RampLineFollowFiveParams(newMinStartSpeed: number, newMaxSpeed: number, newKp?: number, newKd?: number, newN?: number): RampLineFollowInterface {
         return {
-            minSpeed: newMinSpeed,
+            minStartSpeed: newMinStartSpeed,
             maxSpeed: newMaxSpeed,
             Kp: newKp,
             Kd: newKd,
@@ -270,9 +273,9 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowAllParams(newMinSpeed: number, newMaxSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): RampLineFollowInterface {
+    export function RampLineFollowAllParams(newMinStartSpeed: number, newMaxSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): RampLineFollowInterface {
         return {
-            minSpeed: newMinSpeed,
+            minStartSpeed: newMinStartSpeed,
             maxSpeed: newMaxSpeed,
             Kp: newKp,
             Ki: newKi,
