@@ -462,9 +462,9 @@ namespace sensors {
             }
             let colorRgb: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
             colorRgb[0] = [0, 0, 0]; // sensors.color1.rgbRaw();
-            colorRgb[1] = sensors.color2.rgbRaw(); // sensors.color2.rgbRaw();
-            colorRgb[2] = [0, 0, 0]; // sensors.color3.rgbRaw();
-            colorRgb[3] = [0, 0, 0] // sensors.color4.rgbRaw();
+            colorRgb[1] = [0, 0, 0]; // sensors.color2.rgbRaw();
+            colorRgb[2] = sensors.color3.rgbRaw();
+            colorRgb[3] = [0, 0, 0]; // sensors.color4.rgbRaw();
             brick.clearScreen();
             for (let i = 0; i < 4; i++) {
                 brick.printString(`RGB_${i + 1}: ${colorRgb[i][0]} ${colorRgb[i][1]} ${colorRgb[i][2]}`, i + 1, 12);
