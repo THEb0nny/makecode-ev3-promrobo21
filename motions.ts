@@ -28,10 +28,8 @@ namespace motions {
         let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно пройти
         //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
         chassis.steeringCommand(0, speed); // Команда вперёд
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
             let currTime = control.millis(); // Текущее время
-            prevTime = currTime; // Новое время в переменную предыдущего времени
             let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
@@ -151,6 +149,7 @@ namespace motions {
         }
     }
 
+    // Функция поворота на линию датчиком цвета ev3
     function SpinTurnToLineAtColorSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
         let sensor: sensors.ColorSensor; // Инициализируем переменную сенсора
         if (rotateSide == TurnRotateSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
@@ -201,6 +200,7 @@ namespace motions {
         levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
     }
 
+    // Функция поворота на лицию датчиком отражения nxt
     function SpinTurnToLineAtNxtLightSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
         let sensorSide: LineSensor; // Инициализируем переменную сенсора
         let sensorBlackRefRaw = 0, sensorWhiteRefRaw = 0;

@@ -10,7 +10,6 @@ namespace sensors {
     export let wRefRawRightLineSensor: number; // Сырые значения на белом для правого датчика линии
 
     let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
-
     let maxRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Максимальные значения RGB для датчиков цвета
 
     let colorBoundaryColorSensors: number[] = [0, 0, 0, 0];
@@ -442,45 +441,73 @@ namespace sensors {
      * Search for the maximum RGB values of the color sensor, i.e. these are the maximum values on white.
      * Поиск максимальных значений RGB датчика цвета, т.е. это максимальные значения на белом.
      */
-    //% blockId="SearchRgbMaxColorSensors"
-    //% block="show max RGB color sensors"
-    //% block.loc.ru="показать максимальные RGB датчиков цвета"
+    //% blockId="SearchRgbMinMaxColorSensors"
+    //% block="show max RGB $sensor color sensor"
+    //% block.loc.ru="показать минимальные и максимальные RGB $sensor датчика цвета"
     //% inlineInputMode="inline"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
     //% weight="49"
     //% group="Color Sensor"
-    export function SearchRgbMaxColorSensors() {
-        let rgbMax: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-        let btnPressed = 0;
+    export function SearchRgbMinMaxColorSensors(sensor: ColorSensor) {
+        let maxSensorRgb: number[] = [0, 0, 0];
+        const sensorPort = sensor.port() - 1;
+
+        let btnUpState = false, btnDownState = false;
+        let btnRightNumberClicks = 0;
+
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (btnPressed < 2) {
+        while (!brick.buttonEnter.wasPressed()) {
             let currTime = control.millis();
             let loopTime = currTime - prevTime;
             prevTime = currTime;
-            if (brick.buttonEnter.wasPressed()) { // Переключение режима
-                btnPressed++;
-                pause(250);
-            }
-            let colorRgb: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-            colorRgb[0] = [0, 0, 0]; // sensors.color1.rgbRaw();
-            colorRgb[1] = [0, 0, 0]; // sensors.color2.rgbRaw();
-            colorRgb[2] = sensors.color3.rgbRaw();
-            colorRgb[3] = [0, 0, 0]; // sensors.color4.rgbRaw();
-            brick.clearScreen();
-            for (let i = 0; i < 4; i++) {
-                brick.printString(`RGB_${i + 1}: ${colorRgb[i][0]} ${colorRgb[i][1]} ${colorRgb[i][2]}`, i + 1, 12);
-            }
-            if (btnPressed == 0) brick.showString("Press Enter to freeze", 12);
-            if (btnPressed == 1) {
-                for (let i = 0; i < 4; i++) {
-                    for (let j = 0; j < 3; j++) {
-                        rgbMax[i][j] = Math.max(colorRgb[i][j], rgbMax[i][j]);
-                    }
+
+            if (brick.buttonUp.wasPressed()) {
+                btnUpState = true;
+                console.log(`btnUpState: ${btnUpState}`);
+            } else if (brick.buttonRight.wasPressed()) {
+                btnRightNumberClicks++;
+                if (btnRightNumberClicks > 2) { // Сброс
+                    btnRightNumberClicks = 0;
+                    maxSensorRgb = [0, 0, 0];
+                    minRgbColorSensors[sensorPort] = [0, 0, 0];
+                    maxRgbColorSensors[sensorPort] = [0, 0, 0];
                 }
-                for (let i = 0, str = 7; i < 4; i++) {
-                    brick.printString(`RGB_max: ${rgbMax[i][0]} ${rgbMax[i][1]} ${rgbMax[i][2]}`, str++, 12);
-                }
-                brick.showString("Press Enter to exit", 12);
             }
+
+            let sensorRgb = sensor.rgbRaw(); // Считать значение с датчика
+            brick.clearScreen(); // Очистить экран
+            brick.printString(`CS${sensor.port()} RGB: ${sensorRgb[0]} ${sensorRgb[1]} ${sensorRgb[2]}`, 1);
+
+            if (btnRightNumberClicks > 0) {
+                if (btnRightNumberClicks == 1) {
+                    for (let i = 0; i < 3; i++) maxSensorRgb[i] = Math.max(sensorRgb[i], maxSensorRgb[i]);
+                }
+                if (btnUpState == true) {
+                    console.log(`maxSensorRgb: ${maxSensorRgb}`);
+                    minRgbColorSensors[sensorPort] = maxSensorRgb;
+                    btnUpState = false;
+                }
+                // if (brick.buttonDown.isPressed()) {
+                //     maxRgbColorSensors[sensorPort] = maxSensorRgb;
+                // }
+
+                brick.printString(`CS${sensor.port()} RGB MAX: ${maxSensorRgb[0]} ${maxSensorRgb[1]} ${maxSensorRgb[2]}`, 3);
+                brick.printString(`CS${sensor.port()} MIN RGB: ${minRgbColorSensors[sensorPort][0]} ${minRgbColorSensors[sensorPort][1]} ${minRgbColorSensors[sensorPort][2]}`, 5);
+                brick.printString(`CS${sensor.port()} MAX RGB: ${maxRgbColorSensors[sensorPort][0]} ${maxRgbColorSensors[sensorPort][1]} ${maxRgbColorSensors[sensorPort][2]}`, 6);
+
+                if (btnRightNumberClicks == 1) brick.showString("Press RIGHT to freeze", 11);
+                else brick.showString("Press RIGHT to reset", 11);
+
+                if (btnRightNumberClicks > 0) {
+                    brick.showString("Press UP to save to min RGB", 9);
+                    brick.showString("Press DOWN to save to max RGB", 10);
+                }
+            } else {
+                brick.showString("Press RIGHT to search max", 11);
+            }
+            brick.showString("Press ENTER to exit", 12);
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         brick.clearScreen();
