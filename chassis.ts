@@ -15,7 +15,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="79" blockGap="8"
-    //% group="Синхронизированное движение"
+    //% group="Синхронизированное движение в мм"
     export function LinearDistMove(dist: number, speed: number, braking: Braking = Braking.Hold) {
         if (speed == 0 || dist == 0) {
             chassis.stop(true);
@@ -47,7 +47,7 @@ namespace chassis {
     //% speedLeft.shadow="motorSpeedPicker"
     //% speedRight.shadow="motorSpeedPicker"
     //% weight="78"
-    //% group="Синхронизированное движение"
+    //% group="Синхронизированное движение в мм"
     export function DistMove(dist: number, speedLeft: number, speedRight: number, braking: Braking = Braking.Hold) {
         if (dist == 0 || speedLeft == 0 && speedRight == 0) {
             chassis.stop(true);
@@ -82,7 +82,7 @@ namespace chassis {
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="89" blockGap="8"
-    //% group="Синхронизированное движение с ускорениями/замедлениями"
+    //% group="Синхронизированное движение с ускорениями/замедлениями в мм"
     export function RampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
         if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
@@ -150,7 +150,7 @@ namespace chassis {
     // //% inlineInputMode="inline"
     // //% speed.shadow="motorSpeedPicker"
     // //% weight="88"
-    // //% group="Синхронизированное движение с ускорениями/замедлениями"
+    // //% group="Синхронизированное движение с ускорениями/замедлениями в мм"
     // //% blockHidden="true"
     // export function RampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
     //     const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
