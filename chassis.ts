@@ -109,7 +109,7 @@ namespace chassis {
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="88"
-    //% group="Синхронизированное движение с ускорениями/замедлениями"
+    //% group="Синхронизированное движение с ускорениями/замедлениями в мм"
     export function RampLinearDistMoveWithoutBraking(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {

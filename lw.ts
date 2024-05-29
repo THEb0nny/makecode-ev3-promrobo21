@@ -493,8 +493,10 @@ namespace motions {
     }
 
     /**
-     * Moving along a line over a distance with acceleration and deceleration
-     * Движение по линии на расстояние с ускорением и замедлением.
+     * Movement along a line over a distance in mm with acceleration and deceleration.
+     * Acceleration distance, deceleration distance cannot add up to more than the total distance.
+     * Движение по линии на расстояние в мм с ускорением и замедлением.
+     * Расстояние ускорения, расстояние замедления не могут быть в сумме больше, чем общая дистанция.
      * @param totalDist общее расстояние движения в мм, eg: 400
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
@@ -509,8 +511,16 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="RampLineFollowEmptyParams"
     //% weight="78"
-    //% group="Движение по линии"
+    //% group="Движение по линии с ускорениями/замедлениями"
     export function RampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking = Braking.Hold, params?: params.RampLineFollowInterface, debug: boolean = false) {
+        if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
+            music.playSoundEffect(sounds.systemGeneralAlert);
+            control.panic(40);
+        } else if (totalDist == 0) {
+            chassis.stop();
+            return;
+        }
+        
         if (params) { // Если были переданы параметры
             if (params.minStartSpeed) rampLineFollow2SensorMinStartSpeed = Math.abs(params.minStartSpeed);
             if (params.maxSpeed) rampLineFollow2SensorMaxSpeed = Math.abs(params.maxSpeed);
