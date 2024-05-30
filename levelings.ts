@@ -35,7 +35,7 @@ namespace levelings {
     //% block.loc.ru="установить dt = $dt для циклов регулирования выравнивания и позиционирования на линии"
     //% inlineInputMode="inline"
     //% weight="69"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetLineAlignmentOrPositioningLoopDt(dt: number) {
         lineAlignmentOrPositioningLoopDt = dt;
     }
@@ -50,7 +50,7 @@ namespace levelings {
     //% block.loc.ru="установить расстояние между датчиками линии $dist мм"
     //% inlineInputMode="inline"
     //% weight="99"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetDistanceBetweenLineSensors(dist: number) {
         distanceBetweenLineSensors = dist;
     }
