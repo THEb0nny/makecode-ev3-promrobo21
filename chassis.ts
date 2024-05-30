@@ -137,7 +137,7 @@ namespace chassis {
             let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
             chassis.leftMotor.run(powers.pwrLeft);
             chassis.rightMotor.run(powers.pwrRight);
-            control.pauseUntilTime(currTime, 5);
+            control.pauseUntilTime(currTime, 1);
         }
         chassis.steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше
     }
@@ -178,7 +178,7 @@ namespace chassis {
     //         let powers = advmotctrls.getPwrSyncMotors(U);
     //         chassis.leftMotor.run(powers.pwrLeft);
     //         chassis.rightMotor.run(powers.pwrRight);
-    //         control.pauseUntilTime(currTime, 5);
+    //         control.pauseUntilTime(currTime, 1);
     //     }
     //     chassis.stop(true);
     // }

@@ -32,7 +32,7 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторы
             if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
         // Команды для остановки не нужно, в этом и смысл функции
     }
@@ -249,7 +249,7 @@ namespace motions {
             let powers = advmotctrls.getPwrSyncMotors(U);
             chassis.leftMotor.run(powers.pwrLeft);
             chassis.rightMotor.run(powers.pwrRight);
-            control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
         levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
     }
