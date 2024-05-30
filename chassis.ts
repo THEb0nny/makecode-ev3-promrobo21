@@ -23,7 +23,6 @@ namespace chassis {
         } else if (dist < 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
-            pause(2000);
             return;
         }
         const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
@@ -140,7 +139,7 @@ namespace chassis {
             chassis.rightMotor.run(powers.pwrRight);
             control.pauseUntilTime(currTime, 5);
         }
-        // Без команды торможения
+        chassis.steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше
     }
 
 
