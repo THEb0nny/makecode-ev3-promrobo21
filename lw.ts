@@ -240,7 +240,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="99"
-    //% group="Движение по линии"
+    //% group="Движение по линии до перекрёстка"
     export function LineFollowToCrossIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
@@ -300,7 +300,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="89"
-    //% group="Движение по линии"
+    //% group="Движение по линии до перекрёстка"
     export function LineFollowToSideIntersection(junction: SideJunctionType, lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (junction == SideJunctionType.Left) {
             LineFollowToLeftIntersaction(lineLocation, actionAfterMotion, params, debug);
@@ -324,7 +324,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="88" blockGap="8"
-    //% group="Движение по линии"
+    //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
     export function LineFollowToLeftIntersaction(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
@@ -384,7 +384,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="87"
-    //% group="Движение по линии"
+    //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
     export function LineFollowToRightIntersection(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
@@ -444,7 +444,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="79"
-    //% group="Движение по линии"
+    //% group="Движение по линии на расстояние"
     export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
@@ -579,7 +579,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="76"
-    //% group="Движение по линии"
+    //% group="Движение по линии на расстояние"
     export function LineFollowToDistanceWithOneSensor(lineSensor: LineSensor, lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (lineSensor == LineSensor.Left) {
             LineFollowToDistanceWithLeftSensor(lineLocation, dist, actionAfterMotion, params, debug);
@@ -603,7 +603,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="75"
-    //% group="Движение по линии"
+    //% group="Движение по линии на расстояние"
     //% blockHidden="true"
     export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
@@ -669,7 +669,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="74" blockGap="8"
-    //% group="Движение по линии"
+    //% group="Движение по линии на расстояние"
     //% blockHidden="true"
     export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
