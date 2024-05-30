@@ -355,8 +355,8 @@ namespace motions {
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightSensorSpeed); // Команда моторам
             motions.ChassisControlCommand(U, lineFollowRightSensorSpeed); // Команда моторам
-            brick.clearScreen(); // Очистка экрана
             if (debug) {
+                brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
                 brick.printValue("refRightLS", refRightLS, 2);
                 brick.printValue("error", error, 3);

@@ -54,7 +54,6 @@ namespace chassis {
         } else if (dist < 0) {
             chassis.stop(true);
             music.playSoundEffect(sounds.systemGeneralAlert);
-            pause(2000);
             return;
         }
         const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
@@ -135,8 +134,7 @@ namespace chassis {
             pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, 0);
             let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
-            chassis.leftMotor.run(powers.pwrLeft);
-            chassis.rightMotor.run(powers.pwrRight);
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
         chassis.steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше
@@ -176,8 +174,7 @@ namespace chassis {
     //         pidChassisSync.setPoint(error);
     //         let U = pidChassisSync.compute(dt, 0);
     //         let powers = advmotctrls.getPwrSyncMotors(U);
-    //         chassis.leftMotor.run(powers.pwrLeft);
-    //         chassis.rightMotor.run(powers.pwrRight);
+    //         chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
     //         control.pauseUntilTime(currTime, 1);
     //     }
     //     chassis.stop(true);

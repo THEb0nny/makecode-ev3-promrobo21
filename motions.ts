@@ -54,7 +54,7 @@ namespace motions {
         let mB = speed + u, mC = speed - u;
         // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
         // mB *= z; mC *= z;
-        chassis.leftMotor.run(mB); chassis.rightMotor.run(mC);
+        chassis.setSpeedsCommand(mB, mC);
     }
 
     /**
@@ -79,7 +79,17 @@ namespace motions {
     //% weight="89"
     //% group="Move"
     export function MoveToRefZone(turnRatio: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: LogicalOperators, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        // motions.ChassisControlCommand(turnRatio, speed); // Команда двигаться по направлению и скоростью
+        const emlPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
+        const emrPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
+        
+        const { speedLeft, speedRight } = chassis.getMotorsSpeedsAtSteering(turnRatio, speed);
+        advmotctrls.syncMotorsConfig(speedLeft, speedRight);
+        
+        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
+        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        pidChassisSync.reset(); // Сбросить ПИД регулятор
+        
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
             let currTime = control.millis(); // Текущее время
@@ -112,14 +122,20 @@ namespace motions {
                 else if (refCondition == LogicalOperators.LessOrEqual && refRightLS <= refTreshold) break; // Меньше или равно
                 else if (refCondition == LogicalOperators.Equal && refRightLS == refTreshold) break; // Равно
             }
-            chassis.steeringCommand(turnRatio, speed) // Дублирую команду двигаться по направлению и скоростью
+            let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
+            let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
+            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotors(U);
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
                 brick.printValue("refRightLS", refRightLS, 2);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTime(currTime, 1); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(277, 200); // Сигнал о завершении
         motions.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
@@ -190,8 +206,7 @@ namespace motions {
             pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, 0);
             let powers = advmotctrls.getPwrSyncMotors(U);
-            chassis.leftMotor.run(powers.pwrLeft);
-            chassis.rightMotor.run(powers.pwrRight);
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
         }
         levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
@@ -247,8 +262,7 @@ namespace motions {
             pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, 0);
             let powers = advmotctrls.getPwrSyncMotors(U);
-            chassis.leftMotor.run(powers.pwrLeft);
-            chassis.rightMotor.run(powers.pwrRight);
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
         levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
