@@ -558,10 +558,9 @@ namespace motions {
             motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
-        if (braking != Braking.NoStop) {
-            if (braking == Braking.Hold) chassis.stop(true); // Остановить моторы с удержанием
-            else chassis.stop(false); // Остановить моторы без удержания
-        }
+        if (braking == Braking.Hold) chassis.stop(true); // Break at hold
+        else if (braking == Braking.NoBreak) chassis.stop(false); // No hold break
+        else chassis.setSpeedsCommand(rampLineFollow2SensorMinEndSpeed, rampLineFollow2SensorMinEndSpeed); // Forward
     }
 
     /**
