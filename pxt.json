@@ -9,7 +9,6 @@
         "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#v1.3.2"
     },
     "files": [
-        "main.ts",
         "README.md",
         "custom.ts",
         "lw.ts",
@@ -21,7 +20,8 @@
         "levelings.ts",
         "params.ts",
         "tune.ts",
-        "chassis.ts"
+        "chassis.ts",
+        "test.ts"
     ],
     "testFiles": [],
     "targetVersions": {

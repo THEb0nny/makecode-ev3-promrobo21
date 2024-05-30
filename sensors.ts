@@ -464,8 +464,12 @@ namespace sensors {
             prevTime = currTime;
 
             if (brick.buttonUp.wasPressed()) {
-                btnUpState = true;
-                console.log(`btnUpState: ${btnUpState}`);
+                if (btnRightNumberClicks > 0) {
+                    btnUpState = true;
+                    console.log(`btnUpState: ${btnUpState}`);
+                }
+            } else if (brick.buttonDown.wasPressed()) {
+                maxRgbColorSensors[sensorPort] = maxSensorRgb;
             } else if (brick.buttonRight.wasPressed()) {
                 btnRightNumberClicks++;
                 if (btnRightNumberClicks > 2) { // Сброс
@@ -478,6 +482,7 @@ namespace sensors {
 
             let sensorRgb = sensor.rgbRaw(); // Считать значение с датчика
             brick.clearScreen(); // Очистить экран
+            console.log(`btnUpState: ${btnUpState}`);
             brick.printString(`CS${sensor.port()} RGB: ${sensorRgb[0]} ${sensorRgb[1]} ${sensorRgb[2]}`, 1);
 
             if (btnRightNumberClicks > 0) {
@@ -489,9 +494,6 @@ namespace sensors {
                     minRgbColorSensors[sensorPort] = maxSensorRgb;
                     btnUpState = false;
                 }
-                // if (brick.buttonDown.isPressed()) {
-                //     maxRgbColorSensors[sensorPort] = maxSensorRgb;
-                // }
 
                 brick.printString(`CS${sensor.port()} RGB MAX: ${maxSensorRgb[0]} ${maxSensorRgb[1]} ${maxSensorRgb[2]}`, 3);
                 brick.printString(`CS${sensor.port()} MIN RGB: ${minRgbColorSensors[sensorPort][0]} ${minRgbColorSensors[sensorPort][1]} ${minRgbColorSensors[sensorPort][2]}`, 5);
