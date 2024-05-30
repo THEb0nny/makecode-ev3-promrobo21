@@ -47,7 +47,7 @@ namespace motions {
     //% block.loc.ru="установить дистанцию $dist мм прокатки после перекрёстка"
     //% inlineInputMode="inline"
     //% weight="99" blockGap="8"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetDistRollingAfterInsetsection(dist: number) {
         distRollingAfterIntersection = dist;
     }
@@ -61,7 +61,7 @@ namespace motions {
     //% block.loc.ru="дистанция прокатки после перекрёстка в мм"
     //% inlineInputMode="inline"
     //% weight="98"
-    //% group="Параметры"
+    //% group="Свойства"
     export function GetDistRollingAfterInsetsection(): number {
         return distRollingAfterIntersection;
     }
@@ -76,7 +76,7 @@ namespace motions {
     //% block.loc.ru="установить дистанцию $dist мм прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetDistRollingAfterIntersectionMoveOut(dist: number) {
         distRollingAfterIntersectionMoveOut = dist;
     }
@@ -90,7 +90,7 @@ namespace motions {
     //% block.loc.ru="дистанция прокатки съезда с перекрёстка в мм"
     //% inlineInputMode="inline"
     //% weight="96"
-    //% group="Параметры"
+    //% group="Свойства"
     export function GetDistRollingAfterIntersectionMoveOut() {
         return distRollingAfterIntersectionMoveOut;
     }
@@ -105,7 +105,7 @@ namespace motions {
     //% block.loc.ru="установить пороговое значение $reflection отражения"
     //% inlineInputMode="inline"
     //% weight="89" blockGap="8"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetLineRefTreshold(reflection: number) {
         lineRefTreshold = reflection;
     }
@@ -119,7 +119,7 @@ namespace motions {
     //% block.loc.ru="пороговое значение отражения"
     //% inlineInputMode="inline"
     //% weight="88"
-    //% group="Параметры"
+    //% group="Свойства"
     export function GetLineRefTreshold(): number {
         return lineRefTreshold
     }
@@ -134,7 +134,7 @@ namespace motions {
     //% block.loc.ru="установить пороговое значение $reflection отражения движения по линии"
     //% inlineInputMode="inline"
     //% weight="87" blockGap="8"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetLineFollowRefTreshold(reflection: number) {
         lineFollowRefTreshold = reflection;
     }
@@ -148,7 +148,7 @@ namespace motions {
     //% block.loc.ru="пороговое значение отражения движения по линии"
     //% inlineInputMode="inline"
     //% weight="86"
-    //% group="Параметры"
+    //% group="Свойства"
     export function GetLineFollowRefTreshold(): number {
         return lineFollowRefTreshold;
     }
@@ -163,7 +163,7 @@ namespace motions {
     //% block.loc.ru="установить уставку $reflectionSetPoint движения по линии"
     //% inlineInputMode="inline"
     //% weight="85" blockGap="8"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetLineFollowSetPoint(reflectionSetPoint: number) {
         lineFollowSetPoint = reflectionSetPoint;
     }
@@ -177,7 +177,7 @@ namespace motions {
     //% block.loc.ru="уставка движения по линии"
     //% inlineInputMode="inline"
     //% weight="84"
-    //% group="Параметры"
+    //% group="Свойства"
     export function GetLineFollowSetPoint(): number {
         return lineFollowSetPoint;
     }
@@ -192,7 +192,7 @@ namespace motions {
     //% block.loc.ru="установить максимальую ошибку $maxErr движения по линии"
     //% inlineInputMode="inline"
     //% weight="79" blockGap="8"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetLineFollowConditionMaxErr(maxErr: number) {
         lineFollowWithOneSensorConditionMaxErr = maxErr;
     }
@@ -206,7 +206,7 @@ namespace motions {
     //% block.loc.ru="максимальая ошибка при движении по линии"
     //% inlineInputMode="inline"
     //% weight="78"
-    //% group="Параметры"
+    //% group="Свойства"
     export function GetLineFollowConditionMaxErr(): number {
         return lineFollowWithOneSensorConditionMaxErr;
     }
@@ -221,7 +221,7 @@ namespace motions {
     //% block.loc.ru="установить dt = $dt для циклов регулирования движения по линии"
     //% inlineInputMode="inline"
     //% weight="69"
-    //% group="Параметры"
+    //% group="Свойства"
     export function SetLineFollowLoopDt(dt: number) {
         lineFollowLoopDt = dt;
     }
