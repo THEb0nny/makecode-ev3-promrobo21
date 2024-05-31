@@ -70,7 +70,7 @@ namespace chassis {
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
-     * @param minSpeed начальная скорость движения, eg: 10
+     * @param minSpeed начальная скорость движения, eg: 15
      * @param maxSpeed максимальная скорость движения, eg: 50
      */
     //% blockId="RampLinearDistMove"
@@ -97,7 +97,7 @@ namespace chassis {
      * Синхронизация с плавным ускорением при прямолинейном движении без торможения. Не рекомендуется устанавливать минимальную скорость меньше 10.
      * @param totalDist total length encoder value at, eg: 500
      * @param accelDist accelerate length encoder value, eg: 50
-     * @param minSpeed start motor speed, eg: 10
+     * @param minSpeed start motor speed, eg: 15
      * @param maxSpeed max motor speed, eg: 50
      */
     //% blockId="RampLinearDistMoveWithoutBraking"
