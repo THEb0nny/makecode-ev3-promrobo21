@@ -95,6 +95,23 @@ namespace sensors {
     }
 
     /**
+     * A new method for setting sensors to line raw values ​​on black and white.
+     * Новый метод установки датчикам линии сырых значений на чёрном и белом.
+     */
+    //% blockId="SetLineSensorsRawRefValues"
+    //% block="set ref raw values ​​for **left line sensor** black $bRefRawValLeftSensor white $wRefRawValLeftSensor **right line sensor** black $bRefRawValRightSensor white $wRefRawValRightSensor"
+    //% block.loc.ru="установить сырые значения отражения **левому датчику линии** чёрный $bRefRawValLeftSensor белый $wRefRawValLeftSensor **правому датчику линии** чёрный $bRefRawValRightSensor белый $wRefRawValRightSensor"
+    //% inlineInputMode="inline"
+    //% weight="88"
+    //% group="Line Sensor"
+    export function SetLineSensorsRawRefValues(bRefRawValLeftSensor: number, wRefRawValLeftSensor: number, bRefRawValRightSensor: number, wRefRawValRightSensor: number) {
+        bRefRawLeftLineSensor = bRefRawValLeftSensor;
+        wRefRawLeftLineSensor = wRefRawValLeftSensor;
+        bRefRawRightLineSensor = bRefRawValRightSensor;
+        wRefRawRightLineSensor = wRefRawValRightSensor;
+    }
+
+    /**
      * A method for obtaining a raw reflection value from a line sensor.
      * Метод получения с датчика линии сырого значения отражения.
      * @param sensor датчик линии, eg: LineSensor.Left
@@ -103,7 +120,7 @@ namespace sensors {
     //% block="**line sensor** $sensor reflection raw"
     //% block.loc.ru="сырое значение отражения **датчика линии** $sensor"
     //% inlineInputMode="inline"
-    //% weight="88"
+    //% weight="87"
     //% group="Line Sensor"
     export function GetLineSensorRawRefValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
@@ -133,7 +150,7 @@ namespace sensors {
     //% block="normalize raw reflection $refRawVal at black $bRefRawVal white $wRefRawVal"
     //% block.loc.ru="нормализовать сырое значения отражения $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
     //% inlineInputMode="inline"
-    //% weight="87"
+    //% weight="86"
     //% group="Line Sensor"
     export function NormalizingReflectionValue(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
         let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
@@ -152,7 +169,7 @@ namespace sensors {
     //% block="normalized reflection **line sensor** $sensor"
     //% block.loc.ru="нормализованное отражение **датчика линии** $sensor"
     //% inlineInputMode="inline"
-    //% weight="86"
+    //% weight="85"
     //% group="Line Sensor"
     export function GetNormalizedReflectionValue(sensor: LineSensor, recalibrate: boolean = false): number {
         const refRawLS = GetLineSensorRawRefValue(sensor); // Сырое значение с датчика цвета
