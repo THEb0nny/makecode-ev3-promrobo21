@@ -42,5 +42,4 @@ namespace levelings {
 //% block.loc.ru="Параметры"
 //% color="#8B008B" weight="85" icon="\uf12b"
 namespace params {
-
 }
