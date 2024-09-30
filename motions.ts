@@ -62,6 +62,10 @@ namespace motions {
         chassis.setSpeedsCommand(mB, mC);
     }
 
+}
+
+namespace motions {
+
     /**
      * Moving in a direction with a constant speed to a zone with a certain reflection.
      * Движение по направлению с постоянной скоростью до зоны с определённым отражением.

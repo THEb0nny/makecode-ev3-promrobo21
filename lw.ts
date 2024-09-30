@@ -226,6 +226,10 @@ namespace motions {
         lineFollowLoopDt = dt;
     }
 
+}
+
+namespace motions {
+
     /**
      * Function of moving along a line to an intersection using two sensors.
      * Функция движения по линии до перекрёстка двумя датчиками.
@@ -492,6 +496,10 @@ namespace motions {
         motions.ActionAfterMotion(lineFollow2SensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
+}
+
+namespace motions {
+
     /**
      * Movement along a line over a distance in mm with acceleration and deceleration.
      * Acceleration distance, deceleration distance cannot add up to more than the total distance.
@@ -558,10 +566,15 @@ namespace motions {
             motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
+        music.playToneInBackground(262, 300); // Издаём сигнал завершения
         if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
         else if (braking == Braking.NoBreak) chassis.stop(false); // Торможение без удержания
         else chassis.setSpeedsCommand(rampLineFollow2SensorMinEndSpeed, rampLineFollow2SensorMinEndSpeed); // Команда моторам вперёд
     }
+
+}
+
+namespace motions {
 
     /**
      * Движение по линии на расстояние одним из датчиков.
