@@ -25,7 +25,7 @@ namespace motions {
             return;
         }
         let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно пройти
+        let calcMotRot = CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно пройти
         //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
         chassis.steeringCommand(0, speed); // Команда вперёд
         while (true) { // Пока моторы не достигнули градусов вращения
@@ -35,6 +35,11 @@ namespace motions {
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
         // Команды для остановки не нужно, в этом и смысл функции
+    }
+
+    // Вспомогательная функция расчёта движения на дистанцию
+    export function CalculateDistanceToEncRotate(distance: number): number {
+        return (distance / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно пройти
     }
 
     /**

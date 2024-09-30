@@ -455,7 +455,7 @@ namespace motions {
         }
 
         const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = motions.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
 
         automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
         automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
@@ -532,9 +532,9 @@ namespace motions {
         }
 
         const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
-        const mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = motions.CalculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = motions.CalculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
+        const mRotTotalCalc = motions.CalculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
         advmotctrls.accTwoEncConfig(rampLineFollow2SensorMinStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorMinEndSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         automation.pid1.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
@@ -558,9 +558,9 @@ namespace motions {
             motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
-        if (braking == Braking.Hold) chassis.stop(true); // Break at hold
-        else if (braking == Braking.NoBreak) chassis.stop(false); // No hold break
-        else chassis.setSpeedsCommand(rampLineFollow2SensorMinEndSpeed, rampLineFollow2SensorMinEndSpeed); // Forward
+        if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
+        else if (braking == Braking.NoBreak) chassis.stop(false); // Торможение без удержания
+        else chassis.setSpeedsCommand(rampLineFollow2SensorMinEndSpeed, rampLineFollow2SensorMinEndSpeed); // Команда моторам вперёд
     }
 
     /**
@@ -615,7 +615,7 @@ namespace motions {
         }
 
         const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = motions.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
 
         automation.pid1.setGains(lineFollowLeftSensorKp, lineFollowLeftSensorKi, lineFollowLeftSensorKd); // Установка коэффицентов ПИД регулятора
         automation.pid1.setDerivativeFilter(lineFollowLeftSensorN); // Установить фильтр дифференциального регулятора
@@ -681,7 +681,7 @@ namespace motions {
         }
 
         const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = (dist / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = motions.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
 
         automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
         automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
