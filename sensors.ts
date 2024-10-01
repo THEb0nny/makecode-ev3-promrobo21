@@ -26,7 +26,6 @@ namespace sensors {
     //% newRightLineSensor.fieldOptions.columns="4"
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="99"
-    //% subcategory="Custom"
     //% group="Line Sensor"
     export function SetColorSensorsAsLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
         SetLineSensor(newLeftLineSensor, newRightLineSensor);
@@ -49,7 +48,6 @@ namespace sensors {
     //% newRightLineSensor.fieldOptions.columns="4"
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="98"
-    //% subcategory="Custom"
     //% group="Line Sensor"
     export function SetNxtLightSensorsAsLineSensors(newLeftLineSensor: sensors.NXTLightSensor, newRightLineSensor: sensors.NXTLightSensor) {
         SetLineSensor(newLeftLineSensor, newRightLineSensor);
@@ -73,7 +71,6 @@ namespace sensors {
     //% block.loc.ru="установить $sensor **датчику линии** сырые значения чёрного $bRefRawVal белого $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="89"
-    //% subcategory="Custom"
     //% group="Line Sensor"
     export function SetLineSensorRawRefValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
         if (sensor == LineSensor.Left) {
@@ -94,7 +91,6 @@ namespace sensors {
     //% block.loc.ru="установить сырые значения отражения **левому датчику линии** чёрный $bRefRawValLeftSensor белый $wRefRawValLeftSensor **правому датчику линии** чёрный $bRefRawValRightSensor белый $wRefRawValRightSensor"
     //% inlineInputMode="inline"
     //% weight="88"
-    //% subcategory="Custom"
     //% group="Line Sensor"
     export function SetLineSensorsRawRefValues(bRefRawValLeftSensor: number, wRefRawValLeftSensor: number, bRefRawValRightSensor: number, wRefRawValRightSensor: number) {
         bRefRawLeftLineSensor = bRefRawValLeftSensor;
@@ -113,7 +109,6 @@ namespace sensors {
     //% block.loc.ru="сырое значение отражения **датчика линии** $sensor"
     //% inlineInputMode="inline"
     //% weight="87"
-    //% subcategory="Custom"
     //% group="Line Sensor"
     export function GetLineSensorRawRefValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
@@ -144,7 +139,6 @@ namespace sensors {
     //% block.loc.ru="нормализовать сырое значения отражения $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="86"
-    //% subcategory="Custom"
     //% group="Line Sensor"
     export function NormalizingReflectionValue(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
         let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
@@ -164,7 +158,6 @@ namespace sensors {
     //% block.loc.ru="нормализованное отражение **датчика линии** $sensor"
     //% inlineInputMode="inline"
     //% weight="85"
-    //% subcategory="Custom"
     //% group="Line Sensor"
     export function GetNormalizedReflectionValue(sensor: LineSensor, recalibrate: boolean = false): number {
         const refRawLS = GetLineSensorRawRefValue(sensor); // Сырое значение с датчика цвета
