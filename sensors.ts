@@ -9,18 +9,6 @@ namespace sensors {
     export let bRefRawRightLineSensor: number; // Сырые значения на чёрном для правого датчика линии
     export let wRefRawRightLineSensor: number; // Сырые значения на белом для правого датчика линии
 
-    let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
-    let maxRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Максимальные значения RGB для датчиков цвета
-
-    let colorBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let whiteBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let blackBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let redBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let brownBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let yellowBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let greenBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let blueBoundaryColorSensors: number[] = [0, 0, 0, 0];
-
     /**
      * Method for installing color sensors as motion and line sensors. Line sensors only need to be installed once!
      * Метод установки датчиков цвета в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
@@ -38,6 +26,7 @@ namespace sensors {
     //% newRightLineSensor.fieldOptions.columns="4"
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="99"
+    //% subcategory="Custom"
     //% group="Line Sensor"
     export function SetColorSensorsAsLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
         SetLineSensor(newLeftLineSensor, newRightLineSensor);
@@ -60,6 +49,7 @@ namespace sensors {
     //% newRightLineSensor.fieldOptions.columns="4"
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="98"
+    //% subcategory="Custom"
     //% group="Line Sensor"
     export function SetNxtLightSensorsAsLineSensors(newLeftLineSensor: sensors.NXTLightSensor, newRightLineSensor: sensors.NXTLightSensor) {
         SetLineSensor(newLeftLineSensor, newRightLineSensor);
@@ -83,6 +73,7 @@ namespace sensors {
     //% block.loc.ru="установить $sensor **датчику линии** сырые значения чёрного $bRefRawVal белого $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="89"
+    //% subcategory="Custom"
     //% group="Line Sensor"
     export function SetLineSensorRawRefValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
         if (sensor == LineSensor.Left) {
@@ -103,6 +94,7 @@ namespace sensors {
     //% block.loc.ru="установить сырые значения отражения **левому датчику линии** чёрный $bRefRawValLeftSensor белый $wRefRawValLeftSensor **правому датчику линии** чёрный $bRefRawValRightSensor белый $wRefRawValRightSensor"
     //% inlineInputMode="inline"
     //% weight="88"
+    //% subcategory="Custom"
     //% group="Line Sensor"
     export function SetLineSensorsRawRefValues(bRefRawValLeftSensor: number, wRefRawValLeftSensor: number, bRefRawValRightSensor: number, wRefRawValRightSensor: number) {
         bRefRawLeftLineSensor = bRefRawValLeftSensor;
@@ -121,6 +113,7 @@ namespace sensors {
     //% block.loc.ru="сырое значение отражения **датчика линии** $sensor"
     //% inlineInputMode="inline"
     //% weight="87"
+    //% subcategory="Custom"
     //% group="Line Sensor"
     export function GetLineSensorRawRefValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
@@ -151,6 +144,7 @@ namespace sensors {
     //% block.loc.ru="нормализовать сырое значения отражения $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="86"
+    //% subcategory="Custom"
     //% group="Line Sensor"
     export function NormalizingReflectionValue(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
         let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
@@ -170,6 +164,7 @@ namespace sensors {
     //% block.loc.ru="нормализованное отражение **датчика линии** $sensor"
     //% inlineInputMode="inline"
     //% weight="85"
+    //% subcategory="Custom"
     //% group="Line Sensor"
     export function GetNormalizedReflectionValue(sensor: LineSensor, recalibrate: boolean = false): number {
         const refRawLS = GetLineSensorRawRefValue(sensor); // Сырое значение с датчика цвета
@@ -192,6 +187,22 @@ namespace sensors {
             else if (refRawVal < wRefRawRightLineSensor) wRefRawRightLineSensor = refRawVal;
         }
     }
+
+}
+
+namespace sensors {
+
+    let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
+    let maxRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Максимальные значения RGB для датчиков цвета
+
+    let colorBoundaryColorSensors: number[] = [0, 0, 0, 0];
+    let whiteBoundaryColorSensors: number[] = [0, 0, 0, 0];
+    let blackBoundaryColorSensors: number[] = [0, 0, 0, 0];
+    let redBoundaryColorSensors: number[] = [0, 0, 0, 0];
+    let brownBoundaryColorSensors: number[] = [0, 0, 0, 0];
+    let yellowBoundaryColorSensors: number[] = [0, 0, 0, 0];
+    let greenBoundaryColorSensors: number[] = [0, 0, 0, 0];
+    let blueBoundaryColorSensors: number[] = [0, 0, 0, 0];
 
     /**
      * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
