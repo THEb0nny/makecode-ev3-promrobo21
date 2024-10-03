@@ -167,9 +167,9 @@ namespace params {
     //% weight="99"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
     export function SetRampLineFollow2SensorParams(newMinStartSpeed: number, newMaxSpeed: number, newMinEndSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
-        if (newMinStartSpeed) motions.rampLineFollow2SensorMinStartSpeed = newMinStartSpeed;
+        if (newMinStartSpeed) motions.rampLineFollow2SensorStartSpeed = newMinStartSpeed;
         if (newMaxSpeed) motions.rampLineFollow2SensorMaxSpeed = newMaxSpeed;
-        if (newMinEndSpeed) motions.rampLineFollow2SensorMinStartSpeed = newMinEndSpeed;
+        if (newMinEndSpeed) motions.rampLineFollow2SensorStartSpeed = newMinEndSpeed;
         if (newKp) motions.rampLineFollow2SensorKp = newKp;
         if (newKi) motions.rampLineFollow2SensorKi = newKi;
         if (newKd) motions.rampLineFollow2SensorKd = newKd;

@@ -29,9 +29,9 @@ namespace motions {
     export let lineFollowRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком
     export let lineFollowRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком
 
-    export let rampLineFollow2SensorMinStartSpeed = 10; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
+    export let rampLineFollow2SensorStartSpeed = 10; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
     export let rampLineFollow2SensorMaxSpeed = 50; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
-    export let rampLineFollow2SensorMinEndSpeed = 10; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
+    export let rampLineFollow2SensorEndSpeed = 10; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
     export let rampLineFollow2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     export let rampLineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
     export let rampLineFollow2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
@@ -530,9 +530,9 @@ namespace motions {
         }
         
         if (params) { // Если были переданы параметры
-            if (params.minStartSpeed) rampLineFollow2SensorMinStartSpeed = Math.abs(params.minStartSpeed);
+            if (params.minStartSpeed) rampLineFollow2SensorStartSpeed = Math.abs(params.minStartSpeed);
             if (params.maxSpeed) rampLineFollow2SensorMaxSpeed = Math.abs(params.maxSpeed);
-            if (params.minEndSpeed) rampLineFollow2SensorMinEndSpeed = Math.abs(params.minEndSpeed);
+            if (params.minEndSpeed) rampLineFollow2SensorEndSpeed = Math.abs(params.minEndSpeed);
             if (params.Kp) rampLineFollow2SensorKp = params.Kp;
             if (params.Ki) rampLineFollow2SensorKi = params.Ki;
             if (params.Kd) rampLineFollow2SensorKd = params.Kd;
@@ -544,7 +544,7 @@ namespace motions {
         const mRotDecelCalc = motions.CalculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
         const mRotTotalCalc = motions.CalculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
-        advmotctrls.accTwoEncConfig(rampLineFollow2SensorMinStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorMinEndSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorEndSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         automation.pid1.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
         automation.pid1.setDerivativeFilter(rampLineFollow2SensorN); // Установить фильтр дифференциального регулятора
         automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
@@ -569,7 +569,7 @@ namespace motions {
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
         else if (braking == Braking.NoBreak) chassis.stop(false); // Торможение без удержания
-        else chassis.setSpeedsCommand(rampLineFollow2SensorMinEndSpeed, rampLineFollow2SensorMinEndSpeed); // Команда моторам вперёд
+        else chassis.setSpeedsCommand(rampLineFollow2SensorEndSpeed, rampLineFollow2SensorEndSpeed); // Команда моторам вперёд
     }
 
 }
