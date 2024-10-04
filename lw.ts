@@ -530,9 +530,9 @@ namespace motions {
         }
         
         if (params) { // Если были переданы параметры
-            if (params.minStartSpeed) rampLineFollow2SensorStartSpeed = Math.abs(params.minStartSpeed);
+            if (params.startingSpeed) rampLineFollow2SensorStartSpeed = Math.abs(params.startingSpeed);
             if (params.maxSpeed) rampLineFollow2SensorMaxSpeed = Math.abs(params.maxSpeed);
-            if (params.minEndSpeed) rampLineFollow2SensorEndSpeed = Math.abs(params.minEndSpeed);
+            if (params.finishingSpeed) rampLineFollow2SensorEndSpeed = Math.abs(params.finishingSpeed);
             if (params.Kp) rampLineFollow2SensorKp = params.Kp;
             if (params.Ki) rampLineFollow2SensorKi = params.Ki;
             if (params.Kd) rampLineFollow2SensorKd = params.Kd;
