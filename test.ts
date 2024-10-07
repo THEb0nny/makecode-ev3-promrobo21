@@ -12,6 +12,9 @@
 // Установить моторы в шасси и установить свойства инверсии
 // chassis.setSeparatelyChassisMotors(motors.mediumB, motors.mediumC, true, false)
 
+// Установить стандартную синхронизацию моторов шасси
+// chassis.setDefaultRegulated(false)
+
 // Установить радиус колёс в шасси
 // chassis.setWheelRadius(62.4, MeasurementUnit.Millimeters)
 
