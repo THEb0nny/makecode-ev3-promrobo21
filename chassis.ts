@@ -25,7 +25,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
+        const mRotCalc = motions.CalculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -56,7 +56,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = Math.abs((dist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчёт угла поворота на дистанцию
+        const mRotCalc = motions.CalculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -86,9 +86,9 @@ namespace chassis {
             chassis.stop(true);
             return;
         }
-        const mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
-        const mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = motions.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = motions.CalculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = motions.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
