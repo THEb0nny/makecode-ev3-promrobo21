@@ -17,7 +17,7 @@ namespace motions {
             chassis.steeringCommand(0, speed);
         }
     }
-
+    
     // Вспомогательная функция для типа торможения движения на расстоние без торможения. Например, для съезда с линии, чтобы её не считал алгоритм движения по линии.
     export function RollingMoveOut(dist: number, speed: number) {
         if (dist == 0 || speed == 0) {
@@ -30,8 +30,8 @@ namespace motions {
         chassis.steeringCommand(0, speed); // Команда вперёд
         while (true) { // Пока моторы не достигнули градусов вращения
             let currTime = control.millis(); // Текущее время
-            let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторы
-            if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
+            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторы
+            if (Math.abs(lMotEnc) >= Math.abs(calcMotRot) || Math.abs(rMotEnc) >= Math.abs(calcMotRot)) break;
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
         // Команды для остановки не нужно, в этом и смысл функции

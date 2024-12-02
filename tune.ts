@@ -28,7 +28,7 @@ namespace custom {
                         max: 5000
                     },
                     speed: {
-                        val: motions.lineFollow2SensorSpeed,
+                        val: motions.lineFollowDistanceSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -111,25 +111,25 @@ namespace custom {
                         val: true
                     },
                     speed: {
-                        val: motions.lineFollow2SensorSpeed,
+                        val: motions.lineFollowCrossIntersactionSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
                     },
                     Kp: {
-                       val: motions.lineFollow2SensorKp,
+                        val: motions.lineFollowCrossIntersactionKp,
                        changeStep: 0.05
                     },
                     Ki: {
-                        val: motions.lineFollow2SensorKi,
+                        val: motions.lineFollowCrossIntersactionKi,
                         changeStep: 0.001
                     },
                     Kd: {
-                        val: motions.lineFollow2SensorKd,
+                        val: motions.lineFollowCrossIntersactionKd,
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollow2SensorN,
+                        val: motions.lineFollowCrossIntersactionN,
                         changeStep: 0.1
                     }
                 },
@@ -148,25 +148,25 @@ namespace custom {
                         val: true
                     },
                     speed: {
-                        val: motions.lineFollow2SensorSpeed,
+                        val: motions.lineFollowDistanceSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
                     },
                     Kp: {
-                        val: motions.lineFollow2SensorKp,
+                        val: motions.lineFollowDistanceKp,
                         changeStep: 0.05
                     },
                     Ki: {
-                        val: motions.lineFollow2SensorKi,
+                        val: motions.lineFollowDistanceKi,
                         changeStep: 0.001
                     },
                     Kd: {
-                        val: motions.lineFollow2SensorKd,
+                        val: motions.lineFollowDistanceKd,
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollow2SensorN,
+                        val: motions.lineFollowDistanceN,
                         changeStep: 0.1
                     }
                 },
@@ -185,25 +185,25 @@ namespace custom {
                         val: true
                     },
                     speed: {
-                        val: motions.lineFollow2SensorSpeed,
+                        val: motions.lineFollowDistanceSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
                     },
                     Kp: {
-                        val: motions.lineFollow2SensorKp,
+                        val: motions.lineFollowDistanceKp,
                         changeStep: 0.05
                     },
                     Ki: {
-                        val: motions.lineFollow2SensorKi,
+                        val: motions.lineFollowDistanceKi,
                         changeStep: 0.001
                     },
                     Kd: {
-                        val: motions.lineFollow2SensorKd,
+                        val: motions.lineFollowDistanceKd,
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollow2SensorN,
+                        val: motions.lineFollowDistanceN,
                         changeStep: 0.1
                     }
                 },
