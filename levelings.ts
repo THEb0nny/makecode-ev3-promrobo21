@@ -285,7 +285,7 @@ namespace levelings {
             chassis.stop(true); // Жёсткое торможение для теста
             pause(1000);
         }
-        a = (a / 360) * Math.PI * chassis.getWheelRadius(); // Перевести в мм пройденное значение
+        a = (a / 360) * Math.PI * chassis.getWheelDiametr(); // Перевести в мм пройденное значение
         const alpha = Math.atan(a / b) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
         if (firstSide == "LEFT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.LeftWheel);
         else if (firstSide == "RIGHT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.RightWheel);

@@ -116,7 +116,7 @@ namespace chassis {
 
         let lMotEncPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
         let rMotEncPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
-        let calcMotRot = Math.round(deg * getBaseLength() / getWheelRadius()); // Расчёт угла поворота моторов для поворота
+        let calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
 
         automation.pid2.setGains(smartSpinTurnKp, smartSpinTurnKi, smartSpinTurnKd); // Установка коэффициентов ПИД регулятора
         automation.pid2.setDerivativeFilter(smartSpinTurnN); // Установить фильтр дифференциального регулятора
@@ -199,7 +199,7 @@ namespace chassis {
             rightMotor.stop(); // Тормоз на мотор
             motEncPrev = leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
         }
-        let calcMotRot = Math.round(((deg * getBaseLength()) / getWheelRadius()) * 2); // Рассчитываем сколько градусов вращать мотор
+        let calcMotRot = Math.round(((deg * getBaseLength()) / getWheelDiametr()) * 2); // Рассчитываем сколько градусов вращать мотор
         
         automation.pid2.setGains(smartPivotTurnKp, smartPivotTurnKi, smartPivotTurnKd); // Устанавливаем коэффиценты ПИД регулятора
         automation.pid2.setDerivativeFilter(smartPivotTurnN); // Установить фильтр дифференциального регулятора

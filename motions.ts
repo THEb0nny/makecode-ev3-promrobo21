@@ -39,7 +39,7 @@ namespace motions {
 
     // Вспомогательная функция расчёта движения на дистанцию
     export function CalculateDistanceToEncRotate(distance: number): number {
-        return (distance / (Math.PI * chassis.getWheelRadius())) * 360; // Дистанция в мм, которую нужно пройти
+        return (distance / (Math.PI * chassis.getWheelDiametr())) * 360; // Дистанция в мм, которую нужно пройти
     }
 
     /**
@@ -180,7 +180,7 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
         const emrPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
-        let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelRadius()); // Расчитать градусы для поворота в градусы для мотора
+        let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
 
         if (rotateSide == TurnRotateSide.Left) {
             advmotctrls.syncMotorsConfig(-speed, speed);
@@ -238,7 +238,7 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
         const emrPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
-        let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelRadius()); // Расчитать градусы для поворота в градусы для мотора
+        let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
 
         if (rotateSide == TurnRotateSide.Left) {
             advmotctrls.syncMotorsConfig(-speed, speed);
