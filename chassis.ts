@@ -107,7 +107,7 @@ namespace chassis {
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="88"
-    //% group="Синхронизированное движение с ускорениями/замедлениями в мм"
+    //% group="Синхронизированное движение с ускорениями/замедлениями"
     export function RampLinearDistMoveWithoutBraking(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {
@@ -147,7 +147,7 @@ namespace chassis {
     // //% inlineInputMode="inline"
     // //% speed.shadow="motorSpeedPicker"
     // //% weight="88"
-    // //% group="Синхронизированное движение с ускорениями/замедлениями в мм"
+    // //% group="Синхронизированное движение с ускорениями/замедлениями"
     // //% blockHidden="true"
     // export function RampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
     //     const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
