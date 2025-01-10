@@ -27,7 +27,7 @@ namespace chassis {
     //% block="максимальное время поворота относительно центра $timeOut мс"
     //% inlineInputMode="inline"
     //% weight="99" blockGap="8"
-    //% subcategory="Свойства 2"
+    //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
     export function SetSmartSpinTurnTimeOut(timeOut: number) {
         smartSpinTurnTimeOut = timeOut;
@@ -41,7 +41,7 @@ namespace chassis {
     //% block="максимальное время поворота относительно колеса $timeOut мс"
     //% inlineInputMode="inline"
     //% weight="98" blockGap="8"
-    //% subcategory="Свойства 2"
+    //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
     export function SetSmartPivotTurnTimeOut(timeOut: number) {
         smartPivotTurnTimeOut = timeOut;
@@ -55,7 +55,7 @@ namespace chassis {
     //% block="максимальное время дорегулирования умного поворота $timeOut мс"
     //% inlineInputMode="inline"
     //% weight="97"
-    //% subcategory="Свойства 2"
+    //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
     export function SetSmartTurnDeregTimeOut(timeOut: number) {
         smartTurnDeregTimeOut = timeOut;
@@ -69,7 +69,7 @@ namespace chassis {
     //% block="максимальная ошибка при умном повороте $maxErr определения окончания"
     //% inlineInputMode="inline"
     //% weight="96" blockGap="8"
-    //% subcategory="Свойства 2"
+    //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
     export function SetSmartTurnConditionErrDifference(maxErr: number) {
         smartTurnConditionErrDifference = maxErr;
@@ -83,7 +83,7 @@ namespace chassis {
     //% block="максимальное значение управляющего воздействия при умном повороте $maxU определения окончания"
     //% inlineInputMode="inline"
     //% weight="96" blockGap="8"
-    //% subcategory="Свойства 2"
+    //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
     export function SetSmartTurnConditionRegDifference(maxU: number) {
         smartTurnConditionRegDifference = maxU;
