@@ -5,7 +5,7 @@ namespace motions {
     export let lineFollowSetPoint = lineFollowRefTreshold; // Среднее значение серого
 
     export let distRollingAfterIntersection = 0; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
-    export let distRollingAfterIntersectionMoveOut = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
+    export let distRollingMoveOutFromLineAfterIntersection = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
 
     export let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
@@ -60,13 +60,13 @@ namespace motions {
      * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
      * @param dist дистанция прокатки после перекрёстка, eg: 50
      */
-    //% blockId="SetDistRollingAfterInsetsection"
+    //% blockId="SetDistRollingAfterIntersection"
     //% block="set distance $dist mm rolling after intersection"
     //% block.loc.ru="установить дистанцию $dist мм прокатки после перекрёстка"
     //% inlineInputMode="inline"
     //% weight="99" blockGap="8"
     //% group="Свойства движения"
-    export function SetDistRollingAfterInsetsection(dist: number) {
+    export function SetDistRollingAfterIntersection(dist: number) {
         distRollingAfterIntersection = dist;
     }
 
@@ -74,13 +74,13 @@ namespace motions {
      * Get the driving distance after determining the intersection for rolling in mm.
      * Получить дистанцию проезда после определения перекрёстка для прокатки в мм.
      */
-    //% blockId="GetDistRollingAfterInsetsection"
+    //% blockId="GetDistRollingAfterIntersection"
     //% block="get distance rolling after intersection in mm"
     //% block.loc.ru="дистанция прокатки после перекрёстка в мм"
     //% inlineInputMode="inline"
     //% weight="98"
     //% group="Свойства движения"
-    export function GetDistRollingAfterInsetsection(): number {
+    export function GetDistRollingAfterIntersection(): number {
         return distRollingAfterIntersection;
     }
 
@@ -89,28 +89,28 @@ namespace motions {
      * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      * @param dist дистанция прокатки после перекрёстка, eg: 20
      */
-    //% blockId="SetDistRollingAfterIntersectionMoveOut"
+    //% blockId="SetDistRollingMoveOutFromAfterIntersection"
     //% block="set distance $dist mm rolling exit an intersection"
     //% block.loc.ru="установить дистанцию $dist мм прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
     //% group="Свойства движения"
-    export function SetDistRollingAfterIntersectionMoveOut(dist: number) {
-        distRollingAfterIntersectionMoveOut = dist;
+    export function SetDistRollingMoveOutFromAfterIntersection(dist: number) {
+        distRollingMoveOutFromLineAfterIntersection = dist;
     }
 
     /**
      * Get the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
      * Получить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      */
-    //% blockId="GetDistRollingAfterIntersectionMoveOut"
-    //% block="get distance rolling exit an intersection in mm"
-    //% block.loc.ru="дистанция прокатки съезда с перекрёстка в мм"
+    //% blockId="GetDistRollingMoveOutFromAfterIntersection"
+    //% block="get rolling distance for exit from intersection in mm"
+    //% block.loc.ru="дистанция прокатки для съезда с перекрёстка в мм"
     //% inlineInputMode="inline"
     //% weight="96"
     //% group="Свойства движения"
-    export function GetDistRollingAfterIntersectionMoveOut() {
-        return distRollingAfterIntersectionMoveOut;
+    export function GetDistRollingMoveOutFromAfterIntersection() {
+        return distRollingMoveOutFromLineAfterIntersection;
     }
 
     /**
