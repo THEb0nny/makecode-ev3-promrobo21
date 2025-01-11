@@ -55,6 +55,8 @@ namespace motions {
     export let rampLineFollow2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
     export let rampLineFollow2SensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
+    export const pidLineFollow = new automation.PIDController(); // PID для регулирования движения по линии
+
     /**
      * Set the driving distance after determining the intersection for rolling in mm.
      * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
@@ -272,10 +274,10 @@ namespace motions {
             if (params.N) lineFollowCrossIntersactionN = params.N;
         }
 
-        automation.pid1.setGains(lineFollowCrossIntersactionKp, lineFollowCrossIntersactionKi, lineFollowCrossIntersactionKd); // Установка коэффицентов ПИД регулятора
-        automation.pid1.setDerivativeFilter(lineFollowCrossIntersactionN); // Установить фильтр дифференциального регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
-        automation.pid1.reset(); // Сброс ПИД регулятора
+        pidLineFollow.setGains(lineFollowCrossIntersactionKp, lineFollowCrossIntersactionKi, lineFollowCrossIntersactionKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowCrossIntersactionN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        pidLineFollow.reset(); // Сброс ПИД регулятора
         
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
@@ -286,8 +288,8 @@ namespace motions {
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (refLeftLS < motions.GetLineFollowRefTreshold() && refRightLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток
             let error = refLeftLS - refRightLS; // Ошибка регулирования
-            automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
             motions.ChassisControlCommand(U, lineFollowCrossIntersactionSpeed); // Команда моторам
             if (debug) {
@@ -357,10 +359,10 @@ namespace motions {
             if (params.N) lineFollowLeftIntersactionN = params.N;
         }
 
-        automation.pid1.setGains(lineFollowLeftIntersactionKp, lineFollowLeftIntersactionKi, lineFollowLeftIntersactionKd); // Установка коэффицентов регулятора
-        automation.pid1.setDerivativeFilter(lineFollowLeftIntersactionN); // Установить фильтр дифференциального регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
-        automation.pid1.reset(); // Сброс регулятора
+        pidLineFollow.setGains(lineFollowLeftIntersactionKp, lineFollowLeftIntersactionKi, lineFollowLeftIntersactionKd); // Установка коэффицентов регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowLeftIntersactionN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
+        pidLineFollow.reset(); // Сброс регулятора
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -373,8 +375,8 @@ namespace motions {
             if (lineLocation == HorizontalLineLocation.Inside) error = motions.GetLineFollowSetPoint() - refRightLS; // Ошибка регулирования
             else if (lineLocation == HorizontalLineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
             if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refLeftLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
-            automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftIntersactionSpeed); // Команда моторам
             motions.ChassisControlCommand(U, lineFollowLeftIntersactionSpeed); // Команда моторам
             if (debug) {
@@ -417,10 +419,10 @@ namespace motions {
             if (params.N) lineFollowRightIntersactionN = params.N;
         }
 
-        automation.pid1.setGains(lineFollowRightIntersactionKp, lineFollowRightIntersactionKi, lineFollowRightIntersactionKd); // Установка коэффицентов регулятора
-        automation.pid1.setDerivativeFilter(lineFollowRightIntersactionN); // Установить фильтр дифференциального регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
-        automation.pid1.reset(); // Сброс регулятора
+        pidLineFollow.setGains(lineFollowRightIntersactionKp, lineFollowRightIntersactionKi, lineFollowRightIntersactionKd); // Установка коэффицентов регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowRightIntersactionN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
+        pidLineFollow.reset(); // Сброс регулятора
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -433,8 +435,8 @@ namespace motions {
             if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
             else if (lineLocation == HorizontalLineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
             if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refRightLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
-            automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightIntersactionSpeed); // Команда моторам
             motions.ChassisControlCommand(U, lineFollowRightIntersactionSpeed); // Команда моторам
             if (debug) {
@@ -477,12 +479,12 @@ namespace motions {
         }
 
         const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = motions.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
 
-        automation.pid1.setGains(lineFollowDistanceKp, lineFollowDistanceKi, lineFollowDistanceKd); // Установка коэффицентов ПИД регулятора
-        automation.pid1.setDerivativeFilter(lineFollowDistanceN); // Установить фильтр дифференциального регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
-        automation.pid1.reset(); // Сброс ПИД регулятора
+        pidLineFollow.setGains(lineFollowDistanceKp, lineFollowDistanceKi, lineFollowDistanceKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowDistanceN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        pidLineFollow.reset(); // Сброс ПИД регулятора
 
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Пока моторы не достигнули градусов вращения
@@ -496,8 +498,8 @@ namespace motions {
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
-            automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowDistanceSpeed); // Команда моторам
             motions.ChassisControlCommand(U, lineFollowDistanceSpeed); // Команда моторам
             if (debug) {
@@ -570,12 +572,12 @@ namespace motions {
         }
 
         const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = motions.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
 
-        automation.pid1.setGains(lineFollowToDistanceWithLeftSensorKp, lineFollowToDistanceWithLeftSensorKi, lineFollowToDistanceWithLeftSensorKd); // Установка коэффицентов ПИД регулятора
-        automation.pid1.setDerivativeFilter(lineFollowToDistanceWithLeftSensorN); // Установить фильтр дифференциального регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
-        automation.pid1.reset(); // Сброс ПИД регулятора
+        pidLineFollow.setGains(lineFollowToDistanceWithLeftSensorKp, lineFollowToDistanceWithLeftSensorKi, lineFollowToDistanceWithLeftSensorKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowToDistanceWithLeftSensorN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        pidLineFollow.reset(); // Сброс ПИД регулятора
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -591,8 +593,8 @@ namespace motions {
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
             else if (lineLocation == HorizontalLineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
-            automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
             motions.ChassisControlCommand(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
             if (debug) {
@@ -636,12 +638,12 @@ namespace motions {
         }
 
         const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = motions.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
 
-        automation.pid1.setGains(lineFollowToDistanceWithRightSensorKp, lineFollowToDistanceWithRightSensorKi, lineFollowToDistanceWithRightSensorKd); // Установка коэффицентов ПИД регулятора
-        automation.pid1.setDerivativeFilter(lineFollowToDistanceWithRightSensorN); // Установить фильтр дифференциального регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
-        automation.pid1.reset(); // Сброс ПИД регулятора
+        pidLineFollow.setGains(lineFollowToDistanceWithRightSensorKp, lineFollowToDistanceWithRightSensorKi, lineFollowToDistanceWithRightSensorKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowToDistanceWithRightSensorN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        pidLineFollow.reset(); // Сброс ПИД регулятора
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
@@ -657,8 +659,8 @@ namespace motions {
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (lineLocation == HorizontalLineLocation.Inside) error = motions.GetLineFollowSetPoint() - refRightLS; // Ошибка регулирования
             else if (lineLocation == HorizontalLineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
-            automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
             motions.ChassisControlCommand(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
             if (debug) {
@@ -719,15 +721,15 @@ namespace motions {
         }
 
         const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const mRotAccelCalc = motions.CalculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = motions.CalculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
-        const mRotTotalCalc = motions.CalculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = math.CalculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = math.CalculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
+        const mRotTotalCalc = math.CalculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
         advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorEndSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
-        automation.pid1.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
-        automation.pid1.setDerivativeFilter(rampLineFollow2SensorN); // Установить фильтр дифференциального регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
-        automation.pid1.reset(); // Сброс ПИД регулятора
+        pidLineFollow.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(rampLineFollow2SensorN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        pidLineFollow.reset(); // Сброс ПИД регулятора
         
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) {
@@ -740,8 +742,8 @@ namespace motions {
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
-            automation.pid1.setPoint(error); // Передать ошибку регулятору
-            let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
@@ -768,10 +770,10 @@ namespace motions {
             if (params.N) lineFollow2SensorN = params.N;
         }
 
-        automation.pid1.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов регулятора
-        automation.pid1.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
-        automation.pid1.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
-        automation.pid1.reset(); // Сброс регулятора
+        pidLineFollow.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов регулятора
+        pidLineFollow.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
+        pidLineFollow.reset(); // Сброс регулятора
 
         control.timer1.reset();
         let lastSensor = 2; // Переменная для хранения последнего сенсора, который видел линию, изначально центральный
@@ -787,7 +789,7 @@ namespace motions {
             let refMCS = sensors.GetNormRef(refRawMCS, B_REF_RAW_MCS, W_REF_RAW_MCS); // Нормализованное значение с левого датчика цвета
             let refRCS = sensors.GetNormRef(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
             let error = refLCS - refRCS; // Ошибка регулирования
-            automation.pid1.setPoint(error); // Передать ошибку регулятору
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = 0;
             if (refLCS > LINE_REF_TRESHOLD) {
                 control.timer1.reset();
@@ -801,7 +803,7 @@ namespace motions {
             } else if (control.timer1.millis() > 100) {
                 U = (2 - lastSensor) * lineFollow2SensorSpeed;
             } else {
-                U = automation.pid1.compute(dt, 0); // Управляющее воздействие
+                U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             }
             //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
             chassis.ChassisControl(U, lineFollow2SensorSpeed); // Команда моторам

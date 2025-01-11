@@ -15,7 +15,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="79" blockGap="8"
-    //% subcategory="Движение 2"
+    //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
     export function LinearDistMove(dist: number, speed: number, braking: Braking = Braking.Hold) {
         if (speed == 0 || dist == 0) {
@@ -26,7 +26,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = motions.CalculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
+        const mRotCalc = math.CalculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -47,7 +47,7 @@ namespace chassis {
     //% speedLeft.shadow="motorSpeedPicker"
     //% speedRight.shadow="motorSpeedPicker"
     //% weight="78"
-    //% subcategory="Движение 2"
+    //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
     export function DistMove(dist: number, speedLeft: number, speedRight: number, braking: Braking = Braking.Hold) {
         if (dist == 0 || speedLeft == 0 && speedRight == 0) {
@@ -58,7 +58,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = motions.CalculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
+        const mRotCalc = math.CalculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -83,58 +83,20 @@ namespace chassis {
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="89" blockGap="8"
-    //% subcategory="Движение 2"
+    //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function RampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
         if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
             return;
         }
-        const mRotAccelCalc = motions.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = motions.CalculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
-        const mRotTotalCalc = motions.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = math.CalculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
-    // //% blockId="RampDistMove"
-    // //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
-    // //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
-    // //% inlineInputMode="inline"
-    // //% speed.shadow="motorSpeedPicker"
-    // //% weight="88"
-    // //% subcategory="Движение 2"
-    // //% group="Синхронизированное движение с ускорениями"
-    // //% blockHidden="true"
-    // export function RampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
-    //     const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
-    //     const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
-    //     const mRotAccelCalc = Math.abs((accelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние ускорения
-    //     const mRotDecelCalc = Math.abs((decelDist / (Math.PI * chassis.getWheelRadius())) * 360); // Расчитываем расстояние замедления
-    //     const mRotTotalCalc = Math.abs((totalDist / (Math.PI * chassis.getWheelRadius())) * 360); // Рассчитываем общюю дистанцию
-
-    //     advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
-    //     advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, accelDist, 0, totalDist);
-    //     const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
-    //     pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
-    //     pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
-    //     pidChassisSync.reset(); // Сбросить ПИД регулятор
-    //     let prevTime = 0;
-    //     while (true) {
-    //         let currTime = control.millis();
-    //         let dt = currTime - prevTime;
-    //         prevTime = currTime;
-    //         let encB = chassis.leftMotor.angle();
-    //         let encC = chassis.rightMotor.angle();
-    //         if ((encB + encC) / 2 >= totalDist) break;
-    //         let error = advmotctrls.getErrorSyncMotors(encB, encC);
-    //         pidChassisSync.setPoint(error);
-    //         let U = pidChassisSync.compute(dt, 0);
-    //         let powers = advmotctrls.getPwrSyncMotors(U);
-    //         chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-    //         control.pauseUntilTime(currTime, 1);
-    //     }
-    //     chassis.stop(true);
-    // }
+    // 
 
     /**
      * Synchronization of movement with smooth start in mm.
@@ -155,7 +117,7 @@ namespace chassis {
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="88"
-    //% subcategory="Движение 2"
+    //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function AccelStartLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
@@ -163,12 +125,11 @@ namespace chassis {
             stop(true);
             return;
         }
-        const mRotAccelCalc = motions.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotTotalCalc = motions.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
         const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
-        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
@@ -190,5 +151,42 @@ namespace chassis {
         }
         chassis.steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
     }
+
+    // //% blockId="RampDistMove"
+    // //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
+    // //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    // //% inlineInputMode="inline"
+    // //% speed.shadow="motorSpeedPicker"
+    // //% weight="88"
+    // //% subcategory="Движение"
+    // //% group="Синхронизированное движение с ускорениями"
+    // //% blockHidden="true"
+    // export function RampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+    //     const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
+    //     const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
+    //     const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+    //     const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+    //     advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
+    //     // advmotctrls.accTwoEncConfig(minSpeed, maxSpeedLeft, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
+    //     pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
+    //     pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+    //     pidChassisSync.reset(); // Сбросить ПИД регулятор
+    //     let prevTime = 0;
+    //     while (true) {
+    //         let currTime = control.millis();
+    //         let dt = currTime - prevTime;
+    //         prevTime = currTime;
+    //         let encB = chassis.leftMotor.angle();
+    //         let encC = chassis.rightMotor.angle();
+    //         if ((encB + encC) / 2 >= totalDist) break;
+    //         let error = advmotctrls.getErrorSyncMotors(encB, encC);
+    //         pidChassisSync.setPoint(error);
+    //         let U = pidChassisSync.compute(dt, 0);
+    //         let powers = advmotctrls.getPwrSyncMotors(U);
+    //         chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+    //         control.pauseUntilTime(currTime, 1);
+    //     }
+    //     chassis.stop(true);
+    // }
 
 }

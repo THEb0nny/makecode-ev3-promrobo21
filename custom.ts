@@ -83,3 +83,12 @@ namespace custom {
     }
 
 }
+
+namespace math {
+
+    // Вспомогательная функция расчёта движения на дистанцию в мм
+    export function CalculateDistanceToEncRotate(distance: number): number {
+        return (distance / (Math.PI * chassis.getWheelDiametr())) * 360; // Дистанция в мм, которую нужно пройти
+    }
+    
+}
