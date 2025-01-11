@@ -84,10 +84,11 @@ namespace chassis {
         }
         const emlPrev = leftMotor.angle(); // Считываем с левого мотора значения энкодера перед стартом алгаритма
         const emrPrev = rightMotor.angle(); // Считываем с правого мотора значения энкодера перед стартом алгаритма
-        let calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
-        stop(true); // Brake so that one of the motors is held when turning
+        const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
+        stop(true, 0); // Brake so that one of the motors is held when turning
         if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
         else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
+        else return;
         const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
@@ -274,9 +275,9 @@ namespace chassis {
             if (params.N) smartSpinTurnN = params.N;
         }
 
-        let lMotEncPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
-        let rMotEncPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
-        let calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
+        const lMotEncPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
+        const rMotEncPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
+        const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
 
         automation.pid2.setGains(smartSpinTurnKp, smartSpinTurnKi, smartSpinTurnKd); // Установка коэффициентов ПИД регулятора
         automation.pid2.setDerivativeFilter(smartSpinTurnN); // Установить фильтр дифференциального регулятора
@@ -320,8 +321,7 @@ namespace chassis {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
-        leftMotor.setBrake(true); rightMotor.setBrake(true); // Установка тормоз с удержанием на моторы
-        leftMotor.stop(); rightMotor.stop(); // Остановка моторов
+        chassis.stop(true); // Остановка моторов с удержанием
     }
 
     /**
@@ -350,15 +350,11 @@ namespace chassis {
             if (params.N) smartPivotTurnN = params.N;
         }
 
-        leftMotor.setBrake(true); rightMotor.setBrake(true); // Установить жёсткий тормоз для моторов
+        stop(true, 0); // Остановить и установить жёсткий тормоз для моторов
         let motEncPrev = 0; // Инициализируем переменную хранения значения с энкодера мотора
-        if (wheelPivot == WheelPivot.LeftWheel) { // Записываем текущее значение с энкодера нужного мотора и ставим тормоз нужному мотору
-            leftMotor.stop(); // Тормоз на мотор
-            motEncPrev = rightMotor.angle(); // Если вращаться нужно вокруг левого, тогда записываем с правого
-        } else if (wheelPivot == WheelPivot.RightWheel) {
-            rightMotor.stop(); // Тормоз на мотор
-            motEncPrev = leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
-        }
+        // Записываем текущее значение с энкодера нужного мотора и ставим тормоз нужному мотору
+        if (wheelPivot == WheelPivot.LeftWheel) motEncPrev = rightMotor.angle(); // Если вращаться нужно вокруг левого, тогда записываем с правого
+        else if (wheelPivot == WheelPivot.RightWheel) motEncPrev = leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
         let calcMotRot = Math.round(((deg * getBaseLength()) / getWheelDiametr()) * 2); // Рассчитываем сколько градусов вращать мотор
         
         automation.pid2.setGains(smartPivotTurnKp, smartPivotTurnKi, smartPivotTurnKd); // Устанавливаем коэффиценты ПИД регулятора
@@ -400,7 +396,7 @@ namespace chassis {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
-        leftMotor.stop(); rightMotor.stop(); // Остановить моторы
+        chassis.stop(true); // Остановить моторы
     }
     
 }
