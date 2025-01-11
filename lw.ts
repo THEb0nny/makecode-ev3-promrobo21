@@ -89,13 +89,13 @@ namespace motions {
      * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      * @param dist дистанция прокатки после перекрёстка, eg: 20
      */
-    //% blockId="SetDistRollingFromAfterIntersection"
+    //% blockId="SetDistRollingFromLineAfterIntersection"
     //% block="set distance $dist mm rolling exit an intersection"
     //% block.loc.ru="установить дистанцию $dist мм прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
     //% group="Свойства движения"
-    export function SetDistRollingFromAfterIntersection(dist: number) {
+    export function SetDistRollingFromLineAfterIntersection(dist: number) {
         distRollingFromLineAfterIntersection = dist;
     }
 
