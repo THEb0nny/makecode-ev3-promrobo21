@@ -287,8 +287,8 @@ namespace levelings {
         }
         a = (a / 360) * Math.PI * chassis.getWheelDiametr(); // Перевести в мм пройденное значение
         const alpha = Math.atan(a / b) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
-        if (firstSide == "LEFT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.LeftWheel);
-        else if (firstSide == "RIGHT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.RightWheel);
+        if (firstSide == "LEFT_SIDE") chassis.PivotTurn(alpha, speed, WheelPivot.LeftWheel);
+        else if (firstSide == "RIGHT_SIDE") chassis.PivotTurn(alpha, speed, WheelPivot.RightWheel);
         if (debug) { // Выводим на экран расчёты
             brick.clearScreen();
             brick.printValue("encLeftMot1", encLeftMot1, 1);

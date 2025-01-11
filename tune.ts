@@ -676,7 +676,7 @@ namespace custom {
                         const speed = methodScreens[screenName].params.speed.val;
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
-                        chassis.spinTurn(deg, speed);
+                        chassis.SpinTurn(deg, speed);
                     } else if (screenName == "CHASSIS_PIVOT_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const pivot = methodScreens[screenName].params.pivot.val;
@@ -684,7 +684,7 @@ namespace custom {
                         const debug = methodScreens[screenName].params.debug.val;
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
-                        chassis.pivotTurn(deg, speed, pivot);
+                        chassis.PivotTurn(deg, speed, pivot);
                     } else if (screenName == "SMART_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const debug = methodScreens[screenName].params.debug.val;

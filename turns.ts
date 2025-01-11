@@ -1,5 +1,165 @@
 namespace chassis {
 
+    /**
+     * Synchronized rotation of the chassis relative to the center at the desired angle at a certain speed.
+     * For example, if degress > 0, then the robot will rotate to the right, and if degress < 0, then to the left.
+     * The speed must be positive!
+     * Синхронизированный поворот шасси относительно центра на нужный угол с определенной скоростью.
+     * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
+     * Скорость должна быть положительной!
+     * @param degress rotation value in degrees, eg: 90
+     * @param speed turning speed value, eg: 30
+     */
+    //% blockId="ChassisSpinTurn"
+    //% block="sync chassis spin turn $degress\\° at $speed\\% relative to center wheel axis"
+    //% block.loc.ru="синхронизированный поворот шасси на $degress\\° с $speed\\% относительно центра оси колёс"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="99" blockGap="8"
+    //% subcategory="Повороты"
+    //% group="Синхронизированные повороты"
+    export function SpinTurn(degress: number, speed: number) {
+        //if (!motorsPair) return;
+        if (degress == 0 || speed == 0) {
+            stop(true);
+            return;
+        } else if (speed < 0) {
+            music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
+            control.panic(1);
+        }
+        speed = Math.clamp(-100, 100, speed >> 0); // We limit the speed of the motor from -100 to 100 and cut off the fractional part
+        const emlPrev = leftMotor.angle(); // We read the value from the encoder from the left motor before starting
+        const emrPrev = rightMotor.angle(); // We read the value from the encoder from the right motor before starting
+        const calcMotRot = Math.round(degress * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
+        if (degress > 0) advmotctrls.syncMotorsConfig(speed, -speed);
+        else if (degress < 0) advmotctrls.syncMotorsConfig(-speed, speed);
+        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
+        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
+        pidChassisSync.reset(); // Сбросить регулятор
+        let prevTime = 0;
+        while (true) {
+            let currTime = control.millis();
+            let dt = currTime - prevTime;
+            prevTime = currTime;
+            let eml = leftMotor.angle() - emlPrev;
+            let emr = rightMotor.angle() - emrPrev;
+            if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
+            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotors(U);
+            setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
+            control.pauseUntilTime(currTime, 1);
+        }
+        stop(true); // Break at hold
+    }
+
+    /**
+     * Synchronized rotation to the desired angle relative to one of the wheels.
+     * A positive speed is set for forward rotation, and a negative speed is set for backward rotation.
+     * The value of the rotation angle is always positive!
+     * Синхронизированный поворот на нужный угол относительно одного из колес.
+     * Для вращения вперёд устанавливается положительная скорость, а назад - отрицательная.
+     * Значение угла поворота всегда положительное!
+     * @param deg rotation value in degrees, eg: 90
+     * @param speed turning speed value, eg: 30
+     */
+    //% blockId="ChassisPivotTurn"
+    //% block="sync chassis pivot turn $deg\\° at $speed\\% pivot $wheelPivot"
+    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно $wheelPivot"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="98"
+    //% subcategory="Повороты"
+    //% group="Синхронизированные повороты"
+    export function PivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
+        //if (!motorsPair) return;
+        if (deg == 0 || speed == 0) {
+            stop(true);
+            return;
+        } else if (deg < 0) {
+            music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
+            control.panic(2);
+        }
+        const emlPrev = leftMotor.angle(); // Считываем с левого мотора значения энкодера перед стартом алгаритма
+        const emrPrev = rightMotor.angle(); // Считываем с правого мотора значения энкодера перед стартом алгаритма
+        let calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
+        stop(true); // Brake so that one of the motors is held when turning
+        if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
+        else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
+        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
+        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
+        pidChassisSync.reset(); // Сбросить регулятор
+        let prevTime = 0;
+        while (true) {
+            let currTime = control.millis();
+            let dt = currTime - prevTime;
+            prevTime = currTime;
+            let eml = leftMotor.angle() - emlPrev;
+            let emr = rightMotor.angle() - emrPrev;
+            if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) break;
+            else if (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) break;
+            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotors(U);
+            if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(powers.pwrRight);
+            else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
+            control.pauseUntilTime(currTime, 1);
+        }
+        stop(true); // Break at hold
+    }
+
+    /**
+     * Synchronized rotation of the chassis relative to the center at the desired angle at a certain speed.
+     * For example, if degress > 0, then the robot will rotate to the right, and if degress < 0, then to the left.
+     * The speed must be positive!
+     * Синхронизированный поворот шасси относительно центра на нужный угол с определенной скоростью.
+     * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
+     * Скорость должна быть положительной!
+     * @param degress rotation value in degrees, eg: 90
+     * @param speed turning speed value, eg: 30
+     */
+    //% blockId="ChassisRampSpinTurn"
+    //% block="sync chassis spin turn $degress\\° at $speed\\% relative to center wheel axis"
+    //% block.loc.ru="синхронизированный поворот шасси на $degress\\° с $speed\\% относительно центра оси колёс"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="89" blockGap="8"
+    //% subcategory="Повороты"
+    //% group="Синхронизированные повороты с ускорениями"
+    function RampSpinTurn(degress: number, minSpeed: number, maxSpeed: number) {
+        return;
+    }
+
+    /**
+     * Synchronized rotation to the desired angle relative to one of the wheels.
+     * A positive speed is set for forward rotation, and a negative speed is set for backward rotation.
+     * The value of the rotation angle is always positive!
+     * Синхронизированный поворот на нужный угол относительно одного из колес.
+     * Для вращения вперёд устанавливается положительная скорость, а назад - отрицательная.
+     * Значение угла поворота всегда положительное!
+     * @param deg rotation value in degrees, eg: 90
+     * @param speed turning speed value, eg: 30
+     */
+    //% blockId="ChassisRampPivotTurn"
+    //% block="sync chassis pivot turn $deg\\° at $minSpeed\\% $maxSpeed\\% pivot $wheelPivot"
+    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $minSpeed\\% $maxSpeed\\% относительно $wheelPivot"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="88"
+    //% subcategory="Повороты"
+    //% group="Синхронизированные повороты с ускорениями"
+    function RampPivotTurn(deg: number, minSpeed: number, maxSpeed: number, wheelPivot: WheelPivot) {
+        return;
+    }
+
+}
+
+namespace chassis {
+
     export let smartSpinTurnTimeOut = 800; // Максимальное время умного поворота относительно центра в мм
     export let smartPivotTurnTimeOut = 1000; // Максимальное время умного поворота относительно колеса в мм
     export let smartTurnDeregTimeOut = 200; // Время дорегулирования в умном повороте
