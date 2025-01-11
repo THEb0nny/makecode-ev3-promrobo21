@@ -3,11 +3,11 @@ namespace motions {
     // Функция, которая выполняет действие после цикла с движением
     export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
-            chassis.LinearDistMove(motions.distRollingAfterIntersection, speed, Braking.Hold);
+            chassis.LinearDistMove(motions.GetDistRollingAfterIntersection(), speed, Braking.Hold);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            chassis.RampLinearDistMove(10, speed, motions.distRollingAfterIntersection, 0, motions.distRollingAfterIntersection);
+            chassis.RampLinearDistMove(10, speed, motions.GetDistRollingAfterIntersection(), 0, motions.GetDistRollingAfterIntersection());
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
-            motions.RollingMoveOut(motions.distRollingMoveOutFromLineAfterIntersection, speed);
+            motions.RollingMoveOutFromLine(motions.GetDistRollinFromLineAfterIntersection(), speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением (удержанием)
             chassis.stop(true);
         } else if (actionAfterMotion == AfterMotion.NoBreakStop) { // Тормоз с прокаткой по инерции
@@ -18,8 +18,9 @@ namespace motions {
         }
     }
     
-    // Вспомогательная функция для типа торможения движения на расстоние без торможения. Например, для съезда с линии, чтобы её не считал алгоритм движения по линии.
-    export function RollingMoveOut(dist: number, speed: number) {
+    // Вспомогательная функция для типа торможения движения на расстоние без торможения
+    // Например, для съезда с линии, чтобы её не считал алгоритм движения по линии повторно
+    export function RollingMoveOutFromLine(dist: number, speed: number) {
         if (dist == 0 || speed == 0) {
             chassis.stop(true);
             return;

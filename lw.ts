@@ -1,13 +1,13 @@
 namespace motions {
 
-    export let lineRefTreshold = 50; // Среднее значение серого (уставка) для определения границы линии
-    export let lineFollowRefTreshold = 35; // Пороговое значение определения перекрёстка
-    export let lineFollowSetPoint = lineFollowRefTreshold; // Среднее значение серого
+    let lineRefTreshold = 50; // Среднее значение серого (уставка) для определения границы линии
+    let lineFollowRefTreshold = 35; // Пороговое значение определения перекрёстка
+    let lineFollowSetPoint = lineFollowRefTreshold; // Среднее значение серого
 
-    export let distRollingAfterIntersection = 0; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
-    export let distRollingMoveOutFromLineAfterIntersection = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
+    let distRollingAfterIntersection = 0; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
+    let distRollingFromLineAfterIntersection = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
 
-    export let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
+    let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
     export let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
 
@@ -89,28 +89,28 @@ namespace motions {
      * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      * @param dist дистанция прокатки после перекрёстка, eg: 20
      */
-    //% blockId="SetDistRollingMoveOutFromAfterIntersection"
+    //% blockId="SetDistRollingFromAfterIntersection"
     //% block="set distance $dist mm rolling exit an intersection"
     //% block.loc.ru="установить дистанцию $dist мм прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
     //% group="Свойства движения"
-    export function SetDistRollingMoveOutFromAfterIntersection(dist: number) {
-        distRollingMoveOutFromLineAfterIntersection = dist;
+    export function SetDistRollingFromAfterIntersection(dist: number) {
+        distRollingFromLineAfterIntersection = dist;
     }
 
     /**
      * Get the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
      * Получить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      */
-    //% blockId="GetDistRollingMoveOutFromAfterIntersection"
+    //% blockId="GetDistRollingFromLineAfterIntersection"
     //% block="get rolling distance for exit from intersection in mm"
     //% block.loc.ru="дистанция прокатки для съезда с перекрёстка в мм"
     //% inlineInputMode="inline"
     //% weight="96"
     //% group="Свойства движения"
-    export function GetDistRollingMoveOutFromAfterIntersection() {
-        return distRollingMoveOutFromLineAfterIntersection;
+    export function GetDistRollinFromLineAfterIntersection() {
+        return distRollingFromLineAfterIntersection;
     }
 
     /**
@@ -284,7 +284,7 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (refLeftLS < motions.lineFollowRefTreshold && refRightLS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток
+            if (refLeftLS < motions.GetLineFollowRefTreshold() && refRightLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
@@ -370,9 +370,9 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (lineLocation == HorizontalLineLocation.Inside) error = motions.lineFollowSetPoint - refRightLS; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = refRightLS - motions.lineFollowSetPoint; // Ошибка регулирования
-            if (Math.abs(error) <= motions.lineFollowWithOneSensorConditionMaxErr && refLeftLS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток, когда робот едет по линии
+            if (lineLocation == HorizontalLineLocation.Inside) error = motions.GetLineFollowSetPoint() - refRightLS; // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
+            if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refLeftLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftIntersactionSpeed); // Команда моторам
@@ -430,9 +430,9 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.lineFollowSetPoint; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = motions.lineFollowSetPoint - refLeftLS; // Ошибка регулирования
-            if (Math.abs(error) <= motions.lineFollowWithOneSensorConditionMaxErr && refRightLS < motions.lineFollowRefTreshold) break; // Проверка на перекрёсток в момент, когда робот едет по линии
+            if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
+            if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refRightLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightIntersactionSpeed); // Команда моторам
@@ -589,8 +589,8 @@ namespace motions {
             if (Math.abs(lMotEnc) >= Math.abs(calcMotRot) || Math.abs(rMotEnc) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.lineFollowSetPoint; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = motions.lineFollowSetPoint - refLeftLS; // Ошибка регулирования
+            if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
@@ -655,8 +655,8 @@ namespace motions {
             if (Math.abs(lMotEnc) >= Math.abs(calcMotRot) || Math.abs(rMotEnc) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (lineLocation == HorizontalLineLocation.Inside) error = motions.lineFollowSetPoint - refRightLS; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = refRightLS - motions.lineFollowSetPoint; // Ошибка регулирования
+            if (lineLocation == HorizontalLineLocation.Inside) error = motions.GetLineFollowSetPoint() - refRightLS; // Ошибка регулирования
+            else if (lineLocation == HorizontalLineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
             automation.pid1.setPoint(error); // Передать ошибку регулятору
             let U = automation.pid1.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам

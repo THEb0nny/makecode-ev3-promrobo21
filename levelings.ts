@@ -108,8 +108,8 @@ namespace levelings {
             if (isOnLine && control.timer8.millis() >= regulatorTime) break; // Условие выхода из цикла при дорегулировании
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left, recalibrate); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right, recalibrate); // Нормализованное значение с правого датчика линии
-            let errorL = motions.lineFollowSetPoint - refLeftLS, errorR = motions.lineFollowSetPoint - refRightLS; // Вычисляем ошибки регулирования
-            if (!isOnLine && Math.abs(errorL) <= motions.lineFollowSetPoint && Math.abs(errorR) <= motions.lineFollowSetPoint) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
+            let errorL = motions.GetLineFollowSetPoint() - refLeftLS, errorR = motions.GetLineFollowSetPoint() - refRightLS; // Вычисляем ошибки регулирования
+            if (!isOnLine && Math.abs(errorL) <= motions.GetLineFollowSetPoint() && Math.abs(errorR) <= motions.GetLineFollowSetPoint()) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки (нахождения линии) достигнуто
@@ -179,7 +179,7 @@ namespace levelings {
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Находим ошибку
-            if (!isOnLine && Math.abs(error) <= motions.lineFollowSetPoint) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
+            if (!isOnLine && Math.abs(error) <= motions.GetLineFollowSetPoint()) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
@@ -244,12 +244,12 @@ namespace levelings {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (refLeftLS <= motions.lineRefTreshold) { // Левый датчик первый нашёл линию
+            if (refLeftLS <= motions.GetLineRefTreshold()) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
                 encRightMot1 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
                 break;
-            } else if (refRightLS <= motions.lineRefTreshold) { // Правый датчик первый нашёл линию
+            } else if (refRightLS <= motions.GetLineRefTreshold()) { // Правый датчик первый нашёл линию
                 firstSide = "RIGHT_SIDE";
                 encLeftMot1 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
@@ -266,13 +266,13 @@ namespace levelings {
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (firstSide == "LEFT_SIDE") {
-                if (refRightLS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
+                if (refRightLS <= motions.GetLineRefTreshold()) { // Левый датчик нашёл линию
                     encRightMot2 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол по новой
                     a = Math.abs(encRightMot2 - encRightMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             } else if (firstSide == "RIGHT_SIDE") {
-                if (refLeftLS <= motions.lineRefTreshold) { // Левый датчик нашёл линию
+                if (refLeftLS <= motions.GetLineRefTreshold()) { // Левый датчик нашёл линию
                     encLeftMot2 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол по новой
                     a = Math.abs(encLeftMot2 - encLeftMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
