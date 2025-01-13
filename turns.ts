@@ -27,7 +27,7 @@ namespace chassis {
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(1);
         }
-        speed = Math.clamp(-100, 100, speed >> 0); // We limit the speed of the motor from -100 to 100 and cut off the fractional part
+        speed = Math.clamp(0, 100, speed >> 0); // We limit the speed of the motor from -100 to 100 and cut off the fractional part
         const emlPrev = leftMotor.angle(); // We read the value from the encoder from the left motor before starting
         const emrPrev = rightMotor.angle(); // We read the value from the encoder from the right motor before starting
         const calcMotRot = Math.round(degress * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
@@ -81,6 +81,7 @@ namespace chassis {
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(2);
         }
+        speed = Math.clamp(0, 100, speed >> 0); // We limit the speed of the motor from -100 to 100 and cut off the fractional part
         const emlPrev = leftMotor.angle(); // Считываем с левого мотора значения энкодера перед стартом алгаритма
         const emrPrev = rightMotor.angle(); // Считываем с правого мотора значения энкодера перед стартом алгаритма
         const calcMotRot = Math.round(((Math.abs(degress) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
