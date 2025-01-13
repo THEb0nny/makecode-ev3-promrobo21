@@ -176,10 +176,10 @@ namespace custom {
             LW_TO_SIDE_INTERSECTION: {
                 params: {
                     junction: {
-                        val: SideJunctionType.Left
+                        val: SideIntersaction.Left
                     },
                     horizLineLoc: {
-                        val: HorizontalLineLocation.Inside
+                        val: LineLocation.Inside
                     },
                     debug: {
                         val: true

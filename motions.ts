@@ -68,7 +68,7 @@ namespace motions {
      * @param dir направление движения, eg: 0
      * @param speed скорость движения, eg: 50
      * @param LineSensorSelection определение датчиками, eg: SensorSelection.LeftAndRight
-     * @param refCondition отражение больше или меньше, eg: Condition.Larger
+     * @param refCondition отражение больше или меньше, eg: Comprasion.Greater
      * @param refTreshold пороговое значение отражения света, eg: 50
      * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
      * @param debug отладка, eg: false
@@ -83,7 +83,7 @@ namespace motions {
     //% speed.shadow="motorSpeedPicker"
     //% weight="89"
     //% group="Move"
-    export function MoveToRefZone(turnRatio: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: LogicalOperators, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    export function MoveToRefZone(turnRatio: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: Comprasion, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         const emlPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
         const emrPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
         
@@ -103,29 +103,29 @@ namespace motions {
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (sensorsCondition == LineSensorSelection.LeftAndRight) { // Левый и правый датчик
-                if (refCondition == LogicalOperators.Greater && (refLeftLS > refTreshold && refRightLS > refTreshold)) break; // Больше
-                else if (refCondition == LogicalOperators.GreaterOrEqual && (refLeftLS >= refTreshold && refRightLS >= refTreshold)) break; // Больше или равно
-                else if (refCondition == LogicalOperators.Less && (refLeftLS < refTreshold && refRightLS < refTreshold)) break; // Меньше
-                else if (refCondition == LogicalOperators.LessOrEqual && (refLeftLS <= refTreshold && refRightLS <= refTreshold)) break; // Меньше или равно
-                else if (refCondition == LogicalOperators.Equal && (refLeftLS == refTreshold && refRightLS == refTreshold)) break; // Равно
+                if (refCondition == Comprasion.Greater && (refLeftLS > refTreshold && refRightLS > refTreshold)) break; // Больше
+                else if (refCondition == Comprasion.GreaterOrEqual && (refLeftLS >= refTreshold && refRightLS >= refTreshold)) break; // Больше или равно
+                else if (refCondition == Comprasion.Less && (refLeftLS < refTreshold && refRightLS < refTreshold)) break; // Меньше
+                else if (refCondition == Comprasion.LessOrEqual && (refLeftLS <= refTreshold && refRightLS <= refTreshold)) break; // Меньше или равно
+                else if (refCondition == Comprasion.Equal && (refLeftLS == refTreshold && refRightLS == refTreshold)) break; // Равно
             } else if (sensorsCondition == LineSensorSelection.LeftOrRight) { // Левый или правый датчик
-                if (refCondition == LogicalOperators.Greater && (refLeftLS > refTreshold || refRightLS > refTreshold)) break; // Больше
-                else if (refCondition == LogicalOperators.GreaterOrEqual && (refLeftLS >= refTreshold || refRightLS >= refTreshold)) break; // Больше или равно
-                else if (refCondition == LogicalOperators.Less && (refLeftLS < refTreshold || refRightLS < refTreshold)) break; // Меньше
-                else if (refCondition == LogicalOperators.LessOrEqual && (refLeftLS <= refTreshold || refRightLS <= refTreshold)) break; // Меньше или равно
-                else if (refCondition == LogicalOperators.Equal && (refLeftLS == refTreshold || refRightLS == refTreshold)) break; // Равно
+                if (refCondition == Comprasion.Greater && (refLeftLS > refTreshold || refRightLS > refTreshold)) break; // Больше
+                else if (refCondition == Comprasion.GreaterOrEqual && (refLeftLS >= refTreshold || refRightLS >= refTreshold)) break; // Больше или равно
+                else if (refCondition == Comprasion.Less && (refLeftLS < refTreshold || refRightLS < refTreshold)) break; // Меньше
+                else if (refCondition == Comprasion.LessOrEqual && (refLeftLS <= refTreshold || refRightLS <= refTreshold)) break; // Меньше или равно
+                else if (refCondition == Comprasion.Equal && (refLeftLS == refTreshold || refRightLS == refTreshold)) break; // Равно
             } else if (sensorsCondition == LineSensorSelection.OnlyLeft) { // Только левый датчик
-                if (refCondition == LogicalOperators.Greater && refLeftLS > refTreshold) break; // Больше
-                else if (refCondition == LogicalOperators.GreaterOrEqual && refLeftLS >= refTreshold) break; // Больше или равно
-                else if (refCondition == LogicalOperators.Less && refLeftLS < refTreshold) break; // Меньше
-                else if (refCondition == LogicalOperators.LessOrEqual && refLeftLS <= refTreshold) break; // Меньше или равно
-                else if (refCondition == LogicalOperators.Equal && refLeftLS == refTreshold) break; // Равно
+                if (refCondition == Comprasion.Greater && refLeftLS > refTreshold) break; // Больше
+                else if (refCondition == Comprasion.GreaterOrEqual && refLeftLS >= refTreshold) break; // Больше или равно
+                else if (refCondition == Comprasion.Less && refLeftLS < refTreshold) break; // Меньше
+                else if (refCondition == Comprasion.LessOrEqual && refLeftLS <= refTreshold) break; // Меньше или равно
+                else if (refCondition == Comprasion.Equal && refLeftLS == refTreshold) break; // Равно
             } else if (sensorsCondition == LineSensorSelection.OnlyRight) { // Только правый датчик
-                if (refCondition == LogicalOperators.Greater && refRightLS > refTreshold) break; // Больше
-                else if (refCondition == LogicalOperators.GreaterOrEqual && refRightLS >= refTreshold) break; // Больше или равно
-                else if (refCondition == LogicalOperators.Less && refRightLS < refTreshold) break; // Меньше
-                else if (refCondition == LogicalOperators.LessOrEqual && refRightLS <= refTreshold) break; // Меньше или равно
-                else if (refCondition == LogicalOperators.Equal && refRightLS == refTreshold) break; // Равно
+                if (refCondition == Comprasion.Greater && refRightLS > refTreshold) break; // Больше
+                else if (refCondition == Comprasion.GreaterOrEqual && refRightLS >= refTreshold) break; // Больше или равно
+                else if (refCondition == Comprasion.Less && refRightLS < refTreshold) break; // Меньше
+                else if (refCondition == Comprasion.LessOrEqual && refRightLS <= refTreshold) break; // Меньше или равно
+                else if (refCondition == Comprasion.Equal && refRightLS == refTreshold) break; // Равно
             }
             let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
             let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент

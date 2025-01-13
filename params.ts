@@ -139,9 +139,9 @@ namespace params {
 
     // Интерфейс перадачи параметров для алгоритма движения по линии с ускорениями и замедлениями
     export interface RampLineFollowInterface {
-        startingSpeed?: number;
+        startSpeed?: number;
         maxSpeed?: number;
-        finishingSpeed?: number;
+        finishSpeed?: number;
         Kp?: number;
         Ki?: number;
         Kd?: number;
@@ -153,23 +153,23 @@ namespace params {
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newMinStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
-     * @param newMinEndSpeed конечная скорость движения, eg: 10
+     * @param newMinFihishSpeed конечная скорость движения, eg: 10
      * @param newKp пропорциональный коэффицент, eg: 1
      * @param newKi интегральный коэффицент, eg: 0
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="SetRampLineFollow2SensorParams"
-    //% block="set line follow params at start speed = $newMinStartSpeed\\% max = $newMaxSpeed\\% final = $newMinEndSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
-    //% block.loc.ru="установить параметры движения по линии при стартовой скорости = $newMinStartSpeed\\% макс = $newMaxSpeed\\% конечной = $newMinEndSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block="set line follow params at start speed = $newMinStartSpeed\\% max = $newMaxSpeed\\% final = $newMinFihishSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block.loc.ru="установить параметры движения по линии при стартовой скорости = $newMinStartSpeed\\% макс = $newMaxSpeed\\% конечной = $newMinFihishSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function SetRampLineFollow2SensorParams(newMinStartSpeed: number, newMaxSpeed: number, newMinEndSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
+    export function SetRampLineFollow2SensorParams(newMinStartSpeed: number, newMaxSpeed: number, newMinFihishSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newMinStartSpeed) motions.rampLineFollow2SensorStartSpeed = newMinStartSpeed;
         if (newMaxSpeed) motions.rampLineFollow2SensorMaxSpeed = newMaxSpeed;
-        if (newMinEndSpeed) motions.rampLineFollow2SensorStartSpeed = newMinEndSpeed;
+        if (newMinFihishSpeed) motions.rampLineFollow2SensorFinishSpeed = newMinFihishSpeed;
         if (newKp) motions.rampLineFollow2SensorKp = newKp;
         if (newKi) motions.rampLineFollow2SensorKi = newKi;
         if (newKd) motions.rampLineFollow2SensorKd = newKd;
@@ -193,43 +193,43 @@ namespace params {
     /**
      * Parameters for an algorithm with a regulator with the ability to set the speed.
      * Параметры для алгоритма с регулятором с возможностью установить скорость.
-     * @param newMinStartSpeed начальная скорость движения, eg: 10
+     * @param newStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
-     * @param newFinishingSpeed конечная скорость движения, eg: 10
+     * @param newFinishSpeed конечная скорость движения, eg: 10
      */
     //% blockId="RampLineFollowThreeParams"
-    //% block="start speed = $newMinStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishingSpeed\\%"
-    //% block.loc.ru="начальная скорость = $newMinStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishingSpeed\\%"
+    //% block="start speed = $newStartSpeed\\% max = $newMaxSpeed\\% finally $newFinishSpeed\\%"
+    //% block.loc.ru="начальная скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\%"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowThreeParams(newStartingSpeed: number, newMaxSpeed: number, newFinishingSpeed: number): RampLineFollowInterface {
+    export function RampLineFollowThreeParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number): RampLineFollowInterface {
         return {
-            startingSpeed: newStartingSpeed,
+            startSpeed: newStartSpeed,
             maxSpeed: newMaxSpeed,
-            finishingSpeed: newFinishingSpeed
+            finishSpeed: newFinishSpeed
         };
     }
 
     /**
      * Parameters for an algorithm with a regulator with the ability to set the speed, Kp.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
-     * @param newStartingSpeed начальная скорость движения, eg: 10
+     * @param newStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
-     * @param newFinishingSpeed конечная скорость движения, eg: 10
+     * @param newFinishSpeed конечная скорость движения, eg: 10
      * @param newKp пропорциональный коэффицент, eg: 1
      */
     //% blockId="RampLineFollowFourParams"
-    //% block="min speed = $newStartingSpeed\\% max = $newMaxSpeed\\% finaly $newFinishingSpeed\\% Kp = $newKp"
-    //% block.loc.ru="начальная скорость = $newStartingSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishingSpeed\\% Kp = $newKp"
+    //% block="min speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp"
+    //% block.loc.ru="начальная скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowFourParams(newStartingSpeed: number, newMaxSpeed: number, newFinishingSpeed: number, newKp?: number): RampLineFollowInterface {
+    export function RampLineFollowFourParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number): RampLineFollowInterface {
         return {
-            startingSpeed: newStartingSpeed,
+            startSpeed: newStartSpeed,
             maxSpeed: newMaxSpeed,
-            finishingSpeed: newFinishingSpeed,
+            finishSpeed: newFinishSpeed,
             Kp: newKp
         };
     }
@@ -237,25 +237,25 @@ namespace params {
     /**
      * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
-     * @param newStartingSpeed начальная скорость движения, eg: 10
+     * @param newStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
-     * @param newFinishingSpeed конечная скорость движения, eg: 10
+     * @param newFinishSpeed конечная скорость движения, eg: 10
      * @param newKp пропорциональный коэффицент, eg: 1
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="RampLineFollowSixParams"
-    //% block="starting speed = $newStartingSpeed\\% max = $newMaxSpeed\\% finaly $newFinishingSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
-    //% block.loc.ru="стартовая скорость = $newStartingSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishingSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
+    //% block="starting speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
+    //% block.loc.ru="стартовая скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowSixParams(newStartingSpeed: number, newMaxSpeed: number, newFinishingSpeed: number, newKp?: number, newKd?: number, newN?: number): RampLineFollowInterface {
+    export function RampLineFollowSixParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number, newKd?: number, newN?: number): RampLineFollowInterface {
         return {
-            startingSpeed: newStartingSpeed,
+            startSpeed: newStartSpeed,
             maxSpeed: newMaxSpeed,
-            finishingSpeed: newFinishingSpeed,
+            finishSpeed: newFinishSpeed,
             Kp: newKp,
             Kd: newKd,
             N: newN
@@ -265,26 +265,26 @@ namespace params {
     /**
      * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
-     * @param newMinSpeed начальная скорость движения, eg: 10
+     * @param newStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
-     * @param newMinEndSpeed конечная скорость движения, eg: 10
+     * @param newFinishSpeed конечная скорость движения, eg: 10
      * @param newKp пропорциональный коэффицент, eg: 1
      * @param newKi интегральный коэффицент, eg: 0
      * @param newKd дифференциальный коэффицент, eg: 0
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="RampLineFollowAllParams"
-    //% block="starting speed = $newStartingSpeed\\% max = $newMaxSpeed\\% finaly $newMinEndSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
-    //% block.loc.ru="стартовая скорость = $newStartingSpeed\\% макс = $newMaxSpeed\\% конечная $newMinEndSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
+    //% block="starting speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
+    //% block.loc.ru="стартовая скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowAllParams(newStartingSpeed: number, newMaxSpeed: number, newFinishingSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): RampLineFollowInterface {
+    export function RampLineFollowAllParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): RampLineFollowInterface {
         return {
-            startingSpeed: newStartingSpeed,
+            startSpeed: newStartSpeed,
             maxSpeed: newMaxSpeed,
-            finishingSpeed: newFinishingSpeed,
+            finishSpeed: newFinishSpeed,
             Kp: newKp,
             Ki: newKi,
             Kd: newKd,

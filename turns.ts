@@ -2,25 +2,25 @@ namespace chassis {
 
     /**
      * Synchronized rotation of the chassis relative to the center at the desired angle at a certain speed.
-     * For example, if degress > 0, then the robot will rotate to the right, and if degress < 0, then to the left.
+     * For example, if deg > 0, then the robot will rotate to the right, and if deg < 0, then to the left.
      * The speed must be positive!
      * Синхронизированный поворот шасси относительно центра на нужный угол с определенной скоростью.
      * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
      * Скорость должна быть положительной!
-     * @param degress угол вращения в градусах, eg: 90
+     * @param deg угол вращения в градусах, eg: 90
      * @param speed скорость ващения, eg: 50
      */
     //% blockId="ChassisSpinTurn"
-    //% block="sync chassis spin turn $degress\\° at $speed\\% relative to center wheel axis"
-    //% block.loc.ru="синхронизированный поворот шасси на $degress\\° с $speed\\% относительно центра оси колёс"
+    //% block="sync chassis spin turn $deg\\° at $speed\\% relative to center wheel axis"
+    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="99" blockGap="8"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function SpinTurn(degress: number, speed: number) {
+    export function SpinTurn(deg: number, speed: number) {
         //if (!motorsPair) return;
-        if (degress == 0 || speed == 0) {
+        if (deg == 0 || speed == 0) {
             stop(true);
             return;
         } else if (speed < 0) {
@@ -28,11 +28,10 @@ namespace chassis {
             control.panic(1);
         }
         speed = Math.clamp(0, 100, speed >> 0); // We limit the speed of the motor from -100 to 100 and cut off the fractional part
-        const emlPrev = leftMotor.angle(); // We read the value from the encoder from the left motor before starting
-        const emrPrev = rightMotor.angle(); // We read the value from the encoder from the right motor before starting
-        const calcMotRot = Math.round(degress * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
-        if (degress > 0) advmotctrls.syncMotorsConfig(speed, -speed);
-        else if (degress < 0) advmotctrls.syncMotorsConfig(-speed, speed);
+        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // We read the value from the encoder from the left motor, right motor before starting
+        const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
+        if (deg > 0) advmotctrls.syncMotorsConfig(speed, -speed);
+        else if (deg < 0) advmotctrls.syncMotorsConfig(-speed, speed);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.reset(); // Сбросить регулятор
@@ -61,30 +60,29 @@ namespace chassis {
      * Синхронизированный поворот на нужный угол относительно одного из колес.
      * Для вращения вперёд устанавливается положительная скорость, а назад - отрицательная.
      * Значение угла поворота всегда положительное!
-     * @param degress угол вращения в градусах, eg: 90
+     * @param deg угол вращения в градусах, eg: 90
      * @param speed скорость вращения, eg: 50
      */
     //% blockId="ChassisPivotTurn"
-    //% block="sync chassis pivot turn $degress\\° at $speed\\% pivot $wheelPivot"
-    //% block.loc.ru="синхронизированный поворот шасси на $degress\\° с $speed\\% относительно $wheelPivot"
+    //% block="sync chassis pivot turn $deg\\° at $speed\\% pivot $wheelPivot"
+    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно $wheelPivot"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="98"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function PivotTurn(degress: number, speed: number, wheelPivot: WheelPivot) {
+    export function PivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
         //if (!motorsPair) return;
-        if (degress == 0 || speed == 0) {
+        if (deg == 0 || speed == 0) {
             stop(true);
             return;
-        } else if (degress < 0) {
+        } else if (deg < 0) {
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(2);
         }
         speed = Math.clamp(0, 100, speed >> 0); // We limit the speed of the motor from -100 to 100 and cut off the fractional part
-        const emlPrev = leftMotor.angle(); // Считываем с левого мотора значения энкодера перед стартом алгаритма
-        const emrPrev = rightMotor.angle(); // Считываем с правого мотора значения энкодера перед стартом алгаритма
-        const calcMotRot = Math.round(((Math.abs(degress) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
+        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
+        const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
         stop(true, 0); // Установить тормоз и удержание моторов перед поворотом
         if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
         else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
@@ -114,23 +112,23 @@ namespace chassis {
 
     /**
      * Synchronized rotation of the chassis relative to the center at the desired angle at a certain speed.
-     * For example, if degress > 0, then the robot will rotate to the right, and if degress < 0, then to the left.
+     * For example, if deg > 0, then the robot will rotate to the right, and if deg < 0, then to the left.
      * The speed must be positive!
      * Синхронизированный поворот шасси относительно центра на нужный угол с определенной скоростью.
      * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
      * Скорость должна быть положительной!
-     * @param degress rotation value in degrees, eg: 90
+     * @param deg rotation value in degrees, eg: 90
      * @param speed turning speed value, eg: 30
      */
     //% blockId="ChassisRampSpinTurn"
-    //% block="sync chassis spin turn $degress\\° at $speed\\% relative to center wheel axis"
-    //% block.loc.ru="синхронизированный поворот шасси на $degress\\° с $speed\\% относительно центра оси колёс"
+    //% block="sync chassis spin turn $deg\\° at $speed\\% relative to center wheel axis"
+    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="89" blockGap="8"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты с ускорениями"
-    function RampSpinTurn(degress: number, minSpeed: number, maxSpeed: number) {
+    function RampSpinTurn(deg: number, minSpeed: number, maxSpeed: number) {
         return;
     }
 
@@ -275,8 +273,7 @@ namespace chassis {
             if (params.Kd) smartSpinTurnKd = params.Kd;
             if (params.N) smartSpinTurnN = params.N;
         }
-        const lMotEncPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
-        const rMotEncPrev = rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
+        const lMotEncPrev = leftMotor.angle(), rMotEncPrev = rightMotor.angle(); // Считываем значение с энкодера левого мотора и правого мотора перед стартом алгаритма
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
         pidSmartTurns.setGains(smartSpinTurnKp, smartSpinTurnKi, smartSpinTurnKd); // Установка коэффициентов ПИД регулятора
         pidSmartTurns.setDerivativeFilter(smartSpinTurnN); // Установить фильтр дифференциального регулятора

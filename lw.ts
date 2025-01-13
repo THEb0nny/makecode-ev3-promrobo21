@@ -4,8 +4,8 @@ namespace motions {
     let lineFollowRefTreshold = 35; // Пороговое значение определения перекрёстка
     let lineFollowSetPoint = lineFollowRefTreshold; // Среднее значение серого
 
-    let distRollingAfterIntersection = 0; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
-    let distRollingFromLineAfterIntersection = 0; // Дистанция прокатки на перекрёстке для съезда с него в мм
+    let distRollingAfterIntersection = 30; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
+    let distRollingFromLineAfterIntersection = 20; // Дистанция прокатки на перекрёстке для съезда с него в мм
 
     let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
@@ -49,7 +49,7 @@ namespace motions {
 
     export let rampLineFollow2SensorStartSpeed = 10; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
     export let rampLineFollow2SensorMaxSpeed = 50; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
-    export let rampLineFollow2SensorEndSpeed = 10; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
+    export let rampLineFollow2SensorFinishSpeed = 10; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
     export let rampLineFollow2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     export let rampLineFollow2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
     export let rampLineFollow2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
@@ -311,26 +311,26 @@ namespace motions {
      * Функция движения по линии до определения перекрёстка слева или справа.
      * Если слева, тогда движение осуществляется правым датчиком и левый отвечает за определение.
      * Если справа, тогда за движение отвечает левый датчик, а правый отвечает за определение перекрёстка.
-     * @param junction перекрёсток слева или справа, eg: SideJunctionType.Left
-     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
+     * @param sideIntersaction перекрёсток слева или справа, eg: SideIntersaction.Left
+     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToSideIntersection"
-    //% block="line follow to intersection $junction line $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии до перекрёстка $junction линия $lineLocation с действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow to intersection $sideIntersaction line $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии до перекрёстка $sideIntersaction линия $lineLocation с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="89"
     //% group="Движение по линии до перекрёстка"
-    export function LineFollowToSideIntersection(junction: SideJunctionType, lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
-        if (junction == SideJunctionType.Left) {
+    export function LineFollowToSideIntersection(sideIntersaction: SideIntersaction, lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+        if (sideIntersaction == SideIntersaction.Left) {
             LineFollowToLeftIntersaction(lineLocation, actionAfterMotion, params, debug);
-        } else if (junction == SideJunctionType.Right) {
+        } else if (sideIntersaction == SideIntersaction.Right) {
             LineFollowToRightIntersection(lineLocation, actionAfterMotion, params, debug);
-        }
+        } else return;
     }
 
     /**
@@ -350,7 +350,7 @@ namespace motions {
     //% weight="88" blockGap="8"
     //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
-    export function LineFollowToLeftIntersaction(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToLeftIntersaction(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowLeftIntersactionSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowLeftIntersactionKp = params.Kp;
@@ -372,8 +372,8 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (lineLocation == HorizontalLineLocation.Inside) error = motions.GetLineFollowSetPoint() - refRightLS; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
+            if (lineLocation == LineLocation.Inside) error = motions.GetLineFollowSetPoint() - refRightLS; // Ошибка регулирования
+            else if (lineLocation == LineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
             if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refLeftLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
@@ -396,7 +396,7 @@ namespace motions {
     /**
      * The function of moving along the line to determine the intersection on the right with the left sensor.
      * Функция движения по линии до определения перекрёстка справа левым датчиком.
-     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
+     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
@@ -410,7 +410,7 @@ namespace motions {
     //% weight="87"
     //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
-    export function LineFollowToRightIntersection(lineLocation: HorizontalLineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowRightIntersactionSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowRightIntersactionKp = params.Kp;
@@ -432,8 +432,8 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
+            if (lineLocation == LineLocation.Inside) error = refLeftLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
+            else if (lineLocation == LineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
             if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refRightLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
@@ -523,7 +523,7 @@ namespace motions {
     /**
      * Движение по линии на расстояние одним из датчиков.
      * @param lineSensor позиция линии для движения, eg: LineSensor.Left
-     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
+     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist скорость движения, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
@@ -537,7 +537,7 @@ namespace motions {
     //% params.shadow="LineFollowEmptyParams"
     //% weight="76"
     //% group="Движение по линии на расстояние"
-    export function LineFollowToDistanceWithOneSensor(lineSensor: LineSensor, lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToDistanceWithOneSensor(lineSensor: LineSensor, lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (lineSensor == LineSensor.Left) {
             LineFollowToDistanceWithLeftSensor(lineLocation, dist, actionAfterMotion, params, debug);
         } else if (lineSensor == LineSensor.Right) {
@@ -547,7 +547,7 @@ namespace motions {
 
     /**
      * Движение по линии на расстояние левым датчиком. Очень грубый метод.
-     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
+     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist скорость движения, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
@@ -562,7 +562,7 @@ namespace motions {
     //% weight="75"
     //% group="Движение по линии на расстояние"
     //% blockHidden="true"
-    export function LineFollowToDistanceWithLeftSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToDistanceWithLeftSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowToDistanceWithLeftSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowToDistanceWithLeftSensorKp = params.Kp;
@@ -591,8 +591,8 @@ namespace motions {
             if (Math.abs(lMotEnc) >= Math.abs(calcMotRot) || Math.abs(rMotEnc) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (lineLocation == HorizontalLineLocation.Inside) error = refLeftLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
+            if (lineLocation == LineLocation.Inside) error = refLeftLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
+            else if (lineLocation == LineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
@@ -613,7 +613,7 @@ namespace motions {
 
     /**
      * Движение по линии на расстояние правым датчиком. Очень грубый метод.
-     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
+     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist скорость движения, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
@@ -628,7 +628,7 @@ namespace motions {
     //% weight="74" blockGap="8"
     //% group="Движение по линии на расстояние"
     //% blockHidden="true"
-    export function LineFollowToDistanceWithRightSensor(lineLocation: HorizontalLineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToDistanceWithRightSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowToDistanceWithRightSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowToDistanceWithRightSensorKp = params.Kp;
@@ -657,8 +657,8 @@ namespace motions {
             if (Math.abs(lMotEnc) >= Math.abs(calcMotRot) || Math.abs(rMotEnc) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (lineLocation == HorizontalLineLocation.Inside) error = motions.GetLineFollowSetPoint() - refRightLS; // Ошибка регулирования
-            else if (lineLocation == HorizontalLineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
+            if (lineLocation == LineLocation.Inside) error = motions.GetLineFollowSetPoint() - refRightLS; // Ошибка регулирования
+            else if (lineLocation == LineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
@@ -700,7 +700,7 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="RampLineFollowEmptyParams"
     //% weight="78"
-    //% group="Движение по линии с ускорениями/замедлениями"
+    //% group="Движение по линии с ускорениями"
     export function RampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking = Braking.Hold, params?: params.RampLineFollowInterface, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             music.playSoundEffect(sounds.systemGeneralAlert);
@@ -711,9 +711,9 @@ namespace motions {
         }
         
         if (params) { // Если были переданы параметры
-            if (params.startingSpeed) rampLineFollow2SensorStartSpeed = Math.abs(params.startingSpeed);
+            if (params.startSpeed) rampLineFollow2SensorStartSpeed = Math.abs(params.startSpeed);
             if (params.maxSpeed) rampLineFollow2SensorMaxSpeed = Math.abs(params.maxSpeed);
-            if (params.finishingSpeed) rampLineFollow2SensorEndSpeed = Math.abs(params.finishingSpeed);
+            if (params.finishSpeed) rampLineFollow2SensorFinishSpeed = Math.abs(params.finishSpeed);
             if (params.Kp) rampLineFollow2SensorKp = params.Kp;
             if (params.Ki) rampLineFollow2SensorKi = params.Ki;
             if (params.Kd) rampLineFollow2SensorKd = params.Kd;
@@ -725,7 +725,7 @@ namespace motions {
         const mRotDecelCalc = math.CalculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
         const mRotTotalCalc = math.CalculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
-        advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorEndSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorFinishSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         pidLineFollow.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
         pidLineFollow.setDerivativeFilter(rampLineFollow2SensorN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
@@ -750,7 +750,7 @@ namespace motions {
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
         else if (braking == Braking.NoBreak) chassis.stop(false); // Торможение без удержания
-        else chassis.setSpeedsCommand(rampLineFollow2SensorEndSpeed, rampLineFollow2SensorEndSpeed); // Команда моторам вперёд
+        else chassis.setSpeedsCommand(rampLineFollow2SensorFinishSpeed, rampLineFollow2SensorFinishSpeed); // Команда моторам вперёд
     }
 
 }

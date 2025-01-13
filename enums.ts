@@ -8,8 +8,8 @@ const enum ClawState {
     Close
 }
 
-// Перечисление о типе больше или меньше
-const enum LogicalOperators {
+// Перечисление о типах сравнения
+const enum Comprasion {
     //% block="greater"
     //% block.loc.ru="больше"
     Greater,
@@ -79,7 +79,7 @@ const enum AfterMotionShort {
 }
 
 // Перечисление о расположении линии при движении по линии
-const enum HorizontalLineLocation {
+const enum LineLocation {
     //% block="inside"
     //% block.loc.ru="изнутри"
     Inside,
@@ -109,7 +109,7 @@ const enum LineSensor {
 }
 
 // Перечисление о перекрёстках
-const enum SideJunctionType {
+const enum SideIntersaction {
     //% block="left"
     //% block.loc.ru="слева"
     Left,
