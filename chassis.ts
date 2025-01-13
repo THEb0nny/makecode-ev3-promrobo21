@@ -33,8 +33,8 @@ namespace chassis {
     /**
      * Movement over a distance in mm with independent speeds on motors.
      * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
-     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Движение на расстояние в мм с независимыми скоростями на моторы.
+     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
      * @param speedLeft скорость левого мотора, eg: 50
      * @param speedRight скорость правого мотора, eg: 50
@@ -129,17 +129,18 @@ namespace chassis {
         const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
         const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
+
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
+
         let prevTime = 0;
         while (true) {
             let currTime = control.millis();
             let dt = currTime - prevTime;
             prevTime = currTime;
-            let eml = leftMotor.angle() - emlPrev;
-            let emr = rightMotor.angle() - emrPrev;
+            let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break;
             let error = advmotctrls.getErrorSyncMotorsInPwr(eml, emr, out.pwrOut, out.pwrOut);
@@ -176,8 +177,7 @@ namespace chassis {
     //         let currTime = control.millis();
     //         let dt = currTime - prevTime;
     //         prevTime = currTime;
-    //         let encB = chassis.leftMotor.angle();
-    //         let encC = chassis.rightMotor.angle();
+    //         let encB = chassis.leftMotor.angle(), encC = chassis.rightMotor.angle();
     //         if ((encB + encC) / 2 >= totalDist) break;
     //         let error = advmotctrls.getErrorSyncMotors(encB, encC);
     //         pidChassisSync.setPoint(error);
