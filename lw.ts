@@ -312,7 +312,7 @@ namespace motions {
      * Если слева, тогда движение осуществляется правым датчиком и левый отвечает за определение.
      * Если справа, тогда за движение отвечает левый датчик, а правый отвечает за определение перекрёстка.
      * @param junction перекрёсток слева или справа, eg: SideJunctionType.Left
-     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
+     * @param lineLocation позиция линии для движения, eg: HorizontalLineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
