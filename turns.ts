@@ -33,7 +33,6 @@ namespace chassis {
         const calcMotRot = Math.round(degress * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
         if (degress > 0) advmotctrls.syncMotorsConfig(speed, -speed);
         else if (degress < 0) advmotctrls.syncMotorsConfig(-speed, speed);
-        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.reset(); // Сбросить регулятор
@@ -85,11 +84,10 @@ namespace chassis {
         const emlPrev = leftMotor.angle(); // Считываем с левого мотора значения энкодера перед стартом алгаритма
         const emrPrev = rightMotor.angle(); // Считываем с правого мотора значения энкодера перед стартом алгаритма
         const calcMotRot = Math.round(((Math.abs(degress) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
-        stop(true, 0); // Brake so that one of the motors is held when turning
+        stop(true, 0); // Установить тормоз и удержание моторов перед поворотом
         if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
         else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
         else return;
-        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.reset(); // Сбросить регулятор
