@@ -7,8 +7,8 @@ namespace chassis {
      * Синхронизированный поворот шасси относительно центра на нужный угол с определенной скоростью.
      * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
      * Скорость должна быть положительной!
-     * @param degress rotation value in degrees, eg: 90
-     * @param speed turning speed value, eg: 30
+     * @param degress угол вращения в градусах, eg: 90
+     * @param speed скорость ващения, eg: 50
      */
     //% blockId="ChassisSpinTurn"
     //% block="sync chassis spin turn $degress\\° at $speed\\% relative to center wheel axis"
@@ -62,29 +62,29 @@ namespace chassis {
      * Синхронизированный поворот на нужный угол относительно одного из колес.
      * Для вращения вперёд устанавливается положительная скорость, а назад - отрицательная.
      * Значение угла поворота всегда положительное!
-     * @param deg rotation value in degrees, eg: 90
-     * @param speed turning speed value, eg: 30
+     * @param degress угол вращения в градусах, eg: 90
+     * @param speed скорость вращения, eg: 50
      */
     //% blockId="ChassisPivotTurn"
-    //% block="sync chassis pivot turn $deg\\° at $speed\\% pivot $wheelPivot"
-    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно $wheelPivot"
+    //% block="sync chassis pivot turn $degress\\° at $speed\\% pivot $wheelPivot"
+    //% block.loc.ru="синхронизированный поворот шасси на $degress\\° с $speed\\% относительно $wheelPivot"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="98"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function PivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
+    export function PivotTurn(degress: number, speed: number, wheelPivot: WheelPivot) {
         //if (!motorsPair) return;
-        if (deg == 0 || speed == 0) {
+        if (degress == 0 || speed == 0) {
             stop(true);
             return;
-        } else if (deg < 0) {
+        } else if (degress < 0) {
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(2);
         }
         const emlPrev = leftMotor.angle(); // Считываем с левого мотора значения энкодера перед стартом алгаритма
         const emrPrev = rightMotor.angle(); // Считываем с правого мотора значения энкодера перед стартом алгаритма
-        const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
+        const calcMotRot = Math.round(((Math.abs(degress) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
         stop(true, 0); // Brake so that one of the motors is held when turning
         if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
         else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
