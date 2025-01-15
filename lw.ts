@@ -291,7 +291,7 @@ namespace motions {
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowCrossIntersactionSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowCrossIntersactionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -378,7 +378,7 @@ namespace motions {
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowLeftIntersactionSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowLeftIntersactionSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowLeftIntersactionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -438,7 +438,7 @@ namespace motions {
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowRightIntersactionSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowRightIntersactionSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowRightIntersactionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -478,7 +478,7 @@ namespace motions {
             if (params.N) lineFollowDistanceN = params.N;
         }
 
-        const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
 
         pidLineFollow.setGains(lineFollowDistanceKp, lineFollowDistanceKi, lineFollowDistanceKd); // Установка коэффицентов ПИД регулятора
@@ -491,17 +491,17 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            // let lMotEnc = chassis.leftMotor.angle(), rMotEnc = chassis.rightMotor.angle(); // Значения с энкодеров моторов
-            // if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(rMotEnc - rMotEncPrev) >= Math.abs(calcMotRot)) break;
-            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторов
-            if (Math.abs(lMotEnc) >= Math.abs(calcMotRot) || Math.abs(rMotEnc) >= Math.abs(calcMotRot)) break;
+            // let eml = chassis.leftMotor.angle(), emr = chassis.rightMotor.angle(); // Значения с энкодеров моторов
+            // if (Math.abs(lMotEnc - lMotEncPrev) >= Math.abs(calcMotRot) || Math.abs(emr - emrPrev) >= Math.abs(calcMotRot)) break;
+            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emrPrev) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowDistanceSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowDistanceSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowDistanceSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -596,7 +596,7 @@ namespace motions {
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -662,7 +662,7 @@ namespace motions {
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
-            motions.ChassisControlCommand(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -720,7 +720,7 @@ namespace motions {
             if (params.N) rampLineFollow2SensorN = params.N;
         }
 
-        const lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const mRotAccelCalc = math.CalculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
         const mRotDecelCalc = math.CalculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
         const mRotTotalCalc = math.CalculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
@@ -736,15 +736,15 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторов
-            let out = advmotctrls.accTwoEnc(lMotEnc, rMotEnc);
+            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
+            chassis.ControlCommand(U, out.pwrOut); // Команда моторам
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения

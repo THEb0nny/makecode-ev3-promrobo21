@@ -1,6 +1,27 @@
 namespace chassis {
 
     /**
+     * Chassis motor control command.
+     * Команда управления моторами шасси. Предназначена для регуляторов.
+     * @param u управляющее воздействие, eg: 0
+     * @param speed скорость движения, eg: 50
+     */
+    //% blockId="ControlCommand"
+    //% block="movement command on u $u at $speed\\%"
+    //% block.loc.ru="команда движения по u $u на $speed\\%"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="99"
+    //% subcategory="Движение"
+    //% group="Move"
+    export function ControlCommand(u: number, speed: number) {
+        let mB = speed + u, mC = speed - u;
+        // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
+        // mB *= z; mC *= z;
+        chassis.setSpeedsCommand(mB, mC);
+    }
+
+    /**
      * Linear movement over a distance in mm at a constant speed.
      * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
      * Линейное движение на расстояние в мм с постоянной скоростью.
@@ -125,21 +146,21 @@ namespace chassis {
             stop(true);
             return;
         }
+
+        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
         const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
         const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
-        const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
-        const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
-
+        
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
 
-        let prevTime = 0;
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) {
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
-            prevTime = currTime;
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
             let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break;
@@ -153,40 +174,69 @@ namespace chassis {
         chassis.steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
     }
 
-    // //% blockId="RampDistMove"
-    // //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
-    // //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
-    // //% inlineInputMode="inline"
-    // //% speed.shadow="motorSpeedPicker"
-    // //% weight="88"
-    // //% subcategory="Движение"
-    // //% group="Синхронизированное движение с ускорениями"
-    // //% blockHidden="true"
-    // export function RampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
-    //     const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом двигателе
-    //     const emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на правом двигателе
-    //     const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-    //     const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
-    //     advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
-    //     // advmotctrls.accTwoEncConfig(minSpeed, maxSpeedLeft, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
-    //     pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
-    //     pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
-    //     pidChassisSync.reset(); // Сбросить ПИД регулятор
-    //     let prevTime = 0;
-    //     while (true) {
-    //         let currTime = control.millis();
-    //         let dt = currTime - prevTime;
-    //         prevTime = currTime;
-    //         let encB = chassis.leftMotor.angle(), encC = chassis.rightMotor.angle();
-    //         if ((encB + encC) / 2 >= totalDist) break;
-    //         let error = advmotctrls.getErrorSyncMotors(encB, encC);
-    //         pidChassisSync.setPoint(error);
-    //         let U = pidChassisSync.compute(dt, 0);
-    //         let powers = advmotctrls.getPwrSyncMotors(U);
-    //         chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-    //         control.pauseUntilTime(currTime, 1);
-    //     }
-    //     chassis.stop(true);
-    // }
+    //% blockId="RampDistMove"
+    //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
+    //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="88"
+    //% subcategory="Движение"
+    //% group="Синхронизированное движение с ускорениями"
+    //% blockHidden="true"
+    export function RampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+        //if (!motorsPair) return;
+
+        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
+        const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = math.CalculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        
+        advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
+        // advmotctrls.accTwoEncConfig(minSpeed, maxSpeedLeft, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
+        // advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorFinishSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
+        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        pidChassisSync.reset(); // Сбросить ПИД регулятор
+        
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) {
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            let out = advmotctrls.accTwoEnc(eml, emr);
+            if (out.isDone) break; // Проверка условия окончания
+            // if ((eml + emr) / 2 >= totalDist) break;
+            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotors(U);
+            // chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            // motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
+            control.pauseUntilTime(currTime, 1);
+        }
+        chassis.stop(true);
+
+        // let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        // while (true) {
+        //     let currTime = control.millis(); // Текущее время
+        //     let dt = currTime - prevTime; // Время за которое выполнился цикл
+        //     prevTime = currTime; // Новое время в переменную предыдущего времени
+        //     let lMotEnc = chassis.leftMotor.angle() - emlPrev, rMotEnc = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+        //     let out = advmotctrls.accTwoEnc(lMotEnc, rMotEnc);
+        //     if (out.isDone) break; // Проверка условия окончания
+        //     let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+        //     let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+        //     let error = refLeftLS - refRightLS; // Ошибка регулирования
+        //     pidLineFollow.setPoint(error); // Передать ошибку регулятору
+        //     let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
+        //     motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
+        //     control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+        // }
+        // music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        // if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
+        // else if (braking == Braking.NoBreak) chassis.stop(false); // Торможение без удержания
+        // else chassis.setSpeedsCommand(rampLineFollow2SensorFinishSpeed, rampLineFollow2SensorFinishSpeed); // Команда моторам вперёд
+    }
 
 }

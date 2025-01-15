@@ -38,26 +38,6 @@ namespace motions {
         // Команды для остановки не нужно, в этом и смысл функции
     }
 
-    /**
-     * Chassis motor control command.
-     * Команда управления моторами шасси. Предназначена для регуляторов.
-     * @param u управляющее воздействие, eg: 0
-     * @param speed скорость движения, eg: 50
-     */
-    //% blockId="ChassisControlCommand"
-    //% block="u $u movement command at $speed\\%"
-    //% block.loc.ru="команда движения по u $u на $speed\\%"
-    //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
-    //% weight="99"
-    //% group="Move"
-    export function ChassisControlCommand(u: number, speed: number) {
-        let mB = speed + u, mC = speed - u;
-        // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
-        // mB *= z; mC *= z;
-        chassis.setSpeedsCommand(mB, mC);
-    }
-
 }
 
 namespace motions {

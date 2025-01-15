@@ -235,7 +235,7 @@ namespace levelings {
         let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
         let encLeftMot1 = 0, encLeftMot2 = 0, encRightMot1 = 0, encRightMot2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
         let a = 0, b = distanceBetweenLineSensors, c = 0;
-        motions.ChassisControlCommand(0, speed); // Команда двигаться вперёд
+        chassis.ControlCommand(0, speed); // Команда двигаться вперёд
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         // Первая часть - датчик, который замечает линию первым
         while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
