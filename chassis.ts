@@ -210,7 +210,8 @@ namespace chassis {
             pidChassisSync.setPoint(error2); // Transfer control error to controller
             let U = pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
             let powers = advmotctrls.getPwrSyncMotors(U);
-            // chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            // let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             // chassis.ControlCommand(0, 50); // Команда моторам
             control.pauseUntilTime(currTime, 1);
         }
