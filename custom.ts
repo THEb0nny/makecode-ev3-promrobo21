@@ -64,9 +64,8 @@ namespace custom {
         let currentCount = 1;
         // Проходим по отсортированному массиву, подсчитывая частоту каждого числа
         for (let i = 1; i < arr.length; i++) {
-            if (arr[i] === currentNum) {
-                currentCount++;
-            } else {
+            if (arr[i] === currentNum) currentCount++;
+            else {
                 if (currentCount > maxCount) {
                     maxCount = currentCount;
                     mostFrequentNum = currentNum;
@@ -76,9 +75,7 @@ namespace custom {
             }
         }
         // Проверяем последнее число
-        if (currentCount > maxCount) {
-            mostFrequentNum = currentNum;
-        }
+        if (currentCount > maxCount) mostFrequentNum = currentNum;
         return mostFrequentNum;
     }
 
