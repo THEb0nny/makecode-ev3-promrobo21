@@ -205,12 +205,12 @@ namespace chassis {
             let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
-            // if ((eml + emr) / 2 >= totalDist) break;
-            let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
-            pidChassisSync.setPoint(error); // Transfer control error to controller
+            // let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
+            let error2 = advmotctrls.getErrorSyncMotorsInPwr(eml, emr, out.pwrOut, out.pwrOut); //////////////////////////////////////////////////////////////////////////
+            pidChassisSync.setPoint(error2); // Transfer control error to controller
             let U = pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
             let powers = advmotctrls.getPwrSyncMotors(U);
-            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            // chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             // chassis.ControlCommand(0, 50); // Команда моторам
             control.pauseUntilTime(currTime, 1);
         }
@@ -218,3 +218,12 @@ namespace chassis {
     }
 
 }
+
+// let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
+// let out = advmotctrls.accTwoEnc(eml, emr);
+// if (out.isDone) break;
+// let error = advmotctrls.getErrorSyncMotorsInPwr(eml, emr, out.pwrOut, out.pwrOut);
+// pidChassisSync.setPoint(error);
+// let U = pidChassisSync.compute(dt, 0);
+// let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
+// setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
