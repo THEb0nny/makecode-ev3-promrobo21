@@ -212,7 +212,7 @@ namespace chassis {
             let U = pidChassisSync.compute(dt, 0);
             let powers = advmotctrls.getPwrSyncMotors(U);
             // chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            chassis.ControlCommand(U, out.pwrOut); // Команда моторам
+            chassis.ControlCommand(0, out.pwrOut); // Команда моторам
             control.pauseUntilTime(currTime, 1);
         }
         chassis.stop(true);
