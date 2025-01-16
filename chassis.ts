@@ -209,33 +209,36 @@ namespace chassis {
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
             pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, 0);
-            let powers = advmotctrls.getPwrSyncMotors(U);
-            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            // chassis.ControlCommand(0, out.pwrOut); // Команда моторам
+            // let powers = advmotctrls.getPwrSyncMotors(U);
+            // chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            // chassis.ControlCommand(0, 50); // Команда моторам
+            leftMotor.run(50);
+            rightMotor.run(50);
             control.pauseUntilTime(currTime, 1);
         }
         chassis.stop(true);
-
-        // let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        // while (true) {
-        //     let currTime = control.millis(); // Текущее время
-        //     let dt = currTime - prevTime; // Время за которое выполнился цикл
-        //     prevTime = currTime; // Новое время в переменную предыдущего времени
-        //     let lMotEnc = chassis.leftMotor.angle() - emlPrev, rMotEnc = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-        //     let out = advmotctrls.accTwoEnc(lMotEnc, rMotEnc);
-        //     if (out.isDone) break; // Проверка условия окончания
-        //     let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-        //     let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-        //     let error = refLeftLS - refRightLS; // Ошибка регулирования
-        //     pidLineFollow.setPoint(error); // Передать ошибку регулятору
-        //     let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-        //     motions.ChassisControlCommand(U, out.pwrOut); // Команда моторам
-        //     control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
-        // }
-        // music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        // if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
-        // else if (braking == Braking.NoBreak) chassis.stop(false); // Торможение без удержания
-        // else chassis.setSpeedsCommand(rampLineFollow2SensorFinishSpeed, rampLineFollow2SensorFinishSpeed); // Команда моторам вперёд
     }
 
 }
+
+// advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, accelValue, decelValue, totalValue);
+// pidChassisSync.setGains(syncKp, syncKi, syncKd); // Setting the regulator coefficients
+// pidChassisSync.setControlSaturation(-100, 100); // Regulator limitation
+// pidChassisSync.reset(); // Reset pid controller
+
+// let prevTime = 0; // Last time time variable for loop
+// while (true) {
+//     let currTime = control.millis();
+//     let dt = currTime - prevTime;
+//     prevTime = currTime;
+//     let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
+//     let out = advmotctrls.accTwoEnc(eml, emr);
+//     if (out.isDone) break;
+//     let error = advmotctrls.getErrorSyncMotorsInPwr(eml, emr, out.pwrOut, out.pwrOut);
+//     pidChassisSync.setPoint(error);
+//     let U = pidChassisSync.compute(dt, 0);
+//     let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
+//     setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
+//     control.pauseUntilTime(currTime, 1);
+// }
+// stop(true); // Break at hold
