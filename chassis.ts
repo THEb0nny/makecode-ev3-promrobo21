@@ -1,7 +1,7 @@
 namespace chassis {
 
     /**
-     * Chassis motor control command.
+     * Chassis motors control command.
      * Команда управления моторами шасси. Предназначена для регуляторов.
      * @param u управляющее воздействие, eg: 0
      * @param speed скорость движения, eg: 50
