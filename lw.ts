@@ -36,16 +36,16 @@ namespace motions {
     export let lineFollowDistanceN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками на расстояние
 
     export let lineFollowToDistanceWithLeftSensorSpeed = 50; // Переменная для хранения скорости при движения по линии левым датчиком на расстояние
-    export let lineFollowToDistanceWithLeftSensorKp = 50; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии левым датчиком на расстояние
-    export let lineFollowToDistanceWithLeftSensorKi = 50; // Переменная для хранения коэффицента интегорального регулятора при движения по линии левым датчиком на расстояние
-    export let lineFollowToDistanceWithLeftSensorKd = 50; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии левым датчиком на расстояние
-    export let lineFollowToDistanceWithLeftSensorN = 50; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceWithLeftSensorKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceWithLeftSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceWithLeftSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceWithLeftSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии левым датчиком на расстояние
 
     export let lineFollowToDistanceWithRightSensorSpeed = 50; // Переменная для хранения скорости при движения по линии правым датчиком на расстояние
-    export let lineFollowToDistanceWithRightSensorKp = 50; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии правым датчиком на расстояние
-    export let lineFollowToDistanceWithRightSensorKi = 50; // Переменная для хранения коэффицента интегорального регулятора при движения по линии правым датчиком на расстояние
-    export let lineFollowToDistanceWithRightSensorKd = 50; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком на расстояние
-    export let lineFollowToDistanceWithRightSensorN = 50; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceWithRightSensorKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceWithRightSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceWithRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceWithRightSensorN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком на расстояние
 
     export let rampLineFollow2SensorStartSpeed = 10; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
     export let rampLineFollow2SensorMaxSpeed = 50; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
@@ -290,7 +290,6 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            //CHASSIS_MOTORS.steer(U, lineFollow2SensorSpeed); // Команда моторам
             chassis.ControlCommand(U, lineFollowCrossIntersactionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
@@ -377,7 +376,6 @@ namespace motions {
             if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refLeftLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            //CHASSIS_MOTORS.steer(U, lineFollowLeftIntersactionSpeed); // Команда моторам
             chassis.ControlCommand(U, lineFollowLeftIntersactionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
@@ -437,7 +435,6 @@ namespace motions {
             if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refRightLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            //CHASSIS_MOTORS.steer(U, lineFollowRightIntersactionSpeed); // Команда моторам
             chassis.ControlCommand(U, lineFollowRightIntersactionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
@@ -500,7 +497,6 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            //CHASSIS_MOTORS.steer(U, lineFollowDistanceSpeed); // Команда моторам
             chassis.ControlCommand(U, lineFollowDistanceSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
@@ -595,7 +591,6 @@ namespace motions {
             else if (lineLocation == LineLocation.Outside) error = motions.GetLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
             chassis.ControlCommand(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
@@ -661,7 +656,6 @@ namespace motions {
             else if (lineLocation == LineLocation.Outside) error = refRightLS - motions.GetLineFollowSetPoint(); // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            //CHASSIS_MOTORS.steer(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
             chassis.ControlCommand(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
@@ -805,7 +799,6 @@ namespace motions {
             } else {
                 U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             }
-            //CHASSIS_MOTORS.steer(U, lineFollowLeftSensorSpeed); // Команда моторам
             chassis.ChassisControl(U, lineFollow2SensorSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
