@@ -192,8 +192,7 @@ namespace chassis {
         const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         
         advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
-        advmotctrls.accTwoEncConfig(minSpeed, maxSpeedLeft, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
-        // advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorFinishSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.accTwoEncConfig(minSpeed, maxSpeedLeft, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
