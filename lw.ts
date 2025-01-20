@@ -477,7 +477,9 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
-
+        brick.clearScreen(); // Очистка экрана
+        brick.printValue("calcMotRot", calcMotRot, 1);
+        pause(5000);
         pidLineFollow.setGains(lineFollowToDistanceKp, lineFollowToDistanceKi, lineFollowToDistanceKd); // Установка коэффицентов ПИД регулятора
         pidLineFollow.setDerivativeFilter(lineFollowToDistanceN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
