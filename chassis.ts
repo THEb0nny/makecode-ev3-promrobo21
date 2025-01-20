@@ -164,10 +164,10 @@ namespace chassis {
             let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break;
-            let error = advmotctrls.getErrorSyncMotorsInPwr(eml, emr, out.pwrOut, out.pwrOut);
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrOut, out.pwrOut);
             pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, 0);
-            let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
+            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwrOut, out.pwrOut);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
@@ -191,7 +191,7 @@ namespace chassis {
         const mRotDecelCalc = math.CalculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
         const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         
-        advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
+        // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
@@ -206,11 +206,11 @@ namespace chassis {
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             // let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
-            let error2 = advmotctrls.getErrorSyncMotorsInPwr(eml, emr, out.pwrOut, out.pwrOut); //////////////////////////////////////////////////////////////////////////
+            let error2 = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrOut, out.pwrOut); //////////////////////////////////////////////////////////////////////////
             pidChassisSync.setPoint(error2); // Transfer control error to controller
             let U = pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
             // let powers = advmotctrls.getPwrSyncMotors(U);
-            let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
+            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwrOut, out.pwrOut);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             // chassis.ControlCommand(0, 50); // Команда моторам
             control.pauseUntilTime(currTime, 1);
