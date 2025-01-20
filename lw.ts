@@ -29,11 +29,11 @@ namespace motions {
     export let lineFollowRightIntersactionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движении по линии левым датчиком до правого перекрёстка
     export let lineFollowRightIntersactionN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движении по линии левым датчиком до правого перекрёстка
 
-    export let lineFollowDistanceSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками на расстояние
-    export let lineFollowDistanceKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками на расстояние
-    export let lineFollowDistanceKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками на расстояние
-    export let lineFollowDistanceKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками на расстояние
-    export let lineFollowDistanceN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками на расстояние
+    export let lineFollowToDistanceSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками на расстояние
+    export let lineFollowToDistanceKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками на расстояние
+    export let lineFollowToDistanceKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками на расстояние
+    export let lineFollowToDistanceKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками на расстояние
+    export let lineFollowToDistanceN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками на расстояние
 
     export let lineFollowToDistanceWithLeftSensorSpeed = 50; // Переменная для хранения скорости при движения по линии левым датчиком на расстояние
     export let lineFollowToDistanceWithLeftSensorKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии левым датчиком на расстояние
@@ -468,18 +468,18 @@ namespace motions {
     //% group="Движение по линии на расстояние"
     export function LineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowDistanceSpeed = Math.abs(params.speed);
-            if (params.Kp) lineFollowDistanceKp = params.Kp;
-            if (params.Ki) lineFollowDistanceKi = params.Ki;
-            if (params.Kd) lineFollowDistanceKd = params.Kd;
-            if (params.N) lineFollowDistanceN = params.N;
+            if (params.speed) lineFollowToDistanceSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollowToDistanceKp = params.Kp;
+            if (params.Ki) lineFollowToDistanceKi = params.Ki;
+            if (params.Kd) lineFollowToDistanceKd = params.Kd;
+            if (params.N) lineFollowToDistanceN = params.N;
         }
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
 
-        pidLineFollow.setGains(lineFollowDistanceKp, lineFollowDistanceKi, lineFollowDistanceKd); // Установка коэффицентов ПИД регулятора
-        pidLineFollow.setDerivativeFilter(lineFollowDistanceN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setGains(lineFollowToDistanceKp, lineFollowToDistanceKi, lineFollowToDistanceKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowToDistanceN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
@@ -497,7 +497,7 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.ControlCommand(U, lineFollowDistanceSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowToDistanceSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -509,7 +509,7 @@ namespace motions {
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollowDistanceSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowToDistanceSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
 }

@@ -28,7 +28,7 @@ namespace custom {
                         max: 5000
                     },
                     speed: {
-                        val: motions.lineFollowDistanceSpeed,
+                        val: motions.lineFollowToDistanceSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -148,25 +148,25 @@ namespace custom {
                         val: true
                     },
                     speed: {
-                        val: motions.lineFollowDistanceSpeed,
+                        val: motions.lineFollowToDistanceSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
                     },
                     Kp: {
-                        val: motions.lineFollowDistanceKp,
+                        val: motions.lineFollowToDistanceKp,
                         changeStep: 0.05
                     },
                     Ki: {
-                        val: motions.lineFollowDistanceKi,
+                        val: motions.lineFollowToDistanceKi,
                         changeStep: 0.001
                     },
                     Kd: {
-                        val: motions.lineFollowDistanceKd,
+                        val: motions.lineFollowToDistanceKd,
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollowDistanceN,
+                        val: motions.lineFollowToDistanceN,
                         changeStep: 0.1
                     }
                 },
@@ -185,25 +185,25 @@ namespace custom {
                         val: true
                     },
                     speed: {
-                        val: motions.lineFollowDistanceSpeed,
+                        val: motions.lineFollowToDistanceSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
                     },
                     Kp: {
-                        val: motions.lineFollowDistanceKp,
+                        val: motions.lineFollowToDistanceKp,
                         changeStep: 0.05
                     },
                     Ki: {
-                        val: motions.lineFollowDistanceKi,
+                        val: motions.lineFollowToDistanceKi,
                         changeStep: 0.001
                     },
                     Kd: {
-                        val: motions.lineFollowDistanceKd,
+                        val: motions.lineFollowToDistanceKd,
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollowDistanceN,
+                        val: motions.lineFollowToDistanceN,
                         changeStep: 0.1
                     }
                 },
