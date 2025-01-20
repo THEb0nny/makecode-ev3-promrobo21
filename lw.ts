@@ -479,7 +479,12 @@ namespace motions {
         const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
         brick.clearScreen(); // Очистка экрана
         brick.printValue("calcMotRot", calcMotRot, 1);
-        pause(5000);
+        brick.printValue("emlPrev", emlPrev, 2);
+        brick.printValue("emrPrev", emrPrev, 3);
+        let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+        brick.printValue("eml", eml, 5);
+        brick.printValue("emr", emr, 6);
+        pause(7000);
         pidLineFollow.setGains(lineFollowToDistanceKp, lineFollowToDistanceKi, lineFollowToDistanceKd); // Установка коэффицентов ПИД регулятора
         pidLineFollow.setDerivativeFilter(lineFollowToDistanceN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
