@@ -495,9 +495,7 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            // let eml = chassis.leftMotor.angle(), emr = chassis.rightMotor.angle(); // Значения с энкодеров моторов
-            // if (Math.abs(eml - emlPrev) >= Math.abs(calcMotRot) || Math.abs(emr - emrPrev) >= Math.abs(calcMotRot)) break;
-            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            let eml = Math.abs(chassis.leftMotor.angle() - emlPrev), emr = Math.abs(chassis.rightMotor.angle() - emrPrev); // Значения с энкодеров моторов
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emrPrev) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
