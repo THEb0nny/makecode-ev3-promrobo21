@@ -477,14 +477,7 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
-        brick.clearScreen(); // Очистка экрана
-        brick.printValue("calcMotRot", calcMotRot, 1);
-        brick.printValue("emlPrev", emlPrev, 2);
-        brick.printValue("emrPrev", emrPrev, 3);
-        let eml = Math.abs(chassis.leftMotor.angle() - emlPrev), emr = Math.abs(chassis.rightMotor.angle() - emrPrev); // Значения с энкодеров моторов
-        brick.printValue("eml", eml, 5);
-        brick.printValue("emr", emr, 6);
-        pause(7000);
+
         pidLineFollow.setGains(lineFollowToDistanceKp, lineFollowToDistanceKi, lineFollowToDistanceKd); // Установка коэффицентов ПИД регулятора
         pidLineFollow.setDerivativeFilter(lineFollowToDistanceN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
@@ -495,7 +488,7 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let eml = Math.abs(chassis.leftMotor.angle() - emlPrev), emr = Math.abs(chassis.rightMotor.angle() - emrPrev); // Значения с энкодеров моторов
+            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -586,8 +579,6 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            // let eml = chassis.leftMotor.angle(), emr = chassis.rightMotor.angle(); // Значения с энкодеров моторы
-            // if (Math.abs(eml - emlPrev) >= Math.abs(calcMotRot) || Math.abs(emr - emrPrev) >= Math.abs(calcMotRot)) break;
             let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторы
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
@@ -651,8 +642,6 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            // let eml = chassis.leftMotor.angle(), emr = chassis.rightMotor.angle(); // Значения с энкодеров моторы
-            // if (Math.abs(eml - emlPrev) >= Math.abs(calcMotRot) || Math.abs(emr - emrPrev) >= Math.abs(calcMotRot)) break;
             let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторы
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
