@@ -109,7 +109,7 @@ const enum LineSensor {
 }
 
 // Перечисление о перекрёстках
-const enum SideIntersaction {
+const enum SideIntersection {
     //% block="left"
     //% block.loc.ru="слева"
     Left,

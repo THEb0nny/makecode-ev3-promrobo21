@@ -111,25 +111,25 @@ namespace custom {
                         val: true
                     },
                     speed: {
-                        val: motions.lineFollowCrossIntersactionSpeed,
+                        val: motions.lineFollowCrossIntersectionSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
                     },
                     Kp: {
-                        val: motions.lineFollowCrossIntersactionKp,
+                        val: motions.lineFollowCrossIntersectionKp,
                        changeStep: 0.05
                     },
                     Ki: {
-                        val: motions.lineFollowCrossIntersactionKi,
+                        val: motions.lineFollowCrossIntersectionKi,
                         changeStep: 0.001
                     },
                     Kd: {
-                        val: motions.lineFollowCrossIntersactionKd,
+                        val: motions.lineFollowCrossIntersectionKd,
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollowCrossIntersactionN,
+                        val: motions.lineFollowCrossIntersectionN,
                         changeStep: 0.1
                     }
                 },
@@ -176,7 +176,7 @@ namespace custom {
             LW_TO_SIDE_INTERSECTION: {
                 params: {
                     junction: {
-                        val: SideIntersaction.Left
+                        val: SideIntersection.Left
                     },
                     horizLineLoc: {
                         val: LineLocation.Inside

@@ -26,11 +26,11 @@ namespace params {
     //% weight="99"
     //% group="Параметры движения по линии двумя датчиками"
     export function SetLineFollow2SensorParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
-        if (newSpeed) motions.lineFollowCrossIntersactionSpeed = newSpeed;
-        if (newKp) motions.lineFollowCrossIntersactionKp = newKp;
-        if (newKi) motions.lineFollowCrossIntersactionKi = newKi;
-        if (newKd) motions.lineFollowCrossIntersactionKd = newKd;
-        if (newN) motions.lineFollowCrossIntersactionN = newN;
+        if (newSpeed) motions.lineFollowCrossIntersectionSpeed = newSpeed;
+        if (newKp) motions.lineFollowCrossIntersectionKp = newKp;
+        if (newKi) motions.lineFollowCrossIntersectionKi = newKi;
+        if (newKd) motions.lineFollowCrossIntersectionKd = newKd;
+        if (newN) motions.lineFollowCrossIntersectionN = newN;
     }
 
     /**

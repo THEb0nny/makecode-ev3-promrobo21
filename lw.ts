@@ -11,23 +11,23 @@ namespace motions {
 
     export let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
 
-    export let lineFollowCrossIntersactionSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
-    export let lineFollowCrossIntersactionKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
-    export let lineFollowCrossIntersactionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
-    export let lineFollowCrossIntersactionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
-    export let lineFollowCrossIntersactionN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
+    export let lineFollowCrossIntersectionSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
+    export let lineFollowCrossIntersectionKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
+    export let lineFollowCrossIntersectionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
+    export let lineFollowCrossIntersectionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
+    export let lineFollowCrossIntersectionN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
-    export let lineFollowLeftIntersactionSpeed = 50; // Переменная для хранения скорости при движении по линии правым датчиком до левого перекрёстка
-    export let lineFollowLeftIntersactionKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии правым датчиком до левого перекрёстка
-    export let lineFollowLeftIntersactionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движении по линии правым датчиком до левого перекрёстка
-    export let lineFollowLeftIntersactionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движении по линии правым датчиком до левого перекрёстка
-    export let lineFollowLeftIntersactionN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движении по линии правым датчиком до левого перекрёстка
+    export let lineFollowLeftIntersectionSpeed = 50; // Переменная для хранения скорости при движении по линии правым датчиком до левого перекрёстка
+    export let lineFollowLeftIntersectionKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии правым датчиком до левого перекрёстка
+    export let lineFollowLeftIntersectionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движении по линии правым датчиком до левого перекрёстка
+    export let lineFollowLeftIntersectionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движении по линии правым датчиком до левого перекрёстка
+    export let lineFollowLeftIntersectionN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движении по линии правым датчиком до левого перекрёстка
 
-    export let lineFollowRightIntersactionSpeed = 50; // Переменная для хранения скорости при движении по линии левым датчиком до правого перекрёстка
-    export let lineFollowRightIntersactionKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии левым датчиком до правого перекрёстка
-    export let lineFollowRightIntersactionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движении по линии левым датчиком до правого перекрёстка
-    export let lineFollowRightIntersactionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движении по линии левым датчиком до правого перекрёстка
-    export let lineFollowRightIntersactionN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движении по линии левым датчиком до правого перекрёстка
+    export let lineFollowRightIntersectionSpeed = 50; // Переменная для хранения скорости при движении по линии левым датчиком до правого перекрёстка
+    export let lineFollowRightIntersectionKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии левым датчиком до правого перекрёстка
+    export let lineFollowRightIntersectionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движении по линии левым датчиком до правого перекрёстка
+    export let lineFollowRightIntersectionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движении по линии левым датчиком до правого перекрёстка
+    export let lineFollowRightIntersectionN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движении по линии левым датчиком до правого перекрёстка
 
     export let lineFollowToDistanceSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками на расстояние
     export let lineFollowToDistanceKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками на расстояние
@@ -267,15 +267,15 @@ namespace motions {
     //% group="Движение по линии до перекрёстка"
     export function LineFollowToCrossIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowCrossIntersactionSpeed = Math.abs(params.speed);
-            if (params.Kp) lineFollowCrossIntersactionKp = params.Kp;
-            if (params.Ki) lineFollowCrossIntersactionKi = params.Ki;
-            if (params.Kd) lineFollowCrossIntersactionKd = params.Kd;
-            if (params.N) lineFollowCrossIntersactionN = params.N;
+            if (params.speed) lineFollowCrossIntersectionSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollowCrossIntersectionKp = params.Kp;
+            if (params.Ki) lineFollowCrossIntersectionKi = params.Ki;
+            if (params.Kd) lineFollowCrossIntersectionKd = params.Kd;
+            if (params.N) lineFollowCrossIntersectionN = params.N;
         }
 
-        pidLineFollow.setGains(lineFollowCrossIntersactionKp, lineFollowCrossIntersactionKi, lineFollowCrossIntersactionKd); // Установка коэффицентов ПИД регулятора
-        pidLineFollow.setDerivativeFilter(lineFollowCrossIntersactionN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setGains(lineFollowCrossIntersectionKp, lineFollowCrossIntersectionKi, lineFollowCrossIntersectionKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowCrossIntersectionN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
         
@@ -290,7 +290,7 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.ControlCommand(U, lineFollowCrossIntersactionSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowCrossIntersectionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -302,7 +302,7 @@ namespace motions {
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollowCrossIntersactionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -310,24 +310,24 @@ namespace motions {
      * Функция движения по линии до определения перекрёстка слева или справа.
      * Если слева, тогда движение осуществляется правым датчиком и левый отвечает за определение.
      * Если справа, тогда за движение отвечает левый датчик, а правый отвечает за определение перекрёстка.
-     * @param sideIntersaction перекрёсток слева или справа, eg: SideIntersaction.Left
+     * @param sideIntersection перекрёсток слева или справа, eg: SideIntersection.Left
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToSideIntersection"
-    //% block="line follow to intersection $sideIntersaction line $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии до перекрёстка $sideIntersaction линия $lineLocation с действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow to intersection $sideIntersection line $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии до перекрёстка $sideIntersection линия $lineLocation с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="89"
     //% group="Движение по линии до перекрёстка"
-    export function LineFollowToSideIntersection(sideIntersaction: SideIntersaction, lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
-        if (sideIntersaction == SideIntersaction.Left) {
-            LineFollowToLeftIntersaction(lineLocation, actionAfterMotion, params, debug);
-        } else if (sideIntersaction == SideIntersaction.Right) {
+    export function LineFollowToSideIntersection(sideIntersection: SideIntersection, lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+        if (sideIntersection == SideIntersection.Left) {
+            LineFollowToLeftIntersection(lineLocation, actionAfterMotion, params, debug);
+        } else if (sideIntersection == SideIntersection.Right) {
             LineFollowToRightIntersection(lineLocation, actionAfterMotion, params, debug);
         } else return;
     }
@@ -339,7 +339,7 @@ namespace motions {
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
-    //% blockId="LineFollowToLeftIntersaction"
+    //% blockId="LineFollowToLeftIntersection"
     //% block="line follow to left intersection $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии до перекрёстка слева $lineLocation c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -349,17 +349,17 @@ namespace motions {
     //% weight="88" blockGap="8"
     //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
-    export function LineFollowToLeftIntersaction(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function LineFollowToLeftIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowLeftIntersactionSpeed = Math.abs(params.speed);
-            if (params.Kp) lineFollowLeftIntersactionKp = params.Kp;
-            if (params.Ki) lineFollowLeftIntersactionKi = params.Ki;
-            if (params.Kd) lineFollowLeftIntersactionKd = params.Kd;
-            if (params.N) lineFollowLeftIntersactionN = params.N;
+            if (params.speed) lineFollowLeftIntersectionSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollowLeftIntersectionKp = params.Kp;
+            if (params.Ki) lineFollowLeftIntersectionKi = params.Ki;
+            if (params.Kd) lineFollowLeftIntersectionKd = params.Kd;
+            if (params.N) lineFollowLeftIntersectionN = params.N;
         }
 
-        pidLineFollow.setGains(lineFollowLeftIntersactionKp, lineFollowLeftIntersactionKi, lineFollowLeftIntersactionKd); // Установка коэффицентов регулятора
-        pidLineFollow.setDerivativeFilter(lineFollowLeftIntersactionN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setGains(lineFollowLeftIntersectionKp, lineFollowLeftIntersectionKi, lineFollowLeftIntersectionKd); // Установка коэффицентов регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowLeftIntersectionN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         pidLineFollow.reset(); // Сброс регулятора
 
@@ -376,7 +376,7 @@ namespace motions {
             if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refLeftLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.ControlCommand(U, lineFollowLeftIntersactionSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowLeftIntersectionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -388,7 +388,7 @@ namespace motions {
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollowLeftIntersactionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowLeftIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -410,15 +410,15 @@ namespace motions {
     //% blockHidden="true"
     export function LineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowRightIntersactionSpeed = Math.abs(params.speed);
-            if (params.Kp) lineFollowRightIntersactionKp = params.Kp;
-            if (params.Ki) lineFollowRightIntersactionKi = params.Ki;
-            if (params.Kd) lineFollowRightIntersactionKd = params.Kd;
-            if (params.N) lineFollowRightIntersactionN = params.N;
+            if (params.speed) lineFollowRightIntersectionSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollowRightIntersectionKp = params.Kp;
+            if (params.Ki) lineFollowRightIntersectionKi = params.Ki;
+            if (params.Kd) lineFollowRightIntersectionKd = params.Kd;
+            if (params.N) lineFollowRightIntersectionN = params.N;
         }
 
-        pidLineFollow.setGains(lineFollowRightIntersactionKp, lineFollowRightIntersactionKi, lineFollowRightIntersactionKd); // Установка коэффицентов регулятора
-        pidLineFollow.setDerivativeFilter(lineFollowRightIntersactionN); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setGains(lineFollowRightIntersectionKp, lineFollowRightIntersectionKi, lineFollowRightIntersectionKd); // Установка коэффицентов регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowRightIntersectionN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         pidLineFollow.reset(); // Сброс регулятора
 
@@ -435,7 +435,7 @@ namespace motions {
             if (Math.abs(error) <= motions.GetLineFollowConditionMaxErr() && refRightLS < motions.GetLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.ControlCommand(U, lineFollowRightIntersactionSpeed); // Команда моторам
+            chassis.ControlCommand(U, lineFollowRightIntersectionSpeed); // Команда моторам
             if (debug) {
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -447,7 +447,7 @@ namespace motions {
             control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
-        motions.ActionAfterMotion(lineFollowRightIntersactionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.ActionAfterMotion(lineFollowRightIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
