@@ -133,7 +133,6 @@ namespace levelings {
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
-        // chassis.ChassisStop(true);
         chassis.stop(true);
     }
 
@@ -199,7 +198,6 @@ namespace levelings {
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
-        // chassis.ChassisStop(true);
         chassis.stop(true);
     }
 
