@@ -87,16 +87,16 @@ namespace sensors {
      * Новый метод установки датчикам линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorsRawRefValues"
-    //% block="set ref raw values ​​for **left line sensor** black $bRefRawValLeftSensor white $wRefRawValLeftSensor **right line sensor** black $bRefRawValRightSensor white $wRefRawValRightSensor"
-    //% block.loc.ru="установить сырые значения отражения **левому датчику линии** чёрный $bRefRawValLeftSensor белый $wRefRawValLeftSensor **правому датчику линии** чёрный $bRefRawValRightSensor белый $wRefRawValRightSensor"
+    //% block="set ref raw values ​​for **left line sensor** black $blackRefRawValLeftSensor white $whiteRefRawValLeftSensor **right line sensor** black $blackRefRawValRightSensor white $whiteRefRawValRightSensor"
+    //% block.loc.ru="установить сырые значения отражения **левому датчику линии** чёрный $bRefRawValLeftSensor белый $wRefRawValLeftSensor **правому датчику линии** чёрный $blackRefRawValRightSensor белый $whiteRefRawValRightSensor"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Line Sensor"
-    export function SetLineSensorsRawRefValues(bRefRawValLeftSensor: number, wRefRawValLeftSensor: number, bRefRawValRightSensor: number, wRefRawValRightSensor: number) {
-        bRefRawLeftLineSensor = bRefRawValLeftSensor;
-        wRefRawLeftLineSensor = wRefRawValLeftSensor;
-        bRefRawRightLineSensor = bRefRawValRightSensor;
-        wRefRawRightLineSensor = wRefRawValRightSensor;
+    export function SetLineSensorsRawRefValues(blackRefRawValLeftSensor: number, whiteRefRawValLeftSensor: number, blackRefRawValRightSensor: number, whiteRefRawValRightSensor: number) {
+        bRefRawLeftLineSensor = blackRefRawValLeftSensor;
+        wRefRawLeftLineSensor = whiteRefRawValLeftSensor;
+        bRefRawRightLineSensor = blackRefRawValRightSensor;
+        wRefRawRightLineSensor = whiteRefRawValRightSensor;
     }
 
     /**
