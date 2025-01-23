@@ -689,7 +689,7 @@ namespace motions {
     //% params.shadow="RampLineFollowEmptyParams"
     //% weight="78"
     //% group="Движение по линии с ускорениями"
-    export function RampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking = Braking.Hold, params?: params.RampLineFollowInterface, debug: boolean = false) {
+    export function RampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking, params?: params.RampLineFollowInterface, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             music.playSoundEffect(sounds.systemGeneralAlert);
             control.panic(40);
