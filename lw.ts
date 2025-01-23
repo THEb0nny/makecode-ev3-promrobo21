@@ -453,7 +453,7 @@ namespace motions {
     /**
      * Movement along the line for a distance. A very crude method.
      * Движение по линии на расстояние. Очень грубый метод.
-     * @param dist скорость движения, eg: 250
+     * @param dist дистанция движения в мм, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
@@ -518,7 +518,7 @@ namespace motions {
      * Движение по линии на расстояние одним из датчиков.
      * @param lineSensor позиция линии для движения, eg: LineSensor.Left
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
-     * @param dist скорость движения, eg: 250
+     * @param dist дистанция движения в мм eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
@@ -542,7 +542,7 @@ namespace motions {
     /**
      * Движение по линии на расстояние левым датчиком. Очень грубый метод.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
-     * @param dist скорость движения, eg: 250
+     * @param dist дистанция движения в мм, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
@@ -605,7 +605,7 @@ namespace motions {
     /**
      * Движение по линии на расстояние правым датчиком. Очень грубый метод.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
-     * @param dist скорость движения, eg: 250
+     * @param dist дистанция движения в мм, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
