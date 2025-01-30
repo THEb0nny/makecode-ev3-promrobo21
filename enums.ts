@@ -110,12 +110,18 @@ const enum LineSensor {
 
 // Перечисление о перекрёстках
 const enum SideIntersection {
+    //% block="left inside"
+    //% block.loc.ru="слева изнутри"
+    LeftInside,
+    //% block="right inside"
+    //% block.loc.ru="справа изнутри"
+    RightInside,
     //% block="left"
-    //% block.loc.ru="слева"
-    Left,
-    //% block="right"
-    //% block.loc.ru="справа"
-    Right
+    //% block.loc.ru="слева снаружи"
+    LeftOutside,
+    //% block="right outside"
+    //% block.loc.ru="справа снаружи"
+    RightOutside,
 }
 
 // Перечисление о поворотах в сторону

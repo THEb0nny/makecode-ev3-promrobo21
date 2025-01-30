@@ -176,7 +176,7 @@ namespace custom {
             LW_TO_SIDE_INTERSECTION: {
                 params: {
                     junction: {
-                        val: SideIntersection.Left
+                        val: SideIntersection.LeftInside
                     },
                     horizLineLoc: {
                         val: LineLocation.Inside
@@ -670,7 +670,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.LineFollowToSideIntersection(junction, lineLocation, AfterMotion.BreakStop, params, debug);
+                        motions.LineFollowToSideIntersection(junction, AfterMotion.BreakStop, params, debug);
                     } else if (screenName == "CHASSIS_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const speed = methodScreens[screenName].params.speed.val;

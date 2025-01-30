@@ -311,24 +311,27 @@ namespace motions {
      * Если слева, тогда движение осуществляется правым датчиком и левый отвечает за определение.
      * Если справа, тогда за движение отвечает левый датчик, а правый отвечает за определение перекрёстка.
      * @param sideIntersection перекрёсток слева или справа, eg: SideIntersection.Left
-     * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToSideIntersection"
-    //% block="line follow to intersection $sideIntersection line $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии до перекрёстка $sideIntersection линия $lineLocation с действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow to intersection $sideIntersection after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии до перекрёстка $sideIntersection с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="89"
     //% group="Движение по линии до перекрёстка"
-    export function LineFollowToSideIntersection(sideIntersection: SideIntersection, lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
-        if (sideIntersection == SideIntersection.Left) {
-            LineFollowToLeftIntersection(lineLocation, actionAfterMotion, params, debug);
-        } else if (sideIntersection == SideIntersection.Right) {
-            LineFollowToRightIntersection(lineLocation, actionAfterMotion, params, debug);
+    export function LineFollowToSideIntersection(sideIntersection: SideIntersection, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+        if (sideIntersection == SideIntersection.LeftInside) {
+            LineFollowToLeftIntersection(LineLocation.Inside, actionAfterMotion, params, debug);
+        } else if (sideIntersection == SideIntersection.LeftOutside) {
+            LineFollowToLeftIntersection(LineLocation.Outside, actionAfterMotion, params, debug);
+        } else if (sideIntersection == SideIntersection.RightInside) {
+            LineFollowToRightIntersection(LineLocation.Inside, actionAfterMotion, params, debug);
+        } else if (sideIntersection == SideIntersection.RightOutside) {
+            LineFollowToRightIntersection(LineLocation.Outside, actionAfterMotion, params, debug);
         } else return;
     }
 
