@@ -45,3 +45,6 @@
 
 // Установка сокращённых параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
 // params.SetLineAlignmentShortParams(40, 0.3, 0.3, 0.5, 0.5)
+
+// brick.buttonEnter.pauseUntil(ButtonEvent.Bumped);
+// sensors.SearchRgbMinMaxColorSensors(sensors.color4);
