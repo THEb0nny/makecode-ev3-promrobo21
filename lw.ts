@@ -453,6 +453,10 @@ namespace motions {
         motions.ActionAfterMotion(lineFollowRightIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
+}
+
+namespace motions {
+
     /**
      * Movement along the line for a distance. A very crude method.
      * Движение по линии на расстояние. Очень грубый метод.
@@ -512,10 +516,6 @@ namespace motions {
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowToDistanceSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
-
-}
-
-namespace motions {
 
     /**
      * Движение по линии на расстояние одним из датчиков.
