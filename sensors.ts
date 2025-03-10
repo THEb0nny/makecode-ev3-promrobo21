@@ -390,7 +390,7 @@ namespace sensors {
         let r = rgbArr[0], g = rgbArr[1], b = rgbArr[2];
 
         // https://clev3r.ru/codesamples/
-        // Color sensor V2 RGB Maxmium is 255
+        // HT Color sensor V2 RGB Maxmium is 255
         // r = Math.constrain(r, 0, 255);
         // g = Math.constrain(g, 0, 255);
         // b = Math.constrain(b, 0, 255);
