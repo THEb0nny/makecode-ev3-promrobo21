@@ -52,8 +52,8 @@ namespace custom {
      * @param arr массив с элементами
      */
     //% blockId="MostFrequentNumber"
-    //% block="get the most common number from $arr array"
-    //% block.loc.ru="получить макс часто встречающийся элемент из массива $arr"
+    //% block="get most common number from $arr array"
+    //% block.loc.ru="получить часто встречающийся элемент из массива $arr"
     //% weight="89"
     export function MostFrequentNumber(arr: number[]): number {
         // Сортируем массив для более эффективного подсчета частоты

@@ -87,8 +87,8 @@ namespace sensors {
      * Новый метод установки датчикам линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorsRawRefValues"
-    //% block="set ref raw values ​​for **left line sensor** black $blackRefRawValLeftSensor white $whiteRefRawValLeftSensor **right line sensor** black $blackRefRawValRightSensor white $whiteRefRawValRightSensor"
-    //% block.loc.ru="установить сырые значения отражения **левому датчику линии** чёрный $bRefRawValLeftSensor белый $wRefRawValLeftSensor **правому датчику линии** чёрный $blackRefRawValRightSensor белый $whiteRefRawValRightSensor"
+    //% block="set ref raw values ​​for **left line sensor** black $blackRefRawValLeftSensor white $whiteRefRawValLeftSensor **right** black $blackRefRawValRightSensor white $whiteRefRawValRightSensor"
+    //% block.loc.ru="установить сырые значения отражения **левому датчику линии** чёрный $blackRefRawValLeftSensor белый $whiteRefRawValLeftSensor **правому** чёрный $blackRefRawValRightSensor белый $whiteRefRawValRightSensor"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Line Sensor"
