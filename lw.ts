@@ -10,7 +10,6 @@ namespace motions {
     let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
     export let steeringAtSearchLine = 15; // Подруливание при поиске линии для последущего движени одним датчиком
-    export let speedAtSearchLine = 30; // Скорость при поиске линии для последующего движения один датчиком
     
     let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
 
@@ -312,6 +311,19 @@ namespace motions {
         motions.ActionAfterMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
+    // Вспомогательная линия, чтобы подрулить и ждать нахождения линии
+    function SteeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
+        // Подруливаем плавно к линии
+        chassis.steeringCommand(steering, Math.abs(speed));
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) { // Цикл регулирования движения по линии
+            let currTime = control.millis(); // Текущее время
+            let refLS = sensors.GetNormalizedReflectionValue(lineSensor); // Нормализованное значение с датчика линии
+            if (refLS < motions.GetLineFollowSetPoint()) break;
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
+        }
+    }
+
     /**
      * The function of moving along the line to determine the intersection on the left with the right sensor.
      * Функция движения по линии до определения перекрёстка слева или справа.
@@ -340,24 +352,6 @@ namespace motions {
         } else if (sideIntersection == SideIntersection.RightOutside) {
             LineFollowToRightIntersection(LineLocation.Outside, actionAfterMotion, params, debug);
         } else return;
-    }
-
-    // Вспомогательная линия, чтобы подрулить и ждать нахождения линии
-    function SteeringUntilFindLine(sideIntersection: SideIntersection, steering: number, speed: number) {
-        let lineSensor: LineSensor;
-        if (sideIntersection == SideIntersection.LeftInside || sideIntersection == SideIntersection.LeftOutside) lineSensor = LineSensor.Right;
-        else if (sideIntersection == SideIntersection.RightInside || sideIntersection == SideIntersection.RightOutside) lineSensor = LineSensor.Left;
-        // Подруливаем плавно к линии
-        if (sideIntersection == SideIntersection.LeftInside || sideIntersection == SideIntersection.RightOutside) chassis.steeringCommand(steering, speed);
-        else if (sideIntersection == SideIntersection.LeftOutside || sideIntersection == SideIntersection.RightInside) chassis.steeringCommand(-steering, speed);
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (true) { // Цикл регулирования движения по линии
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
-            let refLS = sensors.GetNormalizedReflectionValue(lineSensor); // Нормализованное значение с правого датчика линии
-            if (refLS < motions.GetLineFollowSetPoint()) break;
-            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
-        }
     }
 
     /**
@@ -392,7 +386,8 @@ namespace motions {
         pidLineFollow.reset(); // Сброс регулятора
 
         // Подруливаем плавно к линии
-        SteeringUntilFindLine(lineLocation == LineLocation.Inside ? SideIntersection.LeftInside : SideIntersection.LeftOutside, steeringAtSearchLine, speedAtSearchLine);
+        SteeringUntilFindLine(LineSensor.Right, steeringAtSearchLine * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
+        music.playToneInBackground(587, 100); // Издаём сигнал завершения
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -454,7 +449,8 @@ namespace motions {
         pidLineFollow.reset(); // Сброс регулятора
 
         // Подруливаем плавно к линии
-        SteeringUntilFindLine(lineLocation == LineLocation.Inside ? SideIntersection.LeftInside : SideIntersection.LeftOutside, steeringAtSearchLine, speedAtSearchLine);
+        SteeringUntilFindLine(LineSensor.Left, steeringAtSearchLine * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowRightIntersectionSpeed);
+        music.playToneInBackground(587, 100); // Издаём сигнал завершения
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
