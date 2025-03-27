@@ -9,7 +9,10 @@ namespace motions {
 
     let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
-    export let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
+    export let steeringAtSearchLine = 15; // Подруливание при поиске линии для последущего движени одним датчиком
+    export let speedAtSearchLine = 30; // Скорость при поиске линии для последующего движения один датчиком
+    
+    let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
 
     export let lineFollowCrossIntersectionSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
     export let lineFollowCrossIntersectionKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
@@ -246,6 +249,10 @@ namespace motions {
         lineFollowLoopDt = dt;
     }
 
+    export function GetLineFollowLoopDt() {
+        return lineFollowLoopDt;
+    }
+
 }
 
 namespace motions {
@@ -299,7 +306,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -335,7 +342,7 @@ namespace motions {
         } else return;
     }
 
-    // Вспомогательная линия, чтобы подрулить 
+    // Вспомогательная линия, чтобы подрулить и ждать нахождения линии
     function SteeringUntilFindLine(sideIntersection: SideIntersection, steering: number, speed: number) {
         let lineSensor: LineSensor;
         if (sideIntersection == SideIntersection.LeftInside || sideIntersection == SideIntersection.LeftOutside) lineSensor = LineSensor.Right;
@@ -349,7 +356,7 @@ namespace motions {
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             let refLS = sensors.GetNormalizedReflectionValue(lineSensor); // Нормализованное значение с правого датчика линии
             if (refLS < motions.GetLineFollowSetPoint()) break;
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
     }
 
@@ -385,7 +392,7 @@ namespace motions {
         pidLineFollow.reset(); // Сброс регулятора
 
         // Подруливаем плавно к линии
-        SteeringUntilFindLine(lineLocation == LineLocation.Inside ? SideIntersection.LeftInside : SideIntersection.LeftOutside, 15, 50);
+        SteeringUntilFindLine(lineLocation == LineLocation.Inside ? SideIntersection.LeftInside : SideIntersection.LeftOutside, steeringAtSearchLine, speedAtSearchLine);
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -409,7 +416,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowLeftIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -447,7 +454,7 @@ namespace motions {
         pidLineFollow.reset(); // Сброс регулятора
 
         // Подруливаем плавно к линии
-        SteeringUntilFindLine(lineLocation == LineLocation.Inside ? SideIntersection.LeftInside : SideIntersection.LeftOutside, 15, 50);
+        SteeringUntilFindLine(lineLocation == LineLocation.Inside ? SideIntersection.LeftInside : SideIntersection.LeftOutside, steeringAtSearchLine, speedAtSearchLine);
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -471,7 +478,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowRightIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -535,7 +542,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowToDistanceSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -623,7 +630,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowToDistanceWithLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -686,7 +693,7 @@ namespace motions {
                 brick.printValue("U", U, 4);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         motions.ActionAfterMotion(lineFollowToDistanceWithRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
@@ -760,7 +767,7 @@ namespace motions {
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             chassis.ControlCommand(U, out.pwrOut); // Команда моторам
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 300); // Издаём сигнал завершения
         if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
@@ -830,7 +837,7 @@ namespace motions {
                 brick.printValue("U", U, 5);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
         }
     }
 
