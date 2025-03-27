@@ -546,28 +546,28 @@ namespace motions {
 
     /**
      * Движение по линии на расстояние одним из датчиков.
-     * @param lineMoveSensor левым датчиком при позиции изнутри, eg: LineMoveSensor.LeftInside
+     * @param followLineSensor выбранным сенсором и позицией, eg: FollowLineSensor.LeftInside
      * @param dist дистанция движения в мм eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithOneSensor"
-    //% block="line follow $lineMoveSensor sensor to distance $dist mm|after motion $actionAfterMotion||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии $lineMoveSensor датчиком на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block="line follow $followLineSensor sensor to distance $dist mm|after motion $actionAfterMotion||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии $followLineSensor датчиком на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="76"
     //% group="Движение по линии на расстояние"
-    export function LineFollowToDistanceWithOneSensor(lineMoveSensor: LineMoveSensor, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
-        if (lineMoveSensor == LineMoveSensor.LeftInside) {
+    export function LineFollowToDistanceWithOneSensor(followLineSensor: FollowLineSensor, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+        if (followLineSensor == FollowLineSensor.LeftInside) {
             LineFollowToDistanceWithLeftSensor(LineLocation.Inside, dist, actionAfterMotion, params, debug);
-        } else if (lineMoveSensor == LineMoveSensor.LeftOutside) {
+        } else if (followLineSensor == FollowLineSensor.LeftOutside) {
             LineFollowToDistanceWithLeftSensor(LineLocation.Outside, dist, actionAfterMotion, params, debug);
-        } else if (lineMoveSensor == LineMoveSensor.RightInside) {
+        } else if (followLineSensor == FollowLineSensor.RightInside) {
             LineFollowToDistanceWithRightSensor(LineLocation.Inside, dist, actionAfterMotion, params, debug);
-        } else if (lineMoveSensor == LineMoveSensor.RightOutside) {
+        } else if (followLineSensor == FollowLineSensor.RightOutside) {
             LineFollowToDistanceWithRightSensor(LineLocation.Outside, dist, actionAfterMotion, params, debug);
         }
     }

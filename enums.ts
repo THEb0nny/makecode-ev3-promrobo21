@@ -116,7 +116,7 @@ const enum SideIntersection {
     //% block="right inside"
     //% block.loc.ru="справа изнутри"
     RightInside,
-    //% block="left"
+    //% block="left inside"
     //% block.loc.ru="слева снаружи"
     LeftOutside,
     //% block="right outside"
@@ -125,7 +125,7 @@ const enum SideIntersection {
 }
 
 // Перечисление о движении по линии датчиком
-const enum LineMoveSensor {
+const enum FollowLineSensor {
     //% block="left inside"
     //% block.loc.ru="левым изнутри"
     LeftInside,
