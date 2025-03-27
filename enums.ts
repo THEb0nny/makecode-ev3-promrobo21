@@ -124,6 +124,22 @@ const enum SideIntersection {
     RightOutside,
 }
 
+// Перечисление о движении по линии датчиком
+const enum LineMoveSensor {
+    //% block="left inside"
+    //% block.loc.ru="левым изнутри"
+    LeftInside,
+    //% block="right inside"
+    //% block.loc.ru="правым изнутри"
+    RightInside,
+    //% block="left"
+    //% block.loc.ru="левым снаружи"
+    LeftOutside,
+    //% block="right outside"
+    //% block.loc.ru="правым снаружи"
+    RightOutside,
+}
+
 // Перечисление о поворотах в сторону
 enum TurnRotateSide {
     //% block="влево"
