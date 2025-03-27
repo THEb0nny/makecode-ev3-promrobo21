@@ -335,6 +335,24 @@ namespace motions {
         } else return;
     }
 
+    // Вспомогательная линия, чтобы подрулить 
+    function SteeringUntilFindLine(sideIntersection: SideIntersection, steering: number, speed: number) {
+        let lineSensor: LineSensor;
+        if (sideIntersection == SideIntersection.LeftInside || sideIntersection == SideIntersection.LeftOutside) lineSensor = LineSensor.Right;
+        else if (sideIntersection == SideIntersection.RightInside || sideIntersection == SideIntersection.RightOutside) lineSensor = LineSensor.Left;
+        // Подруливаем плавно к линии
+        if (sideIntersection == SideIntersection.LeftInside || sideIntersection == SideIntersection.RightOutside) chassis.steeringCommand(steering, speed);
+        else if (sideIntersection == SideIntersection.LeftOutside || sideIntersection == SideIntersection.RightInside) chassis.steeringCommand(-steering, speed);
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) { // Цикл регулирования движения по линии
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            let refLS = sensors.GetNormalizedReflectionValue(lineSensor); // Нормализованное значение с правого датчика линии
+            if (refLS < motions.GetLineFollowSetPoint()) break;
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+        }
+    }
+
     /**
      * The function of moving along the line to determine the intersection on the left with the right sensor.
      * Функция движения по линии до определения перекрёстка слева правым датчиком.
@@ -365,6 +383,9 @@ namespace motions {
         pidLineFollow.setDerivativeFilter(lineFollowLeftIntersectionN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         pidLineFollow.reset(); // Сброс регулятора
+
+        // Подруливаем плавно к линии
+        SteeringUntilFindLine(lineLocation == LineLocation.Inside ? SideIntersection.LeftInside : SideIntersection.LeftOutside, 15, 50);
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -420,24 +441,16 @@ namespace motions {
             if (params.N) lineFollowRightIntersectionN = params.N;
         }
 
-        if (lineLocation == LineLocation.Inside) chassis.steeringCommand(15, 30);
-        else if (lineLocation == LineLocation.Outside) chassis.steeringCommand(-15, 30);
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (true) { // Цикл регулирования движения по линии
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
-            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (refRightLS < motions.GetLineFollowRefTreshold()) break;
-            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
-        }
-
         pidLineFollow.setGains(lineFollowRightIntersectionKp, lineFollowRightIntersectionKi, lineFollowRightIntersectionKd); // Установка коэффицентов регулятора
         pidLineFollow.setDerivativeFilter(lineFollowRightIntersectionN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         pidLineFollow.reset(); // Сброс регулятора
 
+        // Подруливаем плавно к линии
+        SteeringUntilFindLine(lineLocation == LineLocation.Inside ? SideIntersection.LeftInside : SideIntersection.LeftOutside, 15, 50);
+
         let error = 0; // Переменная для хранения ошибки регулирования
-        prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
