@@ -420,13 +420,24 @@ namespace motions {
             if (params.N) lineFollowRightIntersectionN = params.N;
         }
 
+        if (lineLocation == LineLocation.Inside) chassis.steeringCommand(15, 30);
+        else if (lineLocation == LineLocation.Outside) chassis.steeringCommand(-15, 30);
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) { // Цикл регулирования движения по линии
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            if (refRightLS < motions.GetLineFollowRefTreshold()) break;
+            control.pauseUntilTime(currTime, motions.lineFollowLoopDt); // Ожидание выполнения цикла
+        }
+
         pidLineFollow.setGains(lineFollowRightIntersectionKp, lineFollowRightIntersectionKi, lineFollowRightIntersectionKd); // Установка коэффицентов регулятора
         pidLineFollow.setDerivativeFilter(lineFollowRightIntersectionN); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         pidLineFollow.reset(); // Сброс регулятора
 
         let error = 0; // Переменная для хранения ошибки регулирования
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
