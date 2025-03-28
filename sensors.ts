@@ -185,6 +185,34 @@ namespace sensors {
 
 namespace sensors {
 
+    /**
+     * Get normalized RGB values ​​from a color sensor.
+     * Получить нормализованные значения RGB с датчика цвета.
+     */
+    //% blockId="GetNormalizeRgb"
+    //% block="**color sensor** $sensor normalize RGB"
+    //% block.loc.ru="**датчика цвета** $sensor нормализованные RGB"
+    //% inlineInputMode="inline"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
+    //% weight="88" blockGap="8"
+    //% group="Color Sensor"
+    export function GetNormalizeRgb(sensor: sensors.ColorSensor): number[] {
+        const rgbRaw = sensor.rgbRaw(); // Получить сырые значения датчика цвета
+        let normRgb: number[] = [0, 0, 0];
+        for(let i = 0; i < 3; i++) {
+            const toHighMap = sensors.GetMaxRgbColorSensor(sensor)[i] < 255 ? sensors.GetMaxRgbColorSensor(sensor)[i] : 255;
+            normRgb[i] = Math.map(rgbRaw[i], sensors.GetMinRgbColorSensor(sensor)[i], sensors.GetMaxRgbColorSensor(sensor)[i], 0, toHighMap);
+            normRgb[i] = Math.round(Math.constrain(normRgb[i], 0, 255));
+        }
+        return normRgb;
+    }
+
+}
+
+namespace sensors {
+
     let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
     let maxRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Максимальные значения RGB для датчиков цвета
 
