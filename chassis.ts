@@ -206,8 +206,8 @@ namespace chassis {
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             // let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
-            let error2 = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrOut, out.pwrOut); //////////////////////////////////////////////////////////////////////////
-            pidChassisSync.setPoint(error2); // Transfer control error to controller
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrOut, out.pwrOut); //////////////////////////////////////////////////////////////////////////
+            pidChassisSync.setPoint(error); // Transfer control error to controller
             let U = pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
             // let powers = advmotctrls.getPwrSyncMotors(U);
             let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwrOut, out.pwrOut);

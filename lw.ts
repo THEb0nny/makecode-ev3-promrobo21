@@ -313,14 +313,28 @@ namespace motions {
 
     // Вспомогательная линия, чтобы подрулить и ждать нахождения линии
     function SteeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
-        // Подруливаем плавно к линии
-        chassis.steeringCommand(steering, Math.abs(speed));
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (true) { // Цикл регулирования движения по линии
-            let currTime = control.millis(); // Текущее время
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // We read the value from the encoder from the left and right motor before starting
+        const { speedLeft, speedRight } = chassis.getMotorsSpeedsAtSteering(steering, speed);
+
+        advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
+        chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
+        chassis.pidChassisSync.setControlSaturation(-100, 100); // Regulator limitation
+        chassis.pidChassisSync.reset(); // Reset pid controller
+
+        let prevTime = 0; // Last time time variable for loop
+        while (true) { // Synchronized motion control cycle
+            let currTime = control.millis();
+            let dt = currTime - prevTime;
+            prevTime = currTime;
             let refLS = sensors.GetNormalizedReflectionValue(lineSensor); // Нормализованное значение с датчика линии
             if (refLS < motions.GetLineFollowSetPoint()) break;
-            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
+            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
+            let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
+            chassis.pidChassisSync.setPoint(error); // Transfer control error to controller
+            let U = chassis.pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
+            let powers = advmotctrls.getPwrSyncMotors(U); // Find out the power of motors for regulation
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
+            control.pauseUntilTime(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
         }
     }
 
@@ -775,70 +789,3 @@ namespace motions {
     }
 
 }
-
-/*
-namespace motions {
-
-    export function LineFollow3Sensor(params?: automation.LineFollowInterface, debug: boolean = false) {
-        // Движение по линии с волновым регулятором (PID + защита от слёта с линии)
-        if (M_COLOR_SEN == undefined) return; // Если центрального сенсора нет
-        
-        if (params) { // Если были переданы параметры
-            if (params.speed) lineFollow2SensorSpeed = Math.abs(params.speed);
-            if (params.Kp) lineFollow2SensorKp = params.Kp;
-            if (params.Ki) lineFollow2SensorKi = params.Ki;
-            if (params.Kd) lineFollow2SensorKd = params.Kd;
-            if (params.N) lineFollow2SensorN = params.N;
-        }
-
-        pidLineFollow.setGains(lineFollow2SensorKp, lineFollow2SensorKi, lineFollow2SensorKd); // Установка коэффицентов регулятора
-        pidLineFollow.setDerivativeFilter(lineFollow2SensorN); // Установить фильтр дифференциального регулятора
-        pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
-        pidLineFollow.reset(); // Сброс регулятора
-
-        control.timer1.reset();
-        let lastSensor = 2; // Переменная для хранения последнего сенсора, который видел линию, изначально центральный
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (brick.buttonEnter.wasPressed()) {
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
-            prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refRawLCS = sensors.leftLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawMCS = M_COLOR_SEN.light(LightIntensityMode.ReflectedRaw); // Сырое значение с левого датчика цвета
-            let refRawRCS = sensors.rightLineSensor.light(LightIntensityMode.ReflectedRaw); // Сырое значение с правого датчика цвета
-            let refLCS = sensors.GetNormRef(refRawLCS, B_REF_RAW_LCS, W_REF_RAW_LCS); // Нормализованное значение с левого датчика цвета
-            let refMCS = sensors.GetNormRef(refRawMCS, B_REF_RAW_MCS, W_REF_RAW_MCS); // Нормализованное значение с левого датчика цвета
-            let refRCS = sensors.GetNormRef(refRawRCS, B_REF_RAW_RCS, W_REF_RAW_RCS); // Нормализованное значение с правого датчика цвета
-            let error = refLCS - refRCS; // Ошибка регулирования
-            pidLineFollow.setPoint(error); // Передать ошибку регулятору
-            let U = 0;
-            if (refLCS > LINE_REF_TRESHOLD) {
-                control.timer1.reset();
-                lastSensor = 1;
-            } else if (refMCS > LINE_REF_TRESHOLD) {
-                control.timer1.reset();
-                lastSensor = 2;
-            } else if (refRCS > LINE_REF_TRESHOLD) {
-                control.timer1.reset();
-                lastSensor = 3;
-            } else if (control.timer1.millis() > 100) {
-                U = (2 - lastSensor) * lineFollow2SensorSpeed;
-            } else {
-                U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            }
-            chassis.ChassisControl(U, lineFollow2SensorSpeed); // Команда моторам
-            if (debug) {
-                brick.clearScreen(); // Очистка экрана
-                brick.printValue("refLCS", refLCS, 1);
-                brick.printValue("refMCS", refMCS, 2);
-                brick.printValue("refRCS", refRCS, 3);
-                brick.printValue("error", error, 4);
-                brick.printValue("U", U, 5);
-                brick.printValue("dt", dt, 12);
-            }
-            control.pauseUntilTime(currTime, GetLineFollowLoopDt()); // Ожидание выполнения цикла
-        }
-    }
-
-}
-*/
