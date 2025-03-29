@@ -25,7 +25,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Параметры движения по линии двумя датчиками"
-    export function SetLineFollow2SensorParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
+    export function setLineFollow2SensorParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newSpeed) motions.lineFollowCrossIntersectionSpeed = newSpeed;
         if (newKp) motions.lineFollowCrossIntersectionKp = newKp;
         if (newKi) motions.lineFollowCrossIntersectionKi = newKi;
@@ -43,7 +43,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры движения по линии"
-    export function LineFollowEmptyParams(): LineFollowInterface {
+    export function lineFollowEmptyParams(): LineFollowInterface {
         return null;
     }
 
@@ -58,7 +58,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры движения по линии"
-    export function LineFollowOneParams(newSpeed?: number): LineFollowInterface {
+    export function lineFollowOneParams(newSpeed?: number): LineFollowInterface {
         return {
             speed: newSpeed
         };
@@ -76,7 +76,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры движения по линии"
-    export function LineFollowTwoParams(newSpeed?: number, newKp?: number): LineFollowInterface {
+    export function lineFollowTwoParams(newSpeed?: number, newKp?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp
@@ -98,7 +98,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Параметры движения по линии"
-    export function LineFollowFourParams(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInterface {
+    export function lineFollowFourParams(newSpeed?: number, newKp?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp,
@@ -123,7 +123,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Параметры движения по линии"
-    export function LineFollowAllParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInterface {
+    export function lineFollowAllParams(newSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LineFollowInterface {
         return {
             speed: newSpeed,
             Kp: newKp,
@@ -166,7 +166,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function SetRampLineFollow2SensorParams(newMinStartSpeed: number, newMaxSpeed: number, newMinFihishSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
+    export function setRampLineFollow2SensorParams(newMinStartSpeed: number, newMaxSpeed: number, newMinFihishSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newMinStartSpeed) motions.rampLineFollow2SensorStartSpeed = newMinStartSpeed;
         if (newMaxSpeed) motions.rampLineFollow2SensorMaxSpeed = newMaxSpeed;
         if (newMinFihishSpeed) motions.rampLineFollow2SensorFinishSpeed = newMinFihishSpeed;
@@ -186,7 +186,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowEmptyParams(): RampLineFollowInterface {
+    export function rampLineFollowEmptyParams(): RampLineFollowInterface {
         return null;
     }
 
@@ -203,7 +203,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowThreeParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number): RampLineFollowInterface {
+    export function rampLineFollowThreeParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number): RampLineFollowInterface {
         return {
             startSpeed: newStartSpeed,
             maxSpeed: newMaxSpeed,
@@ -225,7 +225,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowFourParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number): RampLineFollowInterface {
+    export function rampLineFollowFourParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number): RampLineFollowInterface {
         return {
             startSpeed: newStartSpeed,
             maxSpeed: newMaxSpeed,
@@ -251,7 +251,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowSixParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number, newKd?: number, newN?: number): RampLineFollowInterface {
+    export function rampLineFollowSixParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number, newKd?: number, newN?: number): RampLineFollowInterface {
         return {
             startSpeed: newStartSpeed,
             maxSpeed: newMaxSpeed,
@@ -280,7 +280,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function RampLineFollowAllParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): RampLineFollowInterface {
+    export function rampLineFollowAllParams(newStartSpeed: number, newMaxSpeed: number, newFinishSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): RampLineFollowInterface {
         return {
             startSpeed: newStartSpeed,
             maxSpeed: newMaxSpeed,
@@ -330,7 +330,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function SetLineAlignmentParams(newSpeed: number, newLeftKp: number, newRightKp: number, newLeftKi: number, newRightKi: number, newLeftKd: number, newRightKd: number, newLeftN?: number, newRightN?: number) {
+    export function setLineAlignmentParams(newSpeed: number, newLeftKp: number, newRightKp: number, newLeftKi: number, newRightKi: number, newLeftKd: number, newRightKd: number, newLeftN?: number, newRightN?: number) {
         if (newSpeed) levelings.lineAlignmentMaxSpeed = newSpeed;
         if (newLeftKp) levelings.lineAlignmentLeftSideKp = newLeftKp;
         if (newRightKp) levelings.lineAlignmentRightSideKp = newRightKp;
@@ -360,7 +360,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="98"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function SetLineAlignmentShortParams(newSpeed: number, newLeftKp?: number, newRightKp?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number) {
+    export function setLineAlignmentShortParams(newSpeed: number, newLeftKp?: number, newRightKp?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number) {
         if (newSpeed) levelings.lineAlignmentMaxSpeed = newSpeed;
         if (newLeftKp) levelings.lineAlignmentLeftSideKp = newLeftKp;
         if (newRightKp) levelings.lineAlignmentRightSideKp = newRightKp;
@@ -380,7 +380,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function LineAlignmentEmptyParams(): LineAlignmentInterface {
+    export function lineAlignmentEmptyParams(): LineAlignmentInterface {
         return null;
     }
 
@@ -395,7 +395,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function LineAlignmentOneParams(newSpeed?: number): LineAlignmentInterface {
+    export function lineAlignmentOneParams(newSpeed?: number): LineAlignmentInterface {
         return {
             maxSpeed: newSpeed
         };
@@ -414,7 +414,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function LineAlignmentThreeParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number): LineAlignmentInterface {
+    export function lineAlignmentThreeParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number): LineAlignmentInterface {
         return {
             maxSpeed: newSpeed,
             leftKp: newLeftKp,
@@ -440,7 +440,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function LineAlignmentSevenParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
+    export function lineAlignmentSevenParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
         return {
             maxSpeed: newSpeed,
             leftKp: newLeftKp,
@@ -472,7 +472,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Параметры перпендикулярного выравнивания на линии"
-    export function LineAlignmentAllParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKi?: number, newRightKi?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
+    export function lineAlignmentAllParams(newSpeed?: number, newLeftKp?: number, newRightKp?: number, newLeftKi?: number, newRightKi?: number, newLeftKd?: number, newRightKd?: number, newLeftN?: number, newRightN?: number): LineAlignmentInterface {
         return {
             maxSpeed: newSpeed,
             leftKp: newLeftKp,
@@ -490,6 +490,16 @@ namespace params {
 
 namespace params {
 
+    // Интерфейс перадачи параметров для алгоритма позиционирования на линии
+    export interface LinePositioningInterface {
+        maxSpeed?: number;
+        timeOut?: number;
+        Kp?: number;
+        Ki?: number;
+        Kd?: number;
+        N?: number;
+    }
+
     /**
      * Setting parameters for the positioning algorithm (alignment) on the line by line sensors with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Установка параметров для алгоритма позицианирования (выравнивание) на линии датчиками линии с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
@@ -506,26 +516,12 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Параметры позицианирования на линии"
-    export function SetLinePositioningParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
+    export function setLinePositioningParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newSpeed) levelings.linePositioningMaxSpeed = newSpeed;
         if (newKp) levelings.linePositioningKp = newKp;
         if (newKi) levelings.linePositioningKi = newKi;
         if (newKd) levelings.linePositioningKd = newKd;
         if (newN) levelings.linePositioningN = newN;
-    }
-
-}
-
-namespace params {
-
-    // Интерфейс перадачи параметров для алгоритма позиционирования на линии
-    export interface LinePositioningInterface {
-        maxSpeed?: number;
-        timeOut?: number;
-        Kp?: number;
-        Ki?: number;
-        Kd?: number;
-        N?: number;
     }
 
 }

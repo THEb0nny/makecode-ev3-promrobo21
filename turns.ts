@@ -18,7 +18,7 @@ namespace chassis {
     //% weight="99" blockGap="8"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function SpinTurn(deg: number, speed: number) {
+    export function spinTurn(deg: number, speed: number) {
         //if (!motorsPair) return;
         if (deg == 0 || speed == 0) {
             stop(true);
@@ -71,7 +71,7 @@ namespace chassis {
     //% weight="98"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function PivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
+    export function pivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
         //if (!motorsPair) return;
         if (deg == 0 || speed == 0) {
             stop(true);
@@ -128,7 +128,7 @@ namespace chassis {
     //% weight="89" blockGap="8"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты с ускорениями"
-    function RampSpinTurn(deg: number, minSpeed: number, maxSpeed: number) {
+    function rampSpinTurn(deg: number, minSpeed: number, maxSpeed: number) {
         return;
     }
 
@@ -150,7 +150,7 @@ namespace chassis {
     //% weight="88"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты с ускорениями"
-    function RampPivotTurn(deg: number, minSpeed: number, maxSpeed: number, wheelPivot: WheelPivot) {
+    function rampPivotTurn(deg: number, minSpeed: number, maxSpeed: number, wheelPivot: WheelPivot) {
         return;
     }
 
@@ -189,7 +189,7 @@ namespace chassis {
     //% weight="99" blockGap="8"
     //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
-    export function SetSmartSpinTurnTimeOut(timeOut: number) {
+    export function setSmartSpinTurnTimeOut(timeOut: number) {
         smartSpinTurnTimeOut = timeOut;
     }
 
@@ -203,7 +203,7 @@ namespace chassis {
     //% weight="98" blockGap="8"
     //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
-    export function SetSmartPivotTurnTimeOut(timeOut: number) {
+    export function setSmartPivotTurnTimeOut(timeOut: number) {
         smartPivotTurnTimeOut = timeOut;
     }
 
@@ -217,7 +217,7 @@ namespace chassis {
     //% weight="97"
     //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
-    export function SetSmartTurnDeregTimeOut(timeOut: number) {
+    export function setSmartTurnDeregTimeOut(timeOut: number) {
         smartTurnDeregTimeOut = timeOut;
     }
 
@@ -231,7 +231,7 @@ namespace chassis {
     //% weight="96" blockGap="8"
     //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
-    export function SetSmartTurnConditionErrDifference(maxErr: number) {
+    export function setSmartTurnConditionErrDifference(maxErr: number) {
         smartTurnConditionErrDifference = maxErr;
     }
 
@@ -245,7 +245,7 @@ namespace chassis {
     //% weight="96" blockGap="8"
     //% subcategory="Повороты 2"
     //% group="Свойства умных поворотов"
-    export function SetSmartTurnConditionRegDifference(maxU: number) {
+    export function setSmartTurnConditionRegDifference(maxU: number) {
         smartTurnConditionRegDifference = maxU;
     }
 
@@ -264,7 +264,7 @@ namespace chassis {
     //% weight="99" blockGap="8"
     //% subcategory="Повороты 2"
     //% group="Умные повороты с регулятором"
-    export function SmartSpinTurn(deg: number, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function smartSpinTurn(deg: number, params?: params.LineFollowInterface, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
             if (params.speed) smartSpinTurnSpeed = params.speed;
@@ -335,7 +335,7 @@ namespace chassis {
     //% weight="98"
     //% subcategory="Повороты 2"
     //% group="Умные повороты с регулятором"
-    export function SmartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function smartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: params.LineFollowInterface, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
             if (params.speed) smartPivotTurnSpeed = params.speed;

@@ -27,8 +27,8 @@ namespace sensors {
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="99"
     //% group="Line Sensor"
-    export function SetColorSensorsAsLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
-        SetLineSensor(newLeftLineSensor, newRightLineSensor);
+    export function setColorSensorsAsLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
+        setLineSensor(newLeftLineSensor, newRightLineSensor);
     }
 
     /**
@@ -49,11 +49,11 @@ namespace sensors {
     //% newRightLineSensor.fieldOptions.width="300"
     //% weight="98"
     //% group="Line Sensor"
-    export function SetNxtLightSensorsAsLineSensors(newLeftLineSensor: sensors.NXTLightSensor, newRightLineSensor: sensors.NXTLightSensor) {
-        SetLineSensor(newLeftLineSensor, newRightLineSensor);
+    export function setNxtLightSensorsAsLineSensors(newLeftLineSensor: sensors.NXTLightSensor, newRightLineSensor: sensors.NXTLightSensor) {
+        setLineSensor(newLeftLineSensor, newRightLineSensor);
     }
 
-    function SetLineSensor(newLeftLineSensor: sensors.ColorSensor | sensors.NXTLightSensor, newRightLineSensor: sensors.ColorSensor | sensors.NXTLightSensor) {
+    function setLineSensor(newLeftLineSensor: sensors.ColorSensor | sensors.NXTLightSensor, newRightLineSensor: sensors.ColorSensor | sensors.NXTLightSensor) {
         if (!leftLineSensor && !rightLineSensor) { // Если датчики до этого не были установлены
             if (newLeftLineSensor !== newRightLineSensor) { // Если сенсоры установили не одинаковые
                 leftLineSensor = newLeftLineSensor;
@@ -72,7 +72,7 @@ namespace sensors {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Line Sensor"
-    export function SetLineSensorRawRefValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
+    export function setLineSensorRawRefValue(sensor: LineSensor, bRefRawVal: number, wRefRawVal: number) {
         if (sensor == LineSensor.Left) {
             bRefRawLeftLineSensor = bRefRawVal;
             wRefRawLeftLineSensor = wRefRawVal;
@@ -92,7 +92,7 @@ namespace sensors {
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Line Sensor"
-    export function SetLineSensorsRawRefValues(blackRefRawValLeftSensor: number, whiteRefRawValLeftSensor: number, blackRefRawValRightSensor: number, whiteRefRawValRightSensor: number) {
+    export function setLineSensorsRawRefValues(blackRefRawValLeftSensor: number, whiteRefRawValLeftSensor: number, blackRefRawValRightSensor: number, whiteRefRawValRightSensor: number) {
         bRefRawLeftLineSensor = blackRefRawValLeftSensor;
         wRefRawLeftLineSensor = whiteRefRawValLeftSensor;
         bRefRawRightLineSensor = blackRefRawValRightSensor;
@@ -110,7 +110,7 @@ namespace sensors {
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Line Sensor"
-    export function GetLineSensorRawRefValue(sensor: LineSensor): number {
+    export function getLineSensorRawRefValue(sensor: LineSensor): number {
         if (sensor == LineSensor.Left) {
             if (leftLineSensor instanceof sensors.ColorSensor) {
                 return (leftLineSensor as sensors.ColorSensor).light(LightIntensityMode.ReflectedRaw);
@@ -140,7 +140,7 @@ namespace sensors {
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Line Sensor"
-    export function NormalizingReflectionValue(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
+    export function normalizingReflectionValue(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
         let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
         refVal = Math.constrain(refVal, 0, 100);
         return refVal;
@@ -159,19 +159,19 @@ namespace sensors {
     //% inlineInputMode="inline"
     //% weight="85"
     //% group="Line Sensor"
-    export function GetNormalizedReflectionValue(sensor: LineSensor, recalibrate: boolean = false): number {
-        const refRawLS = GetLineSensorRawRefValue(sensor); // Сырое значение с датчика цвета
-        if (recalibrate) RecalibrateLineSensors(sensor, refRawLS); // Перекалибруем, если есть необходимость
+    export function getNormalizedReflectionValue(sensor: LineSensor, recalibrate: boolean = false): number {
+        const refRawLS = getLineSensorRawRefValue(sensor); // Сырое значение с датчика цвета
+        if (recalibrate) recalibrateLineSensors(sensor, refRawLS); // Перекалибруем, если есть необходимость
         if (sensor == LineSensor.Left) {
-            return NormalizingReflectionValue(refRawLS, bRefRawLeftLineSensor, wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
+            return normalizingReflectionValue(refRawLS, bRefRawLeftLineSensor, wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
         } else if (sensor == LineSensor.Right) {
-            return NormalizingReflectionValue(refRawLS, bRefRawRightLineSensor, wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
+            return normalizingReflectionValue(refRawLS, bRefRawRightLineSensor, wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
         }
         return 0;
     }
 
     // Функция перекалибровки значений датчика
-    function RecalibrateLineSensors(sensor: LineSensor, refRawVal: number) {
+    function recalibrateLineSensors(sensor: LineSensor, refRawVal: number) {
         if (sensor == LineSensor.Left) {
             if (refRawVal > bRefRawLeftLineSensor) bRefRawLeftLineSensor = refRawVal;
             else if (refRawVal < wRefRawLeftLineSensor) wRefRawLeftLineSensor = refRawVal;
@@ -198,12 +198,12 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="88" blockGap="8"
     //% group="Color Sensor"
-    export function GetNormalizeRgb(sensor: sensors.ColorSensor): number[] {
+    export function getNormalizeRgb(sensor: sensors.ColorSensor): number[] {
         const rgbRaw = sensor.rgbRaw(); // Получить сырые значения датчика цвета
         let normRgb: number[] = [0, 0, 0];
         for(let i = 0; i < 3; i++) {
-            const toHighMap = sensors.GetMaxRgbColorSensor(sensor)[i] < 255 ? sensors.GetMaxRgbColorSensor(sensor)[i] : 255;
-            normRgb[i] = Math.map(rgbRaw[i], sensors.GetMinRgbColorSensor(sensor)[i], sensors.GetMaxRgbColorSensor(sensor)[i], 0, toHighMap);
+            const toHighMap = getMaxRgbColorSensor(sensor)[i] < 255 ? getMaxRgbColorSensor(sensor)[i] : 255;
+            normRgb[i] = Math.map(rgbRaw[i], getMinRgbColorSensor(sensor)[i], getMaxRgbColorSensor(sensor)[i], 0, toHighMap);
             normRgb[i] = Math.round(Math.constrain(normRgb[i], 0, 255));
         }
         return normRgb;
@@ -241,7 +241,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="59" blockGap="8"
     //% group="Color Sensor"
-    export function SetColorSensorMinRgbValues(sensor: sensors.ColorSensor, minR: number, minG: number, minB: number) {
+    export function setColorSensorMinRgbValues(sensor: sensors.ColorSensor, minR: number, minG: number, minB: number) {
         if (minR < 0 || minG < 0 || minB < 0) {
             music.playSoundEffect(sounds.systemGeneralAlert);
             control.panic(30);
@@ -266,7 +266,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="58" blockGap="8"
     //% group="Color Sensor"
-    export function SetColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxR: number, maxG: number, maxB: number) {
+    export function setColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxR: number, maxG: number, maxB: number) {
         if (maxR < 0 || maxG < 0 || maxB < 0) {
             music.playSoundEffect(sounds.systemGeneralAlert);
             control.panic(31);
@@ -288,7 +288,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="57" blockGap="8"
     //% group="Color Sensor"
-    export function GetMinRgbColorSensor(sensor: sensors.ColorSensor): number[] {
+    export function getMinRgbColorSensor(sensor: sensors.ColorSensor): number[] {
         const index = sensor.port() - 1;
         return minRgbColorSensors[index];
     }
@@ -306,7 +306,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="56"
     //% group="Color Sensor"
-    export function GetMaxRgbColorSensor(sensor: sensors.ColorSensor): number[] {
+    export function getMaxRgbColorSensor(sensor: sensors.ColorSensor): number[] {
         const index = sensor.port() - 1;
         return maxRgbColorSensors[index];
     }
@@ -340,7 +340,7 @@ namespace sensors {
     //% inlineInputMode="inline"
     //% weight="55" blockGap="8"
     //% group="Color Sensor"
-    export function HsvlToColorNumParams(newColorBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): HsvlToColorNumInterface {
+    export function hsvlToColorNumParams(newColorBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): HsvlToColorNumInterface {
         return {
             colorBoundary: newColorBoundary, whiteBoundary: newWhiteBoundary, blackBoundary: newBlackBoundary, redBoundary: newRedBoundary, brownBoundary: newBrownBoundary, yellowBoundary: newYellowBoundary, greenBoundary: newGreenBoundary, blueBoundary: newBlueBoundary
         }
@@ -360,7 +360,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="54" blockGap="8"
     //% group="Color Sensor"
-    export function SetHsvlToColorNumParams(sensor: sensors.ColorSensor, params: HsvlToColorNumInterface) {
+    export function setHsvlToColorNumParams(sensor: sensors.ColorSensor, params: HsvlToColorNumInterface) {
         const index = sensor.port() - 1;
         colorBoundaryColorSensors[index] = params.colorBoundary;
         whiteBoundaryColorSensors[index] = params.whiteBoundary;
@@ -385,7 +385,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="53"
     //% group="Color Sensor"
-    export function GetHsvlToColorNumParams(sensor: sensors.ColorSensor): HsvlToColorNumInterface {
+    export function getHsvlToColorNumParams(sensor: sensors.ColorSensor): HsvlToColorNumInterface {
         const index = sensor.port() - 1;
         return {
             colorBoundary: colorBoundaryColorSensors[index],
@@ -406,13 +406,13 @@ namespace sensors {
      * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
      * @param wRefRawValCS сырое значение отражения на белом, eg: 650
      */
-    //% blockId="RgbToHsvlConverter"
+    //% blockId="ConvertRgbToHsvl"
     //% block="convert rgb $rgbArr to hsvl"
     //% block.loc.ru="перевести rgb $rgbArr в hsvl"
     //% inlineInputMode="inline"
     //% weight="52" blockGap="8"
     //% group="Color Sensor"
-    export function RgbToHsvlConverter(rgbArr: number[]): number[] {
+    export function convertRgbToHsvl(rgbArr: number[]): number[] {
         // https://en.wikipedia.org/wiki/HSL_and_HSV#/media/File:Hsl-hsv_models.svg
         // https://github.com/ofdl-robotics-tw/EV3-CLEV3R-Modules/blob/main/Mods/Color.bpm
         let r = rgbArr[0], g = rgbArr[1], b = rgbArr[2];
@@ -465,13 +465,13 @@ namespace sensors {
      * Перевести HSV в код цвета. Получаемые коды цвета соотвествуют кодам LEGO.
      * @param hsvl массив значений hsvl
      */
-    //% blockId="HsvlToColorNum"
+    //% blockId="ConvertHsvlToColorNum"
     //% block="convert HSVL $hsvl to color code at params $params"
     //% block.loc.ru="перевести HSVL $hsvl в цветовой код при параметрах $params"
     //% inlineInputMode="inline"
     //% weight="51"
     //% group="Color Sensor"
-    export function HsvlToColorNum(hsvl: number[], params: HsvlToColorNumInterface): number {
+    export function convertHsvlToColorNum(hsvl: number[], params: HsvlToColorNumInterface): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
         if (S > params.colorBoundary) { // Граница цветности
             if (H < params.redBoundary) return 5; // red
@@ -499,7 +499,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="49"
     //% group="Color Sensor"
-    export function SearchRgbMinMaxColorSensors(sensor: ColorSensor) {
+    export function searchRgbMinMaxColorSensors(sensor: ColorSensor) {
         let maxSensorRgb: number[] = [0, 0, 0];
         const sensorPort = sensor.port() - 1;
 

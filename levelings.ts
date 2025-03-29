@@ -36,7 +36,7 @@ namespace levelings {
     //% inlineInputMode="inline"
     //% weight="69"
     //% group="Свойства"
-    export function SetLineAlignmentOrPositioningLoopDt(dt: number) {
+    export function setLineAlignmentOrPositioningLoopDt(dt: number) {
         lineAlignmentOrPositioningLoopDt = dt;
     }
 
@@ -51,7 +51,7 @@ namespace levelings {
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Свойства"
-    export function SetDistanceBetweenLineSensors(dist: number) {
+    export function setDistanceBetweenLineSensors(dist: number) {
         distanceBetweenLineSensors = dist;
     }
 
@@ -72,7 +72,7 @@ namespace levelings {
     //% params.shadow="LineAlignmentEmptyParams"
     //% weight="99"
     //% group="Линия"
-    export function LineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, recalibrate: boolean = false, params?: params.LineAlignmentInterface, debug: boolean = false) {
+    export function lineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, recalibrate: boolean = false, params?: params.LineAlignmentInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
             if (params.timeOut) lineAlignmentTimeOut = Math.abs(params.timeOut);
@@ -106,10 +106,10 @@ namespace levelings {
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             if (isOnLine && control.timer8.millis() >= regulatorTime) break; // Условие выхода из цикла при дорегулировании
-            let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left, recalibrate); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right, recalibrate); // Нормализованное значение с правого датчика линии
-            let errorL = motions.GetLineFollowSetPoint() - refLeftLS, errorR = motions.GetLineFollowSetPoint() - refRightLS; // Вычисляем ошибки регулирования
-            if (!isOnLine && Math.abs(errorL) <= motions.GetLineFollowSetPoint() && Math.abs(errorR) <= motions.GetLineFollowSetPoint()) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left, recalibrate); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right, recalibrate); // Нормализованное значение с правого датчика линии
+            let errorL = motions.getLineFollowSetPoint() - refLeftLS, errorR = motions.getLineFollowSetPoint() - refRightLS; // Вычисляем ошибки регулирования
+            if (!isOnLine && Math.abs(errorL) <= motions.getLineFollowSetPoint() && Math.abs(errorR) <= motions.getLineFollowSetPoint()) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки (нахождения линии) достигнуто
@@ -151,7 +151,7 @@ namespace levelings {
     //% params.shadow="LineAlignmentEmptyParams"
     //% weight="98"
     //% group="Линия"
-    export function LinePositioning(regTime: number, params?: params.LinePositioningInterface, debug: boolean = false) {
+    export function linePositioning(regTime: number, params?: params.LinePositioningInterface, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) linePositioningMaxSpeed = Math.abs(params.maxSpeed);
             if (params.timeOut) linePositioningTimeOut = Math.abs(params.timeOut);
@@ -175,10 +175,10 @@ namespace levelings {
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             if (isOnLine && control.timer8.millis() >= regTime) break; // Условие выхода из цикла при дорегулировании
-            let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Находим ошибку
-            if (!isOnLine && Math.abs(error) <= motions.GetLineFollowSetPoint()) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
+            if (!isOnLine && Math.abs(error) <= motions.getLineFollowSetPoint()) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
@@ -219,7 +219,7 @@ namespace levelings {
     //% debug.shadow="toggleOnOff"
     //% weight="97"
     //% group="Линия"
-    export function LineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
+    export function lineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
         // https://www.youtube.com/watch?v=DOPXPuB7Xhs
         if (distanceBetweenLineSensors <= 0) {
             chassis.stop(true);
@@ -233,21 +233,21 @@ namespace levelings {
         let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
         let encLeftMot1 = 0, encLeftMot2 = 0, encRightMot1 = 0, encRightMot2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
         let a = 0, b = distanceBetweenLineSensors, c = 0;
-        chassis.ControlCommand(0, speed); // Команда двигаться вперёд
+        chassis.controlCommand(0, speed); // Команда двигаться вперёд
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         // Первая часть - датчик, который замечает линию первым
         while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (refLeftLS <= motions.GetLineRefTreshold()) { // Левый датчик первый нашёл линию
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            if (refLeftLS <= motions.getLineRefTreshold()) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
                 encRightMot1 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
                 break;
-            } else if (refRightLS <= motions.GetLineRefTreshold()) { // Правый датчик первый нашёл линию
+            } else if (refRightLS <= motions.getLineRefTreshold()) { // Правый датчик первый нашёл линию
                 firstSide = "RIGHT_SIDE";
                 encLeftMot1 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
@@ -261,16 +261,16 @@ namespace levelings {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (firstSide == "LEFT_SIDE") {
-                if (refRightLS <= motions.GetLineRefTreshold()) { // Левый датчик нашёл линию
+                if (refRightLS <= motions.getLineRefTreshold()) { // Левый датчик нашёл линию
                     encRightMot2 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол по новой
                     a = Math.abs(encRightMot2 - encRightMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             } else if (firstSide == "RIGHT_SIDE") {
-                if (refLeftLS <= motions.GetLineRefTreshold()) { // Левый датчик нашёл линию
+                if (refLeftLS <= motions.getLineRefTreshold()) { // Левый датчик нашёл линию
                     encLeftMot2 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол по новой
                     a = Math.abs(encLeftMot2 - encLeftMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
@@ -285,8 +285,8 @@ namespace levelings {
         }
         a = (a / 360) * Math.PI * chassis.getWheelDiametr(); // Перевести в мм пройденное значение
         const alpha = Math.atan(a / b) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
-        if (firstSide == "LEFT_SIDE") chassis.PivotTurn(alpha, speed, WheelPivot.LeftWheel);
-        else if (firstSide == "RIGHT_SIDE") chassis.PivotTurn(alpha, speed, WheelPivot.RightWheel);
+        if (firstSide == "LEFT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.LeftWheel);
+        else if (firstSide == "RIGHT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.RightWheel);
         if (debug) { // Выводим на экран расчёты
             brick.clearScreen();
             brick.printValue("encLeftMot1", encLeftMot1, 1);
@@ -298,7 +298,7 @@ namespace levelings {
             brick.printValue("alpha", alpha, 7);
         }
         music.playToneInBackground(Note.D, 250); // Сигнал для понимация завершения
-        motions.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
+        motions.actionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
         if (debug) pause(3000);
     }
     

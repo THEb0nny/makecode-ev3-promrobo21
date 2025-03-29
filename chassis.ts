@@ -14,7 +14,7 @@ namespace chassis {
     //% weight="99"
     //% subcategory="Движение"
     //% group="Move"
-    export function ControlCommand(u: number, speed: number) {
+    export function controlCommand(u: number, speed: number) {
         let mB = speed + u, mC = speed - u;
         // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
         // mB *= z; mC *= z;
@@ -38,7 +38,7 @@ namespace chassis {
     //% weight="79" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function LinearDistMove(dist: number, speed: number, braking: Braking = Braking.Hold) {
+    export function linearDistMove(dist: number, speed: number, braking: Braking = Braking.Hold) {
         if (speed == 0 || dist == 0) {
             chassis.stop(true);
             return;
@@ -47,7 +47,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = math.CalculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
+        const mRotCalc = math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -70,7 +70,7 @@ namespace chassis {
     //% weight="78"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function DistMove(dist: number, speedLeft: number, speedRight: number, braking: Braking = Braking.Hold) {
+    export function distMove(dist: number, speedLeft: number, speedRight: number, braking: Braking = Braking.Hold) {
         if (dist == 0 || speedLeft == 0 && speedRight == 0) {
             chassis.stop(true);
             return;
@@ -79,7 +79,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = math.CalculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
+        const mRotCalc = math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -106,14 +106,14 @@ namespace chassis {
     //% weight="89" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function RampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
+    export function rampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
         if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
             return;
         }
-        const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = math.CalculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
-        const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
@@ -140,7 +140,7 @@ namespace chassis {
     //% weight="88"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function AccelStartLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
+    export function accelStartLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {
             stop(true);
@@ -148,8 +148,8 @@ namespace chassis {
         }
 
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
-        const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
@@ -183,13 +183,13 @@ namespace chassis {
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями"
     //% blockHidden="true"
-    export function RampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+    export function rampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
         //if (!motorsPair) return;
 
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
-        const mRotAccelCalc = math.CalculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = math.CalculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
-        const mRotTotalCalc = math.CalculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         
         // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
@@ -212,7 +212,6 @@ namespace chassis {
             // let powers = advmotctrls.getPwrSyncMotors(U);
             let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwrOut, out.pwrOut);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            // chassis.ControlCommand(0, 50); // Команда моторам
             control.pauseUntilTime(currTime, 1);
         }
         chassis.stop(true);

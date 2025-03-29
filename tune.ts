@@ -10,7 +10,7 @@ namespace custom {
     //% expandableArgumentMode="toggle"
     //% weight="99"
     //% group="Дополнительно"
-    export function FunctionsTune(startupScreen: number = 0) {
+    export function functionsTune(startupScreen: number = 0) {
         const LOOP_DELAY = 10; // Задержка цикла
         const LINE_SCROLL_TRESHOLD = 5; // Начинать скролл параметров с строки
         const BTN_PRESS_LOOP_DELAY = 150; // Задержка в цикле при нажатии
@@ -623,7 +623,7 @@ namespace custom {
                             N: methodScreens[screenName].params.N.val
                         };
                         chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
-                        chassis.LinearDistMove(dist, speed, Braking.Hold);
+                        chassis.linearDistMove(dist, speed, Braking.Hold);
                     } else if (screenName == "SYNC_RAMP_DIST_MOVE") {
                         const minSpeed = methodScreens[screenName].params.minSpeed.val;
                         const maxSpeed = methodScreens[screenName].params.maxSpeed.val;
@@ -637,7 +637,7 @@ namespace custom {
                             N: methodScreens[screenName].params.N.val
                         };
                         chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
-                        chassis.RampLinearDistMove(minSpeed, maxSpeed, totalDist, accelDist, decelDist);
+                        chassis.rampLinearDistMove(minSpeed, maxSpeed, totalDist, accelDist, decelDist);
                     } else if (screenName == "LW_2S_TO_INTERSECTION") {
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
@@ -647,7 +647,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.LineFollowToCrossIntersection(AfterMotion.BreakStop, params, debug);
+                        motions.lineFollowToCrossIntersection(AfterMotion.BreakStop, params, debug);
                     } else if (screenName == "LW_2S_TO_DISTANCE") {
                         const dist = methodScreens[screenName].params.dist.val;
                         const debug = methodScreens[screenName].params.debug.val;
@@ -658,7 +658,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.LineFollowToDistance(dist, AfterMotion.BreakStop, params, debug);
+                        motions.lineFollowToDistance(dist, AfterMotion.BreakStop, params, debug);
                     } else if (screenName == "LW_TO_SIDE_INTERSECTION") {
                         const junction = methodScreens[screenName].params.junction.val;
                         const lineLocation = methodScreens[screenName].params.lineLocation.val;
@@ -670,13 +670,13 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.LineFollowToSideIntersection(junction, AfterMotion.BreakStop, params, debug);
+                        motions.lineFollowToSideIntersection(junction, AfterMotion.BreakStop, params, debug);
                     } else if (screenName == "CHASSIS_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const speed = methodScreens[screenName].params.speed.val;
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
-                        chassis.SpinTurn(deg, speed);
+                        chassis.spinTurn(deg, speed);
                     } else if (screenName == "CHASSIS_PIVOT_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const pivot = methodScreens[screenName].params.pivot.val;
@@ -684,7 +684,7 @@ namespace custom {
                         const debug = methodScreens[screenName].params.debug.val;
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
-                        chassis.PivotTurn(deg, speed, pivot);
+                        chassis.pivotTurn(deg, speed, pivot);
                     } else if (screenName == "SMART_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const debug = methodScreens[screenName].params.debug.val;
@@ -697,7 +697,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        chassis.SmartSpinTurn(deg, params, debug);
+                        chassis.smartSpinTurn(deg, params, debug);
                     } else if (screenName == "SMART_PIVOT_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const pivot = methodScreens[screenName].params.pivot.val;
@@ -711,7 +711,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        chassis.SmartPivotTurn(deg, pivot, params, debug);
+                        chassis.smartPivotTurn(deg, pivot, params, debug);
                     } else if (screenName == "LINE_ALIGNMET") {
                         const lineLocation = methodScreens[screenName].params.location.val;
                         const time = methodScreens[screenName].params.time.val;
@@ -729,11 +729,11 @@ namespace custom {
                             leftN: methodScreens[screenName].params.leftN.val,
                             rightN: methodScreens[screenName].params.rightN.val
                         };
-                        levelings.LineAlignment(lineLocation, time, recalibrate, params, debug);
+                        levelings.lineAlignment(lineLocation, time, recalibrate, params, debug);
                     } else if (screenName == "LINE_ALIGNMET_IN_MOTION") {
                         const speed = methodScreens[screenName].params.speed.val;
                         const debug = methodScreens[screenName].params.debug.val;
-                        levelings.LineAlignmentInMotion(speed, AfterMotionShort.BreakStop, debug)
+                        levelings.lineAlignmentInMotion(speed, AfterMotionShort.BreakStop, debug)
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал

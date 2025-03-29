@@ -55,7 +55,7 @@ namespace custom {
     //% block="get most common number from $arr array"
     //% block.loc.ru="получить часто встречающийся элемент из массива $arr"
     //% weight="89"
-    export function MostFrequentNumber(arr: number[]): number {
+    export function mostFrequentNumber(arr: number[]): number {
         // Сортируем массив для более эффективного подсчета частоты
         arr.sort((a, b) => a - b);
         let maxCount = 0;
@@ -84,7 +84,7 @@ namespace custom {
 namespace math {
 
     // Вспомогательная функция расчёта движения на дистанцию в мм
-    export function CalculateDistanceToEncRotate(distance: number): number {
+    export function calculateDistanceToEncRotate(distance: number): number {
         return (distance / (Math.PI * chassis.getWheelDiametr())) * 360; // Дистанция в мм, которую нужно пройти
     }
     

@@ -1,13 +1,13 @@
 namespace motions {
 
     // Функция, которая выполняет действие после цикла с движением
-    export function ActionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
+    export function actionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
-            chassis.LinearDistMove(motions.GetDistRollingAfterIntersection(), speed, Braking.Hold);
+            chassis.linearDistMove(motions.getDistRollingAfterIntersection(), speed, Braking.Hold);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            chassis.RampLinearDistMove(10, speed, motions.GetDistRollingAfterIntersection(), 0, motions.GetDistRollingAfterIntersection());
+            chassis.rampLinearDistMove(10, speed, motions.getDistRollingAfterIntersection(), 0, motions.getDistRollingAfterIntersection());
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
-            motions.RollingMoveOutFromLine(motions.GetDistRollinFromLineAfterIntersection(), speed);
+            motions.rollingMoveOutFromLine(motions.getDistRollinFromLineAfterIntersection(), speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением (удержанием)
             chassis.stop(true);
         } else if (actionAfterMotion == AfterMotion.NoBreakStop) { // Тормоз с прокаткой по инерции
@@ -19,7 +19,7 @@ namespace motions {
     
     // Вспомогательная функция для типа торможения движения на расстоние без торможения
     // Например, для съезда с линии, чтобы её не считал алгоритм движения по линии повторно
-    export function RollingMoveOutFromLine(dist: number, speed: number) {
+    export function rollingMoveOutFromLine(dist: number, speed: number) {
         if (dist == 0 || speed == 0) {
             chassis.stop(true);
             return;
@@ -30,7 +30,7 @@ namespace motions {
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно пройти
+        const calcMotRot = math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно пройти
         advmotctrls.syncMotorsConfig(speed, speed);
 
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -76,7 +76,7 @@ namespace motions {
     //% speed.shadow="motorSpeedPicker"
     //% weight="89"
     //% group="Move"
-    export function MoveToRefZone(turnRatio: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: Comprasion, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    export function moveToRefZone(turnRatio: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: Comprasion, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
@@ -90,8 +90,8 @@ namespace motions {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refLeftLS = sensors.GetNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.GetNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (sensorsCondition == LineSensorSelection.LeftAndRight) { // Левый и правый датчик
                 if (refCondition == Comprasion.Greater && (refLeftLS > refTreshold && refRightLS > refTreshold)) break; // Больше
                 else if (refCondition == Comprasion.GreaterOrEqual && (refLeftLS >= refTreshold && refRightLS >= refTreshold)) break; // Больше или равно
@@ -133,7 +133,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 1); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(277, 200); // Сигнал о завершении
-        motions.ActionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
+        motions.actionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
     }
 
     /**
@@ -149,16 +149,16 @@ namespace motions {
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Поворот на линию"
-    export function SpinTurnToLine(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+    export function spinTurnToLine(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
         if (sensors.leftLineSensor instanceof sensors.ColorSensor && sensors.rightLineSensor instanceof sensors.ColorSensor) {
-            SpinTurnToLineAtColorSensor(rotateSide, speed, debug);
+            spinTurnToLineAtColorSensor(rotateSide, speed, debug);
         } else if (sensors.leftLineSensor instanceof sensors.NXTLightSensor && sensors.rightLineSensor instanceof sensors.NXTLightSensor) {
-            SpinTurnToLineAtNxtLightSensor(rotateSide, speed, debug);
+            spinTurnToLineAtNxtLightSensor(rotateSide, speed, debug);
         }
     }
 
     // Функция поворота на линию датчиком цвета ev3
-    function SpinTurnToLineAtColorSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+    function spinTurnToLineAtColorSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
         let sensor: sensors.ColorSensor; // Инициализируем переменную сенсора
         if (rotateSide == TurnRotateSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
         else if (rotateSide == TurnRotateSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
@@ -190,8 +190,8 @@ namespace motions {
             if (!preTurnIsDone && (Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) preTurnIsDone = true; // Если предвариательный поворот ещё не выполнен, то проверяем условия
             if (preTurnIsDone) { // Если предварительный поворот выполнен
                 const rgbCS = sensor.rgbRaw(); // Получаем от сенсора RGB
-                const hsvlCS = sensors.RgbToHsvlConverter(rgbCS); // Переводим RGB в HSV
-                const colorCS = sensors.HsvlToColorNum(hsvlCS, sensors.HsvlToColorNumParams(50, 10, 1, 25, 30, 100, 180, 260)); // Узнаём какой цвет
+                const hsvlCS = sensors.convertRgbToHsvl(rgbCS); // Переводим RGB в HSV
+                const colorCS = sensors.convertHsvlToColorNum(hsvlCS, sensors.getHsvlToColorNumParams(sensor)); // Узнаём какой цвет
                 if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
             }
@@ -202,11 +202,11 @@ namespace motions {
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
         }
-        levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
+        levelings.linePositioning(100, null, debug); // Позиционируемся на линии
     }
 
     // Функция поворота на лицию датчиком отражения nxt
-    function SpinTurnToLineAtNxtLightSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+    function spinTurnToLineAtNxtLightSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
         let sensorSide: LineSensor; // Инициализируем переменную сенсора
         let sensorBlackRefRaw = 0, sensorWhiteRefRaw = 0;
         if (rotateSide == TurnRotateSide.Left) {
@@ -218,7 +218,7 @@ namespace motions {
             sensorBlackRefRaw = sensors.bRefRawRightLineSensor;
             sensorWhiteRefRaw = sensors.wRefRawRightLineSensor;
         }
-        sensors.GetLineSensorRawRefValue(sensorSide); // Обращаемся к режиму датчика заранее, чтобы тот включился
+        sensors.getLineSensorRawRefValue(sensorSide); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
@@ -245,7 +245,7 @@ namespace motions {
             let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             if (!preTurnIsDone && (Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) preTurnIsDone = true; // Если предвариательный поворот ещё не выполнен, то проверяем условия
             if (preTurnIsDone) { // Если предварительный поворот выполнен
-                let refLS = sensors.GetNormalizedReflectionValue(sensorSide); // Нормализованное значение с датчика линии
+                let refLS = sensors.getNormalizedReflectionValue(sensorSide); // Нормализованное значение с датчика линии
                 if (!lineIsFound && refLS <= 15) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && refLS >= 80) break; // Нашли белую часть посли линии
             }
@@ -256,7 +256,7 @@ namespace motions {
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
-        levelings.LinePositioning(100, null, debug); // Позиционируемся на линии
+        levelings.linePositioning(100, null, debug); // Позиционируемся на линии
     }
 
 }
