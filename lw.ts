@@ -9,7 +9,7 @@ namespace motions {
 
     let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
-    export let steeringAtSearchLine = 15; // Подруливание при поиске линии для последущего движени одним датчиком
+    export let steeringAtSearchLine = 25; // Подруливание при поиске линии для последущего движени одним датчиком
     
     let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
 
