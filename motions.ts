@@ -13,7 +13,6 @@ namespace motions {
         } else if (actionAfterMotion == AfterMotion.NoBreakStop) { // Тормоз с прокаткой по инерции
             chassis.stop(false);
         } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
-            // CHASSIS_MOTORS.steer(0, speed);
             chassis.steeringCommand(0, speed);
         }
     }
@@ -25,14 +24,28 @@ namespace motions {
             chassis.stop(true);
             return;
         }
-        let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно пройти
-        //CHASSIS_MOTORS.steer(0, speed); // Команда вперёд
-        chassis.steeringCommand(0, speed); // Команда вперёд
+
+        chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const calcMotRot = math.CalculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно пройти
+        advmotctrls.syncMotorsConfig(speed, speed);
+
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Пока моторы не достигнули градусов вращения
             let currTime = control.millis(); // Текущее время
-            let lMotEnc = chassis.leftMotor.angle() - lMotEncPrev, rMotEnc = chassis.rightMotor.angle() - rMotEncPrev; // Значения с энкодеров моторы
-            if (Math.abs(lMotEnc) >= Math.abs(calcMotRot) || Math.abs(rMotEnc) >= Math.abs(calcMotRot)) break;
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
+            let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
+            if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
+            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            chassis.pidChassisSync.setPoint(error);
+            let U = chassis.pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotors(U);
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
         // Команды для остановки не нужно, в этом и смысл функции
@@ -64,16 +77,13 @@ namespace motions {
     //% weight="89"
     //% group="Move"
     export function MoveToRefZone(turnRatio: number, speed: number, sensorsCondition: LineSensorSelection, refCondition: Comprasion, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        const emlPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
-        const emrPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
-        
+        chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const { speedLeft, speedRight } = chassis.getMotorsSpeedsAtSteering(turnRatio, speed);
         advmotctrls.syncMotorsConfig(speedLeft, speedRight);
-        
-        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
-        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
-        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
-        pidChassisSync.reset(); // Сбросить ПИД регулятор
         
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
@@ -110,8 +120,8 @@ namespace motions {
             let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
             let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, 0);
+            chassis.pidChassisSync.setPoint(error);
+            let U = chassis.pidChassisSync.compute(dt, 0);
             let powers = advmotctrls.getPwrSyncMotors(U);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             if (debug) { // Отладка
@@ -154,8 +164,11 @@ namespace motions {
         else if (rotateSide == TurnRotateSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
         sensor.rgbRaw(); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
-        const emlPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
-        const emrPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
+        chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
 
         if (rotateSide == TurnRotateSide.Left) {
@@ -164,11 +177,6 @@ namespace motions {
         } else if (rotateSide == TurnRotateSide.Right) {
             advmotctrls.syncMotorsConfig(speed, -speed);
         }
-
-        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
-        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
-        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
-        pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
         let lineIsFound = false; // Переменная - флажок о том, что чёрная линия найдена
@@ -188,8 +196,8 @@ namespace motions {
                 if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
             }
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, 0);
+            chassis.pidChassisSync.setPoint(error);
+            let U = chassis.pidChassisSync.compute(dt, 0);
             let powers = advmotctrls.getPwrSyncMotors(U);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
@@ -212,8 +220,11 @@ namespace motions {
         }
         sensors.GetLineSensorRawRefValue(sensorSide); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
-        const emlPrev = chassis.leftMotor.angle(); // Считываем значение с энкодера левого мотора перед стартом алгаритма
-        const emrPrev = chassis.rightMotor.angle(); //Считываем значение с энкодера правого мотора перед стартом алгаритма
+        chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
 
         if (rotateSide == TurnRotateSide.Left) {
@@ -222,11 +233,6 @@ namespace motions {
         } else if (rotateSide == TurnRotateSide.Right) {
             advmotctrls.syncMotorsConfig(speed, -speed);
         }
-
-        const pidChassisSync = new automation.PIDController(); // Создаём объект пид регулятора
-        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
-        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
-        pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
         let lineIsFound = false; // Переменная - флажок о том, что чёрная линия найдена
@@ -244,8 +250,8 @@ namespace motions {
                 if (lineIsFound && refLS >= 80) break; // Нашли белую часть посли линии
             }
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, 0);
+            chassis.pidChassisSync.setPoint(error);
+            let U = chassis.pidChassisSync.compute(dt, 0);
             let powers = advmotctrls.getPwrSyncMotors(U);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
