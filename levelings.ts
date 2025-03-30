@@ -143,8 +143,8 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LinePositioning"
-    //% block="positioning on line at $regTime ms||debug $debug"
-    //% block.loc.ru="спозиционироваться на линии за время $regTime мс||отладка $debug"
+    //% block="positioning on line at $regTime ms||params: $params|debug $debug"
+    //% block.loc.ru="спозиционироваться на линии за время $regTime мс||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
