@@ -409,8 +409,8 @@ namespace params {
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
      */
     //% blockId="LineAlignmentThreeParams"
-    //% block="speed = $newSpeed\\%| left side Kp = $newLeftKp|right Kp = $newRightKp"
-    //% block.loc.ru="скорость = $newSpeed\\%| левая сторона Kp = $newLeftKp|правая Kp = $newRightKp"
+    //% block="speed = $newSpeed\\%|leftKp = $newLeftKp|rightKp = $newRightKp"
+    //% block.loc.ru="скорость = $newSpeed\\%|leftKp = $newLeftKp|rightKp = $newRightKp"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры перпендикулярного выравнивания на линии"
