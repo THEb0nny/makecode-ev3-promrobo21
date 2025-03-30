@@ -354,8 +354,8 @@ namespace params {
      * @param newRightN коэффицент фильтрации дифференциального регулятора правой стороны, eg: 0
      */
     //% blockId="SetLineAlignmentShortParams"
-    //% block="set line alignment params at speed = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd|leftN = $newLeftN rightN = $newRightN"
-    //% block.loc.ru="установить параметры выравнивания на линии с макс скоростью = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd|leftN = $newLeftN rightN = $newRightN"
+    //% block="set line alignment params at speed = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftN = $newLeftN rightN = $newRightN"
+    //% block.loc.ru="установить параметры выравнивания на линии с макс скоростью = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftN = $newLeftN rightN = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="98"
@@ -434,8 +434,8 @@ namespace params {
      * @param newRightN коэффицент фильтрации дифференциального регулятора правой стороны, eg: 0
      */
     //% blockId="LineAlignmentSevenParams"
-    //% block="speed = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd|leftN = $newLeftN rightN = $newRightN"
-    //% block.loc.ru="скорость = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd|leftN = $newLeftN rightN = $newRightN"
+    //% block="speed = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftN = $newLeftN rightN = $newRightN"
+    //% block.loc.ru="скорость = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftN = $newLeftN rightN = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="86"
@@ -466,8 +466,8 @@ namespace params {
      * @param newRightN коэффицент фильтрации дифференциального регулятора правой стороны, eg: 0
      */
     //% blockId="LineAlignmentAllParams"
-    //% block="speed = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd|leftN = $newLeftN rightN = $newRightN"
-    //% block.loc.ru="скорость = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd|leftN = $newLeftN rightN = $newRightN"
+    //% block="speed = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd||leftN = $newLeftN rightN = $newRightN"
+    //% block.loc.ru="скорость = $newSpeed\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd||leftN = $newLeftN rightN = $newRightN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
