@@ -9,7 +9,7 @@ const enum ClawState {
 }
 
 // Перечисление о типах сравнения
-const enum Comprasion {
+const enum Comparison {
     //% block="greater"
     //% block.loc.ru="больше"
     Greater,
