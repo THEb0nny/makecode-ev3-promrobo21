@@ -1,24 +1,29 @@
 namespace chassis {
 
     /**
-     * Chassis motors control command.
+     * Chassis motors control command for regulators.
      * Команда управления моторами шасси. Предназначена для регуляторов.
      * @param u управляющее воздействие, eg: 0
      * @param speed скорость движения, eg: 50
      */
     //% blockId="ControlCommand"
-    //% block="movement command on u $u at $speed\\%"
-    //% block.loc.ru="команда движения по u $u на $speed\\%"
+    //% block="motors command on u $u at $speed\\%"
+    //% block.loc.ru="команда моторам по u $u на $speed\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="99"
     //% subcategory="Движение"
     //% group="Move"
     export function controlCommand(u: number, speed: number) {
-        let mB = speed + u, mC = speed - u;
-        // let z = speed / Math.max(Math.abs(mB), Math.abs(mC));
-        // mB *= z; mC *= z;
-        chassis.setSpeedsCommand(mB, mC);
+        let mLeft = speed + u, mRight = speed - u;
+        chassis.setSpeedsCommand(mLeft, mRight);
+    }
+
+    function controlCommand2(u: number, speed: number) {
+        let mLeft = speed + u, mRight = speed - u;
+        const z = speed / Math.max(Math.abs(mLeft), Math.abs(mRight));
+        mLeft *= z; mRight *= z;
+        chassis.setSpeedsCommand(mLeft, mRight);
     }
 
     /**
@@ -147,14 +152,16 @@ namespace chassis {
             return;
         }
 
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
-        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
-        
-        advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+
+        advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
+
+        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
 
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) {
@@ -186,16 +193,17 @@ namespace chassis {
     export function rampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
         //if (!motorsPair) return;
 
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
-        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
-        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
-        
-        // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
-        advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+
+        // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
+        advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
         
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) {

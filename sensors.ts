@@ -134,13 +134,13 @@ namespace sensors {
      * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
      */
-    //% blockId="NormalizingReflectionValue"
+    //% blockId="NormalizingReflectionRawValue"
     //% block="normalize raw reflection $refRawVal at black $bRefRawVal white $wRefRawVal"
     //% block.loc.ru="нормализовать сырое значения отражения $refRawVal при чёрном $bRefRawVal белом $wRefRawVal"
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Line Sensor"
-    export function normalizingReflectionValue(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
+    export function normalizingReflectionRawValue(refRawVal: number, bRefRawVal: number, wRefRawVal: number): number {
         let refVal = Math.map(refRawVal, bRefRawVal, wRefRawVal, 0, 100);
         refVal = Math.constrain(refVal, 0, 100);
         return refVal;
@@ -163,9 +163,9 @@ namespace sensors {
         const refRawLS = getLineSensorRawRefValue(sensor); // Сырое значение с датчика цвета
         if (recalibrate) recalibrateLineSensors(sensor, refRawLS); // Перекалибруем, если есть необходимость
         if (sensor == LineSensor.Left) {
-            return normalizingReflectionValue(refRawLS, bRefRawLeftLineSensor, wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
+            return normalizingReflectionRawValue(refRawLS, bRefRawLeftLineSensor, wRefRawLeftLineSensor); // Нормализованное значение с левого датчика линии
         } else if (sensor == LineSensor.Right) {
-            return normalizingReflectionValue(refRawLS, bRefRawRightLineSensor, wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
+            return normalizingReflectionRawValue(refRawLS, bRefRawRightLineSensor, wRefRawRightLineSensor); // Нормализованное значение с правого датчика линии
         }
         return 0;
     }
@@ -490,7 +490,7 @@ namespace sensors {
      * Search for the maximum RGB values of the color sensor, i.e. these are the maximum values on white.
      * Поиск максимальных значений RGB датчика цвета, т.е. это максимальные значения на белом.
      */
-    //% blockId="SearchRgbMinMaxColorSensors"
+    //% blockId="SearchRgbMinMax"
     //% block="show max RGB $sensor color sensor"
     //% block.loc.ru="показать минимальные и максимальные RGB $sensor датчика цвета"
     //% inlineInputMode="inline"
@@ -499,7 +499,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="49"
     //% group="Color Sensor"
-    export function searchRgbMinMaxColorSensors(sensor: ColorSensor) {
+    export function searchRgbMinMax(sensor: ColorSensor) {
         let maxSensorRgb: number[] = [0, 0, 0];
         const sensorPort = sensor.port() - 1;
 
