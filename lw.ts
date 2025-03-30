@@ -210,8 +210,8 @@ namespace motions {
      * @param maxErr максимальное значение ошибки движения по линии, eg: 30
      */
     //% blockId="SetLineFollowConditionMaxErr"
-    //% block="set line follow max error $maxErr"
-    //% block.loc.ru="установить максимальую ошибку $maxErr движения по линии"
+    //% block="set line follow max error $maxErr at moving with one sensor"
+    //% block.loc.ru="установить максимальую ошибку $maxErr при движении одним датчиком"
     //% inlineInputMode="inline"
     //% weight="79" blockGap="8"
     //% group="Свойства для датчиков"
@@ -239,8 +239,8 @@ namespace motions {
      * @param dt время, за которое цикл регулирования должен выполняться, eg: 10
      */
     //% blockId="SetLineFollowLoopDt"
-    //% block="set dt = $dt for loops regulator at line follow"
-    //% block.loc.ru="установить dt = $dt для циклов регулирования движения по линии"
+    //% block="set dt = $dt for regulator at line follow"
+    //% block.loc.ru="установить dt = $dt для регулирования движения по линии"
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Свойства"

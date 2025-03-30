@@ -32,7 +32,7 @@ namespace levelings {
      */
     //% blockId="SetLineAlignmentOrPositioningLoopDt"
     //% block="set dt = $dt for line alignment and positioning adjustment loops"
-    //% block.loc.ru="установить dt = $dt для циклов регулирования выравнивания и позиционирования на линии"
+    //% block.loc.ru="установить dt = $dt для регулирования выравнивания и позиционирования на линии"
     //% inlineInputMode="inline"
     //% weight="69"
     //% group="Свойства"
