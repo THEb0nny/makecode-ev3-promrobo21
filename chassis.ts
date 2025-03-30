@@ -1,14 +1,14 @@
 namespace chassis {
 
     /**
-     * Chassis motors control command for regulators.
-     * Команда управления моторами шасси. Предназначена для регуляторов.
+     * Steering command to the chassis motors from the controller.
+     * Команда руления моторами шасси от регулятора.
      * @param u управляющее воздействие, eg: 0
      * @param speed скорость движения, eg: 50
      */
     //% blockId="RegulatorSteering"
     //% block="motors steering on u = $u at $speed\\%"
-    //% block.loc.ru="команда моторам по u = $u на $speed\\%"
+    //% block.loc.ru="руление моторам по u = $u на $speed\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="99"
@@ -19,6 +19,20 @@ namespace chassis {
         chassis.setSpeedsCommand(mLeft, mRight);
     }
 
+    /**
+     * Steering normalized command to the chassis motors from the controller.
+     * Команда нормализованного руления моторами шасси от регулятора.
+     * @param u управляющее воздействие, eg: 0
+     * @param speed скорость движения, eg: 50
+     */
+    //% blockId="NormalizedRegulatorSteering"
+    //% block="motors steering on u = $u at $speed\\%"
+    //% block.loc.ru="руление моторам по u = $u на $speed\\%"
+    //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
+    //% weight="98"
+    //% subcategory="Движение"
+    //% group="Move"
     export function normalizedRegulatorSteering(u: number, speed: number) {
         let mLeft = speed + u, mRight = speed - u;
         const z = speed / Math.max(Math.abs(mLeft), Math.abs(mRight));
