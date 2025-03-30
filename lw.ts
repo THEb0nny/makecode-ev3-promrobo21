@@ -329,7 +329,7 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.controlCommand(U, lineFollowCrossIntersectionSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowCrossIntersectionSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
@@ -443,7 +443,7 @@ namespace motions {
             if (Math.abs(error) <= getLineFollowConditionMaxErr() && refLeftLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.controlCommand(U, lineFollowLeftIntersectionSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowLeftIntersectionSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
@@ -499,7 +499,7 @@ namespace motions {
             if (Math.abs(error) <= getLineFollowConditionMaxErr() && refRightLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.controlCommand(U, lineFollowRightIntersectionSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowRightIntersectionSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
@@ -556,7 +556,7 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.controlCommand(U, lineFollowToDistanceSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowToDistanceSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
@@ -640,7 +640,7 @@ namespace motions {
             else if (lineLocation == LineLocation.Outside) error = getLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.controlCommand(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
@@ -696,7 +696,7 @@ namespace motions {
             else if (lineLocation == LineLocation.Outside) error = refRightLS - getLineFollowSetPoint(); // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.controlCommand(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
@@ -773,7 +773,7 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.controlCommand(U, out.pwrOut); // Команда моторам
+            chassis.regulatorSteering(U, out.pwrOut); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }

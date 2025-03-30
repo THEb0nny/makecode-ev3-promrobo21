@@ -6,20 +6,20 @@ namespace chassis {
      * @param u управляющее воздействие, eg: 0
      * @param speed скорость движения, eg: 50
      */
-    //% blockId="ControlCommand"
-    //% block="motors command on u $u at $speed\\%"
-    //% block.loc.ru="команда моторам по u $u на $speed\\%"
+    //% blockId="RegulatorSteering"
+    //% block="motors steering on u = $u at $speed\\%"
+    //% block.loc.ru="команда моторам по u = $u на $speed\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="99"
     //% subcategory="Движение"
     //% group="Move"
-    export function controlCommand(u: number, speed: number) {
+    export function regulatorSteering(u: number, speed: number) {
         let mLeft = speed + u, mRight = speed - u;
         chassis.setSpeedsCommand(mLeft, mRight);
     }
 
-    function controlCommand2(u: number, speed: number) {
+    export function normalizedRegulatorSteering(u: number, speed: number) {
         let mLeft = speed + u, mRight = speed - u;
         const z = speed / Math.max(Math.abs(mLeft), Math.abs(mRight));
         mLeft *= z; mRight *= z;
