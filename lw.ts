@@ -338,7 +338,7 @@ namespace motions {
     }
 
     // Вспомогательная линия, чтобы подрулить и ждать нахождения линии
-    function steeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
+    export function steeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
         const { speedLeft, speedRight } = chassis.getMotorsSpeedsAtSteering(steering, speed);
 
         advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
@@ -484,7 +484,7 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowRightIntersectionSpeed);
-        music.playToneInBackground(587, 17500); // Издаём сигнал завершения
+        music.playToneInBackground(587, 75); // Издаём сигнал завершения
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -626,6 +626,10 @@ namespace motions {
         const calcMotRot = math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
+        // Подруливаем плавно к линии
+        steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
+        music.playToneInBackground(587, 75); // Издаём сигнал завершения
+
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Пока моторы не достигнули градусов вращения
@@ -681,6 +685,10 @@ namespace motions {
 
         const calcMotRot = math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+
+        // Подруливаем плавно к линии
+        steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
+        music.playToneInBackground(587, 75); // Издаём сигнал завершения
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
