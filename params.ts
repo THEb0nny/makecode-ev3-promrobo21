@@ -515,13 +515,55 @@ namespace params {
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="99"
-    //% group="Параметры позицианирования на линии"
+    //% group="Параметры позиционирования на линии"
     export function setLinePositioningParams(newSpeed: number, newKp?: number, newKi?: number, newKd?: number, newN?: number) {
         if (newSpeed) levelings.linePositioningMaxSpeed = newSpeed;
         if (newKp) levelings.linePositioningKp = newKp;
         if (newKi) levelings.linePositioningKi = newKi;
         if (newKd) levelings.linePositioningKd = newKd;
         if (newN) levelings.linePositioningN = newN;
+    }
+
+    /**
+     * Empty parameters for the algorithm with a regulator.
+     * Пустые параметры для алгоритма с позиционированием на линии.
+     */
+    //% blockId="LinePositioningEmptyParams"
+    //% block="empty"
+    //% block.loc.ru="пусто"
+    //% inlineInputMode="inline"
+    //% weight="89"
+    //% group="Параметры позиционирования на линии"
+    export function linePositioningEmptyParams(): LinePositioningInterface {
+        return null;
+    }
+
+    /**
+     * Parameters for the algorithm with a regulator with the ability to set the timeout time, max speed, Kp, Ki, Kd, ​​and N - the filter of the differential regulator.
+     * Параметры для алгоритма с регулятором с возможностью установить время таймаута, макс скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
+     * @param newTimeOut максимальная время работы алгоритма, eg: 2000
+     * @param newMaxSpeed максимальная скорость выравнивания, eg: 50
+     * @param newKp пропорциональный коэффицент, eg: 1
+     * @param newKi интегральный коэффицент, eg: 0
+     * @param newKd дифференциальный коэффицент, eg: 0
+     * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
+     */
+    //% blockId="LinePositioningAllParams"
+    //% block="timeout = $newTimeOut|max speed = $newMaxSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block.loc.ru="таймаут = $newTimeOut|макс скорость = $newMaxSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% expandableArgumentMode="enabled"
+    //% inlineInputMode="inline"
+    //% weight="88"
+    //% group="Параметры позиционирования на линии"
+    export function linePositioningAllParams(newTimeOut?: number, newMaxSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LinePositioningInterface {
+        return {
+            maxSpeed: newMaxSpeed,
+            timeOut: newTimeOut,
+            Kp: newKp,
+            Ki: newKi,
+            Kd: newKd,
+            N: newN
+        };
     }
 
 }
