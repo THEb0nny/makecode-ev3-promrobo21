@@ -425,8 +425,8 @@ namespace sensors {
 
         let hue = 0, sat = 0, val = 0;
 
-        let max = Math.max(Math.max(r, g), b);
-        let min = Math.min(Math.min(r, g), b);
+        let max = math.max3(r, g, b);
+        let min = math.min3(r, g, b);
         let light = (max + min) / 5.12;
         val = max / 2.56;
         if (Math.round(val) == 0 && Math.round(light) == 0) { // It's black, there's no way to tell hue and sat
@@ -438,8 +438,8 @@ namespace sensors {
             r = r / max;
             g = g / max;
             b = b / max;
-            max = Math.max(Math.max(r, g), b);
-            min = Math.min(Math.min(r, g), b);
+            max = math.max3(r, g, b);
+            min = math.min3(r, g, b);
             sat = (max - min) * 100;
             if (Math.round(sat) == 0) hue = -1;
 
@@ -447,8 +447,8 @@ namespace sensors {
                 r = (r - min) / (max - min);
                 g = (g - min) / (max - min);
                 b = (b - min) / (max - min);
-                max = Math.max(Math.max(r, g), b);
-                min = Math.min(Math.min(r, g), b);
+                max = math.max3(r, g, b);
+                min = math.min3(r, g, b);
 
                 if (Math.round(max) == Math.round(r)) {
                     hue = 0 + 60 * (g - b);
@@ -474,16 +474,16 @@ namespace sensors {
     export function convertHsvlToColorNum(hsvl: number[], params: HsvlToColorNumInterface): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
         if (S > params.colorBoundary) { // Граница цветности
-            if (H < params.redBoundary) return 5; // red
-            else if (H < params.brownBoundary) return 7; // brown
-            else if (H < params.yellowBoundary) return 4; // yellow
-            else if (H < params.greenBoundary) return 3; // green
-            else if (H < params.blueBoundary) return 2; // blue
-            else if (H < 360) return 5; // red
+            if (H < params.redBoundary) return SensorColors.Red; // red
+            else if (H < params.brownBoundary) return SensorColors.Brown; // brown
+            else if (H < params.yellowBoundary) return SensorColors.Yellow; // yellow
+            else if (H < params.greenBoundary) return SensorColors.Green; // green
+            else if (H < params.blueBoundary) return SensorColors.Blue; // blue
+            else if (H < 360) return SensorColors.Red; // red
             else return -1; // error
-        } else if (V >= params.whiteBoundary) return 6; // white
-        else if (V >= params.blackBoundary) return 1; // black
-        return 0; // empty
+        } else if (V >= params.whiteBoundary) return SensorColors.White; // white
+        else if (V >= params.blackBoundary) return SensorColors.Black; // black
+        return SensorColors.None; // Empty
     }
 
     /**

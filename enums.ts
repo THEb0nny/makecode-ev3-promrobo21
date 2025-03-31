@@ -141,9 +141,49 @@ const enum FollowLineSensor {
 }
 
 // Перечисление о поворотах в сторону
-enum TurnRotateSide {
-    //% block="влево"
+const enum TurnRotateSide {
+    //% block="leftward"
+    //% block.loc.ru="влево"
     Left,
-    //% block="вправо"
+    //% block="rightward"
+    //% block.loc.ru="вправо"
     Right
+}
+
+// Перечисление о сторонах
+const enum Side {
+    //% block="left"
+    //% block.loc.ru="лево"
+    Left,
+    //% block="right"
+    //% block.loc.ru="право"
+    Right
+}
+
+// Перечисление о цветах, переводимых из HSV
+const enum SensorColors {
+    //% block="empty"
+    //% block.loc.ru="Пусто"
+    None,
+    //% block="black"
+    //% block.loc.ru="Чёрный"
+    Black,
+    //% block="blue"
+    //% block.loc.ru="синий"
+    Blue,
+    //% block="green"
+    //% block.loc.ru="зелёный"
+    Green,
+    //% block="yellow"
+    //% block.loc.ru="жёлтый"
+    Yellow,
+    //% block="red"
+    //% block.loc.ru="красный"
+    Red,
+    //% block="white"
+    //% block.loc.ru="белый"
+    White,
+    //% block="brown"
+    //% block.loc.ru="коричневый"
+    Brown
 }
