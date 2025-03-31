@@ -425,8 +425,8 @@ namespace sensors {
 
         let hue = 0, sat = 0, val = 0;
 
-        let max = math.max3(r, g, b);
-        let min = math.min3(r, g, b);
+        let max = Math.max3(r, g, b);
+        let min = Math.min3(r, g, b);
         let light = (max + min) / 5.12;
         val = max / 2.56;
         if (Math.round(val) == 0 && Math.round(light) == 0) { // It's black, there's no way to tell hue and sat
@@ -438,8 +438,8 @@ namespace sensors {
             r = r / max;
             g = g / max;
             b = b / max;
-            max = math.max3(r, g, b);
-            min = math.min3(r, g, b);
+            max = Math.max3(r, g, b);
+            min = Math.min3(r, g, b);
             sat = (max - min) * 100;
             if (Math.round(sat) == 0) hue = -1;
 
@@ -447,8 +447,8 @@ namespace sensors {
                 r = (r - min) / (max - min);
                 g = (g - min) / (max - min);
                 b = (b - min) / (max - min);
-                max = math.max3(r, g, b);
-                min = math.min3(r, g, b);
+                max = Math.max3(r, g, b);
+                min = Math.min3(r, g, b);
 
                 if (Math.round(max) == Math.round(r)) {
                     hue = 0 + 60 * (g - b);

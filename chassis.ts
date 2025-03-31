@@ -66,7 +66,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
+        const mRotCalc = Math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -98,7 +98,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
-        const mRotCalc = math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
+        const mRotCalc = Math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         chassis.syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -130,9 +130,9 @@ namespace chassis {
             chassis.stop(true);
             return;
         }
-        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
-        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
         chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
@@ -170,8 +170,8 @@ namespace chassis {
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
 
-        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
 
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
 
@@ -211,9 +211,9 @@ namespace chassis {
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.reset(); // Сбросить ПИД регулятор
 
-        const mRotAccelCalc = math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
-        const mRotTotalCalc = math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
 
         // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);

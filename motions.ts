@@ -30,7 +30,7 @@ namespace motions {
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно пройти
+        const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно пройти
         advmotctrls.syncMotorsConfig(speed, speed);
 
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла

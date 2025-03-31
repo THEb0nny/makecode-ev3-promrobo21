@@ -541,7 +541,7 @@ namespace motions {
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
-        const calcMotRot = math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -623,7 +623,7 @@ namespace motions {
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
-        const calcMotRot = math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
         // Подруливаем плавно к линии
@@ -683,7 +683,7 @@ namespace motions {
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
-        const calcMotRot = math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
         // Подруливаем плавно к линии
@@ -760,9 +760,9 @@ namespace motions {
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
         
-        const mRotAccelCalc = math.calculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = math.calculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
-        const mRotTotalCalc = math.calculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = Math.calculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
         advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorFinishSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
 
