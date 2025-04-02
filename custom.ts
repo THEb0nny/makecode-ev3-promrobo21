@@ -12,7 +12,7 @@ namespace custom {
     //% group="Сортировка массива"
     export function mostFrequentNumber(arr: number[]): number {
         arr.sort((a, b) => a - b); // Сортируем массив для более эффективного подсчета частоты
-        let maxCount = 0, currentCount = 1;;
+        let maxCount = 0, currentCount = 1;
         let currentNum = arr[0], mostFrequentNum = arr[0];
         // Проходим по отсортированному массиву, подсчитывая частоту каждого числа
         for (let i = 1; i < arr.length; i++) {
