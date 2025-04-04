@@ -9,19 +9,19 @@
 // sensors.setLineSensorsRawRefValues(2520, 1712, 2420, 1636)
 
 // Установить моторы в шасси и установить свойства инверсии
-// chassis.setSeparatelyChassisMotors(motors.mediumB, motors.mediumC, true, false)
-
-// Установить стандартную синхронизацию моторов шасси
-// chassis.setDefaultRegulated(false)
-
-// Установить радиус колёс в шасси
-// chassis.setWheelRadius(62.4, MeasurementUnit.Millimeters)
-
-// Установить размер базы шасси
-// chassis.setBaseLength(185, MeasurementUnit.Millimeters)
+// chassis.setChassisMotors(motors.mediumB, motors.mediumC, true, false);
 
 // Установить параметры регулирования синхронизации моторов шасси
-// chassis.setSyncRegulatorGains(0.01, 0, 0.5)
+// chassis.setSyncRegulatorGains(0.01, 0.001, 0.5);
+
+// Установить стандартную синхронизацию моторов шасси
+// chassis.setSpeedRegulated(false);
+
+// Установить радиус колёс в шасси
+// chassis.setWheelDiametr(62.4, MeasurementUnit.Millimeters);
+
+// Установить размер базы шасси
+// chassis.setBaseLength(185, MeasurementUnit.Millimeters);
 
 // Установить пороговое значение отражения при движении по линии
 // motions.setLineFollowRefTreshold(40)
@@ -35,7 +35,6 @@
 // Установить dt для циклов регулирования при движении по линии
 // motions.setLineFollowLoopDt(10)
 
-
 // Установить расстояние между двумя датчиками линии в мм для выравнивания
 // levelings.setDistanceBetweenLineSensors(32)
 
@@ -47,3 +46,5 @@
 
 // brick.buttonEnter.pauseUntil(ButtonEvent.Bumped);
 // sensors.searchRgbMinMaxColorSensors(sensors.color4);
+
+// chassis.spinTurn(90, 50);

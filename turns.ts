@@ -8,17 +8,19 @@ namespace chassis {
      * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
      * Скорость должна быть положительной!
      * @param deg угол вращения в градусах, eg: 90
-     * @param speed скорость ващения, eg: 50
+     * @param speed скорость поворота, eg: 50
+     * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisSpinTurn"
-    //% block="sync chassis spin turn $deg\\° at $speed\\% relative to center wheel axis"
-    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс"
+    //% block="sync chassis spin turn $deg\\° at $speed\\% relative to center wheel axis||timeout $timeOut ms"
+    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс||таймаут $timeOut мс"
+    //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="99" blockGap="8"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function spinTurn(deg: number, speed: number) {
+    export function spinTurn(deg: number, speed: number, timeOut?: number) {
         //if (!motorsPair) return;
         if (deg == 0 || speed == 0) {
             stop(true);
@@ -27,19 +29,22 @@ namespace chassis {
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(1);
         }
-        speed = Math.clamp(0, 100, speed >> 0); // We limit the speed of the motor from -100 to 100 and cut off the fractional part
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // We read the value from the encoder from the left motor, right motor before starting
+        console.log(`timeOut: ${timeOut ? true : false}`);
+        speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
+        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
         if (deg > 0) advmotctrls.syncMotorsConfig(speed, -speed);
         else if (deg < 0) advmotctrls.syncMotorsConfig(-speed, speed);
-        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.reset(); // Сбросить регулятор
-        let prevTime = 0;
+        let prevTime = 0; // Переменная для хранения предыдущего времени для цикла регулирования
+        const startTime = control.millis(); // Стартовое время алгоритма
         while (true) {
             let currTime = control.millis();
             let dt = currTime - prevTime;
             prevTime = currTime;
+            if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
             let eml = leftMotor.angle() - emlPrev;
             let emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
@@ -47,10 +52,10 @@ namespace chassis {
             pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, 0);
             let powers = advmotctrls.getPwrSyncMotors(U);
-            setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
+            setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
-        stop(true); // Break at hold
+        stop(true); // Удерживание при торможении
     }
 
     /**
@@ -62,16 +67,18 @@ namespace chassis {
      * Значение угла поворота всегда положительное!
      * @param deg угол вращения в градусах, eg: 90
      * @param speed скорость вращения, eg: 50
+     * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisPivotTurn"
-    //% block="sync chassis pivot turn $deg\\° at $speed\\% pivot $wheelPivot"
-    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно $wheelPivot"
+    //% block="sync chassis pivot turn $deg\\° at $speed\\% pivot $wheelPivot||timeout $timeOut ms"
+    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно $wheelPivot||таймаут $timeOut мс"
+    //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="98"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function pivotTurn(deg: number, speed: number, wheelPivot: WheelPivot) {
+    export function pivotTurn(deg: number, speed: number, wheelPivot: WheelPivot, timeOut?: number) {
         //if (!motorsPair) return;
         if (deg == 0 || speed == 0) {
             stop(true);
@@ -80,21 +87,23 @@ namespace chassis {
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(2);
         }
-        speed = Math.clamp(0, 100, speed >> 0); // We limit the speed of the motor from -100 to 100 and cut off the fractional part
+        speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
         stop(true, 0); // Установить тормоз и удержание моторов перед поворотом
         if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
         else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
         else return;
-        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.reset(); // Сбросить регулятор
-        let prevTime = 0;
+        let prevTime = 0; // Переменная для хранения предыдущего времени для цикла регулирования
+        const startTime = control.millis(); // Стартовое время алгоритма
         while (true) {
             let currTime = control.millis();
             let dt = currTime - prevTime;
             prevTime = currTime;
+            if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
             let eml = leftMotor.angle() - emlPrev;
             let emr = rightMotor.angle() - emrPrev;
             if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) break;
@@ -107,7 +116,7 @@ namespace chassis {
             else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
             control.pauseUntilTime(currTime, 1);
         }
-        stop(true); // Break at hold
+        stop(true); // Удерживание при торможении
     }
 
     /**
@@ -280,8 +289,8 @@ namespace chassis {
         pidSmartTurns.setControlSaturation(-100, 100); // Устанавливаем интервал ПИД регулятора
         pidSmartTurns.reset(); // Сброс ПИД регулятора
         let isTurned = false; // Флажок о повороте
+        let deregStartTime = 0; // Переменная для хранения времени старта таймера дорегулирования
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
-        let deregStartTime = 0; // Переменная для хранения времени старта таймера дорегулирования 
         let startTime = control.millis(); // Стартовое время алгоритма
         while (true) { // Цикл регулирования
             let currTime = control.millis(); // Текущее время
@@ -316,7 +325,7 @@ namespace chassis {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
-        chassis.stop(true); // Остановка моторов с удержанием
+        stop(true); // Остановка моторов с удержанием
     }
 
     /**
@@ -388,7 +397,7 @@ namespace chassis {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
-        chassis.stop(true); // Остановить моторы
+        stop(true); // Остановить моторы
     }
     
 }

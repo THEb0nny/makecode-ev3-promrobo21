@@ -161,7 +161,7 @@ namespace params {
      */
     //% blockId="SetRampLineFollow2SensorParams"
     //% block="set line follow params at start speed = $newMinStartSpeed\\% max = $newMaxSpeed\\% final = $newMinFihishSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
-    //% block.loc.ru="установить параметры движения по линии при стартовой скорости = $newMinStartSpeed\\% макс = $newMaxSpeed\\% конечной = $newMinFihishSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
+    //% block.loc.ru="установить параметры движения по линии при начальной скорости = $newMinStartSpeed\\% макс = $newMaxSpeed\\% конечной = $newMinFihishSpeed\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="99"
@@ -220,7 +220,7 @@ namespace params {
      * @param newKp пропорциональный коэффицент, eg: 1
      */
     //% blockId="RampLineFollowFourParams"
-    //% block="min speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp"
+    //% block="start speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp"
     //% block.loc.ru="начальная скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp"
     //% inlineInputMode="inline"
     //% weight="87"
@@ -245,8 +245,8 @@ namespace params {
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="RampLineFollowSixParams"
-    //% block="starting speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
-    //% block.loc.ru="стартовая скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
+    //% block="start speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
+    //% block.loc.ru="начальная скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="86"
@@ -274,7 +274,7 @@ namespace params {
      * @param newN коэффицент фильтрации дифференциального регулятора, eg: 0
      */
     //% blockId="RampLineFollowAllParams"
-    //% block="starting speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
+    //% block="start speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
     //% block.loc.ru="стартовая скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
