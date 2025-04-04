@@ -29,7 +29,6 @@ namespace chassis {
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(1);
         }
-        console.log(`timeOut: ${timeOut ? true : false}`);
         speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
