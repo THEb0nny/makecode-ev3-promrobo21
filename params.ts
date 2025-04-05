@@ -275,7 +275,7 @@ namespace params {
      */
     //% blockId="RampLineFollowAllParams"
     //% block="start speed = $newStartSpeed\\% max = $newMaxSpeed\\% finaly $newFinishSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
-    //% block.loc.ru="стартовая скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
+    //% block.loc.ru="начальная скорость = $newStartSpeed\\% макс = $newMaxSpeed\\% конечная $newFinishSpeed\\% Kp = $newKp Ki = $newKi Kd = $newKd||N = $newN"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
@@ -564,6 +564,33 @@ namespace params {
             Kd: newKd,
             N: newN
         };
+    }
+
+}
+
+namespace params {
+
+    export interface MotorRegInterface {
+        maxSpeed?: number;
+        Kp?: number;
+        Ki?: number;
+        Kd?: number;
+        N?: number;
+        timeOut?: number;
+    }
+
+    /**
+     * Empty parameters for the motor control algorithm for setting the position.
+     * Пустые параметры для алгоритма регулирования мотора для установки на позицию.
+     */
+    //% blockId="MotorMovePosEmptyParams"
+    //% block="empty"
+    //% block.loc.ru="пусто"
+    //% inlineInputMode="inline"
+    //% weight="89"
+    //% group="Параметры регулирования управления мотора"
+    export function motorPosEmptyParams(): MotorRegInterface {
+        return null;
     }
 
 }

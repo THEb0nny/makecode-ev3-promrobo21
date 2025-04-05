@@ -48,3 +48,5 @@
 // sensors.searchRgbMinMaxColorSensors(sensors.color4);
 
 // chassis.spinTurn(90, 50);
+
+// motors.movePosition(motors.largeB, 45, {maxSpeed: 50, Kp: 1});
