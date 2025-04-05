@@ -163,10 +163,10 @@ const enum Side {
 // Перечисление о цветах, переводимых из HSV
 const enum SensorColors {
     //% block="empty"
-    //% block.loc.ru="Пусто"
+    //% block.loc.ru="пусто"
     None,
     //% block="black"
-    //% block.loc.ru="Чёрный"
+    //% block.loc.ru="чёрный"
     Black,
     //% block="blue"
     //% block.loc.ru="синий"
