@@ -583,7 +583,7 @@ namespace params {
      * Empty parameters for the motor control algorithm for setting the position.
      * Пустые параметры для алгоритма регулирования мотора для установки на позицию.
      */
-    //% blockId="MotorMovePosEmptyParams"
+    //% blockId="MotorMoveIntoPosEmptyParams"
     //% block="empty"
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"

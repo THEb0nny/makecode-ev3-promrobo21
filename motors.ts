@@ -22,7 +22,7 @@ namespace motors {
     //% expandableArgumentMode="enabled"
     //% motor.fieldEditor="motors"
     //% motor.fieldOptions.decompileLiterals=1
-    //% params.shadow="MotorMovePosEmptyParams"
+    //% params.shadow="MotorMoveIntoPosEmptyParams"
     //% weight="99"
     //% subcategory="Дополнительно"
     //% group="Управление положением"
