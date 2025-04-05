@@ -16,8 +16,8 @@ namespace motors {
      * @param newPos установить новый угол в градусах, eg: 45
      */
     //% blockId="MotorMoveIntoPosition"
-    //% block="set motor $motor to position $pos||params: $params"
-    //% block.loc.ru="установить мотор $motor на позицию $pos||параметры: $params"
+    //% block="set $motor to position $pos||params: $params"
+    //% block.loc.ru="установить $motor на позицию $pos||параметры: $params"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% motor.fieldEditor="motors"
