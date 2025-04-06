@@ -491,7 +491,7 @@ namespace params {
 namespace params {
 
     // Интерфейс перадачи параметров для алгоритма позиционирования на линии
-    export interface LinePositioningInterface {
+    export interface LinePositioning {
         maxSpeed?: number;
         timeOut?: number;
         Kp?: number;
@@ -534,7 +534,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры позиционирования на линии"
-    export function linePositioningEmptyParams(): LinePositioningInterface {
+    export function linePositioningEmptyParams(): LinePositioning {
         return null;
     }
 
@@ -555,7 +555,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры позиционирования на линии"
-    export function linePositioningAllParams(newTimeOut?: number, newMaxSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LinePositioningInterface {
+    export function linePositioningAllParams(newTimeOut?: number, newMaxSpeed?: number, newKp?: number, newKi?: number, newKd?: number, newN?: number): LinePositioning {
         return {
             maxSpeed: newMaxSpeed,
             timeOut: newTimeOut,
@@ -570,7 +570,7 @@ namespace params {
 
 namespace params {
 
-    export interface MotorRegInterface {
+    export interface MotorRegulator {
         maxSpeed?: number;
         Kp?: number;
         Ki?: number;
@@ -583,13 +583,13 @@ namespace params {
      * Empty parameters for the motor control algorithm for setting the position.
      * Пустые параметры для алгоритма регулирования мотора для установки на позицию.
      */
-    //% blockId="MotorMoveIntoPosEmptyParams"
+    //% blockId="MotorSetPosEmptyParams"
     //% block="empty"
     //% block.loc.ru="пусто"
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры регулирования управления мотора"
-    export function motorPosEmptyParams(): MotorRegInterface {
+    export function motorSetPosEmptyParams(): MotorRegulator {
         return null;
     }
 

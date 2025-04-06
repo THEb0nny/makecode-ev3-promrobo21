@@ -156,7 +156,7 @@ namespace levelings {
     //% params.shadow="LinePositioningEmptyParams"
     //% weight="98"
     //% group="Линия"
-    export function linePositioning(regTime: number, params?: params.LinePositioningInterface, debug: boolean = false) {
+    export function linePositioning(regTime: number, params?: params.LinePositioning, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) linePositioningMaxSpeed = Math.abs(params.maxSpeed);
             if (params.timeOut) linePositioningTimeOut = Math.abs(params.timeOut);
