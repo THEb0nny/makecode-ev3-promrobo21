@@ -12,8 +12,8 @@ namespace chassis {
      * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisSpinTurn"
-    //% block="sync chassis spin turn $deg\\° at $speed\\% relative to center wheel axis||timeout $timeOut ms"
-    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс||таймаут $timeOut мс"
+    //% block="chassis spin turn $deg\\° at $speed\\% relative to center wheel axis||timeout $timeOut ms"
+    //% block.loc.ru="поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс||таймаут $timeOut мс"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
@@ -69,8 +69,8 @@ namespace chassis {
      * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisPivotTurn"
-    //% block="sync chassis pivot turn $deg\\° at $speed\\% pivot $wheelPivot||timeout $timeOut ms"
-    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно $wheelPivot||таймаут $timeOut мс"
+    //% block="chassis pivot turn $deg\\° at $speed\\% pivot $wheelPivot||timeout $timeOut ms"
+    //% block.loc.ru="поворот шасси на $deg\\° с $speed\\% относительно $wheelPivot||таймаут $timeOut мс"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
@@ -129,8 +129,8 @@ namespace chassis {
      * @param speed turning speed value, eg: 30
      */
     //% blockId="ChassisRampSpinTurn"
-    //% block="sync chassis spin turn $deg\\° at $speed\\% relative to center wheel axis"
-    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс"
+    //% block="chassis spin turn $deg\\° at $speed\\% relative to center wheel axis"
+    //% block.loc.ru="поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="89" blockGap="8"
@@ -151,8 +151,8 @@ namespace chassis {
      * @param speed turning speed value, eg: 30
      */
     //% blockId="ChassisRampPivotTurn"
-    //% block="sync chassis pivot turn $deg\\° at $minSpeed\\% $maxSpeed\\% pivot $wheelPivot"
-    //% block.loc.ru="синхронизированный поворот шасси на $deg\\° с $minSpeed\\% $maxSpeed\\% относительно $wheelPivot"
+    //% block="chassis pivot turn $deg\\° at $minSpeed\\% $maxSpeed\\% pivot $wheelPivot"
+    //% block.loc.ru="поворот шасси на $deg\\° с $minSpeed\\% $maxSpeed\\% относительно $wheelPivot"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="88"
