@@ -736,8 +736,8 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="RampLineFollowToDistance"
-    //% block="ramp line follow to distance $totalDist mm acceleration $accelDist deceleration $decelDist|braking $braking||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist|торможение $braking||параметры: $params|отладка $debug"
+    //% block="ramp line follow to distance $totalDist mm acceleration $accelDist deceleration $decelDist|с действием после $braking||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist|с действием после $braking||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
