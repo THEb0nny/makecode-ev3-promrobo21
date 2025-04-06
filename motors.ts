@@ -1,10 +1,10 @@
 namespace motors {
 
-    let regMotorMaxSpeed = 50;
-    let regMotorKp = 1;
-    let regMotorKi = 0;
-    let regMotorKd = 0;
-    let regMotorN = 0;
+    let regMotorMaxSpeed = 50; // Максимальная скорость регулирования положения мотором
+    let regMotorKp = 1; // Пропорциональный коэффицент регулирования положения мотора
+    let regMotorKi = 0; // Интегральный коэффицент регулирования положения мотора
+    let regMotorKd = 0; // Дифференциальный коэффицент регулирования положения мотора
+    let regMotorN = 0; // Фильтр дифференциального коэффицента регулирования положения мотора
     let regMotorTimeOut = 2000; // Максимальное время работы
     let tolerance = 5; // Допустимая погрешность (в тиках энкодера)
     let minSpeedThreshold = 5; // Порог минимальной скорости
@@ -15,11 +15,12 @@ namespace motors {
      * A function that sets the motor to the desired position.
      * Функция, которая устанавливает мотор на нужную позицию.
      * @param motor мотор для управления, eg: motors.mediumA
-     * @param newPos установить новый угол в градусах, eg: 45
+     * @param pos установить новый угол в градусах, eg: 45
+     * @param isHold удержание мотора по завершению, eg: true
      */
     //% blockId="MotorSetPosition"
-    //% block="set $motor to position $pos||params: $params"
-    //% block.loc.ru="установить $motor на позицию $pos||параметры: $params"
+    //% block="set $motor to position $pos||holding $isHold|params: $params"
+    //% block.loc.ru="установить $motor на позицию $pos||удерживание $isHold|параметры: $params"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% motor.fieldEditor="motors"
@@ -28,7 +29,7 @@ namespace motors {
     //% weight="99"
     //% subcategory="Дополнительно"
     //% group="Управление положением"
-    export function setPosition(motor: motors.Motor, pos: number, params?: params.MotorRegulator) {
+    export function setPosition(motor: motors.Motor, pos: number, isHold: boolean = true, params?: params.MotorRegulator) {
         if (params) {
             if (params.maxSpeed) regMotorMaxSpeed = params.maxSpeed;
             if (params.Kp) regMotorKp = params.Kp;
@@ -39,7 +40,7 @@ namespace motors {
             if (params.timeOut) minSpeedThreshold = params.minSpeedThreshold;
         }
 
-        motor.setBrake(true); // Установка удерживания мотором позиции
+        motor.setBrake(isHold); // Установка удерживания мотором позиции
 
         pidRegMotor = new automation.PIDController(); // PID для мотора
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора

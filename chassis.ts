@@ -8,11 +8,10 @@ namespace chassis {
      */
     //% blockId="RegulatorSteering"
     //% block="motors steering on u = $u at $speed\\%"
-    //% block.loc.ru="руление моторам по u = $u на $speed\\%"
+    //% block.loc.ru="руление моторами по u = $u на $speed\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="99"
-    //% subcategory="Движение"
+    //% weight="89"
     //% group="Move"
     export function regulatorSteering(u: number, speed: number) {
         let mLeft = speed + u, mRight = speed - u;
@@ -27,11 +26,10 @@ namespace chassis {
      */
     //% blockId="NormalizedRegulatorSteering"
     //% block="motors steering on u = $u at $speed\\%"
-    //% block.loc.ru="руление моторам по u = $u на $speed\\%"
+    //% block.loc.ru="руление моторами по u = $u на $speed\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
-    //% weight="98"
-    //% subcategory="Движение"
+    //% weight="88"
     //% group="Move"
     export function normalizedRegulatorSteering(u: number, speed: number) {
         let mLeft = speed + u, mRight = speed - u;
@@ -107,13 +105,14 @@ namespace chassis {
      * It is not recommended to use a minimum speed of less than 10.
      * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
      * The speed values must have the same sign!
-     * Линейное движение на заданное расстояние с ускорением и замедлением в мм. Не рекомендуется использоваться минимальную скорость меньше 10.
+     * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
+     * Не рекомендуется использоваться минимальную скорость меньше 10.
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей должны иметь одинаковый знак!
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
-     * @param minSpeed начальная скорость движения, eg: 15
+     * @param minSpeed начальная скорость движения, eg: 20
      * @param maxSpeed максимальная скорость движения, eg: 50
      */
     //% blockId="RampLinearDistMove"
@@ -147,7 +146,7 @@ namespace chassis {
      * Значения скоростей должны иметь одинаковый знак!
      * @param totalDist total length in mm, eg: 500
      * @param accelDist accelerate length in mm, eg: 50
-     * @param minSpeed start motor speed, eg: 15
+     * @param minSpeed start motor speed, eg: 20
      * @param maxSpeed max motor speed, eg: 50
      */
     //% blockId="AccelStartLinearDistMove"

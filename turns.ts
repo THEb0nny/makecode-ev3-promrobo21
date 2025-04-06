@@ -272,7 +272,7 @@ namespace chassis {
     //% weight="99" blockGap="8"
     //% subcategory="Повороты 2"
     //% group="Умные повороты с регулятором"
-    export function smartSpinTurn(deg: number, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function smartSpinTurn(deg: number, params?: params.LineFollow, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
             if (params.speed) smartSpinTurnSpeed = params.speed;
@@ -343,7 +343,7 @@ namespace chassis {
     //% weight="98"
     //% subcategory="Повороты 2"
     //% group="Умные повороты с регулятором"
-    export function smartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function smartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: params.LineFollow, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
             if (params.speed) smartPivotTurnSpeed = params.speed;

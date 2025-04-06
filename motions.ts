@@ -90,7 +90,7 @@ namespace motions {
      * Движение по направлению с постоянной скоростью до зоны с определённым отражением.
      * @param dir направление движения, eg: 0
      * @param speed скорость движения, eg: 50
-     * @param sensorsSelection определение датчиками, eg: SensorSelection.LeftAndRight
+     * @param sensorsSelection определение датчиками, eg: LineSensorSelection.LeftAndRight
      * @param refCondition отражение больше или меньше, eg: Comparison.Greater
      * @param refTreshold пороговое значение отражения света, eg: 50
      * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
@@ -144,7 +144,7 @@ namespace motions {
 
     /**
      * Поворот на линию.
-     * @param rotateSide в какую сторону вращаться в поиске линии, eg: TurnRotateSide.Left
+     * @param rotateSide в какую сторону вращаться в поиске линии, eg: TurnSide.Left
      * @param speed скорость вращения, eg: 40
      * @param debug отладка на экран, eg: false
     */
@@ -155,7 +155,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Поворот на линию"
-    export function spinTurnToLine(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+    export function spinTurnToLine(rotateSide: TurnSide, speed: number, debug: boolean = false) {
         if (sensors.leftLineSensor instanceof sensors.ColorSensor && sensors.rightLineSensor instanceof sensors.ColorSensor) {
             spinTurnToLineAtColorSensor(rotateSide, speed, debug);
         } else if (sensors.leftLineSensor instanceof sensors.NXTLightSensor && sensors.rightLineSensor instanceof sensors.NXTLightSensor) {
@@ -164,10 +164,10 @@ namespace motions {
     }
 
     // Функция поворота на линию датчиком цвета ev3
-    function spinTurnToLineAtColorSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+    function spinTurnToLineAtColorSensor(rotateSide: TurnSide, speed: number, debug: boolean = false) {
         let sensor: sensors.ColorSensor; // Инициализируем переменную сенсора
-        if (rotateSide == TurnRotateSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
-        else if (rotateSide == TurnRotateSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
+        if (rotateSide == TurnSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
+        else if (rotateSide == TurnSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
         sensor.rgbRaw(); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
@@ -177,10 +177,10 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
 
-        if (rotateSide == TurnRotateSide.Left) {
+        if (rotateSide == TurnSide.Left) {
             advmotctrls.syncMotorsConfig(-speed, speed);
             calcMotRot *= -1; // Умножаем на -1, чтобы вращаться влево
-        } else if (rotateSide == TurnRotateSide.Right) {
+        } else if (rotateSide == TurnSide.Right) {
             advmotctrls.syncMotorsConfig(speed, -speed);
         }
 
@@ -212,14 +212,14 @@ namespace motions {
     }
 
     // Функция поворота на лицию датчиком отражения nxt
-    function spinTurnToLineAtNxtLightSensor(rotateSide: TurnRotateSide, speed: number, debug: boolean = false) {
+    function spinTurnToLineAtNxtLightSensor(rotateSide: TurnSide, speed: number, debug: boolean = false) {
         let sensorSide: LineSensor; // Инициализируем переменную сенсора
         let sensorBlackRefRaw = 0, sensorWhiteRefRaw = 0;
-        if (rotateSide == TurnRotateSide.Left) {
+        if (rotateSide == TurnSide.Left) {
             sensorSide = LineSensor.Left;
             sensorBlackRefRaw = sensors.bRefRawLeftLineSensor;
             sensorWhiteRefRaw = sensors.wRefRawLeftLineSensor;
-        } else if (rotateSide == TurnRotateSide.Right) {
+        } else if (rotateSide == TurnSide.Right) {
             sensorSide = LineSensor.Right;
             sensorBlackRefRaw = sensors.bRefRawRightLineSensor;
             sensorWhiteRefRaw = sensors.wRefRawRightLineSensor;
@@ -233,10 +233,10 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
 
-        if (rotateSide == TurnRotateSide.Left) {
+        if (rotateSide == TurnSide.Left) {
             advmotctrls.syncMotorsConfig(-speed, speed);
             calcMotRot *= -1; // Умножаем на -1, чтобы вращаться влево
-        } else if (rotateSide == TurnRotateSide.Right) {
+        } else if (rotateSide == TurnSide.Right) {
             advmotctrls.syncMotorsConfig(speed, -speed);
         }
 

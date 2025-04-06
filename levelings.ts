@@ -63,7 +63,7 @@ namespace levelings {
     /**
      * The alignment on the line is perpendicular.
      * Выравнивание на линии перпендикулярно.
-     * @param lineLocation наезжать спереди на линию или двигаться назад на линию, eg: MovementOnLine.Front
+     * @param lineLocation наезжать спереди на линию или двигаться назад на линию, eg: VerticalLineLocation.Front
      * @param regulatorTime время дорегулирования, eg: 500
      * @param recalibrate перекалибровка значений датчиков, eg: false
      * @param debug отладка, eg: false
@@ -77,7 +77,7 @@ namespace levelings {
     //% params.shadow="LineAlignmentEmptyParams"
     //% weight="99"
     //% group="Линия"
-    export function lineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, recalibrate: boolean = false, params?: params.LineAlignmentInterface, debug: boolean = false) {
+    export function lineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, recalibrate: boolean = false, params?: params.LineAlignment, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
             if (params.timeOut) lineAlignmentTimeOut = Math.abs(params.timeOut);

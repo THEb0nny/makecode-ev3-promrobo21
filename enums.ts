@@ -141,7 +141,7 @@ const enum FollowLineSensor {
 }
 
 // Перечисление о поворотах в сторону
-const enum TurnRotateSide {
+const enum TurnSide {
     //% block="leftward"
     //% block.loc.ru="влево"
     Left,

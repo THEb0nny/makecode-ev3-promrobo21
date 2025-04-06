@@ -262,7 +262,7 @@ namespace motions {
     //% block.loc.ru="установить рулевое управление $newSteering при поиске линии в движении по линии одним датчиком"
     //% inlineInputMode="inline"
     //% weight="89"
-    //% group="Свойства"
+    //% group="Свойства движения"
     export function setSteeringAtSearchLineForLineFollowOneSensor(newSteering: number) {
         newSteering = Math.abs(newSteering);
         steeringAtSearchLine = newSteering;
@@ -303,8 +303,9 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="99"
+    //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
-    export function lineFollowToCrossIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function lineFollowToCrossIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowCrossIntersectionSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowCrossIntersectionKp = params.Kp;
@@ -370,7 +371,7 @@ namespace motions {
      * Функция движения по линии до определения перекрёстка слева или справа.
      * Если слева, тогда движение осуществляется правым датчиком и левый отвечает за определение.
      * Если справа, тогда за движение отвечает левый датчик, а правый отвечает за определение перекрёстка.
-     * @param sideIntersection перекрёсток слева или справа, eg: SideIntersection.Left
+     * @param sideIntersection перекрёсток слева или справа, eg: SideIntersection.LeftInside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
@@ -382,8 +383,9 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="89"
+    //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
-    export function lineFollowToSideIntersection(sideIntersection: SideIntersection, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function lineFollowToSideIntersection(sideIntersection: SideIntersection, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
         if (sideIntersection == SideIntersection.LeftInside) {
             lineFollowToLeftIntersection(LineLocation.Inside, actionAfterMotion, params, debug);
         } else if (sideIntersection == SideIntersection.LeftOutside) {
@@ -410,9 +412,10 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="88" blockGap="8"
+    //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
-    export function lineFollowToLeftIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function lineFollowToLeftIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowLeftIntersectionSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowLeftIntersectionKp = params.Kp;
@@ -466,9 +469,10 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="87"
+    //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
-    export function lineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function lineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowRightIntersectionSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowRightIntersectionKp = params.Kp;
@@ -526,8 +530,9 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="79"
+    //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
-    export function lineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function lineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowToDistanceSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowToDistanceKp = params.Kp;
@@ -579,8 +584,9 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="76"
+    //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
-    export function lineFollowToDistanceWithOneSensor(followLineSensor: FollowLineSensor, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function lineFollowToDistanceWithOneSensor(followLineSensor: FollowLineSensor, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
         if (followLineSensor == FollowLineSensor.LeftInside) {
             lineFollowToDistanceWithLeftSensor(LineLocation.Inside, dist, actionAfterMotion, params, debug);
         } else if (followLineSensor == FollowLineSensor.LeftOutside) {
@@ -607,9 +613,10 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="75"
+    //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
     //% blockHidden="true"
-    export function lineFollowToDistanceWithLeftSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function lineFollowToDistanceWithLeftSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowToDistanceWithLeftSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowToDistanceWithLeftSensorKp = params.Kp;
@@ -667,9 +674,10 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineFollowEmptyParams"
     //% weight="74" blockGap="8"
+    //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
     //% blockHidden="true"
-    export function lineFollowToDistanceWithRightSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollowInterface, debug: boolean = false) {
+    export function lineFollowToDistanceWithRightSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowToDistanceWithRightSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowToDistanceWithRightSensorKp = params.Kp;
@@ -735,8 +743,9 @@ namespace motions {
     //% debug.shadow="toggleOnOff"
     //% params.shadow="RampLineFollowEmptyParams"
     //% weight="78"
+    //% subcategory="По линии"
     //% group="Движение по линии с ускорениями"
-    export function rampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking, params?: params.RampLineFollowInterface, debug: boolean = false) {
+    export function rampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking, params?: params.RampLineFollow, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             music.playSoundEffect(sounds.systemGeneralAlert);
             control.panic(40);
