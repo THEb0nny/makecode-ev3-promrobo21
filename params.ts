@@ -577,6 +577,8 @@ namespace params {
         Kd?: number;
         N?: number;
         timeOut?: number;
+        tolerance?: number;
+        minSpeedThreshold?: number;
     }
 
     /**

@@ -6,11 +6,10 @@ namespace motors {
     let regMotorKd = 0;
     let regMotorN = 0;
     let regMotorTimeOut = 2000; // Максимальное время работы
-
     let tolerance = 5; // Допустимая погрешность (в тиках энкодера)
     let minSpeedThreshold = 5; // Порог минимальной скорости
 
-    // export const pidRegMotor = new automation.PIDController(); // PID для регулирования положения мотора
+    export let pidRegMotor: automation.PIDController; // PID для регулирования положения мотора
     
     /**
      * A function that sets the motor to the desired position.
@@ -36,12 +35,13 @@ namespace motors {
             if (params.Ki) regMotorKi = params.Ki;
             if (params.Kd) regMotorKd = params.Kd;
             if (params.N) regMotorN = params.N;
-            if (params.timeOut) regMotorTimeOut = params.timeOut;
+            if (params.tolerance) tolerance = params.tolerance;
+            if (params.timeOut) minSpeedThreshold = params.minSpeedThreshold;
         }
 
         motor.setBrake(true); // Установка удерживания мотором позиции
 
-        let pidRegMotor = new automation.PIDController(); // PID для мотора
+        pidRegMotor = new automation.PIDController(); // PID для мотора
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора
         pidRegMotor.setDerivativeFilter(regMotorN); // Установить фильтр дифференциального регулятора
         pidRegMotor.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
