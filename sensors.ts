@@ -335,9 +335,9 @@ namespace sensors {
      * @param newBlueBoundary значение границы синего, после которого до 360 снова идёт красный, eg: 260
      */
     //% blockId="HsvlToColorNumParams"
-    //% block="converting params HSVL to color|at boundars chroma  = $newColorBoundary|white = $newWhiteBoundary black = $newBlackBoundary|red = $newRedBoundary brown = $newBrownBoundary yellow = $newYellowBoundary green = $newGreenBoundary blue = $newBlueBoundary"
-    //% block.loc.ru="параметры перевода HSVL в цвет|при границах цветности = $newColorBoundary|белого = $newWhiteBoundary чёрного = $newBlackBoundary|красного = $newRedBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary зелёного = $newGreenBoundary синего = $newBlueBoundary"
-    //% inlineInputMode="inline"
+    //% block="converting params HSVL to color at boundars chroma = $newColorBoundary white = $newWhiteBoundary black = $newBlackBoundary|red = $newRedBoundary brown = $newBrownBoundary yellow = $newYellowBoundary|green = $newGreenBoundary blue = $newBlueBoundary"
+    //% block.loc.ru="параметры перевода HSVL в цвет при границах цветности = $newColorBoundary белого = $newWhiteBoundary чёрного = $newBlackBoundary|красного = $newRedBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary|зелёного = $newGreenBoundary синего = $newBlueBoundary"
+    //% inlineInputMode="external"
     //% weight="55" blockGap="8"
     //% group="Color Sensor"
     export function hsvlToColorNumParams(newColorBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): HsvlToColorNumInterface {
