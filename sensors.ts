@@ -336,7 +336,7 @@ namespace sensors {
      */
     //% blockId="HsvlToColorNumParams"
     //% block="converting params HSVL to color|at boundars chroma  = $newColorBoundary|white = $newWhiteBoundary black = $newBlackBoundary|red = $newRedBoundary brown = $newBrownBoundary yellow = $newYellowBoundary green = $newGreenBoundary blue = $newBlueBoundary"
-    //% block.loc.ru="параметры перевода HSVL в цвет|при границе цветности = $newColorBoundary|белого = $newWhiteBoundary чёрного = $newBlackBoundary|красного = $newRedBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary зелёного = $newGreenBoundary синего = $newBlueBoundary"
+    //% block.loc.ru="параметры перевода HSVL в цвет|при границах цветности = $newColorBoundary|белого = $newWhiteBoundary чёрного = $newBlackBoundary|красного = $newRedBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary зелёного = $newGreenBoundary синего = $newBlueBoundary"
     //% inlineInputMode="inline"
     //% weight="55" blockGap="8"
     //% group="Color Sensor"
