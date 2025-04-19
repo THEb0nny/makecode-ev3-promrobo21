@@ -65,19 +65,18 @@ namespace levelings {
      * Выравнивание на линии перпендикулярно.
      * @param lineLocation наезжать спереди на линию или двигаться назад на линию, eg: VerticalLineLocation.Front
      * @param regulatorTime время дорегулирования, eg: 500
-     * @param recalibrate перекалибровка значений датчиков, eg: false
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignment"
-    //% block="line alignment $lineLocation at $regulatorTime ms||recalibrate $recalibrate|params: $params|debug $debug"
-    //% block.loc.ru="выравнивание на линии $lineLocation за $regulatorTimeмс||перекалибровать $recalibrate|параметры: $params|отладка $debug"
+    //% block="line alignment $lineLocation at $regulatorTime ms||params: $params|debug $debug"
+    //% block.loc.ru="выравнивание на линии $lineLocation за $regulatorTimeмс||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
     //% params.shadow="LineAlignmentEmptyParams"
     //% weight="99"
     //% group="Линия"
-    export function lineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, recalibrate: boolean = false, params?: params.LineAlignment, debug: boolean = false) {
+    export function lineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, params?: params.LineAlignment, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
             if (params.timeOut) lineAlignmentTimeOut = Math.abs(params.timeOut);
@@ -111,8 +110,8 @@ namespace levelings {
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             if (isOnLine && control.timer8.millis() >= regulatorTime) break; // Условие выхода из цикла при дорегулировании
-            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left, recalibrate); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right, recalibrate); // Нормализованное значение с правого датчика линии
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let errorL = motions.getLineFollowSetPoint() - refLeftLS, errorR = motions.getLineFollowSetPoint() - refRightLS; // Вычисляем ошибки регулирования
             if (!isOnLine && Math.abs(errorL) <= motions.getLineFollowSetPoint() && Math.abs(errorR) <= motions.getLineFollowSetPoint()) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового знначения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования

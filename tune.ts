@@ -715,7 +715,6 @@ namespace custom {
                     } else if (screenName == "LINE_ALIGNMET") {
                         const lineLocation = methodScreens[screenName].params.location.val;
                         const time = methodScreens[screenName].params.time.val;
-                        const recalibrate = methodScreens[screenName].params.recalibrate.val;
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
                             maxSpeed: methodScreens[screenName].params.maxSpeed.val,
@@ -729,7 +728,7 @@ namespace custom {
                             leftN: methodScreens[screenName].params.leftN.val,
                             rightN: methodScreens[screenName].params.rightN.val
                         };
-                        levelings.lineAlignment(lineLocation, time, recalibrate, params, debug);
+                        levelings.lineAlignment(lineLocation, time, params, debug);
                     } else if (screenName == "LINE_ALIGNMET_IN_MOTION") {
                         const speed = methodScreens[screenName].params.speed.val;
                         const debug = methodScreens[screenName].params.debug.val;

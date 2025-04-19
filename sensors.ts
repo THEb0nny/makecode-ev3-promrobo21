@@ -342,7 +342,14 @@ namespace sensors {
     //% group="Color Sensor"
     export function hsvlToColorNumParams(newColorBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): HsvlToColorNumber {
         return {
-            colorBoundary: newColorBoundary, whiteBoundary: newWhiteBoundary, blackBoundary: newBlackBoundary, redBoundary: newRedBoundary, brownBoundary: newBrownBoundary, yellowBoundary: newYellowBoundary, greenBoundary: newGreenBoundary, blueBoundary: newBlueBoundary
+            colorBoundary: newColorBoundary,
+            whiteBoundary: newWhiteBoundary,
+            blackBoundary: newBlackBoundary,
+            redBoundary: newRedBoundary,
+            brownBoundary: newBrownBoundary,
+            yellowBoundary: newYellowBoundary,
+            greenBoundary: newGreenBoundary,
+            blueBoundary: newBlueBoundary
         }
     }
 
