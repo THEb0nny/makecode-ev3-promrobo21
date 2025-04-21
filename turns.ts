@@ -86,7 +86,7 @@ namespace chassis {
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(2);
         }
-        speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
+        speed = Math.clamp(-100, 100, speed >> 0); // Ограничиваем скорость от -100 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
         stop(true, 0); // Установить тормоз и удержание моторов перед поворотом

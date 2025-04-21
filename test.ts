@@ -21,7 +21,7 @@
 // chassis.setWheelDiametr(62.4, MeasurementUnit.Millimeters);
 
 // Установить размер базы шасси
-// chassis.setBaseLength(185, MeasurementUnit.Millimeters);
+// chassis.setBaseLength(172, MeasurementUnit.Millimeters);
 
 // Установить пороговое значение отражения при движении по линии
 // motions.setLineFollowRefTreshold(40)
@@ -48,5 +48,7 @@
 // sensors.searchRgbMinMaxColorSensors(sensors.color4);
 
 // chassis.spinTurn(90, 50);
+
+// chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
 
 // motors.setPosition(motors.largeA, 45, {maxSpeed: 50, Kp: 1});
