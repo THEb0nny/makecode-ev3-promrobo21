@@ -340,7 +340,7 @@ namespace motions {
 
     // Вспомогательная линия, чтобы подрулить и ждать нахождения линии
     export function steeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
-        const { speedLeft, speedRight } = chassis.getMotorsSpeedsAtSteering(steering, speed);
+        const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(steering, speed);
 
         advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients

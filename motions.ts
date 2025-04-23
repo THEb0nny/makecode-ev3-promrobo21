@@ -112,7 +112,7 @@ namespace motions {
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const { speedLeft, speedRight } = chassis.getMotorsSpeedsAtSteering(turnRatio, speed);
+        const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(turnRatio, speed);
         advmotctrls.syncMotorsConfig(speedLeft, speedRight);
         
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
