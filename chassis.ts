@@ -172,7 +172,7 @@ namespace chassis {
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
 
-        advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
+        advmotctrls.linearAccTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
 
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
 
@@ -182,7 +182,7 @@ namespace chassis {
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
-            let out = advmotctrls.accTwoEnc(eml, emr);
+            let out = advmotctrls.linearAccTwoEnc(eml, emr);
             if (out.isDone) break;
             let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrOut, out.pwrOut);
             pidChassisSync.setPoint(error);
@@ -215,7 +215,7 @@ namespace chassis {
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
 
         // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
-        advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.linearAccTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
         
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -224,7 +224,7 @@ namespace chassis {
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-            let out = advmotctrls.accTwoEnc(eml, emr);
+            let out = advmotctrls.linearAccTwoEnc(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             // let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
             let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrOut, out.pwrOut); //////////////////////////////////////////////////////////////////////////
