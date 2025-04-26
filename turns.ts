@@ -26,6 +26,7 @@ namespace chassis {
             stop(true);
             return;
         } else if (speed < 0) {
+            console.log("Error: the rotation speed relative to the center is negative!");
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(1);
         }
@@ -83,6 +84,7 @@ namespace chassis {
             stop(true);
             return;
         } else if (deg < 0) {
+            console.log("Error: the angle of rotation relative to the wheel is negative!");
             music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
             control.panic(2);
         }

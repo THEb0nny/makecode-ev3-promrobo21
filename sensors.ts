@@ -58,8 +58,14 @@ namespace sensors {
             if (newLeftLineSensor !== newRightLineSensor) { // Если сенсоры установили не одинаковые
                 leftLineSensor = newLeftLineSensor;
                 rightLineSensor = newRightLineSensor;
-            } else control.assert(false, 1);
-        } else control.assert(false, 2);
+            } else {
+                console.log("Error: the left and right line sensors are installed the same way!");
+                control.assert(false, 1);
+            }
+        } else {
+            console.log("Error: the line sensors have already been installed! You're doing it repeatedly!");
+            control.assert(false, 2);
+        }
     }
 
     /**
@@ -243,6 +249,7 @@ namespace sensors {
     //% group="Color Sensor"
     export function setColorSensorMinRgbValues(sensor: sensors.ColorSensor, minR: number, minG: number, minB: number) {
         if (minR < 0 || minG < 0 || minB < 0) {
+            console.log("Error: the min RGB value is less than zero!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             control.panic(30);
         }
@@ -268,6 +275,7 @@ namespace sensors {
     //% group="Color Sensor"
     export function setColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxR: number, maxG: number, maxB: number) {
         if (maxR < 0 || maxG < 0 || maxB < 0) {
+            console.log("Error: the max RGB value is less than zero!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             control.panic(31);
         }

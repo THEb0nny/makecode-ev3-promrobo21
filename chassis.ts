@@ -61,6 +61,7 @@ namespace chassis {
             return;
         } else if (dist < 0) {
             chassis.stop(true);
+            console.log("Error: the driving distance is negative!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
@@ -93,6 +94,7 @@ namespace chassis {
             return;
         } else if (dist < 0) {
             chassis.stop(true);
+            console.log("Error: the driving distance is negative!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
