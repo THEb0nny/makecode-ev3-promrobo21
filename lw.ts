@@ -774,7 +774,7 @@ namespace motions {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
-        advmotctrls.linearAccTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorFinishSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorFinishSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         
@@ -784,14 +784,14 @@ namespace motions {
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-            let out = advmotctrls.linearAccTwoEnc(eml, emr);
+            let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, out.pwrOut); // Команда моторам
+            chassis.regulatorSteering(U, (out.pwrLeft + out.pwrRight) / 2); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
