@@ -186,10 +186,10 @@ namespace chassis {
             let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break;
-            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrLeft, out.pwrRight);
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
             pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, 0);
-            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwrLeft, out.pwrRight);
+            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
@@ -229,11 +229,11 @@ namespace chassis {
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             // let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
-            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrLeft, out.pwrRight); //////////////////////////////////////////////////////////////////////////
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr); //////////////////////////////////////////////////////////////////////////
             pidChassisSync.setPoint(error); // Transfer control error to controller
             let U = pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
             // let powers = advmotctrls.getPwrSyncMotors(U);
-            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwrLeft, out.pwrRight);
+            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }

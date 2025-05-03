@@ -791,7 +791,7 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, (out.pwrLeft + out.pwrRight) / 2); // Команда моторам
+            chassis.regulatorSteering(U, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
