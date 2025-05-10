@@ -27,8 +27,7 @@ namespace chassis {
             return;
         } else if (speed < 0) {
             console.log("Error: the rotation speed relative to the center is negative!");
-            music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
-            control.panic(1);
+            control.assert(false, 7);
         }
         speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
@@ -85,8 +84,7 @@ namespace chassis {
             return;
         } else if (deg < 0) {
             console.log("Error: the angle of rotation relative to the wheel is negative!");
-            music.playSoundEffectUntilDone(sounds.systemGeneralAlert);
-            control.panic(2);
+            control.assert(false, 8);
         }
         speed = Math.clamp(-100, 100, speed >> 0); // Ограничиваем скорость от -100 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма

@@ -748,8 +748,7 @@ namespace motions {
     export function rampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking, params?: params.RampLineFollow, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             console.log("Error: the distance values are negative or the sum of the acceleration and deceleration distances is greater than the total distance!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
-            control.panic(40);
+            control.assert(false, 6);
         } else if (totalDist == 0) {
             chassis.stop();
             return;

@@ -250,8 +250,7 @@ namespace sensors {
     export function setColorSensorMinRgbValues(sensor: sensors.ColorSensor, minR: number, minG: number, minB: number) {
         if (minR < 0 || minG < 0 || minB < 0) {
             console.log("Error: the min RGB value is less than zero!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
-            control.panic(30);
+            control.assert(false, 3);
         }
         const index = sensor.port() - 1;
         minRgbColorSensors[index] = [minR, minG, minB];
@@ -276,8 +275,7 @@ namespace sensors {
     export function setColorSensorMaxRgbValues(sensor: sensors.ColorSensor, maxR: number, maxG: number, maxB: number) {
         if (maxR < 0 || maxG < 0 || maxB < 0) {
             console.log("Error: the max RGB value is less than zero!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
-            control.panic(31);
+            control.assert(false, 4);
         }
         const index = sensor.port() - 1;
         maxRgbColorSensors[index] = [maxR, maxG, maxB];

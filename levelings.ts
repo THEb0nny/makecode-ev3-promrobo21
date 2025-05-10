@@ -228,8 +228,7 @@ namespace levelings {
         if (distanceBetweenLineSensors <= 0) {
             chassis.stop(true);
             console.log("Error: the distance between the sensors is not set!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
-            control.panic(10);
+            control.assert(false, 5);
         } else if (speed == 0) {
             chassis.stop(true);
             return;
