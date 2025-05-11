@@ -127,7 +127,9 @@ namespace chassis {
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function rampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
-        if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) || (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) || totalDist <= 0 || accelDist < 0 || decelDist < 0) {
+        if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) ||
+            (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) ||
+            totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             chassis.stop(true);
             return;
         }

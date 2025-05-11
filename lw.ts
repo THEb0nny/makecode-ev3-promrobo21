@@ -744,7 +744,7 @@ namespace motions {
     //% params.shadow="RampLineFollowEmptyParams"
     //% weight="78"
     //% subcategory="По линии"
-    //% group="Движение по линии с ускорениями"
+    //% group="Движение по линии на расстояние с ускорениями"
     export function rampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking, params?: params.RampLineFollow, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             console.log("Error: the distance values are negative or the sum of the acceleration and deceleration distances is greater than the total distance!");
