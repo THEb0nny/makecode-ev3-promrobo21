@@ -25,8 +25,8 @@ namespace chassis {
      * @param speed скорость движения, eg: 50
      */
     //% blockId="NormalizedRegulatorSteering"
-    //% block="motors steering on u = $u at $speed\\%"
-    //% block.loc.ru="руление моторами по u = $u на $speed\\%"
+    //% block="normalized motor steering on u = $u at $speed\\%"
+    //% block.loc.ru="нормализованное руление моторами по u = $u на $speed\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% weight="88"
