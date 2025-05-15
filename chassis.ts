@@ -139,8 +139,6 @@ namespace chassis {
         chassis.syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
-    // 
-
     /**
      * Synchronization of movement with smooth start in mm.
      * It is not recommended to set the minimum speed below 10.
@@ -150,19 +148,19 @@ namespace chassis {
      * Значения скоростей должны иметь одинаковый знак!
      * @param totalDist total length in mm, eg: 500
      * @param accelDist accelerate length in mm, eg: 50
-     * @param minSpeed start motor speed, eg: 20
+     * @param startSpeed start motor speed, eg: 20
      * @param maxSpeed max motor speed, eg: 50
      */
     //% blockId="AccelStartLinearDistMove"
-    //% block="linear distance moving $totalDist mm at acceleration $accelDist|speed min $minSpeed\\% max $maxSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм при ускорении $accelDist|c скоростью мин $minSpeed\\% макс $maxSpeed\\%"
+    //% block="linear distance moving $totalDist mm at acceleration $accelDist|speed min $startSpeed\\% max $maxSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм при ускорении $accelDist|c скоростью мин $startSpeed\\% макс $maxSpeed\\%"
     //% inlineInputMode="inline"
-    //% minSpeed.shadow="motorSpeedPicker"
+    //% startSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="88"
+    //% weight="87"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function accelStartLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
+    export function accelStartLinearDistMove(startSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
         //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {
             stop(true);
@@ -176,7 +174,64 @@ namespace chassis {
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
 
-        advmotctrls.accTwoEncConfig(minSpeed, maxSpeed, minSpeed, mRotAccelCalc, 0, mRotTotalCalc);
+        advmotctrls.accTwoEncConfig(startSpeed, maxSpeed, maxSpeed, mRotAccelCalc, 0, mRotTotalCalc);
+
+        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
+
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) {
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
+            let out = advmotctrls.accTwoEnc(eml, emr);
+            if (out.isDone) break;
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
+            pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, 0);
+            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            control.pauseUntilTime(currTime, 1);
+        }
+        chassis.steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
+    }
+
+    /**
+     * SSynchronization of movement with smooth speed reduction mm..
+     * It is not recommended to set the minimum speed below 15.
+     * Синхронизация движения с плавным сбросом скорости мм.
+     * Не рекомендуется устанавливать минимальную скорость меньше 15.
+     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
+     * Значения скоростей должны иметь одинаковый знак!
+     * @param totalDist total length in mm, eg: 500
+     * @param decelDist deceletate length in mm, eg: 50
+     * @param maxSpeed max motor speed, eg: 50
+     * @param finishSpeed finish motor speed, eg: 20
+     */
+    //% blockId="DecelFinishLinearDistMove"
+    //% block="linear distance moving $totalDist mm at acceleration $accelDist|speed min $finishSpeed\\% max $maxSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм при ускорении $accelDist|c скоростью мин $finishSpeed\\% макс $maxSpeed\\%"
+    //% inlineInputMode="inline"
+    //% finishSpeed.shadow="motorSpeedPicker"
+    //% maxSpeed.shadow="motorSpeedPicker"
+    //% weight="87"
+    //% subcategory="Движение"
+    //% group="Синхронизированное движение с ускорениями в мм"
+    export function decelFinishLinearDistMove(maxSpeed: number, finishSpeed: number, totalDist: number, decelDist: number) {
+        //if (!motorsPair) return;
+        if (maxSpeed == 0 || totalDist == 0) {
+            stop(true);
+            return;
+        }
+
+        pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
+        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        pidChassisSync.reset(); // Сбросить ПИД регулятор
+
+        const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+
+        advmotctrls.accTwoEncConfig(maxSpeed, maxSpeed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc);
 
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
 
@@ -221,7 +276,7 @@ namespace chassis {
         // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
-        
+
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) {
             let currTime = control.millis(); // Текущее время
