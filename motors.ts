@@ -9,7 +9,7 @@ namespace motors {
     let tolerance = 5; // Допустимая погрешность (в тиках энкодера)
     let minSpeedThreshold = 5; // Порог минимальной скорости
 
-    export let pidRegMotor: automation.PIDController; // PID для регулирования положения мотора
+    export let pidRegMotor = new automation.PIDController(); // PID для регулирования положения мотора
     
     /**
      * A function that sets the motor to the desired position.
@@ -42,7 +42,6 @@ namespace motors {
 
         motor.setBrake(isHold); // Установка удерживания мотором позиции
 
-        pidRegMotor = new automation.PIDController(); // PID для мотора
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора
         pidRegMotor.setDerivativeFilter(regMotorN); // Установить фильтр дифференциального регулятора
         pidRegMotor.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
