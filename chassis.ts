@@ -209,8 +209,8 @@ namespace chassis {
      * @param finishSpeed finish motor speed, eg: 20
      */
     //% blockId="DecelFinishLinearDistMove"
-    //% block="linear distance moving $totalDist mm at acceleration $accelDist|speed min $finishSpeed\\% max $maxSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм при ускорении $accelDist|c скоростью мин $finishSpeed\\% макс $maxSpeed\\%"
+    //% block="linear distance moving $totalDist mm at decelDist $decelDist|speed max $maxSpeed\\% min $finishSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм при decelDist $decelDist|c скорости макс $maxSpeed\\% min $finishSpeed\\%"
     //% inlineInputMode="inline"
     //% finishSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
