@@ -157,7 +157,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% startSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="87"
+    //% weight="88"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function accelStartLinearDistMove(startSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
@@ -197,7 +197,7 @@ namespace chassis {
     }
 
     /**
-     * SSynchronization of movement with smooth speed reduction mm..
+     * Synchronization of movement with smooth speed reduction mm..
      * It is not recommended to set the minimum speed below 15.
      * Синхронизация движения с плавным сбросом скорости мм.
      * Не рекомендуется устанавливать минимальную скорость меньше 15.
@@ -209,8 +209,8 @@ namespace chassis {
      * @param finishSpeed finish motor speed, eg: 20
      */
     //% blockId="DecelFinishLinearDistMove"
-    //% block="linear distance moving $totalDist mm at decelDist $decelDist|speed max $maxSpeed\\% min $finishSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм при decelDist $decelDist|c скорости макс $maxSpeed\\% min $finishSpeed\\%"
+    //% block="linear distance moving $totalDist mm at deceleration $decelDist|from speed $maxSpeed\\% to $finishSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм при замедлении $decelDist|cо скорости $maxSpeed\\% до $finishSpeed\\%"
     //% inlineInputMode="inline"
     //% finishSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
@@ -250,7 +250,7 @@ namespace chassis {
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
-        chassis.steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
+        chassis.stop(true); // Тормоз с удержанием
     }
 
     //% blockId="RampDistMove"
@@ -298,12 +298,3 @@ namespace chassis {
     }
 
 }
-
-// let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
-// let out = advmotctrls.accTwoEnc(eml, emr);
-// if (out.isDone) break;
-// let error = advmotctrls.getErrorSyncMotorsInPwr(eml, emr, out.pwrOut, out.pwrOut);
-// pidChassisSync.setPoint(error);
-// let U = pidChassisSync.compute(dt, 0);
-// let powers = advmotctrls.getPwrSyncMotorsInPwr(U, out.pwrOut, out.pwrOut);
-// setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
