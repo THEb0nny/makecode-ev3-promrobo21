@@ -123,7 +123,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="89" blockGap="8"
+    //% weight="89"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function rampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
@@ -133,9 +133,11 @@ namespace chassis {
             stop(true);
             return;
         }
+        
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
-        const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общюю дистанцию
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
+
         syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
@@ -146,10 +148,10 @@ namespace chassis {
      * Не рекомендуется устанавливать минимальную скорость меньше 10.
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей должны иметь одинаковый знак!
-     * @param totalDist total length in mm, eg: 500
-     * @param accelDist accelerate length in mm, eg: 50
-     * @param startSpeed start motor speed, eg: 20
-     * @param maxSpeed max motor speed, eg: 50
+     * @param totalDist общее расстояние в мм, eg: 500
+     * @param accelDist расстояние ускорения в мм, eg: 50
+     * @param startSpeed начальная скорость движени, eg: 20
+     * @param maxSpeed максимальная скорость движения, eg: 50
      */
     //% blockId="AccelStartLinearDistMove"
     //% block="linear distance moving $totalDist mm at acceleration $accelDist|from speed $startSpeed\\% to $maxSpeed\\%"
@@ -157,7 +159,7 @@ namespace chassis {
     //% inlineInputMode="inline"
     //% startSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="88"
+    //% weight="88" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function accelStartLinearDistMove(startSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
@@ -170,28 +172,25 @@ namespace chassis {
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
-        advmotctrls.accTwoEncConfig(startSpeed, maxSpeed, maxSpeed, mRotAccelCalc, 0, mRotTotalCalc);
-        pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов регулирования
-        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
-        pidChassisSync.reset(); // Сбросить ПИД регулятор
-
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
 
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (true) {
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
-            prevTime = currTime; // Новое время в переменную предыдущего времени
-            let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
-            let out = advmotctrls.accTwoEnc(eml, emr);
-            if (out.isDone) break;
-            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
-            pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, 0);
-            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
-            setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1);
-        }
+        executeRampMovement(startSpeed, maxSpeed, maxSpeed, mRotAccelCalc, 0, mRotTotalCalc, emlPrev, emrPrev); // Выполнение синхронизированного движения с фазами
+
+        // let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        // while (true) {
+        //     let currTime = control.millis(); // Текущее время
+        //     let dt = currTime - prevTime; // Время за которое выполнился цикл
+        //     prevTime = currTime; // Новое время в переменную предыдущего времени
+        //     let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
+        //     let out = advmotctrls.accTwoEnc(eml, emr);
+        //     if (out.isDone) break;
+        //     let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
+        //     pidChassisSync.setPoint(error);
+        //     let U = pidChassisSync.compute(dt, 0);
+        //     let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
+        //     setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+        //     control.pauseUntilTime(currTime, 1);
+        // }
         steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
     }
 
@@ -204,21 +203,21 @@ namespace chassis {
      * Значения скоростей должны иметь одинаковый знак!
      * @param totalDist total length in mm, eg: 500
      * @param decelDist deceletate length in mm, eg: 50
-     * @param maxSpeed max motor speed, eg: 50
+     * @param speed motor speed, eg: 50
      * @param finishSpeed finish motor speed, eg: 20
      */
     //% blockId="DecelFinishLinearDistMove"
-    //% block="linear distance moving $totalDist mm at deceleration $decelDist|from speed $maxSpeed\\% to $finishSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм при замедлении $decelDist|cо скорости $maxSpeed\\% до $finishSpeed\\%"
+    //% block="linear distance moving $totalDist mm at deceleration $decelDist|from speed $speed\\% to $finishSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм при замедлении $decelDist|cо скорости $speed\\% до $finishSpeed\\%"
     //% inlineInputMode="inline"
+    //% speed.shadow="motorSpeedPicker"
     //% finishSpeed.shadow="motorSpeedPicker"
-    //% maxSpeed.shadow="motorSpeedPicker"
-    //% weight="87"
+    //% weight="87" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function decelFinishLinearDistMove(maxSpeed: number, finishSpeed: number, totalDist: number, decelDist: number) {
+    export function decelFinishLinearDistMove(speed: number, finishSpeed: number, totalDist: number, decelDist: number) {
         //if (!motorsPair) return;
-        if (maxSpeed == 0 || totalDist == 0) {
+        if (speed == 0 || totalDist == 0) {
             stop(true);
             return;
         }
@@ -226,28 +225,25 @@ namespace chassis {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
-        advmotctrls.accTwoEncConfig(maxSpeed, maxSpeed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc);
-        pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов регулирования
-        pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
-        pidChassisSync.reset(); // Сбросить ПИД регулятор
-
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
 
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (true) {
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
-            prevTime = currTime; // Новое время в переменную предыдущего времени
-            let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
-            let out = advmotctrls.accTwoEnc(eml, emr);
-            if (out.isDone) break;
-            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
-            pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, 0);
-            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
-            setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1);
-        }
+        executeRampMovement(speed, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc, emlPrev, emrPrev); // Выполнение синхронизированного движения с фазами
+
+        // let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        // while (true) {
+        //     let currTime = control.millis(); // Текущее время
+        //     let dt = currTime - prevTime; // Время за которое выполнился цикл
+        //     prevTime = currTime; // Новое время в переменную предыдущего времени
+        //     let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
+        //     let out = advmotctrls.accTwoEnc(eml, emr);
+        //     if (out.isDone) break;
+        //     let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
+        //     pidChassisSync.setPoint(error);
+        //     let U = pidChassisSync.compute(dt, 0);
+        //     let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
+        //     setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+        //     control.pauseUntilTime(currTime, 1);
+        // }
         stop(true); // Тормоз с удержанием
     }
 
@@ -255,7 +251,9 @@ namespace chassis {
     //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
     //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% minSpeed.shadow="motorSpeedPicker"
+    //% maxSpeedLeft.shadow="motorSpeedPicker"
+    //% maxSpeedRight.shadow="motorSpeedPicker"
     //% weight="88"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями"
