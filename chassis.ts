@@ -98,7 +98,9 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
+
         const mRotCalc = Math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
+        
         syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -172,25 +174,7 @@ namespace chassis {
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
-
-        executeRampMovement(startSpeed, maxSpeed, maxSpeed, mRotAccelCalc, 0, mRotTotalCalc, emlPrev, emrPrev); // Выполнение синхронизированного движения с фазами
-
-        // let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        // while (true) {
-        //     let currTime = control.millis(); // Текущее время
-        //     let dt = currTime - prevTime; // Время за которое выполнился цикл
-        //     prevTime = currTime; // Новое время в переменную предыдущего времени
-        //     let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
-        //     let out = advmotctrls.accTwoEnc(eml, emr);
-        //     if (out.isDone) break;
-        //     let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
-        //     pidChassisSync.setPoint(error);
-        //     let U = pidChassisSync.compute(dt, 0);
-        //     let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
-        //     setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-        //     control.pauseUntilTime(currTime, 1);
-        // }
+        executeRampMovement(startSpeed, maxSpeed, maxSpeed, mRotAccelCalc, 0, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
         steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
     }
 
@@ -225,25 +209,7 @@ namespace chassis {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
-
-        executeRampMovement(speed, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc, emlPrev, emrPrev); // Выполнение синхронизированного движения с фазами
-
-        // let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        // while (true) {
-        //     let currTime = control.millis(); // Текущее время
-        //     let dt = currTime - prevTime; // Время за которое выполнился цикл
-        //     prevTime = currTime; // Новое время в переменную предыдущего времени
-        //     let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
-        //     let out = advmotctrls.accTwoEnc(eml, emr);
-        //     if (out.isDone) break;
-        //     let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
-        //     pidChassisSync.setPoint(error);
-        //     let U = pidChassisSync.compute(dt, 0);
-        //     let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
-        //     setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-        //     control.pauseUntilTime(currTime, 1);
-        // }
+        executeRampMovement(speed, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
         stop(true); // Тормоз с удержанием
     }
 
