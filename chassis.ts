@@ -22,7 +22,7 @@ namespace chassis {
      * Steering normalized command to the chassis motors from the controller.
      * Команда нормализованного руления моторами шасси от регулятора.
      * @param u управляющее воздействие, eg: 0
-     * @param speed скорость движения, eg: 50
+     * @param speed скорость (мощность) движения, eg: 50
      */
     //% blockId="NormalizedRegulatorSteering"
     //% block="normalized regulator steering on u = $u at $speed\\%"
@@ -39,12 +39,12 @@ namespace chassis {
     }
 
     /**
-     * Linear movement over a distance in mm at a constant speed.
+     * Linear movement over a distance in mm at a constant speed (power).
      * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
-     * Линейное движение на расстояние в мм с постоянной скоростью.
+     * Линейное движение на расстояние в мм с постоянной скоростью (мощностью).
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
-     * @param speed скорость движения, eg: 60
+     * @param speed скорость (мощность) движения, eg: 60
      * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="LinearDistMove"
@@ -70,10 +70,10 @@ namespace chassis {
     }
 
     /**
-     * Movement over a distance in mm with independent speeds on motors.
-     * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
-     * Движение на расстояние в мм с независимыми скоростями на моторы.
-     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
+     * Movement over a distance in mm with independent speeds (power) on motors.
+     * The distance value must be positive! If the speed (power) value is positive, then the motors spin forward, and if it is negative, then backward.
+     * Движение на расстояние в мм с независимыми скоростями (мощностями) на моторы.
+     * Значение дистанции должно быть положительным! Если значение скорости (мощностей) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
      * @param speedLeft скорость левого мотора, eg: 50
      * @param speedRight скорость правого мотора, eg: 50
@@ -106,12 +106,12 @@ namespace chassis {
 
     /**
      * Linear movement over a given distance with acceleration and deceleration in mm.
-     * It is not recommended to use a minimum speed of less than 10.
-     * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
+     * It is not recommended to use a minimum speed (power) of less than 10.
+     * The distance value must be positive! If the speed (power) value is positive, then the motors spin forward, and if it is negative, then backward.
      * The speed values must have the same sign!
      * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
-     * Не рекомендуется использоваться минимальную скорость меньше 10.
-     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
+     * Не рекомендуется использоваться минимальную скорость (мощность) меньше 10.
+     * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей должны иметь одинаковый знак!
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
@@ -120,8 +120,8 @@ namespace chassis {
      * @param maxSpeed максимальная скорость движения, eg: 50
      */
     //% blockId="RampLinearDistMove"
-    //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|speed min $minSpeed\\% max $maxSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c скоростью мин $minSpeed\\% макс $maxSpeed\\%"
+    //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|from min $minSpeed\\% max $maxSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c мин $minSpeed\\% макс $maxSpeed\\%"
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
@@ -145,10 +145,10 @@ namespace chassis {
 
     /**
      * Synchronization of movement with smooth start in mm.
-     * It is not recommended to set the minimum speed below 10.
+     * It is not recommended to set the minimum speed (power) below 10.
      * Синхронизация движения с плавным стартом в мм.
      * Не рекомендуется устанавливать минимальную скорость меньше 10.
-     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
+     * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей должны иметь одинаковый знак!
      * @param totalDist общее расстояние в мм, eg: 500
      * @param accelDist расстояние ускорения в мм, eg: 50
@@ -156,8 +156,8 @@ namespace chassis {
      * @param maxSpeed максимальная скорость движения, eg: 50
      */
     //% blockId="AccelStartLinearDistMove"
-    //% block="linear distance moving $totalDist mm at acceleration $accelDist|from speed $startSpeed\\% to $maxSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм при ускорении $accelDist|c скорости $startSpeed\\% макс $maxSpeed\\%"
+    //% block="linear distance moving $totalDist mm at acceleration $accelDist|from $startSpeed\\% to $maxSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм при ускорении $accelDist|c $startSpeed\\% макс $maxSpeed\\%"
     //% inlineInputMode="inline"
     //% startSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
@@ -179,20 +179,20 @@ namespace chassis {
     }
 
     /**
-     * Synchronization of movement with smooth speed reduction mm.
-     * It is not recommended to set the minimum speed below 15.
-     * Синхронизация движения с плавным сбросом скорости мм.
-     * Не рекомендуется устанавливать минимальную скорость меньше 15.
+     * Synchronization of movement with smooth speed (power) reduction mm.
+     * It is not recommended to set the minimum speed (power) below 15.
+     * Синхронизация движения с плавным сбросом скорости (мощности) мм.
+     * Не рекомендуется устанавливать минимальную скорость (мощность) меньше 15.
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
-     * Значения скоростей должны иметь одинаковый знак!
+     * Значения скоростей (мощности) должны иметь одинаковый знак!
      * @param totalDist total length in mm, eg: 500
      * @param decelDist deceletate length in mm, eg: 50
      * @param speed motor speed, eg: 50
      * @param finishSpeed finish motor speed, eg: 20
      */
     //% blockId="DecelFinishLinearDistMove"
-    //% block="linear distance moving $totalDist mm at deceleration $decelDist|from speed $speed\\% to $finishSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм при замедлении $decelDist|cо скорости $speed\\% до $finishSpeed\\%"
+    //% block="linear distance moving $totalDist mm at deceleration $decelDist|from $speed\\% to $finishSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм при замедлении $decelDist|c $speed\\% до $finishSpeed\\%"
     //% inlineInputMode="inline"
     //% speed.shadow="motorSpeedPicker"
     //% finishSpeed.shadow="motorSpeedPicker"
@@ -214,8 +214,8 @@ namespace chassis {
     }
 
     //% blockId="RampDistMove"
-    //% block="distance moving $totalDist|mm acceleration $accelDist| deceleration $decelDist| at speed $speed|\\%"
-    //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist| замедления $decelDist| со скоростью $speed|\\%"
+    //% block="distance moving $totalDist|mm acceleration $accelDist|deceleration $decelDist|at $speed|\\%"
+    //% block.loc.ru="движение на расстояние $totalDist|мм ускорения $accelDist|замедления $decelDist|с $speed|\\%"
     //% inlineInputMode="inline"
     //% minSpeed.shadow="motorSpeedPicker"
     //% maxSpeedLeft.shadow="motorSpeedPicker"
