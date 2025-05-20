@@ -187,3 +187,11 @@ const enum SensorColors {
     //% block.loc.ru="коричневый"
     Brown
 }
+
+// Перечисление методов обхода графа
+const enum GraphTraversal {
+    DFS, // Обход в глубину
+    BFS, // Обход в ширину
+    Dijkstra, // Алгоритм Дейкстры (для взвешенных графов)
+    // A_STAR // A* (для поиска пути)
+}
