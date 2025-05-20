@@ -115,39 +115,32 @@ namespace navigation {
             } else break; // Иначе поворот не требуется
         }
         if (debug) {
-            console.log("inputDirection = " + inputDirection);
-            console.log("turnDegSum = " + turnDegSum);
+            console.log(`inputDirection: ${inputDirection}`);
+            console.log(`turnDegSum: ${turnDegSum}`);
         }
-        chassis.spinTurn(turnDegSum, speed); // Поворот
+        chassis.spinTurn(turnDegSum, speed); // Поворот относительно центра шасси
     }
 
     // Движение до точки (вершины)
-    export function MoveToNode(newPos: number, speed: number, turnSpeed: number, debug: boolean = false) {
-        const travel = navigation.algorithmDFS(currentPos, newPos); // Получить матрицу пути, по которому нужно пройти
+    export function moveToNode(newPos: number, speed: number, turnSpeed: number, debug: boolean = false) {
+        const path = navigation.algorithmDFS(currentPos, newPos); // Получить матрицу пути, по которому нужно пройти
         if (debug) { // Отладка, вывод пути на экран
-            const strTravel = travel.join(', ');
-            // brick.clearScreen();
-            // brick.showString("Target travel:", 1);
-            // brick.showString(strTravel, 2);
-            console.log("Target travel: " + strTravel);
-            console.sendToScreen();
+            console.log(`Target path: ${path.join(', ')}`);
         }
-        for (let i = 0; i < travel.length - 1; i++) {
-            // brick.showString(`${navigation.getNavigationMatrix()[travel[i]][travel[i + 1]]}`, i + 4);
-            directionSpinTurn(navigation.getNavigationMatrix()[travel[i]][travel[i + 1]], turnSpeed); // Поворот
+        for (let i = 0; i < path.length - 1; i++) {
+            // brick.showString(`${navigation.getNavigationMatrix()[path[i]][path[i + 1]]}`, i + 4);
+            directionSpinTurn(navigation.getNavigationMatrix()[path[i]][path[i + 1]], turnSpeed); // Поворот
             motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: speed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
     }
 
-    export function MoveToPath(path: number[], speed: number, turnSpeed: number, debug: boolean = false) {
+    export function moveOnPath(path: number[], speed: number, turnSpeed: number, debug: boolean = false) {
         if (debug) { // Отладка, вывод пути на экран
-            const strPath = path.join(', ');
-            console.log("Target path: " + strPath);
-            console.sendToScreen();
+            console.log(`Target path: ${path.join(', ')}`);
         }
         for (let i = 0; i < path.length - 1; i++) {
-            // brick.showString(`${navigation.getNavigationMatrix()[travel[i]][travel[i + 1]]}`, i + 4);
+            // brick.showString(`${navigation.getNavigationMatrix()[path[i]][path[i + 1]]}`, i + 4);
             directionSpinTurn(navigation.getNavigationMatrix()[path[i]][path[i + 1]], turnSpeed); // Поворот
             motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: speed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную

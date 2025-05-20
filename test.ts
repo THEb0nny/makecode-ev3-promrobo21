@@ -53,4 +53,6 @@
 
 // motors.setPosition(motors.largeA, 45, {maxSpeed: 50, Kp: 1});
 
-navigation.MoveToNode(1, 50, 40, true);
+// navigation.moveToNode(1, 50, 40, true);
+// const travel = navigation.algorithmDFS(25, 1); // Получить матрицу пути, по которому нужно пройти
+// console.log(`travel: ${travel.join(', ')}`);
