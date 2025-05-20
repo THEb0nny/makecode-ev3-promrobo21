@@ -52,3 +52,5 @@
 // chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
 
 // motors.setPosition(motors.largeA, 45, {maxSpeed: 50, Kp: 1});
+
+// navigation.MoveToNode(25, 50, 40, true);

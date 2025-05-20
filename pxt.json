@@ -23,7 +23,8 @@
         "chassis.ts",
         "test.ts",
         "math.ts",
-        "motors.ts"
+        "motors.ts",
+        "navigation.ts"
     ],
     "testFiles": [],
     "targetVersions": {
