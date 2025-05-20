@@ -1,7 +1,7 @@
 namespace navigation {
 
-    let currentPos = 1; // Текущая позиция на узле (местоположение)
-    let navCompass = 0; // Компас для навигации
+    let currentPos = 25; // Текущая позиция на узле (местоположение)
+    let direction = 2; // Направление для навигации
     let numNodes = 29; // Количество узлов
 
     // Матрица навигации, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
@@ -80,8 +80,8 @@ namespace navigation {
         currentPos = newPos;
     }
 
-    export function setCurrentCompassDirection(newDirCompas: number) {
-        navCompass = newDirCompas;
+    export function setCurrentDirection(newDirection: number) {
+        direction = newDirection;
     }
 
     export function setNavigationMatrix(newNavMatrix: number[][]) {
@@ -100,29 +100,29 @@ namespace navigation {
         return weightMatrix;
     }
 
-    // Поворот с помощью компаса навигации
-    export function CompassTurn(inputCompass: number, speed: number, debug: boolean = false) {
+    // Поворот с помощью направления навигации
+    export function directionSpinTurn(inputDirection: number, speed: number, debug: boolean = false) {
         let turnDegSum = 0; // Переменная для суммирования значения поворота
         while (true) {
-            if (inputCompass > navCompass && (navCompass != 0 || inputCompass != 3) || (navCompass == 3 && inputCompass == 0)) {
-                navCompass += 1; // Изменяем глобальное значение направления компаса
-                if (navCompass > 3) navCompass = 0; // Если записали направление больше 3, то его сбросить до 0
+            if (inputDirection > direction && (direction != 0 || inputDirection != 3) || (direction == 3 && inputDirection == 0)) {
+                direction += 1; // Изменяем глобальное значение направления компаса
+                if (direction > 3) direction = 0; // Если записали направление больше 3, то его сбросить до 0
                 turnDegSum -= 90; // Добавляем в переменную итогового поворота
-            } else if (inputCompass < navCompass && (navCompass != 3 || inputCompass != 0) || (navCompass == 0 && inputCompass == 3)) {
-                navCompass -= 1; // Изменяем глобальное значение направления компаса
-                if (navCompass < 0) navCompass = 3; // Если записали направление меньше 0, то его сбросить до 3
+            } else if (inputDirection < direction && (direction != 3 || inputDirection != 0) || (direction == 0 && inputDirection == 3)) {
+                direction -= 1; // Изменяем глобальное значение направления компаса
+                if (direction < 0) direction = 3; // Если записали направление меньше 0, то его сбросить до 3
                 turnDegSum += 90; // Добавляем в переменную итогового поворота
             } else break; // Иначе поворот не требуется
         }
         if (debug) {
-            console.log("inputCompass = " + inputCompass);
+            console.log("inputDirection = " + inputDirection);
             console.log("turnDegSum = " + turnDegSum);
         }
         chassis.spinTurn(turnDegSum, speed); // Поворот
     }
 
     // Движение до точки (вершины)
-    export function MoveToNode(newPos: number, speed: number, turnSpeed: number = 40, debug: boolean = false) {
+    export function MoveToNode(newPos: number, speed: number, turnSpeed: number, debug: boolean = false) {
         const travel = navigation.algorithmDFS(currentPos, newPos); // Получить матрицу пути, по которому нужно пройти
         if (debug) { // Отладка, вывод пути на экран
             const strTravel = travel.join(', ');
@@ -134,14 +134,30 @@ namespace navigation {
         }
         for (let i = 0; i < travel.length - 1; i++) {
             // brick.showString(`${navigation.getNavigationMatrix()[travel[i]][travel[i + 1]]}`, i + 4);
-            CompassTurn(navigation.getNavigationMatrix()[travel[i]][travel[i + 1]], turnSpeed); // Поворот
+            directionSpinTurn(navigation.getNavigationMatrix()[travel[i]][travel[i + 1]], turnSpeed); // Поворот
             motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: speed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
     }
 
-    export function algorithmDFS(start: number, finish: number): number[] {
-        let stack: number[] = [start]; // Стек для хранения узлов в порядке обхода
+    export function MoveToPath(path: number[], speed: number, turnSpeed: number, debug: boolean = false) {
+        if (debug) { // Отладка, вывод пути на экран
+            const strPath = path.join(', ');
+            console.log("Target path: " + strPath);
+            console.sendToScreen();
+        }
+        for (let i = 0; i < path.length - 1; i++) {
+            // brick.showString(`${navigation.getNavigationMatrix()[travel[i]][travel[i + 1]]}`, i + 4);
+            directionSpinTurn(navigation.getNavigationMatrix()[path[i]][path[i + 1]], turnSpeed); // Поворот
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: speed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
+            currentPos = path[i]; // Записываем новую позицию в глобальную переменную
+        }
+        currentPos = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
+    }
+
+    // Алгоритм поиска в глубину
+    export function algorithmDFS(startNode: number, finishNode: number): number[] {
+        let stack: number[] = [startNode]; // Стек для хранения узлов в порядке обхода
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
         let found = false; // Флаг для остановки при нахождении цели
@@ -154,7 +170,7 @@ namespace navigation {
 
         while (stack.length > 0 && !found) {
             const current = stack.pop(); // Берём последний узел из стека
-            if (current == finish) { // Проверка на достижение цели
+            if (current == finishNode) { // Проверка на достижение цели
                 found = true;
                 break;
             }
@@ -173,16 +189,13 @@ namespace navigation {
         if (!found) return []; // Если цель не найдена
 
         let path: number[] = [];
-        let node = finish;
+        let node = finishNode;
         while (node != -1) {
             path.push(node);
             node = parent[node]; // Двигаемся к началу
         }
-
-        // Возвращаем копию развёрнутого массива [finish -> start] в [start -> finish]
-        let reversedPath: number[] = [];
-        for (let i = path.length - 1; i >= 0; i--) reversedPath.push(path[i]);
-        return reversedPath;
+        path.reverse(); // Переворачиваем массив
+        return path;
     }
 
 }
