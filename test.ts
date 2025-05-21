@@ -124,6 +124,13 @@ let weightMatrix: number[][] = [
 
 navigation.setNodesNumber(29);
 navigation.setNavigationMatrix(navMatrix);
-const travel = navigation.algorithmDFS(25, 1); // Получить матрицу пути, по которому нужно пройти
-console.log(`travel: ${travel.join(', ')}`);
+navigation.setWeightMatrix(weightMatrix);
+
+// console.log(`travelDFS: ${navigation.algorithmDFS(25, 1).join(', ')}`);
+
+console.log(`travelBFS1: ${navigation.algorithmBFS(25, 1).join(', ')}`);
+
+console.log(`travelBFS2: ${navigation.algorithmBFS(1, 23).join(', ')}`);
+
+console.log(`travelDijkstra: ${navigation.algorithmDijkstra(1, 23).join(', ')}`);
 */

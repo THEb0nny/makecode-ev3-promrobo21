@@ -95,11 +95,13 @@ namespace navigation {
     }
 
     // Алгоритм поиска в глубину
+    // Нужен любой путь(без учёта длины / веса)
+    // Например: проверка связности графа
     export function algorithmDFS(startNode: number, finishNode: number): number[] {
         let stack: number[] = [startNode]; // Стек для хранения узлов в порядке обхода
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
-        let found = false; // Флаг для остановки при нахождении цели
+        let found: boolean = false; // Флаг для остановки при нахождении цели
 
         // Инициализация массивов
         for (let i = 0; i < numNodes; i++) {
@@ -134,6 +136,100 @@ namespace navigation {
             node = parent[node]; // Двигаемся к началу
         }
         path.reverse(); // Переворачиваем массив
+        return path;
+    }
+
+    // Алгоритм поиска в ширину
+    // Невзвешенный граф + нужен кратчайший по количеству шагов
+    // Например: навигация в лабиринте без "стоимости" поворотов
+    export function algorithmBFS(start: number, finish: number): number[] {
+        let queue: number[] = [start];
+        let visited: boolean[] = []; // Для отслеживания посещённых узлов
+        let parent: number[] = []; // Для восстановления пути (хранит "родителей")
+        visited[start] = true;
+
+        // Инициализация массивов
+        for (let i = 0; i < numNodes; i++) {
+            visited.push(false); // Все узлы изначально не посещены
+            parent.push(-1); // Специальное значение "нет родителя"
+        }
+
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (current === finish) break;
+            for (let i = 0; i < numNodes; i++) {
+                if (navMatrix[current][i] !== -1 && !visited[i]) {
+                    visited[i] = true;
+                    parent[i] = current;
+                    queue.push(i);
+                }
+            }
+        }
+
+        // Восстановление пути (аналогично вашему коду)
+        let path: number[] = [];
+        let node = finish;
+        while (node !== -1) {
+            path.push(node);
+            node = parent[node];
+        }
+        path.reverse();
+        return path;
+    }
+
+    // Дейкстра гарантированно найдёт оптимальный путь A → C → B
+    // Взвешенный граф (учёт реальных расстояний/весов)
+    export function algorithmDijkstra(start: number, finish: number): number[] {
+        let dist: number[] = []; // Для записи расстояний до узлов
+        let visited: boolean[] = []; // Для отслеживания посещённых узлов
+        let parent: number[] = []; // Для восстановления пути (хранит "родителей")
+        dist[start] = 0; // Расстояние до старта = 0
+
+        // Инициализация массивов
+        for (let i = 0; i < numNodes; i++) {
+            dist.push(Infinity); // Infinity символизирует, что путь до узла пока не обнаружен
+            visited.push(false); // Все узлы изначально не посещены
+            parent.push(-1); // Специальное значение "нет родителя"
+        }
+
+        for (let step = 0; step < numNodes; step++) {
+            // Находим узел с минимальным расстоянием
+            let current = -1;
+            let minDist = Infinity;
+            for (let i = 0; i < numNodes; i++) {
+                if (!visited[i] && dist[i] < minDist) {
+                    minDist = dist[i];
+                    current = i;
+                }
+            }
+
+            if (current === -1) break; // Все узлы обработаны
+            if (current === finish) break; // Достигли цели
+
+            visited[current] = true;
+            // Обновляем расстояния до соседей
+            for (let i = 0; i < numNodes; i++) {
+                const weight = weightMatrix[current][i];
+                if (navMatrix[current][i] !== -1 && !visited[i] && weight !== -1) {
+                    const newDist = dist[current] + weight;
+                    if (newDist < dist[i]) {
+                        dist[i] = newDist;
+                        parent[i] = current;
+                    }
+                }
+            }
+        }
+
+        // Восстановление пути
+        if (dist[finish] === Infinity) return []; // Пути нет
+
+        let path: number[] = [];
+        let node = finish;
+        while (node !== -1) {
+            path.push(node);
+            node = parent[node];
+        }
+        path.reverse();
         return path;
     }
 
