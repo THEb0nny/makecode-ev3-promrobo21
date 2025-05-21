@@ -122,7 +122,7 @@ namespace navigation {
     }
 
     // Движение до точки (вершины)
-    export function moveToNode(newPos: number, speed: number, turnSpeed: number, debug: boolean = false) {
+    export function moveToNode(newPos: number, movementSpeed: number, turnSpeed: number, debug: boolean = false) {
         const path = algorithmDFS(currentPos, newPos); // Получить матрицу пути, по которому нужно пройти
         if (debug) { // Отладка, вывод пути на экран
             console.log(`Target path: ${path.join(', ')}`);
@@ -130,19 +130,19 @@ namespace navigation {
         for (let i = 0; i < path.length - 1; i++) {
             // brick.showString(`${navMatrix[path[i]][path[i + 1]]}`, i + 4);
             directionSpinTurn(navMatrix[path[i]][path[i + 1]], turnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: speed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: movementSpeed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
     }
 
-    export function moveOnPath(path: number[], speed: number, turnSpeed: number, debug: boolean = false) {
+    export function moveOnPath(path: number[], movementSpeed: number, turnSpeed: number, debug: boolean = false) {
         if (debug) { // Отладка, вывод пути на экран
             console.log(`Target path: ${path.join(', ')}`);
         }
         for (let i = 0; i < path.length - 1; i++) {
             // brick.showString(`${navMatrix[path[i]][path[i + 1]]}`, i + 4);
             directionSpinTurn(navMatrix[path[i]][path[i + 1]], turnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: speed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: movementSpeed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
         currentPos = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
