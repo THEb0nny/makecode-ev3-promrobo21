@@ -123,13 +123,13 @@ namespace navigation {
 
     // Движение до точки (вершины)
     export function moveToNode(newPos: number, speed: number, turnSpeed: number, debug: boolean = false) {
-        const path = navigation.algorithmDFS(currentPos, newPos); // Получить матрицу пути, по которому нужно пройти
+        const path = algorithmDFS(currentPos, newPos); // Получить матрицу пути, по которому нужно пройти
         if (debug) { // Отладка, вывод пути на экран
             console.log(`Target path: ${path.join(', ')}`);
         }
         for (let i = 0; i < path.length - 1; i++) {
-            // brick.showString(`${navigation.getNavigationMatrix()[path[i]][path[i + 1]]}`, i + 4);
-            directionSpinTurn(navigation.getNavigationMatrix()[path[i]][path[i + 1]], turnSpeed); // Поворот
+            // brick.showString(`${navMatrix[path[i]][path[i + 1]]}`, i + 4);
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], turnSpeed); // Поворот
             motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: speed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
@@ -140,8 +140,8 @@ namespace navigation {
             console.log(`Target path: ${path.join(', ')}`);
         }
         for (let i = 0; i < path.length - 1; i++) {
-            // brick.showString(`${navigation.getNavigationMatrix()[path[i]][path[i + 1]]}`, i + 4);
-            directionSpinTurn(navigation.getNavigationMatrix()[path[i]][path[i + 1]], turnSpeed); // Поворот
+            // brick.showString(`${navMatrix[path[i]][path[i + 1]]}`, i + 4);
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], turnSpeed); // Поворот
             motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: speed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
