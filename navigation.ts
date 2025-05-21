@@ -105,11 +105,11 @@ namespace navigation {
         let turnDeg = 0; // Переменная для значения поворота
         while (true) {
             if (inputDirection > direction && (direction != 0 || inputDirection != 3) || (direction == 3 && inputDirection == 0)) {
-                direction += 1; // Изменяем глобальное значение направления компаса
+                direction += 1; // Изменяем глобальное значение направления
                 if (direction > 3) direction = 0; // Если записали направление больше 3, то его сбросить до 0
                 turnDeg -= 90; // Добавляем в переменную итогового поворота
             } else if (inputDirection < direction && (direction != 3 || inputDirection != 0) || (direction == 0 && inputDirection == 3)) {
-                direction -= 1; // Изменяем глобальное значение направления компаса
+                direction -= 1; // Изменяем глобальное значение направления
                 if (direction < 0) direction = 3; // Если записали направление меньше 0, то его сбросить до 3
                 turnDeg += 90; // Добавляем в переменную итогового поворота
             } else break; // Иначе поворот не требуется
