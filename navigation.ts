@@ -102,23 +102,23 @@ namespace navigation {
 
     // Поворот с помощью направления навигации
     export function directionSpinTurn(inputDirection: number, speed: number, debug: boolean = false) {
-        let turnDegSum = 0; // Переменная для суммирования значения поворота
+        let turnDeg = 0; // Переменная для значения поворота
         while (true) {
             if (inputDirection > direction && (direction != 0 || inputDirection != 3) || (direction == 3 && inputDirection == 0)) {
                 direction += 1; // Изменяем глобальное значение направления компаса
                 if (direction > 3) direction = 0; // Если записали направление больше 3, то его сбросить до 0
-                turnDegSum -= 90; // Добавляем в переменную итогового поворота
+                turnDeg -= 90; // Добавляем в переменную итогового поворота
             } else if (inputDirection < direction && (direction != 3 || inputDirection != 0) || (direction == 0 && inputDirection == 3)) {
                 direction -= 1; // Изменяем глобальное значение направления компаса
                 if (direction < 0) direction = 3; // Если записали направление меньше 0, то его сбросить до 3
-                turnDegSum += 90; // Добавляем в переменную итогового поворота
+                turnDeg += 90; // Добавляем в переменную итогового поворота
             } else break; // Иначе поворот не требуется
         }
         if (debug) {
             console.log(`inputDirection: ${inputDirection}`);
-            console.log(`turnDegSum: ${turnDegSum}`);
+            console.log(`turnDeg: ${turnDeg}`);
         }
-        chassis.spinTurn(turnDegSum, speed); // Поворот относительно центра шасси
+        chassis.spinTurn(turnDeg, speed); // Поворот относительно центра шасси
     }
 
     // Движение до точки (вершины)
