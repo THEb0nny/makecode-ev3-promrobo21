@@ -192,6 +192,7 @@ const enum SensorColors {
 const enum GraphTraversal {
     DFS, // Обход в глубину
     BFS, // Обход в ширину
+    //% block.loc.ru="Дейкстра"
     Dijkstra, // Алгоритм Дейкстры (для взвешенных графов)
     // A_STAR // A* (для поиска пути)
 }

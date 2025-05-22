@@ -1,8 +1,8 @@
 namespace navigation {
 
-    let currentPos = 25; // Текущая позиция на узле (местоположение)
-    let direction = 2; // Направление для навигации
-    let numNodes = 29; // Количество узлов
+    let currentPos = 0; // Текущая позиция на узле (местоположение)
+    let direction = 0; // Направление для навигации
+    let numNodes = 0; // Количество узлов
 
     // Матрица навигации: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
     let navMatrix: number[][] = [];
@@ -60,35 +60,32 @@ namespace navigation {
                 turnDeg += 90; // Добавляем в переменную итогового поворота
             } else break; // Иначе поворот не требуется
         }
-        if (debug) {
-            console.log(`inputDirection: ${inputDirection}`);
-            console.log(`turnDeg: ${turnDeg}`);
-        }
+        if (debug) console.log(`inputDirection: ${inputDirection}, turnDeg: ${turnDeg}`);
         chassis.spinTurn(turnDeg, speed); // Поворот относительно центра шасси
     }
 
     // Движение до точки (вершины)
-    export function moveToNode(newPos: number, movementSpeed: number, turnSpeed: number, debug: boolean = false) {
-        const path = algorithmDFS(currentPos, newPos); // Получить матрицу пути, по которому нужно пройти
-        if (debug) { // Отладка, вывод пути на экран
-            console.log(`Target path: ${path.join(', ')}`);
-        }
+    export function moveToNode(algorithm: GraphTraversal, newPos: number, params: { movementSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number}, debug: boolean = false) {
+        let path: number[] = []; // Для массива пути, по которому нужно пройти
+        if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPos, newPos); // Алгоритм DFS
+        else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPos, newPos); // Алгоритм BFS
+        else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPos, newPos); // Алгоритм Дейкрсты
+        else return;
+        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
         for (let i = 0; i < path.length - 1; i++) {
-            // brick.showString(`${navMatrix[path[i]][path[i + 1]]}`, i + 4);
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], turnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: movementSpeed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: params.movementSpeed, Kp: params.Kp, Ki: params.Ki, Kd: params.Kd }); // Движение до перекрёстка
+            currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
     }
 
-    export function moveOnPath(path: number[], movementSpeed: number, turnSpeed: number, debug: boolean = false) {
-        if (debug) { // Отладка, вывод пути на экран
-            console.log(`Target path: ${path.join(', ')}`);
-        }
+    // Движение по пути по узлам
+    export function moveOnPath(path: number[], params: { movementSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number }, debug: boolean = false) {
+        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
         for (let i = 0; i < path.length - 1; i++) {
-            // brick.showString(`${navMatrix[path[i]][path[i + 1]]}`, i + 4);
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], turnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: movementSpeed, Kp: 0.5, Kd: 0.5 }); // Движение до перекрёстка
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: params.movementSpeed, Kp: params.Kp, Ki: params.Ki, Kd: params.Kd }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
         currentPos = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную

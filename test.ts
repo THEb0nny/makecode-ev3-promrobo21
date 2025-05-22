@@ -51,10 +51,6 @@
 
 // chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
 
-// motors.setPosition(motors.largeA, 45, {maxSpeed: 50, Kp: 1});
-
-// navigation.moveToNode(1, 50, 40, true);
-
 /*
 let navMatrix: number[][] = [
     // 00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
@@ -127,10 +123,8 @@ navigation.setNavigationMatrix(navMatrix);
 navigation.setWeightMatrix(weightMatrix);
 
 // console.log(`travelDFS: ${navigation.algorithmDFS(25, 1).join(', ')}`);
-
-console.log(`travelBFS1: ${navigation.algorithmBFS(25, 1).join(', ')}`);
-
-console.log(`travelBFS2: ${navigation.algorithmBFS(1, 23).join(', ')}`);
-
+console.log(`travelBFS: ${navigation.algorithmBFS(1, 23).join(', ')}`);
 console.log(`travelDijkstra: ${navigation.algorithmDijkstra(1, 23).join(', ')}`);
+
+navigation.moveToNode(GraphTraversal.Dijkstra, 1, {movementSpeed: 70, turnSpeed: 50, Kp: 0.5 });
 */
