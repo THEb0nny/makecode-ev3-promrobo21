@@ -194,5 +194,6 @@ const enum GraphTraversal {
     BFS, // Обход в ширину
     //% block.loc.ru="Дейкстра"
     Dijkstra, // Алгоритм Дейкстры (для взвешенных графов)
+    //% block="A*"
     // A_STAR // A* (для поиска пути)
 }

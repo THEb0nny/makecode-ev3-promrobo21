@@ -4,7 +4,7 @@ namespace navigation {
     let direction = 0; // Направление для навигации
     let numNodes = 0; // Количество узлов
 
-    // Матрица навигации: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
+    // Матрица смежности в виде навигации: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
     let navMatrix: number[][] = [];
 
     // Матрица весов
@@ -45,55 +45,9 @@ namespace navigation {
     export function getWeightMatrix(): number[][] {
         return weightMatrix;
     }
-
-    // Поворот с помощью направления навигации
-    export function directionSpinTurn(inputDirection: number, speed: number, debug: boolean = false) {
-        let turnDeg = 0; // Переменная для значения поворота
-        while (true) {
-            if (inputDirection > direction && (direction != 0 || inputDirection != 3) || (direction == 3 && inputDirection == 0)) {
-                direction += 1; // Изменяем глобальное значение направления
-                if (direction > 3) direction = 0; // Если записали направление больше 3, то его сбросить до 0
-                turnDeg -= 90; // Добавляем в переменную итогового поворота
-            } else if (inputDirection < direction && (direction != 3 || inputDirection != 0) || (direction == 0 && inputDirection == 3)) {
-                direction -= 1; // Изменяем глобальное значение направления
-                if (direction < 0) direction = 3; // Если записали направление меньше 0, то его сбросить до 3
-                turnDeg += 90; // Добавляем в переменную итогового поворота
-            } else break; // Иначе поворот не требуется
-        }
-        if (debug) console.log(`inputDirection: ${inputDirection}, turnDeg: ${turnDeg}`);
-        chassis.spinTurn(turnDeg, speed); // Поворот относительно центра шасси
-    }
-
-    // Движение до точки (вершины)
-    export function moveToNode(algorithm: GraphTraversal, newPos: number, params: { movementSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number}, debug: boolean = false) {
-        let path: number[] = []; // Для массива пути, по которому нужно пройти
-        if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPos, newPos); // Алгоритм DFS
-        else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPos, newPos); // Алгоритм BFS
-        else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPos, newPos); // Алгоритм Дейкрсты
-        else return;
-        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
-        for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: params.movementSpeed, Kp: params.Kp, Ki: params.Ki, Kd: params.Kd }); // Движение до перекрёстка
-            currentPos = path[i]; // Записываем новую позицию в глобальную переменную
-        }
-        currentPos = newPos; // Записываем новую позицию в глобальную переменную
-    }
-
-    // Движение по пути по узлам
-    export function moveOnPath(path: number[], params: { movementSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number }, debug: boolean = false) {
-        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
-        for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: params.movementSpeed, Kp: params.Kp, Ki: params.Ki, Kd: params.Kd }); // Движение до перекрёстка
-            currentPos = path[i]; // Записываем новую позицию в глобальную переменную
-        }
-        currentPos = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
-    }
-
+    
     // Алгоритм поиска в глубину
-    // Нужен любой путь(без учёта длины / веса)
-    // Например: проверка связности графа
+    // Когда нужен любой путь (без учёта длины / веса) для проверки связности графа
     export function algorithmDFS(startNode: number, finishNode: number): number[] {
         let stack: number[] = [startNode]; // Стек для хранения узлов в порядке обхода
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
@@ -105,7 +59,7 @@ namespace navigation {
             visited.push(false); // Все узлы изначально не посещены
             parent.push(-1); // Специальное значение "нет родителя"
         }
-        
+
         while (stack.length > 0 && !found) {
             const current = stack.pop(); // Берём последний узел из стека
             if (current == finishNode) { // Проверка на достижение цели
@@ -228,6 +182,51 @@ namespace navigation {
         }
         path.reverse();
         return path;
+    }
+
+    // Поворот с помощью направления навигации
+    export function directionSpinTurn(inputDirection: number, speed: number, debug: boolean = false) {
+        let turnDeg = 0; // Переменная для значения поворота
+        while (true) {
+            if (inputDirection > direction && (direction != 0 || inputDirection != 3) || (direction == 3 && inputDirection == 0)) {
+                direction += 1; // Изменяем глобальное значение направления
+                if (direction > 3) direction = 0; // Если записали направление больше 3, то его сбросить до 0
+                turnDeg -= 90; // Добавляем в переменную итогового поворота
+            } else if (inputDirection < direction && (direction != 3 || inputDirection != 0) || (direction == 0 && inputDirection == 3)) {
+                direction -= 1; // Изменяем глобальное значение направления
+                if (direction < 0) direction = 3; // Если записали направление меньше 0, то его сбросить до 3
+                turnDeg += 90; // Добавляем в переменную итогового поворота
+            } else break; // Иначе поворот не требуется
+        }
+        if (debug) console.log(`inputDirection: ${inputDirection}, turnDeg: ${turnDeg}`);
+        chassis.spinTurn(turnDeg, speed); // Поворот относительно центра шасси
+    }
+
+    // Движение до точки (вершины)
+    export function moveOnLineToNode(algorithm: GraphTraversal, newPos: number, params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number}, debug: boolean = false) {
+        let path: number[] = []; // Для массива пути, по которому нужно пройти
+        if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPos, newPos); // Алгоритм DFS
+        else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPos, newPos); // Алгоритм BFS
+        else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPos, newPos); // Алгоритм Дейкрсты
+        else return;
+        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
+        for (let i = 0; i < path.length - 1; i++) {
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: params.moveSpeed, Kp: params.Kp, Ki: params.Ki, Kd: params.Kd }); // Движение до перекрёстка
+            currentPos = path[i]; // Записываем новую позицию в глобальную переменную
+        }
+        currentPos = newPos; // Записываем новую позицию в глобальную переменную
+    }
+
+    // Движение по пути по узлам
+    export function moveOnPathLine(path: number[], params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number }, debug: boolean = false) {
+        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
+        for (let i = 0; i < path.length - 1; i++) {
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: params.moveSpeed, Kp: params.Kp, Ki: params.Ki, Kd: params.Kd }); // Движение до перекрёстка
+            currentPos = path[i]; // Записываем новую позицию в глобальную переменную
+        }
+        currentPos = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
     }
 
 }
