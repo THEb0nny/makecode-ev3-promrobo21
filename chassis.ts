@@ -108,11 +108,11 @@ namespace chassis {
      * Linear movement over a given distance with acceleration and deceleration in mm.
      * It is not recommended to use a minimum speed (power) of less than 10.
      * The distance value must be positive! If the speed (power) value is positive, then the motors spin forward, and if it is negative, then backward.
-     * The speed values must have the same sign!
+     * The speed (power) values must have the same sign!
      * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
      * Не рекомендуется использоваться стартовую скорость (мощность) меньше 20.
      * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
-     * Значения скоростей должны иметь одинаковый знак!
+     * Значения скоростей (мощностей) должны иметь одинаковый знак!
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
