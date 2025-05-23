@@ -12,7 +12,7 @@
 // chassis.setChassisMotors(motors.mediumB, motors.mediumC, true, false);
 
 // Установить параметры регулирования синхронизации моторов шасси
-// chassis.setSyncRegulatorGains(0.01, 0.001, 0.5);
+// chassis.setSyncRegulatorGains(0.02, 0.001, 0.5);
 
 // Установить стандартную синхронизацию моторов шасси
 // chassis.setSpeedRegulated(false);
@@ -50,6 +50,11 @@
 // chassis.spinTurn(90, 50);
 
 // chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
+
+// chassis.rampLinearDistMove(25, 50, 0, 300, 100, 100);
+// chassis.accelStartLinearDistMove(25, 50, 150, 150);
+// chassis.steeringCommand(0, 50);
+// chassis.decelFinishLinearDistMove(50, 0, 200, 100);
 
 /*
 let navMatrix: number[][] = [

@@ -110,29 +110,33 @@ namespace chassis {
      * The distance value must be positive! If the speed (power) value is positive, then the motors spin forward, and if it is negative, then backward.
      * The speed values must have the same sign!
      * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
-     * Не рекомендуется использоваться минимальную скорость (мощность) меньше 10.
+     * Не рекомендуется использоваться стартовую скорость (мощность) меньше 20.
      * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей должны иметь одинаковый знак!
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
-     * @param minSpeed начальная скорость движения, eg: 20
-     * @param maxSpeed максимальная скорость движения, eg: 50
+     * @param startSpeed начальная скорость движения, eg: 20
+     * @param maxSpeed максимальная скорость движения, eg: 70
+     * @param finishSpeed финишная скорость движения, eg: 10
      */
     //% blockId="RampLinearDistMove"
-    //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|from min $minSpeed\\% max $maxSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c мин $minSpeed\\% макс $maxSpeed\\%"
+    //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|from start $startSpeed\\% max $maxSpeed\\% finish $maxSpeed\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c стартовой $startSpeed\\% макс $maxSpeed\\% финишной $maxSpeed\\%"
     //% inlineInputMode="inline"
-    //% minSpeed.shadow="motorSpeedPicker"
+    //% startSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
+    //% finishSpeed.shadow="motorSpeedPicker"
     //% weight="89"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function rampLinearDistMove(minSpeed: number, maxSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
-        if (maxSpeed == 0 || Math.abs(minSpeed) >= Math.abs(maxSpeed) ||
-            (minSpeed < 0 && maxSpeed > 0) || (minSpeed > 0 && maxSpeed < 0) ||
+    export function rampLinearDistMove(startSpeed: number, maxSpeed: number, finishSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
+        if (maxSpeed == 0 || Math.abs(startSpeed) >= Math.abs(maxSpeed) || Math.abs(finishSpeed) >= Math.abs(maxSpeed) || 
+            (startSpeed < 0 && maxSpeed > 0) || (startSpeed > 0 && maxSpeed < 0) || 
             totalDist <= 0 || accelDist < 0 || decelDist < 0) {
             stop(true);
+            console.log("Error: parameters passed incorrectly!");
+            music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
         
@@ -140,7 +144,7 @@ namespace chassis {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
-        syncRampMovement(minSpeed, maxSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
+        syncRampMovement(startSpeed, maxSpeed, finishSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
     /**
@@ -174,7 +178,7 @@ namespace chassis {
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние ускорения
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
-        executeRampMovement(startSpeed, maxSpeed, maxSpeed, mRotAccelCalc, 0, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(startSpeed, maxSpeed, 0, mRotAccelCalc, 0, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
         steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
     }
 
@@ -209,7 +213,7 @@ namespace chassis {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
-        executeRampMovement(speed, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(0, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
         stop(true); // Тормоз с удержанием
     }
 

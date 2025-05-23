@@ -637,7 +637,7 @@ namespace custom {
                             N: methodScreens[screenName].params.N.val
                         };
                         chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
-                        chassis.rampLinearDistMove(minSpeed, maxSpeed, totalDist, accelDist, decelDist);
+                        chassis.rampLinearDistMove(minSpeed, maxSpeed, minSpeed, totalDist, accelDist, decelDist);
                     } else if (screenName == "LW_2S_TO_INTERSECTION") {
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {

@@ -5,7 +5,7 @@ namespace motions {
         if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
             chassis.linearDistMove(motions.getDistRollingAfterIntersection(), speed, Braking.Hold);
         } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
-            chassis.rampLinearDistMove(10, speed, motions.getDistRollingAfterIntersection(), 0, motions.getDistRollingAfterIntersection());
+            chassis.rampLinearDistMove(0, speed, 10, motions.getDistRollingAfterIntersection(), 0, motions.getDistRollingAfterIntersection());
         } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             motions.rollingMoveOutFromLine(motions.getDistRollinFromLineAfterIntersection(), speed);
         } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением (удержанием)
