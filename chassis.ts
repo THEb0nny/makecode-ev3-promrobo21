@@ -131,11 +131,14 @@ namespace chassis {
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function rampLinearDistMove(startSpeed: number, maxSpeed: number, finishSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
-        if (maxSpeed == 0 || Math.abs(startSpeed) >= Math.abs(maxSpeed) || Math.abs(finishSpeed) >= Math.abs(maxSpeed) || 
-            (startSpeed < 0 && maxSpeed > 0) || (startSpeed > 0 && maxSpeed < 0) || 
-            totalDist <= 0 || accelDist < 0 || decelDist < 0) {
+        if (maxSpeed == 0 || totalDist == 0) {
             stop(true);
-            console.log("Error: parameters passed incorrectly!");
+            return;
+        } else if (startSpeed < 0 || maxSpeed < 0 || finishSpeed < 0 || 
+            Math.abs(startSpeed) > Math.abs(maxSpeed) || Math.abs(finishSpeed) > Math.abs(maxSpeed) || 
+            totalDist < 0 || accelDist < 0 || decelDist < 0 || totalDist < accelDist + decelDist) {
+            stop(true);
+            console.log("Error: parameters passed incorrectly in rampLinearDistMove!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
@@ -150,10 +153,12 @@ namespace chassis {
     /**
      * Synchronization of movement with smooth start in mm.
      * It is not recommended to set the minimum speed (power) below 10.
+     * The distance value must be positive! If the speed (power) value is positive, then the motors rotate forward, and if negative, then backward.
+     * The speed (power) values ​​must have the same sign!
      * Синхронизация движения с плавным стартом в мм.
      * Не рекомендуется устанавливать минимальную скорость меньше 10.
      * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
-     * Значения скоростей должны иметь одинаковый знак!
+     * Значения скоростей (мощностей) должны иметь одинаковый знак!
      * @param totalDist общее расстояние в мм, eg: 500
      * @param accelDist расстояние ускорения в мм, eg: 50
      * @param startSpeed начальная скорость движени, eg: 20
@@ -169,9 +174,14 @@ namespace chassis {
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function accelStartLinearDistMove(startSpeed: number, maxSpeed: number, totalDist: number, accelDist: number) {
-        //if (!motorsPair) return;
         if (maxSpeed == 0 || totalDist == 0) {
             stop(true);
+            return;
+        } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) ||
+            totalDist <= 0 || accelDist < 0 || totalDist < accelDist) {
+            stop(true);
+            console.log("Error: parameters passed incorrectly in accelStartLinearDistMove!");
+            music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
 
@@ -184,15 +194,15 @@ namespace chassis {
 
     /**
      * Synchronization of movement with smooth speed (power) reduction mm.
-     * It is not recommended to set the minimum speed (power) below 15.
+     * The distance value must be positive! If the speed value is positive, then the motors rotate forward, and if negative, then backward.
+     * The speed (power) values ​​must have the same sign!
      * Синхронизация движения с плавным сбросом скорости (мощности) мм.
-     * Не рекомендуется устанавливать минимальную скорость (мощность) меньше 15.
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей (мощности) должны иметь одинаковый знак!
-     * @param totalDist total length in mm, eg: 500
-     * @param decelDist deceletate length in mm, eg: 50
-     * @param speed motor speed, eg: 50
-     * @param finishSpeed finish motor speed, eg: 20
+     * @param totalDist общее расстояние в мм, eg: 500
+     * @param decelDist расстояние замедления in mm, eg: 100
+     * @param speed изначальная скорость движения, eg: 50
+     * @param finishSpeed финишная скорость движения, eg: 10
      */
     //% blockId="DecelFinishLinearDistMove"
     //% block="linear distance moving $totalDist mm at deceleration $decelDist|from $speed\\% to $finishSpeed\\%"
@@ -204,9 +214,14 @@ namespace chassis {
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
     export function decelFinishLinearDistMove(speed: number, finishSpeed: number, totalDist: number, decelDist: number) {
-        //if (!motorsPair) return;
         if (speed == 0 || totalDist == 0) {
             stop(true);
+            return;
+        } else if (Math.abs(finishSpeed) > Math.abs(speed) ||
+            totalDist <= 0 || decelDist < 0 || totalDist < decelDist) {
+            stop(true);
+            console.log("Error: parameters passed incorrectly in decelFinishLinearDistMove!");
+            music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
 
