@@ -126,5 +126,5 @@ navigation.setWeightMatrix(weightMatrix);
 console.log(`travelBFS: ${navigation.algorithmBFS(1, 23).join(', ')}`);
 console.log(`travelDijkstra: ${navigation.algorithmDijkstra(1, 23).join(', ')}`);
 
-navigation.lineFollowToNode(GraphTraversal.Dijkstra, 1, {moveSpeed: 70, turnSpeed: 50, Kp: 0.5 });
+navigation.followLineToNode(GraphTraversal.Dijkstra, 1, {moveSpeed: 70, turnSpeed: 50, Kp: 0.5 });
 */

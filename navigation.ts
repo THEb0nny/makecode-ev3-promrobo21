@@ -203,7 +203,7 @@ namespace navigation {
     }
 
     // Движение до точки (вершины)
-    export function moveOnLineToNode(algorithm: GraphTraversal, newPos: number, params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number}, debug: boolean = false) {
+    export function followLineToNode(algorithm: GraphTraversal, newPos: number, params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number}, debug: boolean = false) {
         let path: number[] = []; // Для массива пути, по которому нужно пройти
         if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPos, newPos); // Алгоритм DFS
         else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPos, newPos); // Алгоритм BFS
@@ -219,7 +219,7 @@ namespace navigation {
     }
 
     // Движение по пути по узлам
-    export function moveOnPathLine(path: number[], params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number }, debug: boolean = false) {
+    export function followLinePath(path: number[], params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number }, debug: boolean = false) {
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
         for (let i = 0; i < path.length - 1; i++) {
             directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
