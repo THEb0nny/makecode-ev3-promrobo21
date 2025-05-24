@@ -1,3 +1,18 @@
+// Установить моторы в шасси и установить свойства инверсии
+// chassis.setChassisMotors(motors.mediumB, motors.mediumC, true, false);
+
+// Установить параметры регулирования синхронизации моторов шасси
+// chassis.setSyncRegulatorGains(0.02, 0.001, 0.5);
+
+// Установить стандартную синхронизацию моторов шасси
+// chassis.setSpeedRegulated(false);
+
+// Установить радиус колёс в шасси
+// chassis.setWheelDiametr(62.4, MeasurementUnit.Millimeters);
+
+// Установить размер базы шасси
+// chassis.setBaseLength(172, MeasurementUnit.Millimeters);
+
 // custom.functionsTune(0);
 
 // sensors.searchRgbMinMaxColorSensors(sensors.color3);
@@ -8,21 +23,6 @@
 
 // Установить значения отражения на белом и чёрном для датчика линии
 // sensors.setLineSensorsRawRefValues(2520, 1712, 2420, 1636)
-
-// Установить моторы в шасси и установить свойства инверсии
-chassis.setChassisMotors(motors.mediumB, motors.mediumC, true, false);
-
-// Установить параметры регулирования синхронизации моторов шасси
-chassis.setSyncRegulatorGains(0.02, 0.001, 0.5);
-
-// Установить стандартную синхронизацию моторов шасси
-chassis.setSpeedRegulated(false);
-
-// Установить радиус колёс в шасси
-chassis.setWheelDiametr(62.4, MeasurementUnit.Millimeters);
-
-// Установить размер базы шасси
-chassis.setBaseLength(172, MeasurementUnit.Millimeters);
 
 // Установить пороговое значение отражения при движении по линии
 // motions.setLineFollowRefTreshold(40)
@@ -53,9 +53,9 @@ chassis.setBaseLength(172, MeasurementUnit.Millimeters);
 // chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
 
 // chassis.rampLinearDistMove(25, 50, 10, 300, 100, 100);
-// chassis.accelStartLinearDistMove(25, 50, 150, 150);
+// chassis.accelStartLinearDistMove(25, 50, 150);
 // chassis.steeringCommand(0, 50);
-// chassis.decelFinishLinearDistMove(50, 10, 200, 100);
+// chassis.decelFinishLinearDistMove(50, 10, 100);
 
 /*
 let navMatrix: number[][] = [
