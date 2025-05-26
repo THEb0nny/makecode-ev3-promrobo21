@@ -10,26 +10,87 @@ namespace navigation {
     // Матрица весов
     let weightMatrix: number[][] = [];
 
+    /**
+     * Установить количество узловых точек.
+     * @param newMumNodes количество узлов, eg: 25
+     */
+    //% blockId="NavigationSetNodesNumber"
+    //% block="set nodes number $newMumNodes"
+    //% block.loc.ru="установить количество узлов $newMumNodes"
+    //% inlineInputMode="inline"
+    //% weight="99"
+    //% group="Свойства"
     export function setNodesNumber(newMumNodes: number) {
         numNodes = newMumNodes;
     }
 
+    /**
+     * Получить количество узловых точек.
+     */
+    //% blockId="NavigationGetNodesNumber"
+    //% block="get nodes number"
+    //% block.loc.ru="получить количество узлов"
+    //% inlineInputMode="inline"
+    //% weight="98"
+    //% group="Свойства"
     export function getNodesNumber(): number {
         return numNodes;
     }
 
+    /**
+     * Установить текущую позицию на узловой точке.
+     * @param newPos новый текущий узел, eg: 0
+     */
+    //% blockId="NavigationSetCurrentPositon"
+    //% block="set position $newPos"
+    //% block.loc.ru="установить позицию $newPos"
+    //% inlineInputMode="inline"
+    //% weight="97"
+    //% group="Свойства"
     export function setCurrentPositon(newPos: number) {
         currentPos = newPos;
     }
 
+    /**
+     * Получить текущую позицию на узловой точке.
+     */
+    //% blockId="NavigationGetCurrentPositon"
+    //% block="get current position"
+    //% block.loc.ru="получить текущую позцию"
+    //% inlineInputMode="inline"
+    //% weight="96"
+    //% group="Свойства"
     export function getCurrentPositon(): number {
         return currentPos;
     }
 
+    /**
+     * Установить текущее направление на узловой точке.
+     * @param newDirection новое направление, где 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз, eg: 0
+     */
+    //% blockId="NavigationSetCurrentDirection"
+    //% block="set current direction $newDirection"
+    //% block.loc.ru="установить направление $newDirection"
+    //% inlineInputMode="inline"
+    //% weight="95"
+    //% group="Свойства"
     export function setCurrentDirection(newDirection: number) {
         direction = newDirection;
     }
 
+    /**
+     * Получить текущее направление, на узловой точке.
+     */
+    //% blockId="NavigationGetCurrentDirection"
+    //% block="get current direction"
+    //% block.loc.ru="получить текущее направление"
+    //% inlineInputMode="inline"
+    //% weight="94"
+    //% group="Свойства"
+    export function getCurrentDirection() {
+        return direction;
+    }
+    
     export function setNavigationMatrix(newNavMatrix: number[][]) {
         navMatrix = newNavMatrix;
     }

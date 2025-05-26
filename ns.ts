@@ -2,6 +2,7 @@
  * Custom methods (blocks).
  * Пользовательские методы (блоки).
  */
+
 //% block="Custom"
 //% block.loc.ru="Кастомные"
 //% color="#a5625b" weight="96"
@@ -35,11 +36,21 @@ namespace levelings {
 }
 
 /**
+ * Navigation.
+ * Навигация.
+ */
+//% block="Navigation"
+//% block.loc.ru="Навигация"
+//% color="#EF9121" weight="85" icon="\uf124"
+namespace navigation {
+}
+
+/**
  * Params.
  * Параметры.
  */
 //% block="Params"
 //% block.loc.ru="Параметры"
-//% color="#8B008B" weight="85" icon="\uf12b"
+//% color="#8B008B" weight="84" icon="\uf12b"
 namespace params {
 }
