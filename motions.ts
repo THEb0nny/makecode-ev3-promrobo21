@@ -86,7 +86,6 @@ namespace motions {
     }
 
     /**
-     * Moving in a direction with a constant speed to a zone with a certain reflection.
      * Движение по направлению с постоянной скоростью до зоны с определённым отражением.
      * @param dir направление движения, eg: 0
      * @param speed скорость движения, eg: 50

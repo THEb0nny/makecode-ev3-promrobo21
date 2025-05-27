@@ -10,7 +10,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
@@ -34,7 +33,6 @@ namespace params {
     }
 
     /**
-     * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
      */
     //% blockId="LineFollowEmptyParams"
@@ -48,7 +46,6 @@ namespace params {
     }
 
     /**
-     * Parameters for an algorithm with a regulator with the ability to set the speed.
      * Параметры для алгоритма с регулятором с возможностью установить скорость.
      * @param newSpeed скорость движения, eg: 50
      */
@@ -65,7 +62,6 @@ namespace params {
     }
 
     /**
-     * Parameters for an algorithm with a regulator with the ability to set the speed, Kp.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
      * @param newSpeed скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
@@ -84,7 +80,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
@@ -108,7 +103,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
@@ -149,7 +143,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newMinStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
@@ -177,7 +170,6 @@ namespace params {
     }
 
     /**
-     * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
      */
     //% blockId="RampLineFollowEmptyParams"
@@ -191,7 +183,6 @@ namespace params {
     }
 
     /**
-     * Parameters for an algorithm with a regulator with the ability to set the speed.
      * Параметры для алгоритма с регулятором с возможностью установить скорость.
      * @param newStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
@@ -212,7 +203,6 @@ namespace params {
     }
 
     /**
-     * Parameters for an algorithm with a regulator with the ability to set the speed, Kp.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
      * @param newStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
@@ -235,7 +225,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
      * @param newStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
@@ -263,7 +252,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newStartSpeed начальная скорость движения, eg: 10
      * @param newMaxSpeed максимальная скорость движения, eg: 50
@@ -311,7 +299,6 @@ namespace params {
     }
 
     /**
-     * Setting parameters for the alignment algorithm on the line perpendicular with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Установка параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed скорость движения, eg: 50
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
@@ -343,7 +330,6 @@ namespace params {
     }
 
     /**
-     * Setting sort parameters for the alignment algorithm on the line perpendicular with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Установка сокращённых параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed скорость движения, eg: 50
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
@@ -371,7 +357,6 @@ namespace params {
     }
 
     /**
-     * Empty parameters for the algorithm with a regulator.
      * Пустые праметры для алгоритма с регулятором.
      */
     //% blockId="LineAlignmentEmptyParams"
@@ -385,7 +370,6 @@ namespace params {
     }
 
     /**
-     * Parameters for an algorithm with a regulator with the ability to set the speed.
      * Параметры для алгоритма с регулятором с возможностью установить скорость.
      * @param newSpeed максимальная скорость выравнивания, eg: 40
      */
@@ -402,7 +386,6 @@ namespace params {
     }
 
     /**
-     * Parameters for an algorithm with a regulator with the ability to set the speed, Kp.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
      * @param newSpeed максимальная скорость выравнивания, eg: 40
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
@@ -423,7 +406,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed максимальная скорость выравнивания, eg: 40
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
@@ -453,7 +435,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed максимальная скорость выравнивания, eg: 40
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
@@ -501,7 +482,6 @@ namespace params {
     }
 
     /**
-     * Setting parameters for the positioning algorithm (alignment) on the line by line sensors with the ability to set the speed, Kp, Ki, Kd, and N - filter of the differential regulator.
      * Установка параметров для алгоритма позицианирования (выравнивание) на линии датчиками линии с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newSpeed максимальная скорость выравнивания, eg: 40
      * @param newKp пропорциональный коэффицент, eg: 1
@@ -525,7 +505,6 @@ namespace params {
     }
 
     /**
-     * Empty parameters for the algorithm with a regulator.
      * Пустые параметры для алгоритма с позиционированием на линии.
      */
     //% blockId="LinePositioningEmptyParams"
@@ -539,7 +518,6 @@ namespace params {
     }
 
     /**
-     * Parameters for the algorithm with a regulator with the ability to set the timeout time, max speed, Kp, Ki, Kd, ​​and N - the filter of the differential regulator.
      * Параметры для алгоритма с регулятором с возможностью установить время таймаута, макс скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
      * @param newTimeOut максимальная время работы алгоритма, eg: 2000
      * @param newMaxSpeed максимальная скорость выравнивания, eg: 50
@@ -582,7 +560,6 @@ namespace params {
     }
 
     /**
-     * Empty parameters for the motor control algorithm for setting the position.
      * Пустые параметры для алгоритма регулирования мотора для установки на позицию.
      */
     //% blockId="MotorSetPosEmptyParams"

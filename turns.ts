@@ -1,9 +1,6 @@
 namespace chassis {
 
     /**
-     * Synchronized rotation of the chassis relative to the center at the desired angle at a certain speed.
-     * For example, if deg > 0, then the robot will rotate to the right, and if deg < 0, then to the left.
-     * The speed must be positive!
      * Синхронизированный поворот шасси относительно центра на нужный угол с определенной скоростью.
      * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
      * Скорость должна быть положительной!
@@ -58,9 +55,6 @@ namespace chassis {
     }
 
     /**
-     * Synchronized rotation to the desired angle relative to one of the wheels.
-     * A positive speed is set for forward rotation, and a negative speed is set for backward rotation.
-     * The value of the rotation angle is always positive!
      * Синхронизированный поворот на нужный угол относительно одного из колес.
      * Для вращения вперёд устанавливается положительная скорость, а назад - отрицательная.
      * Значение угла поворота всегда положительное!
@@ -119,9 +113,6 @@ namespace chassis {
     }
 
     /**
-     * Synchronized rotation of the chassis relative to the center at the desired angle at a certain speed.
-     * For example, if deg > 0, then the robot will rotate to the right, and if deg < 0, then to the left.
-     * The speed must be positive!
      * Синхронизированный поворот шасси относительно центра на нужный угол с определенной скоростью.
      * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
      * Скорость должна быть положительной!
@@ -141,9 +132,6 @@ namespace chassis {
     }
 
     /**
-     * Synchronized rotation to the desired angle relative to one of the wheels.
-     * A positive speed is set for forward rotation, and a negative speed is set for backward rotation.
-     * The value of the rotation angle is always positive!
      * Синхронизированный поворот на нужный угол относительно одного из колес.
      * Для вращения вперёд устанавливается положительная скорость, а назад - отрицательная.
      * Значение угла поворота всегда положительное!
@@ -258,7 +246,6 @@ namespace chassis {
     }
 
     /**
-     * Rotation relative to the center of the wheels with a regulator.
      * Поворот относительно центра колёс c регулятором.
      * @param deg угол в градусах поворота в градусах, где положительное число - вправо, а отрицательное влево, eg: 90
      * @param debug отладка на экран, eg: false
@@ -328,7 +315,6 @@ namespace chassis {
     }
 
     /**
-     * Turn relative to the left or right wheel with a regulator.
      * Поворот относительно левого или правого колеса c регулятором.
      * @param deg угол в градусах поворота, где положительное число - вправо, а отрицательное влево, eg: 90
      * @param wheelPivot относительно колеса, eg: WheelPivot.LeftWheel

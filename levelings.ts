@@ -31,7 +31,6 @@ namespace levelings {
     const pidLinePositioning = new automation.PIDController(); // PID регулятор для позиционирования на линии
 
     /**
-     * Set dt for adjustment cycles during alignment and positioning.
      * Установить dt для циклов регулирования при выравнивания и позиционирования.
      * @param dt время, за которое цикл регулирования должен выполняться, eg: 10
      */
@@ -46,7 +45,6 @@ namespace levelings {
     }
 
     /**
-     * Set the distance between the two line sensors in mm.
      * Установить расстояние между двумя датчиками линии в мм.
      * @param dist расстояние между датчиками в мм, eg: 32
      */
@@ -61,7 +59,6 @@ namespace levelings {
     }
 
     /**
-     * The alignment on the line is perpendicular.
      * Выравнивание на линии перпендикулярно.
      * @param lineLocation наезжать спереди на линию или двигаться назад на линию, eg: VerticalLineLocation.Front
      * @param regulatorTime время дорегулирования, eg: 500
@@ -141,7 +138,6 @@ namespace levelings {
     }
 
     /**
-     * Positioning (alignment) by sensors on the line.
      * Позиционирование (выравнивание) датчиками на линии.
      * @param regTime время регулирования, eg: 500
      * @param debug отладка, eg: false
@@ -206,8 +202,6 @@ namespace levelings {
     }
 
     /**
-     * Alignment on the line in motion.
-     * Don't use high speeds. Alignment is also maintained when moving backwards.
      * Выравнивание на линии в движении.
      * Не используйте большие скорости. Поддерживается и выравнивание при движении назад.
      * @param speed скорость движения, eg: 30

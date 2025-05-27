@@ -1,7 +1,6 @@
 namespace chassis {
 
     /**
-     * Steering command to the chassis motors from the controller.
      * Команда руления моторами шасси от регулятора.
      * @param u управляющее воздействие, eg: 0
      * @param speed скорость движения, eg: 50
@@ -19,7 +18,6 @@ namespace chassis {
     }
 
     /**
-     * Steering normalized command to the chassis motors from the controller.
      * Команда нормализованного руления моторами шасси от регулятора.
      * @param u управляющее воздействие, eg: 0
      * @param speed скорость (мощность) движения, eg: 50
@@ -39,8 +37,6 @@ namespace chassis {
     }
 
     /**
-     * Linear movement over a distance in mm at a constant speed (power).
-     * The distance value must be positive! If the speed value is positive, then the motors spin forward, and if it is negative, then backward.
      * Линейное движение на расстояние в мм с постоянной скоростью (мощностью).
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
@@ -70,8 +66,6 @@ namespace chassis {
     }
 
     /**
-     * Movement over a distance in mm with independent speeds (power) on motors.
-     * The distance value must be positive! If the speed (power) value is positive, then the motors spin forward, and if it is negative, then backward.
      * Движение на расстояние в мм с независимыми скоростями (мощностями) на моторы.
      * Значение дистанции должно быть положительным! Если значение скорости (мощностей) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
@@ -105,10 +99,6 @@ namespace chassis {
     }
 
     /**
-     * Linear movement over a given distance with acceleration and deceleration in mm.
-     * It is not recommended to use a minimum speed (power) of less than 10.
-     * The distance value must be positive! If the speed (power) value is positive, then the motors spin forward, and if it is negative, then backward.
-     * The speed (power) values must have the same sign!
      * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
      * Не рекомендуется использоваться стартовую скорость (мощность) меньше 20.
      * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
@@ -151,10 +141,6 @@ namespace chassis {
     }
 
     /**
-     * Synchronization of movement with smooth start in mm.
-     * It is not recommended to set the minimum speed (power) below 20.
-     * The distance value must be positive! If the speed (power) value is positive, then the motors rotate forward, and if negative, then backward.
-     * The speed (power) values ​​must have the same sign!
      * Синхронизация движения с плавным стартом в мм.
      * Не рекомендуется устанавливать минимальную скорость меньше 20.
      * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
@@ -190,9 +176,6 @@ namespace chassis {
     }
 
     /**
-     * Synchronization of movement with smooth speed (power) reduction mm.
-     * The distance value must be positive! If the speed value is positive, then the motors rotate forward, and if negative, then backward.
-     * The speed (power) values ​​must have the same sign!
      * Синхронизация движения с плавным сбросом скорости (мощности) мм.
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей (мощности) должны иметь одинаковый знак!

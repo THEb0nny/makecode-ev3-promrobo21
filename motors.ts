@@ -12,7 +12,6 @@ namespace motors {
     export let pidRegMotor = new automation.PIDController(); // PID для регулирования положения мотора
     
     /**
-     * A function that sets the motor to the desired position.
      * Функция, которая устанавливает мотор на нужную позицию.
      * @param motor мотор для управления, eg: motors.mediumA
      * @param pos установить новый угол в градусах, eg: 45

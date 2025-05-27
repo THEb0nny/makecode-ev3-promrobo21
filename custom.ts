@@ -1,7 +1,6 @@
 namespace custom {
 
     /**
-     * Find the most frequently occurring number in an array.
      * Поиск наиболее часто встречающегося числа в массиве.
      * @param arr массив с числами
      */
@@ -42,10 +41,9 @@ namespace custom {
 namespace music {
 
     /**
-     * A function to trigger a tone in the background (parallel task).
      * Функция для запуска тона в фоне (паралельной задачи).
-     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
-     * @param ms tone duration in milliseconds(ms), eg: BeatFraction.Half
+     * @param высота воспроизводимого звукового сигнала в герцах (Гц), eg: Note.C
+     * @param длительность звукового сигнала в миллисекундах (мс), eg: BeatFraction.Half
      */
     //% blockId="PlayToneInBackground"
     //% block="play tone at $frequency for $duration in the background"
@@ -65,10 +63,9 @@ namespace music {
 namespace brick {
 
     /**
-     * A function for setting the color pattern indicator in the background (parallel task).
      * Функция для установки индикатору шаблона цвета в фоне (паралельной задачи).
-     * @param pattern the lights pattern to use. eg: StatusLight.Orange
-     * @param duration in milliseconds(ms), eg: 100
+     * @param создайте шаблон подсветки для использования, eg: StatusLight.Orange
+     * @param длительность в миллисекундах (мс), eg: 100
      */
     //% blockId="SetStatusLightInBackground"
     //% block="set status light to $pattern at $duration in the background"

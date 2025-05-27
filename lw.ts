@@ -60,7 +60,6 @@ namespace motions {
     export const pidLineFollow = new automation.PIDController(); // PID для регулирования движения по линии
 
     /**
-     * Set the driving distance after determining the intersection for rolling in mm.
      * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
      * @param dist дистанция прокатки после перекрёстка, eg: 50
      */
@@ -75,7 +74,6 @@ namespace motions {
     }
 
     /**
-     * Get the driving distance after determining the intersection for rolling in mm.
      * Получить дистанцию проезда после определения перекрёстка для прокатки в мм.
      */
     //% blockId="GetDistRollingAfterIntersection"
@@ -89,7 +87,6 @@ namespace motions {
     }
 
     /**
-     * Set the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
      * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      * @param dist дистанция прокатки после перекрёстка, eg: 20
      */
@@ -104,7 +101,6 @@ namespace motions {
     }
 
     /**
-     * Get the distance for rolling at the intersection without braking. For example, in order not to redefine the line.
      * Получить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
      */
     //% blockId="GetDistRollingFromLineAfterIntersection"
@@ -118,7 +114,6 @@ namespace motions {
     }
 
     /**
-     * Set the reflection threshold value for the line.
      * Установить пороговое значение отражения для линии.
      * @param reflection значение отражения, eg: 50
      */
@@ -133,7 +128,6 @@ namespace motions {
     }
 
     /**
-     * Get the reflection threshold value for the line.
      * Получить пороговое значение отражения для линии.
      */
     //% blockId="GetLineRefTreshold"
@@ -147,7 +141,6 @@ namespace motions {
     }
 
     /**
-     * Set the reflection threshold value when moving along the line.
      * Установить пороговое значение отражения при движении по линии.
      * @param reflection значение отражения, eg: 35
      */
@@ -162,7 +155,6 @@ namespace motions {
     }
 
     /**
-     * Get the reflection threshold value when moving along the line.
      * Получить пороговое значение отражения при движении по линии.
      */
     //% blockId="GetLineFollowRefTreshold"
@@ -176,7 +168,6 @@ namespace motions {
     }
 
     /**
-     * Set the setpoint (average value) of reflection for movement along the line.
      * Установить уставку (среднее значение) отражения для движения по линии.
      * @param reflectionSetPoint значение уставки движения по линии, eg: 50
      */
@@ -191,7 +182,6 @@ namespace motions {
     }
 
     /**
-     * Get the setpoint (average value) of reflection for movement along the line.
      * Получить уставку (среднее значение) отражения для движения по линии.
      */
     //% blockId="GetLineFollowSetPoint"
@@ -205,7 +195,6 @@ namespace motions {
     }
 
     /**
-     * Set the maximum error of the driving condition with one sensor along the line.
      * Установить максимальную ошибку условия движения одним датчиком по линии.
      * @param maxErr максимальное значение ошибки движения по линии, eg: 30
      */
@@ -220,7 +209,6 @@ namespace motions {
     }
 
     /**
-     * Get the maximum error of the driving condition with one sensor along the line.
      * Получить максимальную ошибку условия движения одним датчиком по линии.
      */
     //% blockId="GetLineFollowConditionMaxErr"
@@ -234,7 +222,6 @@ namespace motions {
     }
 
     /**
-     * Set dt for adjustment cycles when line follow.
      * Установить dt для циклов регулирования при движении по линии.
      * @param dt время, за которое цикл регулирования должен выполняться, eg: 10
      */
@@ -253,7 +240,6 @@ namespace motions {
     }
 
     /**
-     * Set the steering control to search for a line when moving along the line with a single sensor.
      * Устновить рулевое управление для поиска линии при движение по линии одним датчиком.
      * @param newSteering получительное значение рулевого подворота к линии, eg: 15
      */
@@ -290,7 +276,6 @@ namespace motions {
 namespace motions {
 
     /**
-     * Function of moving along a line to an intersection using two sensors.
      * Функция движения по линии до перекрёстка двумя датчиками.
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
@@ -367,7 +352,6 @@ namespace motions {
     }
 
     /**
-     * The function of moving along the line to determine the intersection on the left with the right sensor.
      * Функция движения по линии до определения перекрёстка слева или справа.
      * Если слева, тогда движение осуществляется правым датчиком и левый отвечает за определение.
      * Если справа, тогда за движение отвечает левый датчик, а правый отвечает за определение перекрёстка.
@@ -398,7 +382,6 @@ namespace motions {
     }
 
     /**
-     * The function of moving along the line to determine the intersection on the left with the right sensor.
      * Функция движения по линии до определения перекрёстка слева правым датчиком.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
@@ -455,7 +438,6 @@ namespace motions {
     }
 
     /**
-     * The function of moving along the line to determine the intersection on the right with the left sensor.
      * Функция движения по линии до определения перекрёстка справа левым датчиком.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
@@ -516,8 +498,7 @@ namespace motions {
 namespace motions {
 
     /**
-     * Movement along the line for a distance. A very crude method.
-     * Движение по линии на расстояние. Очень грубый метод.
+     * Движение по линии на расстояние.
      * @param dist дистанция движения в мм, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
@@ -660,7 +641,7 @@ namespace motions {
     }
 
     /**
-     * Движение по линии на расстояние правым датчиком. Очень грубый метод.
+     * Движение по линии на расстояние правым датчиком.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist дистанция движения в мм, eg: 250
      * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
@@ -725,8 +706,6 @@ namespace motions {
 namespace motions {
 
     /**
-     * Movement along a line over a distance in mm with acceleration and deceleration.
-     * Acceleration distance, deceleration distance cannot add up to more than the total distance.
      * Движение по линии на расстояние в мм с ускорением и замедлением.
      * Расстояние ускорения, расстояние замедления не могут быть в сумме больше, чем общая дистанция.
      * @param totalDist общее расстояние движения в мм, eg: 400

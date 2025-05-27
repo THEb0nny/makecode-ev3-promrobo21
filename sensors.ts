@@ -10,7 +10,6 @@ namespace sensors {
     export let wRefRawRightLineSensor: number; // Сырые значения на белом для правого датчика линии
 
     /**
-     * Method for installing color sensors as motion and line sensors. Line sensors only need to be installed once!
      * Метод установки датчиков цвета в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
      * @param newLeftLineSensor левый датчик цвета, eg: sensors.color2
      * @param newRightLineSensor правый датчик цвета, eg: sensors.color3
@@ -32,7 +31,6 @@ namespace sensors {
     }
 
     /**
-     * Method for installing nxt reflection sensors as motion and line sensors. Line sensors only need to be installed once!
      * Метод установки nxt датчиков отражения в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
      * @param newLeftLineSensor левый nxt датчик отражения, eg: sensors.nxtLight1
      * @param newRightLineSensor правый nxt датчик отражения, eg: sensors.nxtLight4
@@ -69,7 +67,6 @@ namespace sensors {
     }
 
     /**
-     * The method of setting the sensor line of raw values on black and white.
      * Метод установки датчику линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorRawRefValue"
@@ -89,7 +86,6 @@ namespace sensors {
     }
 
     /**
-     * A new method for setting sensors to line raw values ​​on black and white.
      * Новый метод установки датчикам линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorsRawRefValues"
@@ -106,7 +102,6 @@ namespace sensors {
     }
 
     /**
-     * A method for obtaining a raw reflection value from a line sensor.
      * Метод получения с датчика линии сырого значения отражения.
      * @param sensor датчик линии, eg: LineSensor.Left
      */
@@ -134,7 +129,6 @@ namespace sensors {
     }
 
     /**
-     * A method for normalizing the reflectance value for a line sensor from raw values..
      * Метод нормализации значения отражения для датчика линии из сырых значений.
      * @param refRawVal текущее сырое значение отражения, eg: 0
      * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
@@ -153,7 +147,6 @@ namespace sensors {
     }
 
     /**
-     * A method for obtaining a normalized reflection value for a line sensor from raw values.
      * Метод получения нормализованного значения отражения для датчика линии из сырых значений.
      * @param refRawVal текущее сырое значение отражения, eg: 0
      * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
@@ -192,7 +185,6 @@ namespace sensors {
 namespace sensors {
 
     /**
-     * Get normalized RGB values ​​from a color sensor.
      * Получить нормализованные значения RGB с датчика цвета.
      */
     //% blockId="GetNormalizeRgb"
@@ -232,7 +224,6 @@ namespace sensors {
     let blueBoundaryColorSensors: number[] = [0, 0, 0, 0];
 
     /**
-     * Set the minimum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
      * @param minR минимальное значение красного, eg: 0
      * @param minG минимальное значение зелёного, eg: 0
@@ -257,7 +248,6 @@ namespace sensors {
     }
 
     /**
-     * Set the maximum RGB values for the color sensor. The maximum values are obtained on white.
      * Установить максимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
      * @param maxR максимальное значение красного, eg: 255
      * @param maxG максимальное значение зелёного, eg: 255
@@ -282,7 +272,6 @@ namespace sensors {
     }
 
     /**
-     * Set the maximum RGB values for the color sensor.
      * Получить минимальные значения RGB для датчика цвета.
      */
     //% blockId="GetMinRgbColorSensor"
@@ -300,7 +289,6 @@ namespace sensors {
     }
 
     /**
-     * Get the maximum RGB values for the color sensor.
      * Получить максимальне значения RGB для датчика цвета.
      */
     //% blockId="GetMaxRgbColorSensor"
@@ -329,7 +317,6 @@ namespace sensors {
     }
 
     /**
-     * HSVL conversion values to color codes.
      * Значения перевода HSVL в цветовые коды.
      * @param newColorBoundary значение границы цветности S, если значение S выше, тогда объект будет считаться цветным иначе чёрно-белым (или что ничего нет), eg: 50
      * @param newWhiteBoundary значение границы белого V, если значение V ≥ этому, тогда объект будет считаться белым, eg: 10
@@ -360,7 +347,6 @@ namespace sensors {
     }
 
     /**
-     * Set HSVL conversion values to color codes.
      * Установить значения перевода HSVL в цветовые коды.
      * @param params параметры перевода
      */
@@ -386,7 +372,6 @@ namespace sensors {
     }
 
     /**
-     * Get HSVL conversion values to color codes.
      * Получить значения перевода HSVL в цветовые коды.
      */
     //% blockId="GetHsvlToColorNumParams"
@@ -413,7 +398,6 @@ namespace sensors {
     }
 
     /**
-     * Converting rgb color space values to hsvl.
      * Перевод значений цветового пространства rgb в hsvl.
      * @param refRawValCS текущее сырое значение отражения, eg: 0
      * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
@@ -474,7 +458,6 @@ namespace sensors {
     }
 
     /**
-     * Convert HSV to a color code. The resulting color codes correspond to the LEGO codes.
      * Перевести HSV в код цвета. Получаемые коды цвета соотвествуют кодам LEGO.
      * @param hsvl массив значений hsvl
      */
@@ -500,7 +483,6 @@ namespace sensors {
     }
 
     /**
-     * Search for the maximum RGB values of the color sensor, i.e. these are the maximum values on white.
      * Поиск максимальных значений RGB датчика цвета, т.е. это максимальные значения на белом.
      */
     //% blockId="SearchRgbMinMax"
