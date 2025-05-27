@@ -151,8 +151,8 @@ namespace navigation {
      * Когда нужен любой путь (без учёта длины / веса) для проверки связности графа.
      */
     //% blockId="GraphTraversalAlgorithmDFS"
-    //% block="path with DFS at start $startNode finish $finishNode nodes"
-    //% block.loc.ru="путь с DFS при начальном $startNode конечном $finishNode узлах"
+    //% block="path of DFS algorithm at start $startNode final $finishNode nodes"
+    //% block.loc.ru="путь алгоритмом DFS при начальной $startNode конечных $finishNode узлах"
     //% inlineInputMode="inline"
     //% weight="79"
     //% group="Алгоритм нахождения пути"
@@ -204,16 +204,16 @@ namespace navigation {
      * Например: навигация в лабиринте без "стоимости" поворотов.
      */
     //% blockId="GraphTraversalAlgorithmBFS"
-    //% block="path with BFS at start $startNode finish $finishNode nodes"
-    //% block.loc.ru="путь с BFS при начальном $startNode конечном $finishNode узлах"
+    //% block="path of BFS algorithm at start $startNode final $finishNode nodes"
+    //% block.loc.ru="путь алгоритмом BFS при начальной $startNode конечных $finishNode узлах"
     //% inlineInputMode="inline"
     //% weight="78"
     //% group="Алгоритм нахождения пути"
-    export function algorithmBFS(start: number, finish: number): number[] {
-        let queue: number[] = [start];
+    export function algorithmBFS(startNode: number, finishNode: number): number[] {
+        let queue: number[] = [startNode];
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
-        visited[start] = true;
+        visited[startNode] = true;
 
         // Инициализация массивов
         for (let i = 0; i < numNodes; i++) {
@@ -223,7 +223,7 @@ namespace navigation {
 
         while (queue.length > 0) {
             const current = queue.shift();
-            if (current === finish) break;
+            if (current === finishNode) break;
             for (let i = 0; i < numNodes; i++) {
                 if (navMatrix[current][i] !== -1 && !visited[i]) {
                     visited[i] = true;
@@ -235,7 +235,7 @@ namespace navigation {
 
         // Восстановление пути (аналогично вашему коду)
         let path: number[] = [];
-        let node = finish;
+        let node = finishNode;
         while (node !== -1) {
             path.push(node);
             node = parent[node];
@@ -246,20 +246,19 @@ namespace navigation {
 
     /**
      * Алгоритм Дейкстры — это метод нахождения кратчайших путей от одной вершины графа ко всем остальным.
-     * Дейкстра гарантированно найдёт оптимальный путь A → C → B.
-     * Взвешенный граф (учёт реальных расстояний/весов).
+     * Дейкстра гарантированно найдёт оптимальный путь A → C → B. Взвешенный граф (учёт реальных расстояний/весов).
      */
     //% blockId="GraphTraversalAlgorithmBFS"
-    //% block="path with Dijkstra at start $startNode finish $finishNode nodes"
-    //% block.loc.ru="путь Дейкрсты при начальном $startNode конечном $finishNode узлах"
+    //% block="path of Dijkstra algorithm at start $startNode final $finishNode nodes"
+    //% block.loc.ru="путь алгоритмом Дейкрсты при начальной $startNode конечных $finishNode узлах"
     //% inlineInputMode="inline"
     //% weight="77"
     //% group="Алгоритм нахождения пути"
-    export function algorithmDijkstra(start: number, finish: number): number[] {
+    export function algorithmDijkstra(startNode: number, finishNode: number): number[] {
         let dist: number[] = []; // Для записи расстояний до узлов
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
-        dist[start] = 0; // Расстояние до старта = 0
+        dist[startNode] = 0; // Расстояние до старта = 0
 
         // Инициализация массивов
         for (let i = 0; i < numNodes; i++) {
@@ -280,7 +279,7 @@ namespace navigation {
             }
 
             if (current === -1) break; // Все узлы обработаны
-            if (current === finish) break; // Достигли цели
+            if (current === finishNode) break; // Достигли цели
 
             visited[current] = true;
             // Обновляем расстояния до соседей
@@ -297,10 +296,10 @@ namespace navigation {
         }
 
         // Восстановление пути
-        if (dist[finish] === Infinity) return []; // Пути нет
+        if (dist[finishNode] === Infinity) return []; // Пути нет
 
         let path: number[] = [];
-        let node = finish;
+        let node = finishNode;
         while (node !== -1) {
             path.push(node);
             node = parent[node];
