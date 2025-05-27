@@ -42,8 +42,8 @@ namespace navigation {
      * @param newPos новый текущий узел, eg: 0
      */
     //% blockId="NavigationSetCurrentPositon"
-    //% block="set position $newPos"
-    //% block.loc.ru="установить позицию $newPos"
+    //% block="set node position $newPos"
+    //% block.loc.ru="установить узловую позицию $newPos"
     //% inlineInputMode="inline"
     //% weight="97"
     //% group="Свойства"
@@ -55,8 +55,8 @@ namespace navigation {
      * Получить текущую позицию на узловой точке.
      */
     //% blockId="NavigationGetCurrentPositon"
-    //% block="get current position"
-    //% block.loc.ru="получить текущую позцию"
+    //% block="get current node position"
+    //% block.loc.ru="получить текущую узловую позцию"
     //% inlineInputMode="inline"
     //% weight="96"
     //% group="Свойства"
@@ -91,24 +91,71 @@ namespace navigation {
         return direction;
     }
     
+    /**
+     * Установить матрицу навигаций, т.е. направление движения узловых точек относительно друг друга.
+     * @param newNavMatrix новая матрица навигации
+     */
+    //% blockId="NavigationSetNavigationMatrix"
+    //% block="set navigation matrix $newNavMatrix"
+    //% block.loc.ru="установить матрицу навигации $newNavMatrix"
+    //% inlineInputMode="inline"
+    //% weight="89"
+    //% group="Матрица смежности"
     export function setNavigationMatrix(newNavMatrix: number[][]) {
         navMatrix = newNavMatrix;
     }
 
+    /**
+     * Получить матрицу навигации.
+     */
+    //% blockId="NavigationGetNavigationMatrix"
+    //% block="get navigation matrix"
+    //% block.loc.ru="получить матрицу навигации"
+    //% inlineInputMode="inline"
+    //% weight="88"
+    //% group="Матрица смежности"
     export function getNavigationMatrix(): number[][] {
         return navMatrix;
     }
 
+    /**
+     * Установить матрицу весов рёбер, т.е. длины путей.
+     * @param newWeightMatrix новая матрица весов
+     */
+    //% blockId="NavigationSetNavigationMatrix"
+    //% block="set weight matrix $newWeightMatrix"
+    //% block.loc.ru="установить матрицу весов $newWeightMatrix"
+    //% inlineInputMode="inline"
+    //% weight="87"
+    //% group="Матрица смежности"
     export function setWeightMatrix(newWeightMatrix: number[][]) {
         weightMatrix = newWeightMatrix;
     }
 
+    /**
+     * Получить матрицу весов рёбер.
+     */
+    //% blockId="NavigationGetWeightMatrix"
+    //% block="get weight matrix"
+    //% block.loc.ru="получить матрицу весов"
+    //% inlineInputMode="inline"
+    //% weight="86"
+    //% group="Матрица смежности"
     export function getWeightMatrix(): number[][] {
         return weightMatrix;
     }
     
-    // Алгоритм поиска в глубину
-    // Когда нужен любой путь (без учёта длины / веса) для проверки связности графа
+
+    /**
+     * Алгоритм поиска в глубину (Depth-first search, DFS).
+     * Когда нужен любой путь (без учёта длины / веса) для проверки связности графа.
+     */
+    //% blockId="GraphTraversalAlgorithmDFS"
+    //% block="path with DFS at start $startNode finish $finishNode nodes"
+    //% block.loc.ru="путь с DFS при начальном $startNode конечном $finishNode узлах"
+    //% inlineInputMode="inline"
+    //% weight="79"
+    //% group="Алгоритм нахождения пути"
     export function algorithmDFS(startNode: number, finishNode: number): number[] {
         let stack: number[] = [startNode]; // Стек для хранения узлов в порядке обхода
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
@@ -151,9 +198,17 @@ namespace navigation {
         return path;
     }
 
-    // Алгоритм поиска в ширину
-    // Невзвешенный граф + нужен кратчайший по количеству шагов
-    // Например: навигация в лабиринте без "стоимости" поворотов
+    /**
+     * Алгоритм поиска в ширину (Breadth-First Search, BFS).
+     * Невзвешенный граф + нужен кратчайший по количеству шагов.
+     * Например: навигация в лабиринте без "стоимости" поворотов.
+     */
+    //% blockId="GraphTraversalAlgorithmBFS"
+    //% block="path with BFS at start $startNode finish $finishNode nodes"
+    //% block.loc.ru="путь с BFS при начальном $startNode конечном $finishNode узлах"
+    //% inlineInputMode="inline"
+    //% weight="78"
+    //% group="Алгоритм нахождения пути"
     export function algorithmBFS(start: number, finish: number): number[] {
         let queue: number[] = [start];
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
@@ -189,8 +244,17 @@ namespace navigation {
         return path;
     }
 
-    // Дейкстра гарантированно найдёт оптимальный путь A → C → B
-    // Взвешенный граф (учёт реальных расстояний/весов)
+    /**
+     * Алгоритм Дейкстры — это метод нахождения кратчайших путей от одной вершины графа ко всем остальным.
+     * Дейкстра гарантированно найдёт оптимальный путь A → C → B.
+     * Взвешенный граф (учёт реальных расстояний/весов).
+     */
+    //% blockId="GraphTraversalAlgorithmBFS"
+    //% block="path with Dijkstra at start $startNode finish $finishNode nodes"
+    //% block.loc.ru="путь Дейкрсты при начальном $startNode конечном $finishNode узлах"
+    //% inlineInputMode="inline"
+    //% weight="77"
+    //% group="Алгоритм нахождения пути"
     export function algorithmDijkstra(start: number, finish: number): number[] {
         let dist: number[] = []; // Для записи расстояний до узлов
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
