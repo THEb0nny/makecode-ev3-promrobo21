@@ -122,7 +122,7 @@ namespace navigation {
      * Установить матрицу весов рёбер, т.е. длины путей.
      * @param newWeightMatrix новая матрица весов
      */
-    //% blockId="NavigationSetNavigationMatrix"
+    //% blockId="NavigationSetWeightMatrix"
     //% block="set weight matrix $newWeightMatrix"
     //% block.loc.ru="установить матрицу весов $newWeightMatrix"
     //% inlineInputMode="inline"
@@ -152,7 +152,7 @@ namespace navigation {
      */
     //% blockId="GraphTraversalAlgorithmDFS"
     //% block="path of DFS algorithm at start $startNode final $finishNode nodes"
-    //% block.loc.ru="путь алгоритмом DFS при начальной $startNode конечных $finishNode узлах"
+    //% block.loc.ru="путь алгоритмом DFS при начальной $startNode конечной $finishNode узлах"
     //% inlineInputMode="inline"
     //% weight="79"
     //% group="Алгоритм нахождения пути"
@@ -205,7 +205,7 @@ namespace navigation {
      */
     //% blockId="GraphTraversalAlgorithmBFS"
     //% block="path of BFS algorithm at start $startNode final $finishNode nodes"
-    //% block.loc.ru="путь алгоритмом BFS при начальной $startNode конечных $finishNode узлах"
+    //% block.loc.ru="путь алгоритмом BFS при начальной $startNode конечной $finishNode узлах"
     //% inlineInputMode="inline"
     //% weight="78"
     //% group="Алгоритм нахождения пути"
@@ -248,9 +248,9 @@ namespace navigation {
      * Алгоритм Дейкстры — это метод нахождения кратчайших путей от одной вершины графа ко всем остальным.
      * Дейкстра гарантированно найдёт оптимальный путь A → C → B. Взвешенный граф (учёт реальных расстояний/весов).
      */
-    //% blockId="GraphTraversalAlgorithmBFS"
+    //% blockId="GraphTraversalAlgorithmDijkstra"
     //% block="path of Dijkstra algorithm at start $startNode final $finishNode nodes"
-    //% block.loc.ru="путь алгоритмом Дейкрсты при начальной $startNode конечных $finishNode узлах"
+    //% block.loc.ru="путь алгоритмом Дейкрсты при начальной $startNode конечной $finishNode узлах"
     //% inlineInputMode="inline"
     //% weight="77"
     //% group="Алгоритм нахождения пути"
