@@ -13,6 +13,8 @@
 // Установить размер базы шасси
 // chassis.setBaseLength(172, MeasurementUnit.Millimeters);
 
+// brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
+
 // custom.functionsTune(0);
 
 // sensors.searchRgbMinMaxColorSensors(sensors.color3);
@@ -53,9 +55,10 @@
 // chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
 
 // chassis.rampLinearDistMove(25, 50, 10, 300, 100, 100);
-// chassis.accelStartLinearDistMove(25, 50, 150);
+// chassis.accelStartLinearDistMove(25, 50, 150, 300);
+// chassis.stop(true);
 // chassis.steeringCommand(0, 50);
-// chassis.decelFinishLinearDistMove(50, 10, 100);
+// chassis.decelFinishLinearDistMove(50, 10, 100, 300);
 
 /*
 let navMatrix: number[][] = [

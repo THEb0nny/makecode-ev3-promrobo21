@@ -146,23 +146,26 @@ namespace chassis {
      * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей (мощностей) должны иметь одинаковый знак!
      * @param accelDist расстояние ускорения в мм, eg: 50
+     * @param totalDist общее расстояние в мм, если его не указать значение будет равно accelDist, тогда, eg: 100
      * @param startSpeed начальная скорость (мощность) движени, eg: 20
      * @param maxSpeed максимальная скорость (мощность) движения, eg: 50
      */
     //% blockId="AccelStartLinearDistMove"
-    //% block="linear moving at acceleration distance $accelDist mm|from $startSpeed\\% to $maxSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние ускорения $accelDist мм|c $startSpeed\\% макс $maxSpeed\\%"
+    //% block="acceleration in linear motion from $startSpeed\\% to $maxSpeed\\% per  $accelDist mm||at total distance $totalDist"
+    //% block.loc.ru="ускорение при линейном движении c $startSpeed\\% до $maxSpeed\\% за $accelDist мм||при общей дистанции $totalDist"
     //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
     //% startSpeed.shadow="motorSpeedPicker"
     //% maxSpeed.shadow="motorSpeedPicker"
     //% weight="88" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function accelStartLinearDistMove(startSpeed: number, maxSpeed: number, accelDist: number) {
+    export function accelStartLinearDistMove(startSpeed: number, maxSpeed: number, accelDist: number, totalDist?: number) {
         if (maxSpeed == 0 || accelDist == 0) {
             stop(true);
             return;
-        } else if (Math.abs(startSpeed) > Math.abs(maxSpeed)) {
+        } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) || 
+            accelDist < 0 || totalDist < 0 || totalDist < accelDist) {
             stop(true);
             console.log("Error: parameters passed incorrectly in accelStartLinearDistMove!");
             music.playSoundEffect(sounds.systemGeneralAlert);
@@ -170,8 +173,9 @@ namespace chassis {
         }
 
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
+        const mRotTotalCalc = totalDist ? Math.calculateDistanceToEncRotate(totalDist) : mRotAccelCalc; // Рассчитываем общую дистанцию
 
-        executeRampMovement(startSpeed, maxSpeed, 0, mRotAccelCalc, 0, mRotAccelCalc); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(startSpeed, maxSpeed, 0, mRotAccelCalc, 0, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
         steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
     }
 
@@ -179,24 +183,27 @@ namespace chassis {
      * Синхронизация движения с плавным сбросом скорости (мощности) мм.
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей (мощности) должны иметь одинаковый знак!
-     * @param decelDist расстояние замедления в мм, eg: 100
+     * @param decelDist расстояние замедления в мм, eg: 50
+     * @param totalDist общее расстояние в мм, если его не указать значение будет равно decelDist, eg: 100
      * @param speed изначальная скорость (мощность) движения, eg: 50
      * @param finishSpeed финишная скорость (мощность) движения, eg: 10
      */
     //% blockId="DecelFinishLinearDistMove"
-    //% block="linear moving at deceleration distance $decelDist mm|from $speed\\% to $finishSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние замедления $decelDist мм|c $speed\\% до $finishSpeed\\%"
+    //% block="deceleration in linear motion from $speed\\% to $finishSpeed\\% per $decelDist mm||at total distance of $totalDist"
+    //% block.loc.ru="замеделение при линейном движении c $speed\\% до $finishSpeed\\% за $decelDist мм||при общей дистанции $totalDist"
     //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
     //% speed.shadow="motorSpeedPicker"
     //% finishSpeed.shadow="motorSpeedPicker"
     //% weight="87" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function decelFinishLinearDistMove(speed: number, finishSpeed: number, decelDist: number) {
+    export function decelFinishLinearDistMove(speed: number, finishSpeed: number, decelDist: number, totalDist?: number) {
         if (speed == 0) {
             stop(true);
             return;
-        } else if (Math.abs(finishSpeed) > Math.abs(speed)) {
+        } else if (Math.abs(finishSpeed) > Math.abs(speed) || 
+            decelDist < 0 || totalDist < 0 || totalDist < decelDist) {
             stop(true);
             console.log("Error: parameters passed incorrectly in decelFinishLinearDistMove!");
             music.playSoundEffect(sounds.systemGeneralAlert);
@@ -204,8 +211,9 @@ namespace chassis {
         }
 
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
+        const mRotTotalCalc = totalDist ? Math.calculateDistanceToEncRotate(totalDist) : mRotDecelCalc; // Рассчитываем общую дистанцию
 
-        executeRampMovement(0, speed, finishSpeed, 0, mRotDecelCalc, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(0, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
         stop(true); // Тормоз с удержанием
     }
 
