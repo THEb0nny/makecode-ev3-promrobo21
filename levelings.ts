@@ -6,12 +6,12 @@ namespace levelings {
     export let lineAlignmentLeftSideKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
     export let lineAlignmentLeftSideKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
     export let lineAlignmentLeftSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии левой стороны
-    export let lineAlignmentLeftSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
+    export let lineAlignmentLeftSideKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
 
     export let lineAlignmentRightSideKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии правой стороны
     export let lineAlignmentRightSideKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии правой стороны
     export let lineAlignmentRightSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии правой стороны
-    export let lineAlignmentRightSideN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии правой стороны
+    export let lineAlignmentRightSideKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии правой стороны
 
     export let linePositioningMaxSpeed = 50; // Переменная для хранения максимальной скорости при позиционировании на линии
     export let linePositioningTimeOut = 1000; // Переменная для хранения максимального времени позиционирования
@@ -19,7 +19,7 @@ namespace levelings {
     export let linePositioningKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
     export let linePositioningKi = 0; // Переменная для хранения коэффицента интегорального регулятора при регулировании на линии левой стороны
     export let linePositioningKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии левой стороны
-    export let linePositioningN = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
+    export let linePositioningKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии левой стороны
 
     let distanceBetweenLineSensors = 0; // Переменная для хранения расстояния между датчиками линии
 
@@ -80,17 +80,17 @@ namespace levelings {
             if (params.leftKp) lineAlignmentLeftSideKp = params.leftKp;
             if (params.leftKi) lineAlignmentLeftSideKi = params.leftKi;
             if (params.leftKd) lineAlignmentLeftSideKd = params.leftKd;
-            if (params.leftN) lineAlignmentLeftSideN = params.leftN;
+            if (params.leftKf) lineAlignmentLeftSideKf = params.leftKf;
             if (params.rightKp) lineAlignmentRightSideKp = params.rightKp;
             if (params.rightKi) lineAlignmentRightSideKi = params.rightKi;
             if (params.rightKd) lineAlignmentRightSideKd = params.rightKd;
-            if (params.rightN) lineAlignmentRightSideN = params.rightN;
+            if (params.rightKf) lineAlignmentRightSideKf = params.rightKf;
         }
 
         pidLeftSideLineAlignment.setGains(lineAlignmentLeftSideKp, lineAlignmentLeftSideKi, lineAlignmentLeftSideKd); // Установка значений регулятору для левой стороны
         pidRightSideLineAlignment.setGains(lineAlignmentRightSideKp, lineAlignmentRightSideKi, lineAlignmentRightSideKd); // Установка значений регулятору для правой стороны
-        pidLeftSideLineAlignment.setDerivativeFilter(lineAlignmentLeftSideN); // Установить фильтр дифференциального регулятора для левой стороны
-        pidRightSideLineAlignment.setDerivativeFilter(lineAlignmentRightSideN); // Установить фильтр дифференциального регулятора для правой стороны
+        pidLeftSideLineAlignment.setDerivativeFilter(lineAlignmentLeftSideKf); // Установить фильтр дифференциального регулятора для левой стороны
+        pidRightSideLineAlignment.setDerivativeFilter(lineAlignmentRightSideKf); // Установить фильтр дифференциального регулятора для правой стороны
         pidLeftSideLineAlignment.setControlSaturation(-100, 100); // Устанавливаем ограничения левому регулятору
         pidRightSideLineAlignment.setControlSaturation(-100, 100);// Устанавливаем ограничения правому регулятору
         pidLeftSideLineAlignment.reset(); // Сброс регулятора левой стороны
@@ -158,11 +158,11 @@ namespace levelings {
             if (params.Kp) linePositioningKp = params.Kp;
             if (params.Ki) linePositioningKi = params.Ki;
             if (params.Kd) linePositioningKd = params.Kd;
-            if (params.N) linePositioningN = params.N;
+            if (params.Kf) linePositioningKf = params.Kf;
         }
 
         pidLinePositioning.setGains(linePositioningKp, linePositioningKi, linePositioningKd); // Установка значений регулятору
-        pidLinePositioning.setDerivativeFilter(linePositioningN); // Установить фильтр дифференциального регулятора
+        pidLinePositioning.setDerivativeFilter(linePositioningKf); // Установить фильтр дифференциального регулятора
         pidLinePositioning.setControlSaturation(-100, 100); // Ограничение ПИДа
         pidLinePositioning.reset(); // Сброс ПИДа
         

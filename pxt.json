@@ -11,7 +11,6 @@
     "files": [
         "README.md",
         "custom.ts",
-        "lw.ts",
         "enums.ts",
         "motions.ts",
         "turns.ts",
@@ -24,7 +23,9 @@
         "test.ts",
         "math.ts",
         "motors.ts",
-        "navigation.ts"
+        "navigation.ts",
+        "smart_turns.ts",
+        "line_follow.ts"
     ],
     "testFiles": [],
     "targetVersions": {

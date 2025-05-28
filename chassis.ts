@@ -3,7 +3,7 @@ namespace chassis {
     /**
      * Команда руления моторами шасси от регулятора.
      * @param u управляющее воздействие, eg: 0
-     * @param speed скорость движения, eg: 50
+     * @param speed скорость (мощность) движения, eg: 50
      */
     //% blockId="RegulatorSteering"
     //% block="regulator steering on u = $u at $speed\\%"
@@ -69,8 +69,8 @@ namespace chassis {
      * Движение на расстояние в мм с независимыми скоростями (мощностями) на моторы.
      * Значение дистанции должно быть положительным! Если значение скорости (мощностей) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
-     * @param speedLeft скорость левого мотора, eg: 50
-     * @param speedRight скорость правого мотора, eg: 50
+     * @param speedLeft скорость (мощность) левого мотора, eg: 50
+     * @param speedRight скорость (мощность) правого мотора, eg: 50
      * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="DistMove"
@@ -106,9 +106,9 @@ namespace chassis {
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
-     * @param startSpeed начальная скорость движения, eg: 20
-     * @param maxSpeed максимальная скорость движения, eg: 70
-     * @param finishSpeed финишная скорость движения, eg: 10
+     * @param startSpeed начальная скорость (мощность) движения, eg: 20
+     * @param maxSpeed максимальная скорость (мощность) движения, eg: 70
+     * @param finishSpeed финишная скорость (мощность) движения, eg: 10
      */
     //% blockId="RampLinearDistMove"
     //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|from start $startSpeed\\% max $maxSpeed\\% finish $finishSpeed\\%"
@@ -146,8 +146,8 @@ namespace chassis {
      * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей (мощностей) должны иметь одинаковый знак!
      * @param accelDist расстояние ускорения в мм, eg: 50
-     * @param startSpeed начальная скорость движени, eg: 20
-     * @param maxSpeed максимальная скорость движения, eg: 50
+     * @param startSpeed начальная скорость (мощность) движени, eg: 20
+     * @param maxSpeed максимальная скорость (мощность) движения, eg: 50
      */
     //% blockId="AccelStartLinearDistMove"
     //% block="linear moving at acceleration distance $accelDist mm|from $startSpeed\\% to $maxSpeed\\%"
@@ -180,8 +180,8 @@ namespace chassis {
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей (мощности) должны иметь одинаковый знак!
      * @param decelDist расстояние замедления in mm, eg: 100
-     * @param speed изначальная скорость движения, eg: 50
-     * @param finishSpeed финишная скорость движения, eg: 10
+     * @param speed изначальная скорость (мощность) движения, eg: 50
+     * @param finishSpeed финишная скорость (мощность) движения, eg: 10
      */
     //% blockId="DecelFinishLinearDistMove"
     //% block="linear moving at deceleration distance $decelDist mm|from $speed\\% to $finishSpeed\\%"

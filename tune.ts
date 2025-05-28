@@ -128,7 +128,7 @@ namespace custom {
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollowCrossIntersectionN,
+                        val: motions.lineFollowCrossIntersectionKf,
                         changeStep: 0.1
                     }
                 },
@@ -165,7 +165,7 @@ namespace custom {
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollowToDistanceN,
+                        val: motions.lineFollowToDistanceKf,
                         changeStep: 0.1
                     }
                 },
@@ -202,7 +202,7 @@ namespace custom {
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollowToDistanceN,
+                        val: motions.lineFollowToDistanceKf,
                         changeStep: 0.1
                     }
                 },
@@ -297,7 +297,7 @@ namespace custom {
                         changeStep: 0.1
                     },
                     N: {
-                        val: chassis.smartSpinTurnN,
+                        val: chassis.smartSpinTurnKf,
                         changeStep: 0.1
                     }
                 },
@@ -344,7 +344,7 @@ namespace custom {
                         changeStep: 0.1
                     },
                     N: {
-                        val: chassis.smartPivotTurnN,
+                        val: chassis.smartPivotTurnKf,
                         changeStep: 0.1
                     }
                 },
@@ -405,11 +405,11 @@ namespace custom {
                         changeStep: 0.1
                     },
                     leftN: {
-                        val: levelings.lineAlignmentLeftSideN,
+                        val: levelings.lineAlignmentLeftSideKf,
                         changeStep: 0.1
                     },
                     rightN: {
-                        val: levelings.lineAlignmentRightSideN,
+                        val: levelings.lineAlignmentRightSideKf,
                         changeStep: 0.1
                     }
                 },

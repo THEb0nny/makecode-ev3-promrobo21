@@ -4,7 +4,7 @@ namespace motors {
     let regMotorKp = 1; // Пропорциональный коэффицент регулирования положения мотора
     let regMotorKi = 0; // Интегральный коэффицент регулирования положения мотора
     let regMotorKd = 0; // Дифференциальный коэффицент регулирования положения мотора
-    let regMotorN = 0; // Фильтр дифференциального коэффицента регулирования положения мотора
+    let regMotorKf = 0; // Фильтр дифференциального коэффицента регулирования положения мотора
     let regMotorTimeOut = 2000; // Максимальное время работы
     let tolerance = 5; // Допустимая погрешность (в тиках энкодера)
     let minSpeedThreshold = 5; // Порог минимальной скорости
@@ -34,7 +34,7 @@ namespace motors {
             if (params.Kp) regMotorKp = params.Kp;
             if (params.Ki) regMotorKi = params.Ki;
             if (params.Kd) regMotorKd = params.Kd;
-            if (params.N) regMotorN = params.N;
+            if (params.Kf) regMotorKf = params.Kf;
             if (params.tolerance) tolerance = params.tolerance;
             if (params.timeOut) minSpeedThreshold = params.minSpeedThreshold;
         }
@@ -42,7 +42,7 @@ namespace motors {
         motor.setBrake(isHold); // Установка удерживания мотором позиции
 
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора
-        pidRegMotor.setDerivativeFilter(regMotorN); // Установить фильтр дифференциального регулятора
+        pidRegMotor.setDerivativeFilter(regMotorKf); // Установить фильтр дифференциального регулятора
         pidRegMotor.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidRegMotor.reset(); // Сброс ПИД регулятора
         
