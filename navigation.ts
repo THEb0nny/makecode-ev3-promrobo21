@@ -333,7 +333,19 @@ namespace navigation {
         chassis.spinTurn(turnDeg, speed); // Поворот относительно центра шасси
     }
 
-    // Движение до точки (вершины)
+    /**
+     * Движение по линии до точки (вершины) выбранным алгоритмом.
+     * @param algorithm алгоритм нахождения пути, eg: GraphTraversal.BFS
+     * @param newPos узловая точка, в которую нужно двигаться, eg: 1
+     */
+    //% blockId="NavigationFollowLineToNode"
+    //% block="line follow by algorithm $algorithm to node $newPos||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии алгоритмом $algorithm до узловой точки $newPos||параметры: $params|отладка $debug"
+    //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
+    //% debug.shadow="toggleOnOff"
+    //% weight="69"
+    //% group="Алгоритм движения"
     export function followLineToNode(algorithm: GraphTraversal, newPos: number, params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number}, debug: boolean = false) {
         let path: number[] = []; // Для массива пути, по которому нужно пройти
         if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPos, newPos); // Алгоритм DFS
@@ -349,7 +361,18 @@ namespace navigation {
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
     }
 
-    // Движение по пути по узлам
+    /**
+     * Движение по линии по пути в виде узлов. Решение от одного из алгоритма нужно передать массивом.
+     * @param path путь в виде массива
+     */
+    //% blockId="NavigationFollowLinePath"
+    //% block="line follow along path $path||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии по пути $path||параметры: $params|отладка $debug"
+    //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
+    //% debug.shadow="toggleOnOff"
+    //% weight="68"
+    //% group="Алгоритм движения"
     export function followLinePath(path: number[], params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number }, debug: boolean = false) {
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
         for (let i = 0; i < path.length - 1; i++) {
