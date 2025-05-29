@@ -185,9 +185,9 @@ namespace navigation {
             }
         }
 
-        // Восстановление пути
         if (!found) return []; // Если цель не найдена
 
+        // Восстановление пути
         let path: number[] = [];
         let node = finishNode;
         while (node != -1) {
@@ -214,6 +214,7 @@ namespace navigation {
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
         visited[startNode] = true;
+        let found = false; // Флаг для обнаружения finishNode
 
         // Инициализация массивов
         for (let i = 0; i < numNodes; i++) {
@@ -223,15 +224,20 @@ namespace navigation {
 
         while (queue.length > 0) {
             const current = queue.shift();
-            if (current === finishNode) break;
+            if (current == finishNode) {
+                found = true; // Путь найден
+                break;
+            }
             for (let i = 0; i < numNodes; i++) {
-                if (navMatrix[current][i] !== -1 && !visited[i]) {
+                if (navMatrix[current][i] != -1 && !visited[i]) {
                     visited[i] = true;
                     parent[i] = current;
                     queue.push(i);
                 }
             }
         }
+
+        if (!found) return []; // Если finishNode не найден
 
         // Восстановление пути (аналогично вашему коду)
         let path: number[] = [];
@@ -278,8 +284,8 @@ namespace navigation {
                 }
             }
 
-            if (current === -1) break; // Все узлы обработаны
-            if (current === finishNode) break; // Достигли цели
+            // Если не нашли подходящий узел или достигли цели
+            if (current === -1 || current === finishNode) break;
 
             visited[current] = true;
             // Обновляем расстояния до соседей
@@ -295,9 +301,10 @@ namespace navigation {
             }
         }
 
-        // Восстановление пути
-        if (dist[finishNode] === Infinity) return []; // Пути нет
+        // Проверяем, найден ли путь
+        if (parent[finishNode] == -1 && startNode != finishNode) return []; // Пути нет
 
+        // Восстановление пути
         let path: number[] = [];
         let node = finishNode;
         while (node !== -1) {
