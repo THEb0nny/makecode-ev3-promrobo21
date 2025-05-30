@@ -340,6 +340,15 @@ namespace navigation {
         chassis.spinTurn(turnDeg, speed); // Поворот относительно центра шасси
     }
 
+    function processingFollowLineByPathInputParams(params?: params.NavLineFollow) {
+        if (params.moveSpeed) lineFollowByPathMoveSpeed = Math.abs(params.moveSpeed);
+        if (params.turnSpeed) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
+        if (params.Kp) lineFollowByPathKp = Math.abs(params.Kp);
+        if (params.Ki) lineFollowByPathKi = Math.abs(params.Ki);
+        if (params.Kd) lineFollowByPathKd = Math.abs(params.Kd);
+        if (params.Kf) lineFollowByPathKf = Math.abs(params.Kf);
+    }
+
     /**
      * Движение по линии до точки (вершины) выбранным алгоритмом.
      * @param algorithm алгоритм нахождения пути, eg: GraphTraversal.BFS
@@ -354,14 +363,7 @@ namespace navigation {
     //% weight="69"
     //% group="Алгоритм движения"
     export function followLineToNode(algorithm: GraphTraversal, newPos: number, params?: params.NavLineFollow, debug: boolean = false) {
-        if (params) { // Если были переданы параметры
-            if (params.moveSpeed) lineFollowByPathMoveSpeed = Math.abs(params.moveSpeed);
-            if (params.turnSpeed) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
-            if (params.Kp) lineFollowByPathKp = Math.abs(params.Kp);
-            if (params.Ki) lineFollowByPathKi = Math.abs(params.Ki);
-            if (params.Kd) lineFollowByPathKd = Math.abs(params.Kd);
-            if (params.Kf) lineFollowByPathKf = Math.abs(params.Kf);
-        }
+        if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
         let path: number[] = []; // Для массива пути, по которому нужно пройти
         if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPos, newPos); // Алгоритм DFS
         else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPos, newPos); // Алгоритм BFS
@@ -388,14 +390,7 @@ namespace navigation {
     //% weight="68"
     //% group="Алгоритм движения"
     export function followLineByPath(path: number[], params?: params.NavLineFollow) {
-        if (params) { // Если были переданы параметры
-            if (params.moveSpeed) lineFollowByPathMoveSpeed = Math.abs(params.moveSpeed);
-            if (params.turnSpeed) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
-            if (params.Kp) lineFollowByPathKp = Math.abs(params.Kp);
-            if (params.Ki) lineFollowByPathKi = Math.abs(params.Ki);
-            if (params.Kd) lineFollowByPathKd = Math.abs(params.Kd);
-            if (params.Kf) lineFollowByPathKf = Math.abs(params.Kf);
-        }
+        if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
         for (let i = 0; i < path.length - 1; i++) {
             directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnSpeed); // Поворот
             motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: lineFollowByPathMoveSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
