@@ -10,6 +10,13 @@ namespace navigation {
     // Матрица весов
     let weightMatrix: number[][] = [];
 
+    let lineFollowByPathMoveSpeed = 50;
+    let lineFollowByPathTurnSpeed = 60;
+    let lineFollowByPathKp = 1;
+    let lineFollowByPathKi = 0;
+    let lineFollowByPathKd = 0;
+    let lineFollowByPathKf = 0;
+
     /**
      * Установить количество узловых точек.
      * @param newMumNodes количество узлов, eg: 25
@@ -346,16 +353,24 @@ namespace navigation {
     //% debug.shadow="toggleOnOff"
     //% weight="69"
     //% group="Алгоритм движения"
-    export function followLineToNode(algorithm: GraphTraversal, newPos: number, params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number}, debug: boolean = false) {
+    export function followLineToNode(algorithm: GraphTraversal, newPos: number, params?: params.NavLineFollow, debug: boolean = false) {
+        if (params) { // Если были переданы параметры
+            if (params.moveSpeed) lineFollowByPathMoveSpeed = Math.abs(params.moveSpeed);
+            if (params.turnSpeed) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
+            if (params.Kp) lineFollowByPathKp = Math.abs(params.Kp);
+            if (params.Ki) lineFollowByPathKi = Math.abs(params.Ki);
+            if (params.Kd) lineFollowByPathKd = Math.abs(params.Kd);
+            if (params.Kf) lineFollowByPathKf = Math.abs(params.Kf);
+        }
         let path: number[] = []; // Для массива пути, по которому нужно пройти
         if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPos, newPos); // Алгоритм DFS
         else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPos, newPos); // Алгоритм BFS
         else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPos, newPos); // Алгоритм Дейкрсты
         else return;
-        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
+        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
         for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: params.moveSpeed, Kp: params.Kp, Ki: params.Ki, Kd: params.Kd }); // Движение до перекрёстка
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnSpeed); // Поворот
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: lineFollowByPathMoveSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
@@ -365,19 +380,25 @@ namespace navigation {
      * Движение по линии по пути в виде узлов. Решение от одного из алгоритма нужно передать массивом.
      * @param path путь в виде массива
      */
-    //% blockId="NavigationFollowLinePath"
-    //% block="line follow along path $path||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии по пути $path||параметры: $params|отладка $debug"
+    //% blockId="NavigationFollowLineByPath"
+    //% block="line follow along path $path||params: $params"
+    //% block.loc.ru="движение по линии по пути $path||параметры: $params"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
-    //% debug.shadow="toggleOnOff"
     //% weight="68"
     //% group="Алгоритм движения"
-    export function followLinePath(path: number[], params: { moveSpeed: number, turnSpeed: number, Kp: number, Ki?: number, Kd?: number }, debug: boolean = false) {
-        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути на экран
+    export function followLineByPath(path: number[], params?: params.NavLineFollow) {
+        if (params) { // Если были переданы параметры
+            if (params.moveSpeed) lineFollowByPathMoveSpeed = Math.abs(params.moveSpeed);
+            if (params.turnSpeed) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
+            if (params.Kp) lineFollowByPathKp = Math.abs(params.Kp);
+            if (params.Ki) lineFollowByPathKi = Math.abs(params.Ki);
+            if (params.Kd) lineFollowByPathKd = Math.abs(params.Kd);
+            if (params.Kf) lineFollowByPathKf = Math.abs(params.Kf);
+        }
         for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], params.turnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: params.moveSpeed, Kp: params.Kp, Ki: params.Ki, Kd: params.Kd }); // Движение до перекрёстка
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnSpeed); // Поворот
+            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: lineFollowByPathMoveSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
         currentPos = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
