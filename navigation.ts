@@ -383,16 +383,20 @@ namespace navigation {
      * @param path путь в виде массива
      */
     //% blockId="NavigationFollowLineByPath"
-    //% block="line follow along path $path||params: $params"
-    //% block.loc.ru="движение по линии по пути $path||параметры: $params"
+    //% block="line follow along path $path||params: $params|debug $debug"
+    //% block.loc.ru="движение по линии по пути $path||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
+    //% debug.shadow="toggleOnOff"
     //% weight="68"
     //% group="Алгоритм движения"
-    export function followLineByPath(path: number[], params?: params.NavLineFollow) {
+    export function followLineByPath(path: number[], params?: params.NavLineFollow, debug: boolean = false) {
         if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
         for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnSpeed); // Поворот
+            const newDirection = navMatrix[path[i]][path[i + 1]];
+            const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterMotion.RollingNoStop : AfterMotion.DecelRolling; // Определяем тип движения после завершения
+            if (debug) console.log(`path[i]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
+            directionSpinTurn(newDirection, lineFollowByPathTurnSpeed); // Поворот
             motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: lineFollowByPathMoveSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }

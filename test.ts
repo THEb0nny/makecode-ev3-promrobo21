@@ -130,10 +130,12 @@ let weightMatrix: number[][] = [
 navigation.setNodesNumber(29);
 navigation.setNavigationMatrix(navMatrix);
 navigation.setWeightMatrix(weightMatrix);
+navigation.setCurrentDirection(1);
 
 // console.log(`travelDFS: ${navigation.algorithmDFS(25, 1).join(', ')}`);
 console.log(`travelBFS: ${navigation.algorithmBFS(1, 23).join(', ')}`);
-console.log(`travelDijkstra: ${navigation.algorithmDijkstra(1, 23).join(', ')}`);
+// console.log(`travelDijkstra: ${navigation.algorithmDijkstra(1, 23).join(', ')}`);
 
-navigation.followLineToNode(GraphTraversal.Dijkstra, 1, {moveSpeed: 70, turnSpeed: 50, Kp: 0.5 });
+// navigation.followLineToNode(GraphTraversal.Dijkstra, 1, {moveSpeed: 70, turnSpeed: 50, Kp: 0.5 });
+navigation.followLineByPath(navigation.algorithmBFS(1, 23), null, true);
 */
