@@ -124,8 +124,7 @@ namespace chassis {
         if (maxSpeed == 0 || totalDist == 0) {
             stop(true);
             return;
-        } else if (startSpeed < 0 || maxSpeed < 0 || finishSpeed < 0 || 
-            Math.abs(startSpeed) > Math.abs(maxSpeed) || Math.abs(finishSpeed) > Math.abs(maxSpeed) || 
+        } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) || Math.abs(finishSpeed) > Math.abs(maxSpeed) || 
             totalDist < 0 || accelDist < 0 || decelDist < 0 || totalDist < accelDist + decelDist) {
             stop(true);
             console.log("Error: parameters passed incorrectly in rampLinearDistMove!");
