@@ -579,10 +579,12 @@ namespace params {
     export interface NavLineFollow {
         moveSpeed: number,
         turnSpeed: number,
+        accelStartDist?: number
         Kp: number,
         Ki?: number,
         Kd?: number,
-        Kf?: number
+        Kf?: number,
+        
     }
 
 }
