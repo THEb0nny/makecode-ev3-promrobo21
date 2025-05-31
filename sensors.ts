@@ -230,8 +230,8 @@ namespace sensors {
      * @param minB минимальное значение синего, eg: 0
      */
     //% blockId="SetColorSensorMinRgbValues"
-    //% block="set $sensor **color sensor** min values R = $minR G = $minG B = $minB"
-    //% block.loc.ru="установить $sensor **датчику цвета** мин значения R = $minR G = $minG B = $minB"
+    //% block="set $sensor **color sensor** minimum R = $minR G = $minG B = $minB"
+    //% block.loc.ru="установить $sensor **датчику цвета** минимальные R = $minR G = $minG B = $minB"
     //% inlineInputMode="inline"
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
@@ -254,8 +254,8 @@ namespace sensors {
      * @param maxB максимальное значение синего, eg: 255
      */
     //% blockId="SetColorSensorMaxRgbValues"
-    //% block="set $sensor color **sensor max** RGB values R = $maxR G = $maxG B = $maxB"
-    //% block.loc.ru="установить $sensor **датчику цвета** макс значения R = $maxR G = $maxG B = $maxB"
+    //% block="set $sensor **color sensor** maximum R = $maxR G = $maxG B = $maxB"
+    //% block.loc.ru="установить $sensor **датчику цвета** максимальные R = $maxR G = $maxG B = $maxB"
     //% inlineInputMode="inline"
     //% sensor.fieldEditor="images"
     //% sensor.fieldOptions.columns="4"
