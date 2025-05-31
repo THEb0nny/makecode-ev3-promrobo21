@@ -400,9 +400,9 @@ namespace navigation {
             const newDirection = navMatrix[path[i]][path[i + 1]];
             const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterMotion.RollingNoStop : AfterMotion.DecelRolling; // Определяем тип движения после завершения
             if (debug) console.log(`path[i]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
-            const isDifferentDir = direction != newDirection;
+            const directionChanged = direction != newDirection;
             directionSpinTurn(newDirection, lineFollowByPathTurnSpeed); // Поворот
-            if (i == 0 || isDifferentDir) {
+            if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
                     motions.rampLineFollowToDistance(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, Braking.NoStop, {
                         startSpeed: lineFollowByPathMoveStartSpeed,

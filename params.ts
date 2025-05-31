@@ -585,7 +585,6 @@ namespace params {
         Ki?: number,
         Kd?: number,
         Kf?: number,
-        
     }
 
 }
