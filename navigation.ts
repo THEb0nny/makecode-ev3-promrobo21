@@ -346,7 +346,7 @@ namespace navigation {
         if (params.moveStartSpeed) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveStartSpeed);
         if (params.moveMaxSpeed) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveMaxSpeed);
         if (params.turnSpeed) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
-        if (params.accelStartDist) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist)
+        if (params.accelStartDist) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist);
         if (params.Kp) lineFollowByPathKp = Math.abs(params.Kp);
         if (params.Ki) lineFollowByPathKi = Math.abs(params.Ki);
         if (params.Kd) lineFollowByPathKd = Math.abs(params.Kd);
@@ -401,7 +401,7 @@ namespace navigation {
             const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterMotion.RollingNoStop : AfterMotion.DecelRolling; // Определяем тип движения после завершения
             if (debug) console.log(`path[i]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
             directionSpinTurn(newDirection, lineFollowByPathTurnSpeed); // Поворот
-            if (i == 0) {
+            if (i == 0 || direction != newDirection) {
                 if (lineFollowByPathAccelStartDist > 0) {
                     motions.rampLineFollowToDistance(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, Braking.NoStop, {
                         startSpeed: lineFollowByPathMoveStartSpeed,
@@ -412,9 +412,21 @@ namespace navigation {
                         Kf: lineFollowByPathKf
                     }); // Движение на расстояние для разгона
                 }
-                motions.lineFollowToCrossIntersection(afterMotion, { speed: lineFollowByPathMoveMaxSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
+                motions.lineFollowToCrossIntersection(afterMotion, { 
+                    speed: lineFollowByPathMoveMaxSpeed,
+                    Kp: lineFollowByPathKp,
+                    Ki: lineFollowByPathKi,
+                    Kd: lineFollowByPathKd, 
+                    Kf: lineFollowByPathKf
+                }); // Движение до перекрёстка
             } else {
-                motions.lineFollowToCrossIntersection(afterMotion, { speed: lineFollowByPathMoveMaxSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
+                motions.lineFollowToCrossIntersection(afterMotion, {
+                    speed: lineFollowByPathMoveMaxSpeed,
+                    Kp: lineFollowByPathKp,
+                    Ki: lineFollowByPathKi,
+                    Kd: lineFollowByPathKd,
+                    Kf: lineFollowByPathKf
+                }); // Движение до перекрёстка
             }
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
