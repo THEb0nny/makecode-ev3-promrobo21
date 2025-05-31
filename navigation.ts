@@ -400,7 +400,16 @@ namespace navigation {
             if (debug) console.log(`path[i]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
             directionSpinTurn(newDirection, lineFollowByPathTurnSpeed); // Поворот
             if (i == 0) {
-                if (lineFollowByPathAccelStartDist > 0) motions.lineFollowToDistance(lineFollowByPathAccelStartDist, AfterMotion.NoStop, { speed: lineFollowByPathMoveSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение на расстояние для разгона
+                if (lineFollowByPathAccelStartDist > 0) {
+                    motions.rampLineFollowToDistance(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, Braking.NoStop, {
+                        startSpeed: 20,
+                        maxSpeed: lineFollowByPathMoveSpeed,
+                        Kp: lineFollowByPathKp,
+                        Ki: lineFollowByPathKi,
+                        Kd: lineFollowByPathKd,
+                        Kf: lineFollowByPathKf
+                    }); // Движение на расстояние для разгона
+                }
                 motions.lineFollowToCrossIntersection(afterMotion, { speed: lineFollowByPathMoveSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
             } else {
                 motions.lineFollowToCrossIntersection(afterMotion, { speed: lineFollowByPathMoveSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
