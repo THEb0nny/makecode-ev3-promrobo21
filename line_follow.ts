@@ -96,6 +96,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
     //% group="Свойства движения"
+    //% deprecated=true
     export function setDistRollingFromLineAfterIntersection(dist: number) {
         distRollingFromLineAfterIntersection = dist;
     }
@@ -109,6 +110,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% weight="96"
     //% group="Свойства движения"
+    //% deprecated=true
     export function getDistRollinFromLineAfterIntersection() {
         return distRollingFromLineAfterIntersection;
     }
@@ -329,6 +331,7 @@ namespace motions {
 
         advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
+        pidLineFollow.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Regulator limitation
         chassis.pidChassisSync.reset(); // Reset pid controller
 
@@ -349,6 +352,32 @@ namespace motions {
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
             control.pauseUntilTime(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
         }
+    }
+
+    export function rollingLineFollowingToSide(lineLocation: LineLocation, debug: boolean = false) {
+        const calcMotRot = Math.calculateDistanceToEncRotate(20); // Дистанция в мм, которую нужно проехать по линии
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+
+        let error = 0; // Переменная для хранения ошибки регулирования
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) { // Пока моторы не достигнули градусов вращения
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторы
+            if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            if (lineLocation == LineLocation.Inside) error = refLeftLS - getLineFollowSetPoint(); // Ошибка регулирования
+            else if (lineLocation == LineLocation.Outside) error = getLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
+            chassis.regulatorSteering(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
+            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
+            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+        }
+        music.playToneInBackground(262, 25); // Издаём сигнал завершения
+        chassis.stop(true);
     }
 
     /**
@@ -414,7 +443,7 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
-        music.playToneInBackground(587, 75); // Издаём сигнал завершения
+        music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -470,7 +499,7 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowRightIntersectionSpeed);
-        music.playToneInBackground(587, 75); // Издаём сигнал завершения
+        music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -616,7 +645,7 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
-        music.playToneInBackground(587, 75); // Издаём сигнал завершения
+        music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -677,7 +706,7 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
-        music.playToneInBackground(587, 75); // Издаём сигнал завершения
+        music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = 0; // Переменная предыдущего времения для цикла регулирования

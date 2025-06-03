@@ -53,6 +53,7 @@ const enum AfterLineMotion {
     DecelRolling,
     //% block="short rolling no stop"
     //% block.loc.ru="короткая прокатка без торможения"
+    //% deprecated=true
     ShortRollingNoStop,
     //% block="line rolling"
     //% block.loc.ru="прокатка по линии"

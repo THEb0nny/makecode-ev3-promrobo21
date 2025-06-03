@@ -8,6 +8,8 @@ namespace motions {
             chassis.rampLinearDistMove(0, speed, 10, motions.getDistRollingAfterIntersection(), 0, motions.getDistRollingAfterIntersection());
         } else if (actionAfterMotion == AfterLineMotion.ShortRollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             motions.rollingMoveOutFromLine(motions.getDistRollinFromLineAfterIntersection(), speed);
+        } else if (actionAfterMotion == AfterLineMotion.LineRollingNoStop) {
+            
         } else if (actionAfterMotion == AfterLineMotion.HoldStop) { // Тормоз с жёстким торможением (удержанием)
             chassis.stop(true);
         } else if (actionAfterMotion == AfterLineMotion.FloatStop) { // Тормоз с прокаткой по инерции
