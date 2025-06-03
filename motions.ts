@@ -1,18 +1,18 @@
 namespace motions {
 
     // Функция, которая выполняет действие после цикла с движением
-    export function actionAfterMotion(speed: number, actionAfterMotion: AfterMotion | AfterMotionShort) {
-        if (actionAfterMotion == AfterMotion.Rolling) { // Прокатка после определния перекрёстка
+    export function actionAfterMotion(speed: number, actionAfterMotion: AfterLineMotion | AfterMotion) {
+        if (actionAfterMotion == AfterLineMotion.Rolling) { // Прокатка после определния перекрёстка
             chassis.linearDistMove(motions.getDistRollingAfterIntersection(), speed, Braking.Hold);
-        } else if (actionAfterMotion == AfterMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
+        } else if (actionAfterMotion == AfterLineMotion.DecelRolling) { // Прокатка с мягким торможением после определния перекрёстка
             chassis.rampLinearDistMove(0, speed, 10, motions.getDistRollingAfterIntersection(), 0, motions.getDistRollingAfterIntersection());
-        } else if (actionAfterMotion == AfterMotion.RollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
+        } else if (actionAfterMotion == AfterLineMotion.ShortRollingNoStop) { // Команда прокатка на расстояние, но без торможения, нужна для съезда с перекрёстка
             motions.rollingMoveOutFromLine(motions.getDistRollinFromLineAfterIntersection(), speed);
-        } else if (actionAfterMotion == AfterMotion.BreakStop) { // Тормоз с жёстким торможением (удержанием)
+        } else if (actionAfterMotion == AfterLineMotion.HoldStop) { // Тормоз с жёстким торможением (удержанием)
             chassis.stop(true);
-        } else if (actionAfterMotion == AfterMotion.NoBreakStop) { // Тормоз с прокаткой по инерции
+        } else if (actionAfterMotion == AfterLineMotion.FloatStop) { // Тормоз с прокаткой по инерции
             chassis.stop(false);
-        } else if (actionAfterMotion == AfterMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
+        } else if (actionAfterMotion == AfterLineMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             chassis.steeringCommand(0, speed);
         }
     }

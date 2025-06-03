@@ -205,7 +205,7 @@ namespace levelings {
      * Выравнивание на линии в движении.
      * Не используйте большие скорости. Поддерживается и выравнивание при движении назад.
      * @param speed скорость движения, eg: 30
-     * @param actionAfterMotion действие после, eg: AfterMotionShort.BreakStop
+     * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignmentInMotion"
@@ -217,7 +217,7 @@ namespace levelings {
     //% debug.shadow="toggleOnOff"
     //% weight="97"
     //% group="Линия"
-    export function lineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotionShort, debug: boolean = false) {
+    export function lineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         // https://www.youtube.com/watch?v=DOPXPuB7Xhs
         if (distanceBetweenLineSensors <= 0) {
             chassis.stop(true);

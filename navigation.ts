@@ -376,7 +376,7 @@ namespace navigation {
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
         for (let i = 0; i < path.length - 1; i++) {
             directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterMotion.DecelRolling, { speed: lineFollowByPathMoveMaxSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
+            motions.lineFollowToCrossIntersection(AfterLineMotion.DecelRolling, { speed: lineFollowByPathMoveMaxSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
@@ -398,7 +398,7 @@ namespace navigation {
         if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
         for (let i = 0; i < path.length - 1; i++) {
             const newDirection = navMatrix[path[i]][path[i + 1]];
-            const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterMotion.RollingNoStop : AfterMotion.DecelRolling; // Определяем тип движения после завершения
+            const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.ShortRollingNoStop : AfterLineMotion.DecelRolling; // Определяем тип движения после завершения
             if (debug) console.log(`path[i]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
             const directionChanged = direction != newDirection;
             directionSpinTurn(newDirection, lineFollowByPathTurnSpeed); // Поворот

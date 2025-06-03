@@ -277,7 +277,7 @@ namespace motions {
 
     /**
      * Функция движения по линии до перекрёстка двумя датчиками.
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterLineMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToCrossIntersection"
@@ -290,7 +290,7 @@ namespace motions {
     //% weight="99"
     //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
-    export function lineFollowToCrossIntersection(actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToCrossIntersection(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowCrossIntersectionSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowCrossIntersectionKp = params.Kp;
@@ -356,7 +356,7 @@ namespace motions {
      * Если слева, тогда движение осуществляется правым датчиком и левый отвечает за определение.
      * Если справа, тогда за движение отвечает левый датчик, а правый отвечает за определение перекрёстка.
      * @param sideIntersection перекрёсток слева или справа, eg: SideIntersection.LeftInside
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterLineMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToSideIntersection"
@@ -369,7 +369,7 @@ namespace motions {
     //% weight="89"
     //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
-    export function lineFollowToSideIntersection(sideIntersection: SideIntersection, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToSideIntersection(sideIntersection: SideIntersection, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (sideIntersection == SideIntersection.LeftInside) {
             lineFollowToLeftIntersection(LineLocation.Inside, actionAfterMotion, params, debug);
         } else if (sideIntersection == SideIntersection.LeftOutside) {
@@ -384,7 +384,7 @@ namespace motions {
     /**
      * Функция движения по линии до определения перекрёстка слева правым датчиком.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param AfterLineMotion действие после перекрёстка, eg: AfterMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToLeftIntersection"
@@ -398,7 +398,7 @@ namespace motions {
     //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
-    export function lineFollowToLeftIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToLeftIntersection(lineLocation: LineLocation, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowLeftIntersectionSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowLeftIntersectionKp = params.Kp;
@@ -440,7 +440,7 @@ namespace motions {
     /**
      * Функция движения по линии до определения перекрёстка справа левым датчиком.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterLineMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToRightIntersection"
@@ -454,7 +454,7 @@ namespace motions {
     //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
     //% blockHidden="true"
-    export function lineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowRightIntersectionSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowRightIntersectionKp = params.Kp;
@@ -500,7 +500,7 @@ namespace motions {
     /**
      * Движение по линии на расстояние.
      * @param dist дистанция движения в мм, eg: 250
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+    * @param actionAfterMotion действие после перекрёстка, eg: AfterLineMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistance"
@@ -513,7 +513,7 @@ namespace motions {
     //% weight="79"
     //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
-    export function lineFollowToDistance(dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToDistance(dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowToDistanceSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowToDistanceKp = params.Kp;
@@ -554,7 +554,7 @@ namespace motions {
      * Движение по линии на расстояние одним из датчиков.
      * @param followLineSensor выбранным сенсором и позицией, eg: FollowLineSensor.LeftInside
      * @param dist дистанция движения в мм eg: 250
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterLineMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithOneSensor"
@@ -567,7 +567,7 @@ namespace motions {
     //% weight="76"
     //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
-    export function lineFollowToDistanceWithOneSensor(followLineSensor: FollowLineSensor, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToDistanceWithOneSensor(followLineSensor: FollowLineSensor, dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (followLineSensor == FollowLineSensor.LeftInside) {
             lineFollowToDistanceWithLeftSensor(LineLocation.Inside, dist, actionAfterMotion, params, debug);
         } else if (followLineSensor == FollowLineSensor.LeftOutside) {
@@ -583,7 +583,7 @@ namespace motions {
      * Движение по линии на расстояние левым датчиком. Очень грубый метод.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist дистанция движения в мм, eg: 250
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterLineMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithLeftSensor"
@@ -597,7 +597,7 @@ namespace motions {
     //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
     //% blockHidden="true"
-    export function lineFollowToDistanceWithLeftSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToDistanceWithLeftSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowToDistanceWithLeftSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowToDistanceWithLeftSensorKp = params.Kp;
@@ -644,7 +644,7 @@ namespace motions {
      * Движение по линии на расстояние правым датчиком.
      * @param lineLocation позиция линии для движения, eg: LineLocation.Inside
      * @param dist дистанция движения в мм, eg: 250
-     * @param actionAfterMotion действие после перекрёстка, eg: AfterMotion.Rolling
+     * @param actionAfterMotion действие после перекрёстка, eg: AfterLineMotion.Rolling
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceWithRightSensor"
@@ -658,7 +658,7 @@ namespace motions {
     //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
     //% blockHidden="true"
-    export function lineFollowToDistanceWithRightSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToDistanceWithRightSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.speed) lineFollowToDistanceWithRightSensorSpeed = Math.abs(params.speed);
             if (params.Kp) lineFollowToDistanceWithRightSensorKp = params.Kp;

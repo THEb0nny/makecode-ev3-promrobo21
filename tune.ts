@@ -646,7 +646,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.lineFollowToCrossIntersection(AfterMotion.BreakStop, params, debug);
+                        motions.lineFollowToCrossIntersection(AfterLineMotion.HoldStop, params, debug);
                     } else if (screenName == "LW_2S_TO_DISTANCE") {
                         const dist = methodScreens[screenName].params.dist.val;
                         const debug = methodScreens[screenName].params.debug.val;
@@ -657,7 +657,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.lineFollowToDistance(dist, AfterMotion.BreakStop, params, debug);
+                        motions.lineFollowToDistance(dist, AfterLineMotion.HoldStop, params, debug);
                     } else if (screenName == "LW_TO_SIDE_INTERSECTION") {
                         const junction = methodScreens[screenName].params.junction.val;
                         const lineLocation = methodScreens[screenName].params.lineLocation.val;
@@ -669,7 +669,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.lineFollowToSideIntersection(junction, AfterMotion.BreakStop, params, debug);
+                        motions.lineFollowToSideIntersection(junction, AfterLineMotion.HoldStop, params, debug);
                     } else if (screenName == "CHASSIS_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const speed = methodScreens[screenName].params.speed.val;
@@ -731,7 +731,7 @@ namespace custom {
                     } else if (screenName == "LINE_ALIGNMET_IN_MOTION") {
                         const speed = methodScreens[screenName].params.speed.val;
                         const debug = methodScreens[screenName].params.debug.val;
-                        levelings.lineAlignmentInMotion(speed, AfterMotionShort.BreakStop, debug)
+                        levelings.lineAlignmentInMotion(speed, AfterMotion.Hold, debug)
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал

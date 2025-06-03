@@ -43,36 +43,45 @@ const enum LineSensorSelection {
     OnlyRight
 }
 
-// Перечисление о типах торможения полный вариант
-const enum AfterMotion {
+// Перечисление о типах действий после алгоритма полный вариант
+const enum AfterLineMotion {
     //% block="rolling"
     //% block.loc.ru="прокатка"
     Rolling,
     //% block="decel rolling"
     //% block.loc.ru="плавная прокатка"
     DecelRolling,
-    //% block="rolling no stop"
-    //% block.loc.ru="прокатка без торможения"
-    RollingNoStop,
-    //% block="brake stop"
+    //% block="short rolling no stop"
+    //% block.loc.ru="короткая прокатка без торможения"
+    ShortRollingNoStop,
+    //% block="line rolling"
+    //% block.loc.ru="прокатка по линии"
+    LineRolling,
+    //% block="line decel rolling"
+    //% block.loc.ru="плавная прокатка по линии"
+    LineDecelRolling,
+    //% block="short line rolling no stop"
+    //% block.loc.ru="короткая прокатка по линии без торможения"
+    LineRollingNoStop,
+    //% block="hold stop"
     //% block.loc.ru="тормоз с удержанием"
-    BreakStop,
-    //% block="no break stop"
-    //% block.loc.ru="тормоз с инерцией"
-    NoBreakStop,
+    HoldStop,
+    //% block="float stop"
+    //% block.loc.ru="тормоз с освобождением"
+    FloatStop,
     //% block="no stop"
     //% block.loc.ru="не тормозить"
     NoStop
 }
 
-// Перечисление о типах торможения сокращённый вариант
-const enum AfterMotionShort {
-    //% block="brake stop"
-    //% block.loc.ru="тормоз с удержанием"
-    BreakStop,
-    //% block="no break stop"
-    //% block.loc.ru="тормоз с инерцией"
-    NoBreakStop,
+// Перечисление о типах действий после алгоритма сокращённый вариант
+const enum AfterMotion {
+    //% block="hold"
+    //% block.loc.ru="удержание"
+    Hold,
+    //% block="float"
+    //% block.loc.ru="освобождение"
+    Float,
     //% block="no stop"
     //% block.loc.ru="не тормозить"
     NoStop
