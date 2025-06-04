@@ -24,7 +24,8 @@
 // sensors.setNxtLightSensorsAsLineSensors(sensors.nxtLight1, sensors.nxtLight4)
 
 // Установить значения отражения на белом и чёрном для датчика линии
-// sensors.setLineSensorsRawRefValues(2520, 1712, 2420, 1636)
+// sensors.setLineSensorsRawRefValues(2520, 1712, 2420, 1636);
+// sensors.setLineSensorsRawRefValues(629, 503, 648, 525);
 
 // Установить пороговое значение отражения при движении по линии
 // motions.setLineFollowRefTreshold(40)
@@ -53,6 +54,8 @@
 // chassis.spinTurn(90, 50);
 
 // chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
+
+// motions.lineFollowToCrossIntersection(AfterLineMotion.HoldStop, { speed: 60, Kp: 0.5, Kd: 0.5 });
 
 // chassis.rampLinearDistMove(25, 50, 10, 300, 100, 100);
 // chassis.accelStartLinearDistMove(25, 50, 150, 300);
