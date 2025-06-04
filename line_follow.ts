@@ -321,7 +321,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -462,7 +462,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterMotion(lineFollowLeftIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -518,7 +518,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterMotion(lineFollowRightIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -575,7 +575,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterMotion(lineFollowToDistanceSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -665,7 +665,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterMotion(lineFollowToDistanceWithLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -726,7 +726,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterMotion(lineFollowToDistanceWithRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
@@ -802,9 +802,9 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 300); // Издаём сигнал завершения
+        music.playToneInBackground(262, 250); // Издаём сигнал завершения
         if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
-        else if (braking == Braking.NoBreak) chassis.stop(false); // Торможение без удержания
+        else if (braking == Braking.Float) chassis.stop(false); // Торможение без удержания
         else if (braking == Braking.NoStop) chassis.setSpeedsCommand(rampLineFollow2SensorFinishSpeed, rampLineFollow2SensorFinishSpeed); // Команда моторам вперёд
     }
 
