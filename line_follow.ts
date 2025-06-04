@@ -355,8 +355,8 @@ namespace motions {
         }
     }
 
-    export function rollingLineFollowing(debug: boolean = false) {
-        const calcMotRot = Math.calculateDistanceToEncRotate(20); // Дистанция в мм, которую нужно проехать по линии
+    export function rollingLineFollowing(rollingDist: number, speed: number, braking: Braking, debug: boolean = false) {
+        const calcMotRot = Math.calculateDistanceToEncRotate(rollingDist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
@@ -371,12 +371,14 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, lineFollowToDistanceSpeed); // Команда моторам
+            chassis.regulatorSteering(U, speed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 25); // Издаём сигнал завершения
-        chassis.stop(true);
+        if (braking == Braking.Hold) chassis.stop(true); // Break at hold
+        else if (braking == Braking.Float) chassis.stop(false); // No hold break
+        else chassis.setSpeedsCommand(speed, speed); // Forward
     }
 
     /**

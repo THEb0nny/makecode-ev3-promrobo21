@@ -57,10 +57,10 @@ const enum AfterLineMotion {
     ShortRollingNoStop,
     //% block="line rolling"
     //% block.loc.ru="прокатка по линии"
-    LineRolling,
+    LineFollowRolling,
     //% block="line decel rolling"
     //% block.loc.ru="плавная прокатка по линии"
-    LineDecelRolling,
+    LineFollowDecelRolling,
     //% block="short line rolling no stop"
     //% block.loc.ru="короткая прокатка по линии без торможения"
     LineRollingNoStop,
