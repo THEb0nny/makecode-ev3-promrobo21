@@ -20,7 +20,7 @@ namespace chassis {
     export function spinTurn(deg: number, speed: number, timeOut?: number) {
         //if (!motorsPair) return;
         if (deg == 0 || speed == 0) {
-            stop(true);
+            stop(Braking.Hold);
             return;
         } else if (speed < 0) {
             console.log("Error: the rotation speed relative to the center is negative!");
@@ -51,7 +51,7 @@ namespace chassis {
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
-        stop(true); // Удерживание при торможении
+        stop(Braking.Hold); // Удерживание при торможении
     }
 
     /**
@@ -74,7 +74,7 @@ namespace chassis {
     export function pivotTurn(deg: number, speed: number, wheelPivot: WheelPivot, timeOut?: number) {
         //if (!motorsPair) return;
         if (deg == 0 || speed == 0) {
-            stop(true);
+            stop(Braking.Hold);
             return;
         } else if (deg < 0) {
             console.log("Error: the angle of rotation relative to the wheel is negative!");
@@ -83,7 +83,7 @@ namespace chassis {
         speed = Math.clamp(-100, 100, speed >> 0); // Ограничиваем скорость от -100 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
-        stop(true, 0); // Установить тормоз и удержание моторов перед поворотом
+        stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
         if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
         else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
         else return;
@@ -109,7 +109,7 @@ namespace chassis {
             else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
             control.pauseUntilTime(currTime, 1);
         }
-        stop(true); // Удерживание при торможении
+        stop(Braking.Hold); // Удерживание при торможении
     }
 
     /**

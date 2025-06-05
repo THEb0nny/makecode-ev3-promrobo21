@@ -157,7 +157,7 @@ namespace chassis {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
-        stop(true); // Остановка моторов с удержанием
+        stop(Braking.Hold); // Остановка моторов с удержанием
     }
 
     /**
@@ -184,7 +184,7 @@ namespace chassis {
             if (params.Kd) smartPivotTurnKd = params.Kd;
             if (params.Kf) smartPivotTurnKf = params.Kf;
         }
-        stop(true, 0); // Остановить и установить жёсткий тормоз для моторов
+        stop(Braking.Hold); // Остановить и установить жёсткий тормоз для моторов
         let motEncPrev = 0; // Инициализируем переменную хранения значения с энкодера мотора
         // Записываем текущее значение с энкодера нужного мотора и ставим тормоз нужному мотору
         if (wheelPivot == WheelPivot.LeftWheel) motEncPrev = rightMotor.angle(); // Если вращаться нужно вокруг левого, тогда записываем с правого
@@ -228,7 +228,7 @@ namespace chassis {
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
-        stop(true); // Остановить моторы
+        stop(Braking.Hold); // Остановить моторы
     }
 
 }

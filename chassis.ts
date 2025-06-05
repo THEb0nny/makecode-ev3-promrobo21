@@ -41,7 +41,7 @@ namespace chassis {
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * @param dist дистанция движения в мм, eg: 100
      * @param speed скорость (мощность) движения, eg: 60
-     * @param braking тип торможения, eg: Braking.Hold
+     * @param braking тип торможения, eg: MotionBraking.Hold
      */
     //% blockId="LinearDistMove"
     //% block="linear distance moving $dist mm at $speed\\% braking $braking"
@@ -51,12 +51,12 @@ namespace chassis {
     //% weight="79" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function linearDistMove(dist: number, speed: number, braking: Braking = Braking.Hold) {
+    export function linearDistMove(dist: number, speed: number, braking: MotionBraking = MotionBraking.Hold) {
         if (speed == 0 || dist == 0) {
-            stop(true);
+            stop(Braking.Hold);
             return;
         } else if (dist < 0) {
-            stop(true);
+            stop(Braking.Hold);
             console.log("Error: the driving distance is negative!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
@@ -82,12 +82,12 @@ namespace chassis {
     //% weight="78"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function distMove(dist: number, speedLeft: number, speedRight: number, braking: Braking = Braking.Hold) {
+    export function distMove(dist: number, speedLeft: number, speedRight: number, braking: MotionBraking = MotionBraking.Hold) {
         if (dist == 0 || speedLeft == 0 && speedRight == 0) {
-            stop(true);
+            stop(Braking.Hold);
             return;
         } else if (dist < 0) {
-            stop(true);
+            stop(Braking.Hold);
             console.log("Error: the driving distance is negative!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
@@ -122,11 +122,11 @@ namespace chassis {
     //% group="Синхронизированное движение с ускорениями в мм"
     export function rampLinearDistMove(startSpeed: number, maxSpeed: number, finishSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
         if (maxSpeed == 0 || totalDist == 0) {
-            stop(true);
+            stop(Braking.Hold);
             return;
         } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) || Math.abs(finishSpeed) > Math.abs(maxSpeed) || 
             totalDist < 0 || accelDist < 0 || decelDist < 0 || totalDist < accelDist + decelDist) {
-            stop(true);
+            stop(Braking.Hold);
             console.log("Error: parameters passed incorrectly in rampLinearDistMove!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
@@ -161,11 +161,11 @@ namespace chassis {
     //% group="Синхронизированное движение с ускорениями в мм"
     export function accelStartLinearDistMove(startSpeed: number, maxSpeed: number, accelDist: number, totalDist?: number) {
         if (maxSpeed == 0 || accelDist == 0) {
-            stop(true);
+            stop(Braking.Hold);
             return;
         } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) || 
             accelDist < 0 || totalDist < 0 || totalDist < accelDist) {
-            stop(true);
+            stop(Braking.Hold);
             console.log("Error: parameters passed incorrectly in accelStartLinearDistMove!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
@@ -199,11 +199,11 @@ namespace chassis {
     //% group="Синхронизированное движение с ускорениями в мм"
     export function decelFinishLinearDistMove(speed: number, finishSpeed: number, decelDist: number, totalDist?: number) {
         if (speed == 0) {
-            stop(true);
+            stop(Braking.Hold);
             return;
         } else if (Math.abs(finishSpeed) > Math.abs(speed) || 
             decelDist < 0 || totalDist < 0 || totalDist < decelDist) {
-            stop(true);
+            stop(Braking.Hold);
             console.log("Error: parameters passed incorrectly in decelFinishLinearDistMove!");
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
@@ -213,7 +213,7 @@ namespace chassis {
         const mRotTotalCalc = totalDist ? Math.calculateDistanceToEncRotate(totalDist) : mRotDecelCalc; // Рассчитываем общую дистанцию
 
         executeRampMovement(0, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
-        stop(true); // Тормоз с удержанием
+        stop(Braking.Hold); // Тормоз с удержанием
     }
 
     //% blockId="RampDistMove"
@@ -259,7 +259,7 @@ namespace chassis {
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
-        stop(true);
+        stop(Braking.Hold);
     }
 
 }

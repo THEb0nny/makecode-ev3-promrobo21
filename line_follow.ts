@@ -111,7 +111,7 @@ namespace motions {
     //% weight="96"
     //% group="Свойства движения"
     //% deprecated=true
-    export function getDistRollinFromLineAfterIntersection() {
+    export function getDistRollingFromLineAfterIntersection() {
         return distRollingFromLineAfterIntersection;
     }
 
@@ -273,6 +273,62 @@ namespace motions {
         brick.printValue("dt", dt, 12);
     }
 
+    // Вспомогательная функция для движения по линии одним датчиком и для того, чтобы подрулувать с ожиданием нахождения линии
+    export function steeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
+        const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(steering, speed);
+
+        advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
+        chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
+        pidLineFollow.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
+        chassis.pidChassisSync.setControlSaturation(-100, 100); // Regulator limitation
+        chassis.pidChassisSync.reset(); // Reset pid controller
+
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // We read the value from the encoder from the left and right motor before starting
+
+        let prevTime = 0; // Last time time variable for loop
+        while (true) { // Synchronized motion control cycle
+            let currTime = control.millis();
+            let dt = currTime - prevTime;
+            prevTime = currTime;
+            let refLS = sensors.getNormalizedReflectionValue(lineSensor); // Нормализованное значение с датчика линии
+            if (refLS < getLineFollowSetPoint()) break;
+            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
+            let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
+            chassis.pidChassisSync.setPoint(error); // Transfer control error to controller
+            let U = chassis.pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
+            let powers = advmotctrls.getPwrSyncMotors(U); // Find out the power of motors for regulation
+            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
+            control.pauseUntilTime(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
+        }
+    }
+
+    // Вспомогательная функция движения по линии на расстояние при обнаружении линии, для съезда с линии и последующего движения по ней
+    export function rollingLineFollowing(rollingDist: number, speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+        const calcMotRot = Math.calculateDistanceToEncRotate(rollingDist); // Дистанция в мм, которую нужно проехать по линии
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+
+        // Сбрасывать регулятор не требуется, т.е. его состояние будет дальше использоваться с предыдущей функции
+
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) { // Пока моторы не достигнули градусов вращения
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let error = refLeftLS - refRightLS; // Ошибка регулирования
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
+            chassis.regulatorSteering(U, speed); // Команда моторам
+            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
+            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+        }
+        music.playToneInBackground(262, 25); // Издаём сигнал завершения
+        motions.actionAfterMotion(speed, actionAfterMotion);
+    }
+    
 }
 
 namespace motions {
@@ -323,62 +379,49 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
-    // Вспомогательная линия, чтобы подрулить и ждать нахождения линии
-    export function steeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
-        const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(steering, speed);
-
-        advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
-        chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
-        pidLineFollow.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
-        chassis.pidChassisSync.setControlSaturation(-100, 100); // Regulator limitation
-        chassis.pidChassisSync.reset(); // Reset pid controller
-
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // We read the value from the encoder from the left and right motor before starting
-
-        let prevTime = 0; // Last time time variable for loop
-        while (true) { // Synchronized motion control cycle
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
-            prevTime = currTime;
-            let refLS = sensors.getNormalizedReflectionValue(lineSensor); // Нормализованное значение с датчика линии
-            if (refLS < getLineFollowSetPoint()) break;
-            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
-            let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
-            chassis.pidChassisSync.setPoint(error); // Transfer control error to controller
-            let U = chassis.pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
-            let powers = advmotctrls.getPwrSyncMotors(U); // Find out the power of motors for regulation
-            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
-            control.pauseUntilTime(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
+    export function accelLineFollowToCrossIntersection(accelDist: number, actionAfterMotion: AfterLineMotion, params?: params.RampLineFollow, debug: boolean = false) {
+        if (params) { // Если были переданы параметры
+            if (params.startSpeed) rampLineFollow2SensorStartSpeed = Math.abs(params.startSpeed);
+            if (params.maxSpeed) rampLineFollow2SensorMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.Kp) rampLineFollow2SensorKp = params.Kp;
+            if (params.Ki) rampLineFollow2SensorKi = params.Ki;
+            if (params.Kd) rampLineFollow2SensorKd = params.Kd;
+            if (params.Kf) rampLineFollow2SensorKf = params.Kf;
         }
-    }
 
-    export function rollingLineFollowing(rollingDist: number, speed: number, braking: Braking, debug: boolean = false) {
-        const calcMotRot = Math.calculateDistanceToEncRotate(rollingDist); // Дистанция в мм, которую нужно проехать по линии
+        pidLineFollow.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(rampLineFollow2SensorKf); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        pidLineFollow.reset(); // Сброс ПИД регулятора
+
+        const mRotAccelCalc = Math.calculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
+
+        advmotctrls.accTwoEncConfig(rampLineFollow2SensorStartSpeed, rampLineFollow2SensorMaxSpeed, rampLineFollow2SensorFinishSpeed, mRotAccelCalc, 0, mRotAccelCalc);
+
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (true) { // Пока моторы не достигнули градусов вращения
+        while (true) {
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-            if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
+            let out = advmotctrls.accTwoEnc(eml, emr);
+            if (out.isDone) break; // Проверка условия окончания
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, speed); // Команда моторам
+            chassis.regulatorSteering(U, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 25); // Издаём сигнал завершения
-        if (braking == Braking.Hold) chassis.stop(true); // Break at hold
-        else if (braking == Braking.Float) chassis.stop(false); // No hold break
-        else chassis.setSpeedsCommand(speed, speed); // Forward
+        music.playToneInBackground(262, 250); // Издаём сигнал завершения
+        motions.actionAfterLineMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -399,7 +442,7 @@ namespace motions {
     //% weight="89"
     //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка"
-    export function lineFollowToSideIntersection(sideIntersection: SideIntersection, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToSideIntersection(sideIntersection: SideIntersection, actionAfterMotion: AfterLineMotion, params?: params.AccelLineFollow, debug: boolean = false) {
         if (sideIntersection == SideIntersection.LeftInside) {
             lineFollowToLeftIntersection(LineLocation.Inside, actionAfterMotion, params, debug);
         } else if (sideIntersection == SideIntersection.LeftOutside) {
@@ -464,7 +507,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterMotion(lineFollowLeftIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(lineFollowLeftIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -520,7 +563,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterMotion(lineFollowRightIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(lineFollowRightIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
 }
@@ -577,7 +620,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterMotion(lineFollowToDistanceSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(lineFollowToDistanceSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -667,7 +710,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterMotion(lineFollowToDistanceWithLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(lineFollowToDistanceWithLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
 
     /**
@@ -728,12 +771,8 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterMotion(lineFollowToDistanceWithRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(lineFollowToDistanceWithRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
     }
-
-}
-
-namespace motions {
 
     /**
      * Движение по линии на расстояние в мм с ускорением и замедлением.
@@ -741,7 +780,7 @@ namespace motions {
      * @param totalDist общее расстояние движения в мм, eg: 400
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
-     * @param braking тип торможения, eg: Braking.Hold
+     * @param braking тип торможения, eg: MotionBraking.Hold
      * @param debug отладка, eg: false
      */
     //% blockId="RampLineFollowToDistance"
@@ -754,7 +793,7 @@ namespace motions {
     //% weight="78"
     //% subcategory="По линии"
     //% group="Движение по линии на расстояние с ускорениями"
-    export function rampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: Braking, params?: params.RampLineFollow, debug: boolean = false) {
+    export function rampLineFollowToDistance(totalDist: number, accelDist: number, decelDist: number, braking: MotionBraking, params?: params.RampLineFollow, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             console.log("Error: the distance values are negative or the sum of the acceleration and deceleration distances is greater than the total distance!");
             control.assert(false, 6);
@@ -804,9 +843,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        if (braking == Braking.Hold) chassis.stop(true); // Торможение с удержанием
-        else if (braking == Braking.Float) chassis.stop(false); // Торможение без удержания
-        else if (braking == Braking.NoStop) chassis.setSpeedsCommand(rampLineFollow2SensorFinishSpeed, rampLineFollow2SensorFinishSpeed); // Команда моторам вперёд
+        actionAfterMotion(rampLineFollow2SensorFinishSpeed, braking); // Действие после алгоритма движения
     }
 
 }

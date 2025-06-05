@@ -134,7 +134,7 @@ namespace levelings {
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
-        chassis.stop(true);
+        chassis.stop(Braking.Hold);
     }
 
     /**
@@ -198,7 +198,7 @@ namespace levelings {
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
-        chassis.stop(true);
+        chassis.stop(Braking.Hold);
     }
 
     /**
@@ -220,11 +220,11 @@ namespace levelings {
     export function lineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         // https://www.youtube.com/watch?v=DOPXPuB7Xhs
         if (distanceBetweenLineSensors <= 0) {
-            chassis.stop(true);
+            chassis.stop(Braking.Hold);
             console.log("Error: the distance between the sensors is not set!");
             control.assert(false, 5);
         } else if (speed == 0) {
-            chassis.stop(true);
+            chassis.stop(Braking.Hold);
             return;
         }
         let lMotEncPrev = chassis.leftMotor.angle(), rMotEncPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
@@ -278,7 +278,7 @@ namespace levelings {
         }
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из второго цикла
         if (debug) {
-            chassis.stop(true); // Жёсткое торможение для теста
+            chassis.stop(Braking.Hold); // Жёсткое торможение для теста
             pause(1000);
         }
         a = (a / 360) * Math.PI * chassis.getWheelDiametr(); // Перевести в мм пройденное значение

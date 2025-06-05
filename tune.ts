@@ -622,7 +622,7 @@ namespace custom {
                             N: methodScreens[screenName].params.N.val
                         };
                         chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
-                        chassis.linearDistMove(dist, speed, Braking.Hold);
+                        chassis.linearDistMove(dist, speed, MotionBraking.Hold);
                     } else if (screenName == "SYNC_RAMP_DIST_MOVE") {
                         const minSpeed = methodScreens[screenName].params.minSpeed.val;
                         const maxSpeed = methodScreens[screenName].params.maxSpeed.val;

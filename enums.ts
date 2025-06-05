@@ -48,22 +48,24 @@ const enum AfterLineMotion {
     //% block="rolling"
     //% block.loc.ru="прокатка"
     Rolling,
-    //% block="decel rolling"
+    //% block="smooth rolling"
     //% block.loc.ru="плавная прокатка"
-    DecelRolling,
+    SmoothRolling,
     //% block="short rolling no stop"
     //% block.loc.ru="короткая прокатка без торможения"
     //% deprecated=true
-    ShortRollingNoStop,
+    ContinueRoll,
+
     //% block="line rolling"
     //% block.loc.ru="прокатка по линии"
-    LineFollowRolling,
+    LineRolling,
     //% block="line decel rolling"
     //% block.loc.ru="плавная прокатка по линии"
-    LineFollowDecelRolling,
+    LineSmoothRolling,
     //% block="short line rolling no stop"
     //% block.loc.ru="короткая прокатка по линии без торможения"
-    LineRollingNoStop,
+    LineContinueRoll,
+
     //% block="hold stop"
     //% block.loc.ru="тормоз с удержанием"
     HoldStop,

@@ -142,6 +142,15 @@ namespace params {
         Kf?: number;
     }
 
+    export interface AccelLineFollow {
+        startSpeed?: number;
+        maxSpeed?: number;
+        Kp?: number;
+        Ki?: number;
+        Kd?: number;
+        Kf?: number;
+    }
+
     /**
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newMinStartSpeed начальная скорость движения, eg: 10
