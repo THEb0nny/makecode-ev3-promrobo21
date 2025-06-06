@@ -325,8 +325,39 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        music.playToneInBackground(262, 25); // Издаём сигнал завершения
         motions.actionAfterMotion(speed, actionAfterMotion);
+    }
+
+    export function rampRollingLineFollowing(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
+        // pidLineFollow.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
+        // pidLineFollow.setDerivativeFilter(rampLineFollow2SensorKf); // Установить фильтр дифференциального регулятора
+        // pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        // pidLineFollow.reset(); // Сброс ПИД регулятора
+
+        const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(rollingDist)); // Расчитываем расстояние замедления
+
+        advmotctrls.accTwoEncConfig(0, speed, 0, 0, mRotDecelCalc, mRotDecelCalc);
+
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+
+        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        while (true) {
+            let currTime = control.millis(); // Текущее время
+            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            prevTime = currTime; // Новое время в переменную предыдущего времени
+            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            let out = advmotctrls.accTwoEnc(eml, emr);
+            if (out.isDone) break; // Проверка условия окончания
+            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let error = refLeftLS - refRightLS; // Ошибка регулирования
+            pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
+            chassis.regulatorSteering(U, out.pwr); // Команда моторам
+            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
+            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+        }
+        actionAfterMotion(15, braking); // Действие после алгоритма движения
     }
     
 }
@@ -374,7 +405,7 @@ namespace motions {
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             chassis.regulatorSteering(U, lineFollowCrossIntersectionSpeed); // Команда моторам
-            console.log(`refLS: ${refLeftLS} ${refRightLS}, error: ${error}, U: ${U}`);
+            // console.log(`refLS: ${refLeftLS} ${refRightLS}, error: ${error}, U: ${U}`);
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
