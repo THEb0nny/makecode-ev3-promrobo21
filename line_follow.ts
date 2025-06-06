@@ -279,7 +279,7 @@ namespace motions {
 
         advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
-        pidLineFollow.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
+        chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Regulator limitation
         chassis.pidChassisSync.reset(); // Reset pid controller
 
@@ -325,7 +325,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        motions.actionAfterMotion(speed, actionAfterMotion);
+        motions.actionAfterMotion(actionAfterMotion, speed);
     }
 
     export function rampRollingLineFollowing(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
@@ -357,7 +357,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        actionAfterMotion(15, braking); // Действие после алгоритма движения
+        actionAfterMotion(braking, 15); // Действие после алгоритма движения
     }
     
 }
@@ -410,7 +410,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowCrossIntersectionSpeed); // Действие после алгоритма движения
     }
 
     export function accelLineFollowToCrossIntersection(accelDist: number, actionAfterMotion: AfterLineMotion, params?: params.RampLineFollow, debug: boolean = false) {
@@ -452,7 +452,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(lineFollowCrossIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowCrossIntersectionSpeed); // Действие после алгоритма движения
     }
 
     /**
@@ -538,7 +538,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(lineFollowLeftIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowLeftIntersectionSpeed); // Действие после алгоритма движения
     }
 
     /**
@@ -594,7 +594,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(lineFollowRightIntersectionSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowRightIntersectionSpeed); // Действие после алгоритма движения
     }
 
 }
@@ -651,7 +651,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(lineFollowToDistanceSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceSpeed); // Действие после алгоритма движения
     }
 
     /**
@@ -741,7 +741,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(lineFollowToDistanceWithLeftSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceWithLeftSensorSpeed); // Действие после алгоритма движения
     }
 
     /**
@@ -802,7 +802,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(lineFollowToDistanceWithRightSensorSpeed, actionAfterMotion); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceWithRightSensorSpeed); // Действие после алгоритма движения
     }
 
     /**

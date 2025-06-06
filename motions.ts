@@ -1,7 +1,7 @@
 namespace motions {
 
     // Функция, которая выполняет действие после цикла с движением
-    export function actionAfterMotion(speed: number, actionAfterMotion: AfterMotion | MotionBraking) {
+    export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, speed?: number) { // 
         if (actionAfterMotion == AfterMotion.HoldStop || actionAfterMotion == MotionBraking.Hold) { // Тормоз с жёстким торможением (удержанием)
             chassis.stop(Braking.Hold);
         } else if (actionAfterMotion == AfterMotion.FloatStop || actionAfterMotion == MotionBraking.Float) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
@@ -12,7 +12,7 @@ namespace motions {
     }
 
     // Функция, которая выполняет действие после цикла с движением по линии
-    export function actionAfterLineMotion(speed: number, actionAfterMotion: AfterLineMotion) {
+    export function actionAfterLineMotion(actionAfterMotion: AfterLineMotion, speed?: number) {
         if (actionAfterMotion == AfterLineMotion.Rolling) { // Прокатка, чтобы встать на линию после определния перекрёстка
             chassis.linearDistMove(motions.getDistRollingAfterIntersection(), speed, MotionBraking.Hold);
         } else if (actionAfterMotion == AfterLineMotion.SmoothRolling) { // Прокатка, чтобы вставать на линию с мягким торможением после определния перекрёстка
@@ -25,7 +25,15 @@ namespace motions {
         } else if (actionAfterMotion == AfterLineMotion.LineSmoothRolling) { // Прокатка с движением по линии с плавным торможением
             rampRollingLineFollowing(motions.getDistRollingAfterIntersection(), speed, MotionBraking.Hold);
         } else if (actionAfterMotion == AfterLineMotion.LineContinueRoll) { // Прокатка с движением по линии для съезда с линии с продолжением движения
-            rollingLineFollowing(motions.getDistRollingFromLineAfterIntersection(), speed, AfterMotion.NoStop);
+            if (true) {
+                rollingLineFollowing(motions.getDistRollingFromLineAfterIntersection(), speed, AfterMotion.NoStop);
+            } else if (false) {
+            
+            } else if (false) {
+
+            } else {
+                return;
+            }
         } else if (actionAfterMotion == AfterLineMotion.HoldStop) { // Тормоз с жёстким торможением (удержанием)
             chassis.stop(Braking.Hold);
         } else if (actionAfterMotion == AfterLineMotion.FloatStop) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
@@ -127,6 +135,7 @@ namespace motions {
     //% group="Move"
     export function moveToRefZone(turnRatio: number, speed: number, sensorsSelection: LineSensorSelection, refCondition: Comparison, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
@@ -158,7 +167,7 @@ namespace motions {
             control.pauseUntilTime(currTime, 1); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(277, 200); // Сигнал о завершении
-        motions.actionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
+        motions.actionAfterMotion(actionAfterMotion, speed); // Действие после цикла управления
     }
 
     /**
@@ -190,6 +199,7 @@ namespace motions {
         sensor.rgbRaw(); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
@@ -246,6 +256,7 @@ namespace motions {
         sensors.getLineSensorRawRefValue(sensorSide); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
+        chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 

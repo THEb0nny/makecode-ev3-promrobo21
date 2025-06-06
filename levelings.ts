@@ -296,7 +296,7 @@ namespace levelings {
             brick.printValue("alpha", alpha, 7);
         }
         music.playToneInBackground(Note.D, 250); // Сигнал для понимация завершения
-        motions.actionAfterMotion(speed, actionAfterMotion); // Действие после цикла управления
+        motions.actionAfterMotion(actionAfterMotion, speed); // Действие после цикла управления
         if (debug) pause(3000);
     }
     
