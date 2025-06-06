@@ -731,7 +731,7 @@ namespace custom {
                     } else if (screenName == "LINE_ALIGNMET_IN_MOTION") {
                         const speed = methodScreens[screenName].params.speed.val;
                         const debug = methodScreens[screenName].params.debug.val;
-                        levelings.lineAlignmentInMotion(speed, AfterMotion.Hold, debug)
+                        levelings.lineAlignmentInMotion(speed, AfterMotion.HoldStop, debug)
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал

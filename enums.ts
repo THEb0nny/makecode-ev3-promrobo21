@@ -43,6 +43,19 @@ const enum LineSensorSelection {
     OnlyRight
 }
 
+// Перечисление о типах действий после алгоритма сокращённый вариант
+const enum AfterMotion {
+    //% block="hold"
+    //% block.loc.ru="удержание"
+    HoldStop,
+    //% block="float"
+    //% block.loc.ru="освобождение"
+    FloatStop,
+    //% block="no stop"
+    //% block.loc.ru="не тормозить"
+    NoStop
+}
+
 // Перечисление о типах действий после алгоритма полный вариант
 const enum AfterLineMotion {
     //% block="rolling"
@@ -51,8 +64,8 @@ const enum AfterLineMotion {
     //% block="smooth rolling"
     //% block.loc.ru="плавная прокатка"
     SmoothRolling,
-    //% block="short rolling no stop"
-    //% block.loc.ru="короткая прокатка без торможения"
+    //% block="roll no stop"
+    //% block.loc.ru="прокатка без торможения"
     //% deprecated=true
     ContinueRoll,
 
@@ -62,8 +75,8 @@ const enum AfterLineMotion {
     //% block="line decel rolling"
     //% block.loc.ru="плавная прокатка по линии"
     LineSmoothRolling,
-    //% block="short line rolling no stop"
-    //% block.loc.ru="короткая прокатка по линии без торможения"
+    //% block="line rollno stop"
+    //% block.loc.ru="прокатка по линии без торможения"
     LineContinueRoll,
 
     //% block="hold stop"
@@ -72,19 +85,6 @@ const enum AfterLineMotion {
     //% block="float stop"
     //% block.loc.ru="тормоз с освобождением"
     FloatStop,
-    //% block="no stop"
-    //% block.loc.ru="не тормозить"
-    NoStop
-}
-
-// Перечисление о типах действий после алгоритма сокращённый вариант
-const enum AfterMotion {
-    //% block="hold"
-    //% block.loc.ru="удержание"
-    Hold,
-    //% block="float"
-    //% block.loc.ru="освобождение"
-    Float,
     //% block="no stop"
     //% block.loc.ru="не тормозить"
     NoStop

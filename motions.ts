@@ -2,9 +2,9 @@ namespace motions {
 
     // Функция, которая выполняет действие после цикла с движением
     export function actionAfterMotion(speed: number, actionAfterMotion: AfterMotion | MotionBraking) {
-        if (actionAfterMotion == AfterMotion.Hold || actionAfterMotion == MotionBraking.Hold) { // Тормоз с жёстким торможением (удержанием)
+        if (actionAfterMotion == AfterMotion.HoldStop || actionAfterMotion == MotionBraking.Hold) { // Тормоз с жёстким торможением (удержанием)
             chassis.stop(Braking.Hold);
-        } else if (actionAfterMotion == AfterMotion.Float || actionAfterMotion == MotionBraking.Float) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
+        } else if (actionAfterMotion == AfterMotion.FloatStop || actionAfterMotion == MotionBraking.Float) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
             chassis.stop(Braking.Float);
         } else if (actionAfterMotion == AfterMotion.NoStop || actionAfterMotion == MotionBraking.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             chassis.steeringCommand(0, speed);
@@ -21,7 +21,7 @@ namespace motions {
             // motions.rollingMoveOutFromLine(motions.getDistRollingFromLineAfterIntersection(), speed);
             chassis.linearDistMove(motions.getDistRollingFromLineAfterIntersection(), speed, MotionBraking.NoStop);
         } else if (actionAfterMotion == AfterLineMotion.LineRolling) { // Прокатка с движением по линии с тормозом
-            rollingLineFollowing(motions.getDistRollingAfterIntersection(), speed, AfterMotion.Hold);
+            rollingLineFollowing(motions.getDistRollingAfterIntersection(), speed, AfterMotion.HoldStop);
         } else if (actionAfterMotion == AfterLineMotion.LineSmoothRolling) { // Прокатка с движением по линии с плавным торможением
             // rollingLineFollowing(motions.getDistRollingAfterIntersection(), speed, MotionBraking.Hold);
         } else if (actionAfterMotion == AfterLineMotion.LineContinueRoll) { // Прокатка с движением по линии для съезда с линии с продолжением движения
