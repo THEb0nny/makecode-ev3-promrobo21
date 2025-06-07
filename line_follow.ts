@@ -20,13 +20,13 @@ namespace motions {
     export let lineFollowCrossIntersectionKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
     export let lineFollowLeftIntersectionSpeed = 50; // Переменная для хранения скорости при движении по линии правым датчиком до левого перекрёстка
-    export let lineFollowLeftIntersectionKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии правым датчиком до левого перекрёстка
+    export let lineFollowLeftIntersectionKp = 0.7; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии правым датчиком до левого перекрёстка
     export let lineFollowLeftIntersectionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движении по линии правым датчиком до левого перекрёстка
     export let lineFollowLeftIntersectionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движении по линии правым датчиком до левого перекрёстка
     export let lineFollowLeftIntersectionKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движении по линии правым датчиком до левого перекрёстка
 
     export let lineFollowRightIntersectionSpeed = 50; // Переменная для хранения скорости при движении по линии левым датчиком до правого перекрёстка
-    export let lineFollowRightIntersectionKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии левым датчиком до правого перекрёстка
+    export let lineFollowRightIntersectionKp = 0.7; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии левым датчиком до правого перекрёстка
     export let lineFollowRightIntersectionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движении по линии левым датчиком до правого перекрёстка
     export let lineFollowRightIntersectionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движении по линии левым датчиком до правого перекрёстка
     export let lineFollowRightIntersectionKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движении по линии левым датчиком до правого перекрёстка
@@ -37,17 +37,17 @@ namespace motions {
     export let lineFollowToDistanceKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками на расстояние
     export let lineFollowToDistanceKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками на расстояние
 
-    export let lineFollowToDistanceWithLeftSensorSpeed = 50; // Переменная для хранения скорости при движения по линии левым датчиком на расстояние
-    export let lineFollowToDistanceWithLeftSensorKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии левым датчиком на расстояние
-    export let lineFollowToDistanceWithLeftSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии левым датчиком на расстояние
-    export let lineFollowToDistanceWithLeftSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии левым датчиком на расстояние
-    export let lineFollowToDistanceWithLeftSensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceLeftSensorSpeed = 50; // Переменная для хранения скорости при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceLeftSensorKp = 0.7; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceLeftSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceLeftSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии левым датчиком на расстояние
+    export let lineFollowToDistanceLeftSensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии левым датчиком на расстояние
 
-    export let lineFollowToDistanceWithRightSensorSpeed = 50; // Переменная для хранения скорости при движения по линии правым датчиком на расстояние
-    export let lineFollowToDistanceWithRightSensorKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии правым датчиком на расстояние
-    export let lineFollowToDistanceWithRightSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии правым датчиком на расстояние
-    export let lineFollowToDistanceWithRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком на расстояние
-    export let lineFollowToDistanceWithRightSensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceRightSensorSpeed = 50; // Переменная для хранения скорости при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceRightSensorKp = 0.7; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceRightSensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceRightSensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии правым датчиком на расстояние
+    export let lineFollowToDistanceRightSensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии правым датчиком на расстояние
 
     export let rampLineFollow2SensorStartSpeed = 10; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
     export let rampLineFollow2SensorMaxSpeed = 50; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
@@ -290,7 +290,7 @@ namespace motions {
             if (true) {
                 rollingLineFollowing(motions.getDistRollingFromLineAfterIntersection(), speed, AfterMotion.NoStop);
             } else if (false) {
-
+                
             } else if (false) {
 
             } else {
@@ -735,15 +735,15 @@ namespace motions {
     //% blockHidden="true"
     export function lineFollowToDistanceByLeftSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowToDistanceWithLeftSensorSpeed = Math.abs(params.speed);
-            if (params.Kp) lineFollowToDistanceWithLeftSensorKp = params.Kp;
-            if (params.Ki) lineFollowToDistanceWithLeftSensorKi = params.Ki;
-            if (params.Kd) lineFollowToDistanceWithLeftSensorKd = params.Kd;
-            if (params.Kf) lineFollowToDistanceWithLeftSensorKf = params.Kf;
+            if (params.speed) lineFollowToDistanceLeftSensorSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollowToDistanceLeftSensorKp = params.Kp;
+            if (params.Ki) lineFollowToDistanceLeftSensorKi = params.Ki;
+            if (params.Kd) lineFollowToDistanceLeftSensorKd = params.Kd;
+            if (params.Kf) lineFollowToDistanceLeftSensorKf = params.Kf;
         }
 
-        pidLineFollow.setGains(lineFollowToDistanceWithLeftSensorKp, lineFollowToDistanceWithLeftSensorKi, lineFollowToDistanceWithLeftSensorKd); // Установка коэффицентов ПИД регулятора
-        pidLineFollow.setDerivativeFilter(lineFollowToDistanceWithLeftSensorKf); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setGains(lineFollowToDistanceLeftSensorKp, lineFollowToDistanceLeftSensorKi, lineFollowToDistanceLeftSensorKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowToDistanceLeftSensorKf); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
@@ -768,12 +768,12 @@ namespace motions {
             else if (lineLocation == LineLocation.Outside) error = getLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, lineFollowToDistanceWithLeftSensorSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowToDistanceLeftSensorSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceWithLeftSensorSpeed); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceLeftSensorSpeed); // Действие после алгоритма движения
     }
 
     /**
@@ -796,15 +796,15 @@ namespace motions {
     //% blockHidden="true"
     export function lineFollowToDistanceByRightSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowToDistanceWithRightSensorSpeed = Math.abs(params.speed);
-            if (params.Kp) lineFollowToDistanceWithRightSensorKp = params.Kp;
-            if (params.Ki) lineFollowToDistanceWithRightSensorKi = params.Ki;
-            if (params.Kd) lineFollowToDistanceWithRightSensorKd = params.Kd;
-            if (params.Kf) lineFollowToDistanceWithRightSensorKf = params.Kf;
+            if (params.speed) lineFollowToDistanceRightSensorSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollowToDistanceRightSensorKp = params.Kp;
+            if (params.Ki) lineFollowToDistanceRightSensorKi = params.Ki;
+            if (params.Kd) lineFollowToDistanceRightSensorKd = params.Kd;
+            if (params.Kf) lineFollowToDistanceRightSensorKf = params.Kf;
         }
 
-        pidLineFollow.setGains(lineFollowToDistanceWithRightSensorKp, lineFollowToDistanceWithRightSensorKi, lineFollowToDistanceWithRightSensorKd); // Установка коэффицентов ПИД регулятора
-        pidLineFollow.setDerivativeFilter(lineFollowToDistanceWithRightSensorKf); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setGains(lineFollowToDistanceRightSensorKp, lineFollowToDistanceRightSensorKi, lineFollowToDistanceRightSensorKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowToDistanceRightSensorKf); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
@@ -829,12 +829,12 @@ namespace motions {
             else if (lineLocation == LineLocation.Outside) error = refRightLS - getLineFollowSetPoint(); // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, lineFollowToDistanceWithRightSensorSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowToDistanceRightSensorSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceWithRightSensorSpeed); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceRightSensorSpeed); // Действие после алгоритма движения
     }
 
     /**
