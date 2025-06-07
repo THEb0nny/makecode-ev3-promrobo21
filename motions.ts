@@ -11,38 +11,6 @@ namespace motions {
         }
     }
 
-    // Функция, которая выполняет действие после цикла с движением по линии
-    export function actionAfterLineMotion(actionAfterMotion: AfterLineMotion, speed?: number) {
-        if (actionAfterMotion == AfterLineMotion.Rolling) { // Прокатка, чтобы встать на линию после определния перекрёстка
-            chassis.linearDistMove(motions.getDistRollingAfterIntersection(), speed, MotionBraking.Hold);
-        } else if (actionAfterMotion == AfterLineMotion.SmoothRolling) { // Прокатка, чтобы вставать на линию с мягким торможением после определния перекрёстка
-            chassis.decelFinishLinearDistMove(speed, 15, motions.getDistRollingAfterIntersection());
-        } else if (actionAfterMotion == AfterLineMotion.ContinueRoll) { // Прокатка с линии
-            // motions.rollingMoveOutFromLine(motions.getDistRollingFromLineAfterIntersection(), speed);
-            chassis.linearDistMove(motions.getDistRollingFromLineAfterIntersection(), speed, MotionBraking.NoStop);
-        } else if (actionAfterMotion == AfterLineMotion.LineRolling) { // Прокатка с движением по линии с тормозом
-            rollingLineFollowing(motions.getDistRollingAfterIntersection(), speed, AfterMotion.HoldStop);
-        } else if (actionAfterMotion == AfterLineMotion.LineSmoothRolling) { // Прокатка с движением по линии с плавным торможением
-            rampRollingLineFollowing(motions.getDistRollingAfterIntersection(), speed, MotionBraking.Hold);
-        } else if (actionAfterMotion == AfterLineMotion.LineContinueRoll) { // Прокатка с движением по линии для съезда с линии с продолжением движения
-            if (true) {
-                rollingLineFollowing(motions.getDistRollingFromLineAfterIntersection(), speed, AfterMotion.NoStop);
-            } else if (false) {
-            
-            } else if (false) {
-
-            } else {
-                return;
-            }
-        } else if (actionAfterMotion == AfterLineMotion.HoldStop) { // Тормоз с жёстким торможением (удержанием)
-            chassis.stop(Braking.Hold);
-        } else if (actionAfterMotion == AfterLineMotion.FloatStop) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
-            chassis.stop(Braking.Float);
-        } else if (actionAfterMotion == AfterLineMotion.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
-            chassis.steeringCommand(0, speed);
-        }
-    }
-
     // Вспомогательная функция для типа торможения движения на расстоние без торможения
     // Например, для съезда с линии, чтобы её не считал алгоритм движения по линии повторно
     /*
