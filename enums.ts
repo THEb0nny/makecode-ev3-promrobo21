@@ -136,7 +136,7 @@ const enum SideIntersection {
     RightOutside,
 }
 
-// Перечисление о движении по линии датчиком
+// Перечисление о движении по линии одним из двух датчиков
 const enum FollowLineSensor {
     //% block="left inside"
     //% block.loc.ru="левым изнутри"
