@@ -1,7 +1,7 @@
 namespace motions {
 
     let lineRefTreshold = 50; // Среднее значение серого (уставка) для определения границы линии
-    let lineFollowRefTreshold = 35; // Пороговое значение определения заезда на перекрёсток
+    let lineFollowRefTreshold = 40; // Пороговое значение определения заезда на перекрёсток
     let lineFollowSetPoint = lineRefTreshold; // Среднее значение серого
 
     let distRollingAfterIntersection = 30; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
@@ -13,11 +13,11 @@ namespace motions {
 
     let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
 
-    export let lineFollowCrossIntersectionSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
-    export let lineFollowCrossIntersectionKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
-    export let lineFollowCrossIntersectionKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
-    export let lineFollowCrossIntersectionKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
-    export let lineFollowCrossIntersectionKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
+    export let lineFollowCrossIntersection2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
+    export let lineFollowCrossIntersection2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
+    export let lineFollowCrossIntersection2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
+    export let lineFollowCrossIntersection2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
+    export let lineFollowCrossIntersection2SensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
     export let lineFollowLeftIntersectionSpeed = 50; // Переменная для хранения скорости при движении по линии правым датчиком до левого перекрёстка
     export let lineFollowLeftIntersectionKp = 0.7; // Переменная для хранения коэффицента пропорционального регулятора при движении по линии правым датчиком до левого перекрёстка
@@ -144,7 +144,7 @@ namespace motions {
 
     /**
      * Установить пороговое значение отражения при движении по линии.
-     * @param reflection значение отражения, eg: 35
+     * @param reflection значение отражения, eg: 40
      */
     //% blockId="SetLineFollowRefTreshold"
     //% block="set line follow $reflection reflection treshold"
@@ -198,28 +198,28 @@ namespace motions {
 
     /**
      * Установить максимальную ошибку условия движения одним датчиком по линии.
-     * @param maxErr максимальное значение ошибки движения по линии, eg: 30
+     * @param maxErr максимальное значение ошибки движения по линии, eg: 40
      */
-    //% blockId="SetLineFollowConditionMaxErr"
-    //% block="set line follow max error $maxErr at moving with one sensor"
+    //% blockId="SetLineFollowOneSensorConditionMaxErr"
+    //% block="set line follow max error $maxErr at moving by one sensor"
     //% block.loc.ru="установить максимальую ошибку $maxErr при движении одним датчиком"
     //% inlineInputMode="inline"
     //% weight="79" blockGap="8"
     //% group="Свойства для датчиков"
-    export function setLineFollowConditionMaxErr(maxErr: number) {
+    export function setLineFollowOneSensorConditionMaxErr(maxErr: number) {
         lineFollowByOneSensorConditionMaxErr = maxErr;
     }
 
     /**
      * Получить максимальную ошибку условия движения одним датчиком по линии.
      */
-    //% blockId="GetLineFollowConditionMaxErr"
-    //% block="get line follow max error"
-    //% block.loc.ru="максимальая ошибка при движении по линии"
+    //% blockId="GetLineFollowOneSensorConditionMaxErr"
+    //% block="get line follow by one sensor max error"
+    //% block.loc.ru="максимальая ошибка при движении по линии одним датчиком"
     //% inlineInputMode="inline"
     //% weight="78"
     //% group="Свойства для датчиков"
-    export function getLineFollowConditionMaxErr(): number {
+    export function getLineFollowOneSensorConditionMaxErr(): number {
         return lineFollowByOneSensorConditionMaxErr;
     }
 
@@ -413,15 +413,15 @@ namespace motions {
     //% group="Движение по линии до перекрёстка"
     export function lineFollowToCrossIntersection(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.speed) lineFollowCrossIntersectionSpeed = Math.abs(params.speed);
-            if (params.Kp) lineFollowCrossIntersectionKp = params.Kp;
-            if (params.Ki) lineFollowCrossIntersectionKi = params.Ki;
-            if (params.Kd) lineFollowCrossIntersectionKd = params.Kd;
-            if (params.Kf) lineFollowCrossIntersectionKf = params.Kf;
+            if (params.speed) lineFollowCrossIntersection2SensorSpeed = Math.abs(params.speed);
+            if (params.Kp) lineFollowCrossIntersection2SensorKp = params.Kp;
+            if (params.Ki) lineFollowCrossIntersection2SensorKi = params.Ki;
+            if (params.Kd) lineFollowCrossIntersection2SensorKd = params.Kd;
+            if (params.Kf) lineFollowCrossIntersection2SensorKf = params.Kf;
         }
 
-        pidLineFollow.setGains(lineFollowCrossIntersectionKp, lineFollowCrossIntersectionKi, lineFollowCrossIntersectionKd); // Установка коэффицентов ПИД регулятора
-        pidLineFollow.setDerivativeFilter(lineFollowCrossIntersectionKf); // Установить фильтр дифференциального регулятора
+        pidLineFollow.setGains(lineFollowCrossIntersection2SensorKp, lineFollowCrossIntersection2SensorKi, lineFollowCrossIntersection2SensorKd); // Установка коэффицентов ПИД регулятора
+        pidLineFollow.setDerivativeFilter(lineFollowCrossIntersection2SensorKf); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
@@ -436,13 +436,13 @@ namespace motions {
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, lineFollowCrossIntersectionSpeed); // Команда моторам
+            chassis.regulatorSteering(U, lineFollowCrossIntersection2SensorSpeed); // Команда моторам
             // console.log(`refLS: ${refLeftLS} ${refRightLS}, error: ${error}, U: ${U}`);
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(actionAfterMotion, lineFollowCrossIntersectionSpeed); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowCrossIntersection2SensorSpeed); // Действие после алгоритма движения
     }
 
     export function accelLineFollowToCrossIntersection(accelDist: number, actionAfterMotion: AfterLineMotion, params?: params.RampLineFollow, debug: boolean = false) {
@@ -484,7 +484,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(actionAfterMotion, lineFollowCrossIntersectionSpeed); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, lineFollowCrossIntersection2SensorSpeed); // Действие после алгоритма движения
     }
 
     /**
@@ -562,7 +562,7 @@ namespace motions {
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (lineLocation == LineLocation.Inside) error = getLineFollowSetPoint() - refRightLS; // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = refRightLS - getLineFollowSetPoint(); // Ошибка регулирования
-            if (Math.abs(error) <= getLineFollowConditionMaxErr() && refLeftLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
+            if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refLeftLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             chassis.regulatorSteering(U, lineFollowLeftIntersectionSpeed); // Команда моторам
@@ -618,7 +618,7 @@ namespace motions {
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (lineLocation == LineLocation.Inside) error = refLeftLS - getLineFollowSetPoint(); // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = getLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
-            if (Math.abs(error) <= getLineFollowConditionMaxErr() && refRightLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
+            if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refRightLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             chassis.regulatorSteering(U, lineFollowRightIntersectionSpeed); // Команда моторам

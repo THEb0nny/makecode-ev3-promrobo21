@@ -110,25 +110,25 @@ namespace custom {
                         val: true
                     },
                     speed: {
-                        val: motions.lineFollowCrossIntersectionSpeed,
+                        val: motions.lineFollowCrossIntersection2SensorSpeed,
                         changeStep: 5,
                         min: 5,
                         max: 100
                     },
                     Kp: {
-                        val: motions.lineFollowCrossIntersectionKp,
+                        val: motions.lineFollowCrossIntersection2SensorKp,
                        changeStep: 0.05
                     },
                     Ki: {
-                        val: motions.lineFollowCrossIntersectionKi,
+                        val: motions.lineFollowCrossIntersection2SensorKi,
                         changeStep: 0.001
                     },
                     Kd: {
-                        val: motions.lineFollowCrossIntersectionKd,
+                        val: motions.lineFollowCrossIntersection2SensorKd,
                         changeStep: 0.1
                     },
                     N: {
-                        val: motions.lineFollowCrossIntersectionKf,
+                        val: motions.lineFollowCrossIntersection2SensorKf,
                         changeStep: 0.1
                     }
                 },
