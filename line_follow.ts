@@ -4,14 +4,14 @@ namespace motions {
     let lineFollowRefTreshold = 40; // Пороговое значение определения заезда на перекрёсток
     let lineFollowSetPoint = lineRefTreshold; // Среднее значение серого
 
-    let distRollingAfterIntersection = 30; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
-    let distContinueRollFromLineAfterIntersection = 20; // Дистанция прокатки на перекрёстке для съезда с него в мм
-
     let lineFollowByOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
     let steeringAtSearchLine = 25; // Подруливание при поиске линии для последущего движени одним датчиком
 
     let lineFollowLoopDt = 10; // Значение dt для циклов регулирования движения по линии и работы с датчиками линии
+
+    let distRollingAfterIntersection = 30; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
+    let distContinueRollFromLineAfterIntersection = 20; // Дистанция прокатки на перекрёстке для съезда с него в мм
 
     export let lineFollowCrossIntersection2SensorSpeed = 50; // Переменная для хранения скорости при движения по линии двумя датчиками
     export let lineFollowCrossIntersection2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
