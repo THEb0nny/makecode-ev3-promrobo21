@@ -1,8 +1,8 @@
 namespace motions {
 
-    let lineRefTreshold = 50; // Среднее значение серого (уставка) для определения границы линии
+    let lineRefTreshold = 50; // Среднее значение серого для определения границы линии
     let lineFollowRefTreshold = 40; // Пороговое значение определения заезда на перекрёсток
-    let lineFollowSetPoint = lineRefTreshold; // Среднее значение серого
+    let lineFollowSetPoint = lineRefTreshold; // Среднее значение серого (уставка) для движения по линии
 
     let lineFollowByOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
