@@ -1,11 +1,11 @@
 namespace motions {
 
     let lineRefTreshold = 50; // Среднее значение серого (уставка) для определения границы линии
-    let lineFollowRefTreshold = 35; // Пороговое значение определения перекрёстка
-    let lineFollowSetPoint = lineFollowRefTreshold; // Среднее значение серого
+    let lineFollowRefTreshold = 35; // Пороговое значение определения заезда на перекрёсток
+    let lineFollowSetPoint = lineRefTreshold; // Среднее значение серого
 
     let distRollingAfterIntersection = 30; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
-    let distRollingFromLineAfterIntersection = 20; // Дистанция прокатки на перекрёстке для съезда с него в мм
+    let distContinueRollFromLineAfterIntersection = 20; // Дистанция прокатки на перекрёстке для съезда с него в мм
 
     let lineFollowByOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
@@ -98,7 +98,7 @@ namespace motions {
     //% group="Свойства движения"
     //% deprecated=true
     export function setDistRollingFromLineAfterIntersection(dist: number) {
-        distRollingFromLineAfterIntersection = dist;
+        distContinueRollFromLineAfterIntersection = dist;
     }
 
     /**
@@ -112,7 +112,7 @@ namespace motions {
     //% group="Свойства движения"
     //% deprecated=true
     export function getDistRollingFromLineAfterIntersection() {
-        return distRollingFromLineAfterIntersection;
+        return distContinueRollFromLineAfterIntersection;
     }
 
     /**
