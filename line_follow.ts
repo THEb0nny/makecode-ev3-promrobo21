@@ -7,7 +7,7 @@ namespace motions {
     let distRollingAfterIntersection = 30; // Дистанция для проезда после опредения перекрёстка для прокатки в мм
     let distRollingFromLineAfterIntersection = 20; // Дистанция прокатки на перекрёстке для съезда с него в мм
 
-    let lineFollowWithOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
+    let lineFollowByOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
     let steeringAtSearchLine = 25; // Подруливание при поиске линии для последущего движени одним датчиком
 
@@ -207,7 +207,7 @@ namespace motions {
     //% weight="79" blockGap="8"
     //% group="Свойства для датчиков"
     export function setLineFollowConditionMaxErr(maxErr: number) {
-        lineFollowWithOneSensorConditionMaxErr = maxErr;
+        lineFollowByOneSensorConditionMaxErr = maxErr;
     }
 
     /**
@@ -220,7 +220,7 @@ namespace motions {
     //% weight="78"
     //% group="Свойства для датчиков"
     export function getLineFollowConditionMaxErr(): number {
-        return lineFollowWithOneSensorConditionMaxErr;
+        return lineFollowByOneSensorConditionMaxErr;
     }
 
     /**
