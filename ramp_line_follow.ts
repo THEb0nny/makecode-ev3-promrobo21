@@ -142,7 +142,7 @@ namespace motions {
     //% params.shadow="RampLineFollowEmptyParams"
     //% weight="99"
     //% subcategory="По линии"
-    //% group="Движение по линии до перекрёстка c ускорениями"
+    //% group="Движение по линии до перекрёстка c фазами"
     export function rampLineFollowToCrossIntersection(totalDist: number, accelDist: number, decelDist: number, actionAfterMotion: AfterLineMotion, params?: params.RampLineFollow, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             chassis.stop();
