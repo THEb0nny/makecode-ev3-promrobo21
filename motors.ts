@@ -37,6 +37,7 @@ namespace motors {
             if (params.Kf) regMotorKf = params.Kf;
             if (params.errorThreshold) errorThreshold = params.errorThreshold;
             if (params.minSpeedThreshold) minSpeedThreshold = params.minSpeedThreshold;
+            if (params.timeOut) regMotorTimeOut = params.timeOut;
         }
 
         motor.setBrake(braking == Braking.Hold); // Установка удерживания мотором позиции
