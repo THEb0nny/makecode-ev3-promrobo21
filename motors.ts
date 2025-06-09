@@ -15,11 +15,11 @@ namespace motors {
      * Функция, которая устанавливает мотор на нужную позицию.
      * @param motor мотор для управления, eg: motors.mediumA
      * @param pos установить новый угол в градусах, eg: 45
-     * @param isHold удержание мотора по завершению, eg: true
+     * @param braking торможение мотора по завершению по завершению, eg: Braking.Hold
      */
     //% blockId="MotorSetPosition"
-    //% block="set $motor to position $pos||holding $isHold|params: $params"
-    //% block.loc.ru="установить $motor на позицию $pos||удерживание $isHold|параметры: $params"
+    //% block="set $motor to position $pos||braking $braking|params: $params"
+    //% block.loc.ru="установить $motor на позицию $pos||торможение $braking|параметры: $params"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% motor.fieldEditor="motors"
@@ -28,7 +28,7 @@ namespace motors {
     //% weight="99"
     //% subcategory="Дополнительно"
     //% group="Управление положением"
-    export function setPosition(motor: motors.Motor, pos: number, isHold: boolean = true, params?: params.MotorRegulator) {
+    export function setPosition(motor: motors.Motor, pos: number, braking: Braking, params?: params.MotorRegulator) {
         if (params) {
             if (params.maxSpeed) regMotorMaxSpeed = params.maxSpeed;
             if (params.Kp) regMotorKp = params.Kp;
@@ -39,7 +39,7 @@ namespace motors {
             if (params.minSpeedThreshold) minSpeedThreshold = params.minSpeedThreshold;
         }
 
-        motor.setBrake(isHold); // Установка удерживания мотором позиции
+        motor.setBrake(braking == Braking.Hold); // Установка удерживания мотором позиции
 
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора
         pidRegMotor.setDerivativeFilter(regMotorKf); // Установить фильтр дифференциального регулятора
@@ -54,7 +54,7 @@ namespace motors {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            if (regMotorTimeOut && currTime - startTime >= regMotorTimeOut) break; // Таймаут
+            if (regMotorTimeOut > 0 && currTime - startTime >= regMotorTimeOut) break; // Таймаут
             const error = pos - motor.angle(); // Расчитываем ошибку положения
             // Рассчитываем скорость (производную ошибки)
             if (dt > 0) { // Избегаем деления на ноль
@@ -68,7 +68,7 @@ namespace motors {
             motor.run(U); // Установить мотору управляющее воздействие
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла за нужную частоту
         }
-        music.playToneInBackground(Note.C, 75); // Сигнал о завершении
+        music.playToneInBackground(Note.E, 75); // Сигнал о завершении
         motor.stop(); // Останавливаем
     }
 
