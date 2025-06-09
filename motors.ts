@@ -5,8 +5,8 @@ namespace motors {
     let regMotorKi = 0; // Интегральный коэффицент регулирования положения мотора
     let regMotorKd = 0; // Дифференциальный коэффицент регулирования положения мотора
     let regMotorKf = 0; // Фильтр дифференциального коэффицента регулирования положения мотора
-    let regMotorTimeOut = 2000; // Максимальное время работы
-    let tolerance = 5; // Допустимая погрешность (в тиках энкодера)
+    let regMotorTimeOut = 3000; // Максимальное время работы
+    let errorThreshold = 1; // Допустимая погрешность (в тиках энкодера)
     let minSpeedThreshold = 5; // Порог минимальной скорости
 
     export let pidRegMotor = new automation.PIDController(); // PID для регулирования положения мотора
@@ -35,8 +35,8 @@ namespace motors {
             if (params.Ki) regMotorKi = params.Ki;
             if (params.Kd) regMotorKd = params.Kd;
             if (params.Kf) regMotorKf = params.Kf;
-            if (params.tolerance) tolerance = params.tolerance;
-            if (params.timeOut) minSpeedThreshold = params.minSpeedThreshold;
+            if (params.errorThreshold) errorThreshold = params.errorThreshold;
+            if (params.minSpeedThreshold) minSpeedThreshold = params.minSpeedThreshold;
         }
 
         motor.setBrake(isHold); // Установка удерживания мотором позиции
@@ -61,7 +61,7 @@ namespace motors {
                 speed = (error - prevError) / dt;
                 prevError = error;
             }
-            if (Math.abs(error) < tolerance && Math.abs(speed) < minSpeedThreshold) break; // Угол был достигнут
+            if (Math.abs(error) < errorThreshold && Math.abs(speed) < minSpeedThreshold) break; // Угол был достигнут
             pidRegMotor.setPoint(error); // Передать ошибку регулятору
             let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
             U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
