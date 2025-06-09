@@ -142,15 +142,6 @@ namespace params {
         Kf?: number;
     }
 
-    export interface AccelLineFollow {
-        startSpeed?: number;
-        maxSpeed?: number;
-        Kp?: number;
-        Ki?: number;
-        Kd?: number;
-        Kf?: number;
-    }
-
     /**
      * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newMinStartSpeed начальная скорость движения, eg: 10
@@ -169,13 +160,13 @@ namespace params {
     //% weight="99"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
     export function setRampLineFollow2SensorParams(newMinStartSpeed: number, newMaxSpeed: number, newMinFihishSpeed: number, newKp?: number, newKi?: number, newKd?: number, newKf?: number) {
-        if (newMinStartSpeed) motions.rampLineFollow2SensorStartSpeed = newMinStartSpeed;
-        if (newMaxSpeed) motions.rampLineFollow2SensorMaxSpeed = newMaxSpeed;
-        if (newMinFihishSpeed) motions.rampLineFollow2SensorFinishSpeed = newMinFihishSpeed;
-        if (newKp) motions.rampLineFollow2SensorKp = newKp;
-        if (newKi) motions.rampLineFollow2SensorKi = newKi;
-        if (newKd) motions.rampLineFollow2SensorKd = newKd;
-        if (newKf) motions.rampLineFollow2SensorKf = newKf;
+        if (newMinStartSpeed) motions.rampLineFollowToDistance2SensorStartSpeed = newMinStartSpeed;
+        if (newMaxSpeed) motions.rampLineFollowToDistance2SensorMaxSpeed = newMaxSpeed;
+        if (newMinFihishSpeed) motions.rampLineFollowToDistance2SensorFinishSpeed = newMinFihishSpeed;
+        if (newKp) motions.rampLineFollowToDistance2SensorKp = newKp;
+        if (newKi) motions.rampLineFollowToDistance2SensorKi = newKi;
+        if (newKd) motions.rampLineFollowToDistance2SensorKd = newKd;
+        if (newKf) motions.rampLineFollowToDistance2SensorKf = newKf;
     }
 
     /**
@@ -559,13 +550,13 @@ namespace params {
 
     export interface MotorRegulator {
         maxSpeed?: number;
+        timeOut?: number;
+        errorThreshold?: number;
+        minSpeedThreshold?: number;
         Kp?: number;
         Ki?: number;
         Kd?: number;
         Kf?: number;
-        timeOut?: number;
-        errorThreshold?: number;
-        minSpeedThreshold?: number;
     }
 
     /**

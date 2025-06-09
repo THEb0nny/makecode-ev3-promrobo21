@@ -657,7 +657,7 @@ namespace custom {
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
-                        motions.lineFollowToDistance(dist, AfterLineMotion.HoldStop, params, debug);
+                        motions.lineFollowToDistanceByTwoSensors(dist, AfterLineMotion.HoldStop, params, debug);
                     } else if (screenName == "LW_TO_SIDE_INTERSECTION") {
                         const junction = methodScreens[screenName].params.junction.val;
                         const lineLocation = methodScreens[screenName].params.lineLocation.val;

@@ -25,7 +25,8 @@
         "motors.ts",
         "navigation.ts",
         "smart_turns.ts",
-        "line_follow.ts"
+        "line_follow.ts",
+        "ramp_line_follow.ts"
     ],
     "testFiles": [],
     "targetVersions": {
