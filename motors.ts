@@ -9,7 +9,7 @@ namespace motors {
     let errorThreshold = 1; // Допустимая погрешность (в тиках энкодера)
     let minSpeedThreshold = 5; // Порог минимальной скорости
 
-    export let pidRegMotor = new automation.PIDController(); // PID для регулирования положения мотора
+    export const pidRegMotor = new automation.PIDController(); // PID для регулирования положения мотора
     
     /**
      * Функция, которая устанавливает мотор на нужную позицию.
