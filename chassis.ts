@@ -210,7 +210,7 @@ namespace chassis {
         }
 
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
-        const mRotTotalCalc = totalDist ? Math.calculateDistanceToEncRotate(totalDist) : mRotDecelCalc; // Рассчитываем общую дистанцию
+        const mRotTotalCalc = totalDist > 0 ? Math.calculateDistanceToEncRotate(totalDist) : mRotDecelCalc; // Рассчитываем общую дистанцию
 
         executeRampMovement(0, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
         stop(Braking.Hold); // Тормоз с удержанием

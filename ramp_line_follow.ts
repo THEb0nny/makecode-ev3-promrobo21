@@ -35,6 +35,7 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
             let out = advmotctrls.accTwoEnc(eml, emr);
+            console.log(`out.pwr: ${out.pwr}`);
             if (out.isDone) break; // Проверка условия окончания
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -45,7 +46,7 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
-        actionAfterMotion(braking, 15); // Действие после алгоритма движения
+        actionAfterMotion(braking); // Действие после алгоритма движения
     }
 
 }
