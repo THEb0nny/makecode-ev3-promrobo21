@@ -83,7 +83,7 @@ namespace motions {
 
     /**
      * Движение по направлению с постоянной скоростью до зоны с определённым отражением.
-     * @param dir направление движения, eg: 0
+     * @param turnRatio рулевое направление движения, eg: 0
      * @param speed скорость движения, eg: 50
      * @param sensorsSelection определение датчиками, eg: LineSensorSelection.LeftAndRight
      * @param refCondition отражение больше или меньше, eg: Comparison.Greater
