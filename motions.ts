@@ -91,7 +91,7 @@ namespace motions {
      * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
      * @param debug отладка, eg: false
      */
-    //% blockId="MoveToRefZone"
+    //% blockId="MoveToReflectionZone"
     //% block="move in direction $turnRatio at $speed\\%| before determining reflection $sensorsSelection $refCondition $refTreshold|action after $actionAfterMotion||debug $debug"
     //% block.loc.ru="движение по направлению $turnRatio на $speed\\%| до определения отражения $sensorsSelection $refCondition $refTreshold|действие после $actionAfterMotion||отладка $debug"
     //% inlineInputMode="inline"
@@ -101,7 +101,7 @@ namespace motions {
     //% speed.shadow="motorSpeedPicker"
     //% weight="89"
     //% group="Move"
-    export function moveToRefZone(turnRatio: number, speed: number, sensorsSelection: LineSensorSelection, refCondition: Comparison, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    export function moveToReflectionZone(turnRatio: number, speed: number, sensorsSelection: LineSensorSelection, refCondition: Comparison, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
@@ -139,7 +139,8 @@ namespace motions {
     }
 
     /**
-     * Поворот на линию.
+     * Поворот на линию с помощью датчиков линии.
+     * После поворота выполняется позиционирование на линии, поэтому нужно заранее установить значения регулятора этому алгоритму.
      * @param rotateSide в какую сторону вращаться в поиске линии, eg: TurnSide.Left
      * @param speed скорость вращения, eg: 40
      * @param debug отладка на экран, eg: false
