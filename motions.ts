@@ -140,19 +140,30 @@ namespace motions {
 
     /**
      * Поворот на линию с помощью датчиков линии.
-     * После поворота выполняется позиционирование на линии, поэтому нужно заранее установить значения регулятора этому алгоритму.
+     * После поворота выполняется позиционирование на линии за 100 мсек, поэтому нужно заранее установить значения регулятора этому алгоритму.
      * @param rotateSide в какую сторону вращаться в поиске линии, eg: TurnSide.Left
-     * @param speed скорость вращения, eg: 40
+     * @param speed скорость вращения, eg: 50
      * @param debug отладка на экран, eg: false
     */
     //% blockId="SpinTurnToLine"
-    //% block="turn to line $rotateSide at $speed\\% relative to center of wheel axis||debug $debug"
-    //% block.loc.ru="поворот до линии $rotateSide на $speed\\% относительно центра оси колёс||отдалка $debug"
-    //% expandableArgumentMode="toggle"
+    //% block="turn to line $rotateSide at $speed\\% relative to center of wheel axis||params: $params|debug $debug"
+    //% block.loc.ru="поворот до линии $rotateSide на $speed\\% относительно центра оси колёс||параметры $params|отладка $debug"
+    //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
+    //% debug.shadow="toggleOnOff"
+    //% params.shadow="LinePositioningEmptyParams"
     //% weight="99"
     //% group="Поворот на линию"
-    export function spinTurnToLine(rotateSide: TurnSide, speed: number, debug: boolean = false) {
+    export function spinTurnToLine(rotateSide: TurnSide, speed: number, params?: params.LinePositioning, debug: boolean = false) {
+        if (params) { // Если были переданы параметры
+            if (params.maxSpeed) levelings.linePositioningMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.timeOut) levelings.linePositioningTimeOut = Math.abs(params.timeOut);
+            if (params.Kp) levelings.linePositioningKp = params.Kp;
+            if (params.Ki) levelings.linePositioningKi = params.Ki;
+            if (params.Kd) levelings.linePositioningKd = params.Kd;
+            if (params.Kf) levelings.linePositioningKf = params.Kf;
+        }
+
         if (sensors.leftLineSensor instanceof sensors.ColorSensor && sensors.rightLineSensor instanceof sensors.ColorSensor) {
             spinTurnToLineAtColorSensor(rotateSide, speed, debug);
         } else if (sensors.leftLineSensor instanceof sensors.NXTLightSensor && sensors.rightLineSensor instanceof sensors.NXTLightSensor) {
