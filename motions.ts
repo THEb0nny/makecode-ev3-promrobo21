@@ -147,7 +147,7 @@ namespace motions {
     */
     //% blockId="SpinTurnToLine"
     //% block="turn to line $rotateSide at $speed\\% relative to center of wheel axis||params: $params|debug $debug"
-    //% block.loc.ru="поворот до линии $rotateSide на $speed\\% относительно центра оси колёс||параметры $params|отладка $debug"
+    //% block.loc.ru="поворот до линии $rotateSide на $speed\\% относительно центра оси колёс||параметры: $params|отладка $debug"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"
