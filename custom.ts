@@ -42,8 +42,8 @@ namespace music {
 
     /**
      * Функция для запуска тона в фоне (паралельной задачи).
-     * @param высота воспроизводимого звукового сигнала в герцах (Гц), eg: Note.C
-     * @param длительность звукового сигнала в миллисекундах (мс), eg: BeatFraction.Half
+     * @param frequency высота воспроизводимого звукового сигнала в герцах (Гц), eg: Note.C
+     * @param duration длительность звукового сигнала в миллисекундах (мс), eg: BeatFraction.Half
      */
     //% blockId="PlayToneInBackground"
     //% block="play tone at $frequency for $duration in the background"
@@ -64,8 +64,8 @@ namespace brick {
 
     /**
      * Функция для установки индикатору шаблона цвета в фоне (паралельной задачи).
-     * @param создайте шаблон подсветки для использования, eg: StatusLight.Orange
-     * @param длительность в миллисекундах (мс), eg: 100
+     * @param pattern создайте шаблон подсветки для использования, eg: StatusLight.Orange
+     * @param duration длительность в миллисекундах (мс), eg: 100
      */
     //% blockId="SetStatusLightInBackground"
     //% block="set status light to $pattern at $duration in the background"
