@@ -62,7 +62,7 @@ namespace motors {
                 speed = (error - prevError) / dt;
                 prevError = error;
             }
-            if (Math.abs(error) < errorThreshold && Math.abs(speed) < minSpeedThreshold) break; // Угол был достигнут
+            if (Math.abs(error) <= errorThreshold && Math.abs(speed) <= minSpeedThreshold) break; // Угол был достигнут
             pidRegMotor.setPoint(error); // Передать ошибку регулятору
             let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
             U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
