@@ -32,7 +32,7 @@ namespace chassis {
     export function normalizedRegulatorSteering(u: number, speed: number) {
         let mLeft = speed + u, mRight = speed - u;
         const z = speed / Math.max(Math.abs(mLeft), Math.abs(mRight));
-        mLeft *= z; mRight *= z;
+        mLeft *= z, mRight *= z;
         setSpeedsCommand(mLeft, mRight);
     }
 
