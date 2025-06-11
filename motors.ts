@@ -28,7 +28,7 @@ namespace motors {
     //% weight="99"
     //% subcategory="Дополнительно"
     //% group="Управление положением"
-    export function setPosition(motor: motors.Motor, pos: number, braking: Braking, params?: params.MotorRegulator) {
+    export function setPosition(motor: motors.Motor, pos: number, braking: Braking, params?: params.MotorRegulator, debug: boolean = false) {
         if (params) {
             if (params.maxSpeed) regMotorMaxSpeed = params.maxSpeed;
             if (params.Kp) regMotorKp = params.Kp;
@@ -67,6 +67,12 @@ namespace motors {
             let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
             U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             motor.run(U); // Установить мотору управляющее воздействие
+            if (debug) {
+                brick.clearScreen();
+                brick.printString(`angle: ${motor.angle()}`, 1);
+                brick.printString(`error: ${error}`, 2);
+                brick.printString(`U: ${U}`, 3);
+            }
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла за нужную частоту
         }
         music.playToneInBackground(Note.E, 75); // Сигнал о завершении
