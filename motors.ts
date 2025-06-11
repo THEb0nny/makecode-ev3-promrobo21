@@ -64,7 +64,7 @@ namespace motors {
             }
             if (Math.abs(error) <= errorThreshold && Math.abs(speed) <= minSpeedThreshold) break; // Угол был достигнут
             pidRegMotor.setPoint(error); // Передать ошибку регулятору
-            let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
+            let U = pidRegMotor.compute(1, 0); // Управляющее воздействие
             if (U == NaN) U = 0;
             U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             motor.run(U); // Установить мотору управляющее воздействие
