@@ -47,7 +47,7 @@ namespace motors {
         pidRegMotor.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidRegMotor.reset(); // Сброс ПИД регулятора
 
-        console.log(`start reg motor`);
+        console.log(`start reg motor setPoint: ${pos}`);
         
         let prevError = 0; // Предыдущая ошибка (для расчёта скорости)
         let speed = 0; // Текущая скорость (производная ошибки)
@@ -67,8 +67,7 @@ namespace motors {
             if (Math.abs(error) <= errorThreshold && Math.abs(speed) <= minSpeedThreshold) break; // Угол был достигнут
             pidRegMotor.setPoint(error); // Передать ошибку регулятору
             let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
-            if (U == NaN) U = 0;
-            U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
+            // U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             motor.run(U); // Установить мотору управляющее воздействие
             if (debug) {
                 // brick.clearScreen();
