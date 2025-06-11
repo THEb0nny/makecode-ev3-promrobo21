@@ -1,5 +1,7 @@
 namespace motions {
 
+    export let minimumPwrAtEndMovement = 5; // Минимальная мощность при завершении движения
+
     // Функция, которая выполняет действие после цикла с движением
     export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, speed?: number) { // 
         if (actionAfterMotion == AfterMotion.HoldStop || actionAfterMotion == MotionBraking.Hold) { // Тормоз с жёстким торможением (удержанием)

@@ -17,14 +17,9 @@ namespace motions {
     export let rampLineFollowToDistance2SensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
     export function rampRollingLineFollowingByTwoSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
-        // pidLineFollow.setGains(rampLineFollow2SensorKp, rampLineFollow2SensorKi, rampLineFollow2SensorKd); // Установка коэффицентов ПИД регулятора
-        // pidLineFollow.setDerivativeFilter(rampLineFollow2SensorKf); // Установить фильтр дифференциального регулятора
-        // pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
-        // pidLineFollow.reset(); // Сброс ПИД регулятора
-
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(rollingDist)); // Расчитываем расстояние замедления
 
-        advmotctrls.accTwoEncConfig(0, speed, 10, 0, mRotDecelCalc, mRotDecelCalc);
+        advmotctrls.accTwoEncConfig(0, speed, minimumPwrAtEndMovement, 0, mRotDecelCalc, mRotDecelCalc);
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
