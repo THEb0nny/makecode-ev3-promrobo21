@@ -28,6 +28,13 @@ namespace sensors {
     //% group="Line Sensor"
     export function setColorSensorsAsLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
         setLineSensor(newLeftLineSensor, newRightLineSensor);
+        if (leftLineSensor instanceof sensors.ColorSensor && rightLineSensor instanceof sensors.ColorSensor) {
+            for (let i = 0; i < 20; i++) { // Опрос датчиков, чтобы датчики дальше давали правильные показания
+                getLineSensorRawRefValue(LineSensor.Left);
+                getLineSensorRawRefValue(LineSensor.Right);
+                pause(10);
+            }
+        }
     }
 
     /**
