@@ -1,6 +1,6 @@
 {
     "name": "promrobo21",
-    "version": "6.2.5",
+    "version": "6.2.6",
     "description": "Methods (blocks) for working with ev3 to participate in competitions.",
     "dependencies": {
         "ev3": "*",
