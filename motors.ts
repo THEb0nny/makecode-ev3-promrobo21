@@ -46,6 +46,8 @@ namespace motors {
         pidRegMotor.setDerivativeFilter(regMotorKf); // Установить фильтр дифференциального регулятора
         pidRegMotor.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidRegMotor.reset(); // Сброс ПИД регулятора
+
+        console.log(`start reg motor`);
         
         let prevError = 0; // Предыдущая ошибка (для расчёта скорости)
         let speed = 0; // Текущая скорость (производная ошибки)
@@ -73,13 +75,11 @@ namespace motors {
                 // brick.printString(`angle: ${motor.angle()}`, 1);
                 // brick.printString(`error: ${error}`, 2);
                 // brick.printString(`U: ${U}`, 3);
-                console.log(`angle: ${motor.angle()}`);
-                console.log(`error: ${error}`);
-                console.log(`U: ${U}`);
+                console.log(`angle: ${motor.angle()}, error: ${error}, U: ${U}`);
             }
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла за нужную частоту
         }
-        console.log(`stop reg`);
+        console.log(`stop reg angle: ${motor.angle()}`);
         music.playToneInBackground(Note.E, 75); // Сигнал о завершении
         motor.stop(); // Останавливаем
     }
