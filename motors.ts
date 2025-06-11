@@ -64,18 +64,22 @@ namespace motors {
             }
             if (Math.abs(error) <= errorThreshold && Math.abs(speed) <= minSpeedThreshold) break; // Угол был достигнут
             pidRegMotor.setPoint(error); // Передать ошибку регулятору
-            let U = pidRegMotor.compute(1, 0); // Управляющее воздействие
+            let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
             if (U == NaN) U = 0;
             U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             motor.run(U); // Установить мотору управляющее воздействие
             if (debug) {
-                brick.clearScreen();
-                brick.printString(`angle: ${motor.angle()}`, 1);
-                brick.printString(`error: ${error}`, 2);
-                brick.printString(`U: ${U}`, 3);
+                // brick.clearScreen();
+                // brick.printString(`angle: ${motor.angle()}`, 1);
+                // brick.printString(`error: ${error}`, 2);
+                // brick.printString(`U: ${U}`, 3);
+                console.log(`angle: ${motor.angle()}`);
+                console.log(`error: ${error}`);
+                console.log(`U: ${U}`);
             }
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла за нужную частоту
         }
+        console.log(`stop reg`);
         music.playToneInBackground(Note.E, 75); // Сигнал о завершении
         motor.stop(); // Останавливаем
     }
