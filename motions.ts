@@ -158,12 +158,12 @@ namespace motions {
     //% group="Поворот на линию"
     export function spinTurnToLine(rotateSide: TurnSide, speed: number, params?: params.LinePositioning, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed) levelings.linePositioningMaxSpeed = Math.abs(params.maxSpeed);
-            if (params.timeOut) levelings.linePositioningTimeOut = Math.abs(params.timeOut);
-            if (params.Kp) levelings.linePositioningKp = params.Kp;
-            if (params.Ki) levelings.linePositioningKi = params.Ki;
-            if (params.Kd) levelings.linePositioningKd = params.Kd;
-            if (params.Kf) levelings.linePositioningKf = params.Kf;
+            if (params.maxSpeed >= 0) levelings.linePositioningMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.timeOut >= 0) levelings.linePositioningTimeOut = Math.abs(params.timeOut);
+            if (params.Kp >= 0) levelings.linePositioningKp = params.Kp;
+            if (params.Ki >= 0) levelings.linePositioningKi = params.Ki;
+            if (params.Kd >= 0) levelings.linePositioningKd = params.Kd;
+            if (params.Kf >= 0) levelings.linePositioningKf = params.Kf;
         }
 
         if (sensors.leftLineSensor instanceof sensors.ColorSensor && sensors.rightLineSensor instanceof sensors.ColorSensor) {

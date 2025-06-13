@@ -30,14 +30,14 @@ namespace motors {
     //% group="Управление положением"
     export function setPosition(motor: motors.Motor, pos: number, braking: Braking, params?: params.MotorRegulator, debug: boolean = false) {
         if (params) {
-            if (params.maxSpeed) regMotorMaxSpeed = params.maxSpeed;
-            if (params.Kp) regMotorKp = params.Kp;
-            if (params.Ki) regMotorKi = params.Ki;
-            if (params.Kd) regMotorKd = params.Kd;
-            if (params.Kf) regMotorKf = params.Kf;
-            if (params.errorThreshold) errorThreshold = params.errorThreshold;
-            if (params.minSpeedThreshold) minSpeedThreshold = params.minSpeedThreshold;
-            if (params.timeOut) regMotorTimeOut = params.timeOut;
+            if (params.maxSpeed >= 0) regMotorMaxSpeed = params.maxSpeed;
+            if (params.Kp >= 0) regMotorKp = params.Kp;
+            if (params.Ki >= 0) regMotorKi = params.Ki;
+            if (params.Kd >= 0) regMotorKd = params.Kd;
+            if (params.Kf >= 0) regMotorKf = params.Kf;
+            if (params.errorThreshold >= 0) errorThreshold = params.errorThreshold;
+            if (params.minSpeedThreshold >= 0) minSpeedThreshold = params.minSpeedThreshold;
+            if (params.timeOut >= 0) regMotorTimeOut = params.timeOut;
         }
 
         motor.setBrake(braking == Braking.Hold); // Установка удерживания мотором позиции
@@ -47,39 +47,36 @@ namespace motors {
         pidRegMotor.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidRegMotor.reset(); // Сброс ПИД регулятора
 
-        console.log(`start reg motor setPoint: ${pos}`);
+        if (debug) console.log(`Start motors.setPosition(${pos})`);
         
-        let prevError = 0; // Предыдущая ошибка (для расчёта скорости)
-        let speed = 0; // Текущая скорость (производная ошибки)
         const startTime = control.millis(); // Переменная хранения времени старта алгоритма
+        let prevDebugPrintTime = 0;
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             if (regMotorTimeOut > 0 && currTime - startTime >= regMotorTimeOut) break; // Таймаут
-            const error = pos - motor.angle(); // Расчитываем ошибку положения
-            // Рассчитываем скорость (производную ошибки)
-            if (dt > 0) { // Избегаем деления на ноль
-                speed = (error - prevError) / dt;
-                prevError = error;
-            }
-            if (Math.abs(error) <= errorThreshold && Math.abs(speed) <= minSpeedThreshold) break; // Угол был достигнут
+            let currentAngle = motor.angle();
+            let error = pos - currentAngle; // Расчитываем ошибку положения
+            if (Math.abs(error) <= errorThreshold && Math.abs(motor.speed()) <= minSpeedThreshold) break; // Угол был достигнут
             pidRegMotor.setPoint(error); // Передать ошибку регулятору
             let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
-            // U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
+            let pwr = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
+            U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             motor.run(U); // Установить мотору управляющее воздействие
-            if (debug) {
+            if (debug && currTime - prevDebugPrintTime >= 10) {
                 // brick.clearScreen();
                 // brick.printString(`angle: ${motor.angle()}`, 1);
                 // brick.printString(`error: ${error}`, 2);
                 // brick.printString(`U: ${U}`, 3);
-                console.log(`angle: ${motor.angle()}, error: ${error}, U: ${U}`);
+                console.log(`millis: ${control.millis() - startTime}, angle: ${currentAngle}, error: ${error}, U: ${U}, pwr: ${pwr}`);
+                prevDebugPrintTime = control.millis();
             }
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла за нужную частоту
         }
-        console.log(`stop reg angle: ${motor.angle()}`);
-        music.playToneInBackground(Note.E, 75); // Сигнал о завершении
+        if (debug) console.log(`Stop motors.setPosition, angle: ${motor.angle()}`);
+        music.playToneInBackground(988, 50); // Сигнал о завершении
         motor.stop(); // Останавливаем
     }
 

@@ -75,16 +75,16 @@ namespace levelings {
     //% group="Линия"
     export function lineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, params?: params.LineAlignment, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
-            if (params.timeOut) lineAlignmentTimeOut = Math.abs(params.timeOut);
-            if (params.leftKp) lineAlignmentLeftSideKp = params.leftKp;
-            if (params.leftKi) lineAlignmentLeftSideKi = params.leftKi;
-            if (params.leftKd) lineAlignmentLeftSideKd = params.leftKd;
-            if (params.leftKf) lineAlignmentLeftSideKf = params.leftKf;
-            if (params.rightKp) lineAlignmentRightSideKp = params.rightKp;
-            if (params.rightKi) lineAlignmentRightSideKi = params.rightKi;
-            if (params.rightKd) lineAlignmentRightSideKd = params.rightKd;
-            if (params.rightKf) lineAlignmentRightSideKf = params.rightKf;
+            if (params.maxSpeed >= 0) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.timeOut >= 0) lineAlignmentTimeOut = Math.abs(params.timeOut);
+            if (params.leftKp >= 0) lineAlignmentLeftSideKp = params.leftKp;
+            if (params.leftKi >= 0) lineAlignmentLeftSideKi = params.leftKi;
+            if (params.leftKd >= 0) lineAlignmentLeftSideKd = params.leftKd;
+            if (params.leftKf >= 0) lineAlignmentLeftSideKf = params.leftKf;
+            if (params.rightKp >= 0) lineAlignmentRightSideKp = params.rightKp;
+            if (params.rightKi >= 0) lineAlignmentRightSideKi = params.rightKi;
+            if (params.rightKd >= 0) lineAlignmentRightSideKd = params.rightKd;
+            if (params.rightKf >= 0) lineAlignmentRightSideKf = params.rightKf;
         }
 
         pidLeftSideLineAlignment.setGains(lineAlignmentLeftSideKp, lineAlignmentLeftSideKi, lineAlignmentLeftSideKd); // Установка значений регулятору для левой стороны
@@ -153,12 +153,12 @@ namespace levelings {
     //% group="Линия"
     export function linePositioning(regTime: number, params?: params.LinePositioning, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed) linePositioningMaxSpeed = Math.abs(params.maxSpeed);
-            if (params.timeOut) linePositioningTimeOut = Math.abs(params.timeOut);
-            if (params.Kp) linePositioningKp = params.Kp;
-            if (params.Ki) linePositioningKi = params.Ki;
-            if (params.Kd) linePositioningKd = params.Kd;
-            if (params.Kf) linePositioningKf = params.Kf;
+            if (params.maxSpeed >= 0) linePositioningMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.timeOut >= 0) linePositioningTimeOut = Math.abs(params.timeOut);
+            if (params.Kp >= 0) linePositioningKp = params.Kp;
+            if (params.Ki >= 0) linePositioningKi = params.Ki;
+            if (params.Kd >= 0) linePositioningKd = params.Kd;
+            if (params.Kf >= 0) linePositioningKf = params.Kf;
         }
 
         pidLinePositioning.setGains(linePositioningKp, linePositioningKi, linePositioningKd); // Установка значений регулятору

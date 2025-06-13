@@ -343,14 +343,14 @@ namespace navigation {
     }
 
     function processingFollowLineByPathInputParams(params?: params.NavLineFollow) {
-        if (params.moveStartSpeed) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveStartSpeed);
-        if (params.moveMaxSpeed) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveMaxSpeed);
-        if (params.turnSpeed) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
-        if (params.accelStartDist) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist);
-        if (params.Kp) lineFollowByPathKp = Math.abs(params.Kp);
-        if (params.Ki) lineFollowByPathKi = Math.abs(params.Ki);
-        if (params.Kd) lineFollowByPathKd = Math.abs(params.Kd);
-        if (params.Kf) lineFollowByPathKf = Math.abs(params.Kf);
+        if (params.moveStartSpeed >= 0) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveStartSpeed);
+        if (params.moveMaxSpeed >= 0) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveMaxSpeed);
+        if (params.turnSpeed >= 0) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
+        if (params.accelStartDist >= 0) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist);
+        if (params.Kp >= 0) lineFollowByPathKp = Math.abs(params.Kp);
+        if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
+        if (params.Kd >= 0) lineFollowByPathKd = Math.abs(params.Kd);
+        if (params.Kf >= 0) lineFollowByPathKf = Math.abs(params.Kf);
     }
 
     /**

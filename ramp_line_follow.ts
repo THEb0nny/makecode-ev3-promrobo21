@@ -78,13 +78,13 @@ namespace motions {
         }
 
         if (params) { // Если были переданы параметры
-            if (params.startSpeed) rampLineFollowToDistance2SensorStartSpeed = Math.abs(params.startSpeed);
-            if (params.maxSpeed) rampLineFollowToDistance2SensorMaxSpeed = Math.abs(params.maxSpeed);
-            if (params.finishSpeed) rampLineFollowToDistance2SensorFinishSpeed = Math.abs(params.finishSpeed);
-            if (params.Kp) rampLineFollowToDistance2SensorKp = params.Kp;
-            if (params.Ki) rampLineFollowToDistance2SensorKi = params.Ki;
-            if (params.Kd) rampLineFollowToDistance2SensorKd = params.Kd;
-            if (params.Kf) rampLineFollowToDistance2SensorKf = params.Kf;
+            if (params.startSpeed >= 0) rampLineFollowToDistance2SensorStartSpeed = Math.abs(params.startSpeed);
+            if (params.maxSpeed >= 0) rampLineFollowToDistance2SensorMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.finishSpeed >= 0) rampLineFollowToDistance2SensorFinishSpeed = Math.abs(params.finishSpeed);
+            if (params.Kp >= 0) rampLineFollowToDistance2SensorKp = params.Kp;
+            if (params.Ki >= 0) rampLineFollowToDistance2SensorKi = params.Ki;
+            if (params.Kd >= 0) rampLineFollowToDistance2SensorKd = params.Kd;
+            if (params.Kf >= 0) rampLineFollowToDistance2SensorKf = params.Kf;
         }
 
         pidLineFollow.setGains(rampLineFollowToDistance2SensorKp, rampLineFollowToDistance2SensorKi, rampLineFollowToDistance2SensorKd); // Установка коэффицентов ПИД регулятора
@@ -151,13 +151,13 @@ namespace motions {
         // Проверка условия, что params.finishSpeed или rampLineFollowCrossIntersection2SensorFinishSpeed 0, робот не будет ехать по линии до перекрёстка
         
         if (params) { // Если были переданы параметры
-            if (params.startSpeed) rampLineFollowCrossIntersection2SensorStartSpeed = Math.abs(params.startSpeed);
-            if (params.maxSpeed) rampLineFollowCrossIntersection2SensorMaxSpeed = Math.abs(params.maxSpeed);
-            if (params.finishSpeed) rampLineFollowCrossIntersection2SensorFinishSpeed = Math.abs(params.finishSpeed);
-            if (params.Kp) rampLineFollowCrossIntersection2SensorKp = params.Kp;
-            if (params.Ki) rampLineFollowCrossIntersection2SensorKi = params.Ki;
-            if (params.Kd) rampLineFollowCrossIntersection2SensorKd = params.Kd;
-            if (params.Kf) rampLineFollowCrossIntersection2SensorKf = params.Kf;
+            if (params.startSpeed >= 0) rampLineFollowCrossIntersection2SensorStartSpeed = Math.abs(params.startSpeed);
+            if (params.maxSpeed >= 0) rampLineFollowCrossIntersection2SensorMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.finishSpeed >= 0) rampLineFollowCrossIntersection2SensorFinishSpeed = Math.abs(params.finishSpeed);
+            if (params.Kp >= 0) rampLineFollowCrossIntersection2SensorKp = params.Kp;
+            if (params.Ki >= 0) rampLineFollowCrossIntersection2SensorKi = params.Ki;
+            if (params.Kd >= 0) rampLineFollowCrossIntersection2SensorKd = params.Kd;
+            if (params.Kf >= 0) rampLineFollowCrossIntersection2SensorKf = params.Kf;
         }
 
         pidLineFollow.setGains(rampLineFollowCrossIntersection2SensorKp, rampLineFollowCrossIntersection2SensorKi, rampLineFollowCrossIntersection2SensorKd); // Установка коэффицентов ПИД регулятора

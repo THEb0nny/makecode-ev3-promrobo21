@@ -108,11 +108,11 @@ namespace chassis {
     export function smartSpinTurn(deg: number, params?: params.LineFollow, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
-            if (params.speed) smartSpinTurnSpeed = params.speed;
-            if (params.Kp) smartSpinTurnKp = params.Kp;
-            if (params.Ki) smartSpinTurnKi = params.Ki;
-            if (params.Kd) smartSpinTurnKd = params.Kd;
-            if (params.Kf) smartSpinTurnKf = params.Kf;
+            if (params.speed >= 0) smartSpinTurnSpeed = params.speed;
+            if (params.Kp >= 0) smartSpinTurnKp = params.Kp;
+            if (params.Ki >= 0) smartSpinTurnKi = params.Ki;
+            if (params.Kd >= 0) smartSpinTurnKd = params.Kd;
+            if (params.Kf >= 0) smartSpinTurnKf = params.Kf;
         }
         const lMotEncPrev = leftMotor.angle(), rMotEncPrev = rightMotor.angle(); // Считываем значение с энкодера левого мотора и правого мотора перед стартом алгаритма
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
@@ -178,11 +178,11 @@ namespace chassis {
     export function smartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: params.LineFollow, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
-            if (params.speed) smartPivotTurnSpeed = params.speed;
-            if (params.Kp) smartPivotTurnKp = params.Kp;
-            if (params.Ki) smartPivotTurnKi = params.Ki;
-            if (params.Kd) smartPivotTurnKd = params.Kd;
-            if (params.Kf) smartPivotTurnKf = params.Kf;
+            if (params.speed >= 0) smartPivotTurnSpeed = params.speed;
+            if (params.Kp >= 0) smartPivotTurnKp = params.Kp;
+            if (params.Ki >= 0) smartPivotTurnKi = params.Ki;
+            if (params.Kd >= 0) smartPivotTurnKd = params.Kd;
+            if (params.Kf >= 0) smartPivotTurnKf = params.Kf;
         }
         stop(Braking.Hold); // Остановить и установить жёсткий тормоз для моторов
         let motEncPrev = 0; // Инициализируем переменную хранения значения с энкодера мотора
