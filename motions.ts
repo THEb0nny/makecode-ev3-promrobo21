@@ -8,7 +8,7 @@ namespace motions {
             chassis.stop(Braking.Hold);
         } else if (actionAfterMotion == AfterMotion.FloatStop || actionAfterMotion == MotionBraking.Float) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
             chassis.stop(Braking.Float);
-        } else if (actionAfterMotion == AfterMotion.NoStop || actionAfterMotion == MotionBraking.NoStop) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
+        } else if (actionAfterMotion == AfterMotion.NoStop || actionAfterMotion == MotionBraking.Coasting) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             chassis.steeringCommand(0, speed);
         }
     }
