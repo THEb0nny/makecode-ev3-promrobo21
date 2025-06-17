@@ -44,7 +44,7 @@ namespace motors {
 
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора
         pidRegMotor.setDerivativeFilter(regMotorKf); // Установить фильтр дифференциального регулятора
-        pidRegMotor.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        pidRegMotor.setControlSaturation(-500, 500); // Установка интервала ПИД регулятора
         pidRegMotor.reset(); // Сброс ПИД регулятора
 
         if (debug) console.log(`Start motors.setPosition(${pos})`);
