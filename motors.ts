@@ -73,7 +73,7 @@ namespace motors {
                 console.log(`millis: ${control.millis() - startTime}, angle: ${currentAngle}, error: ${error}, U: ${U}, pwr: ${pwr}`);
                 prevDebugPrintTime = control.millis();
             }
-            control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла за нужную частоту
+            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла за нужную частоту
         }
         if (debug) console.log(`Stop motors.setPosition, angle: ${motor.angle()}`);
         music.playToneInBackground(988, 50); // Сигнал о завершении
