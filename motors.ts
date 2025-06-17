@@ -62,7 +62,6 @@ namespace motors {
             if (Math.abs(error) <= errorThreshold && Math.abs(motor.speed()) <= minSpeedThreshold) break; // Угол был достигнут
             pidRegMotor.setPoint(error); // Передать ошибку регулятору
             let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
-            let pwr = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             motor.run(U); // Установить мотору управляющее воздействие
             if (debug && currTime - prevDebugPrintTime >= 10) {
@@ -70,7 +69,8 @@ namespace motors {
                 // brick.printString(`angle: ${motor.angle()}`, 1);
                 // brick.printString(`error: ${error}`, 2);
                 // brick.printString(`U: ${U}`, 3);
-                console.log(`millis: ${control.millis() - startTime}, angle: ${currentAngle}, error: ${error}, U: ${U}, pwr: ${pwr}`);
+                // console.log(`millis: ${control.millis() - startTime}, angle: ${currentAngle}, error: ${error}, U: ${U}`);
+                console.log(`${currentAngle}, ${error}, ${U}`);
                 prevDebugPrintTime = control.millis();
             }
             control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла за нужную частоту
