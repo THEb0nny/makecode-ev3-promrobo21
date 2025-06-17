@@ -70,10 +70,12 @@ namespace motors {
                 // brick.printString(`error: ${error}`, 2);
                 // brick.printString(`U: ${U}`, 3);
                 // console.log(`millis: ${control.millis() - startTime}, angle: ${currentAngle}, error: ${error}, U: ${U}`);
-                console.log(`${currentAngle}, ${error}, ${U}`);
-                prevDebugPrintTime = control.millis();
+                control.runInParallel(function() {
+                    console.log(`${currentAngle}, ${error}, ${U}`);
+                    prevDebugPrintTime = control.millis();
+                })
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла за нужную частоту
+            control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла за нужную частоту
         }
         if (debug) console.log(`Stop motors.setPosition, angle: ${motor.angle()}`);
         music.playToneInBackground(988, 50); // Сигнал о завершении
