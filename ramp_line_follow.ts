@@ -19,7 +19,7 @@ namespace motions {
     export function rampRollingLineFollowingByTwoSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(rollingDist)); // Расчитываем расстояние замедления
 
-        advmotctrls.accTwoEncConfig(0, speed, minimumPwrAtEndMovement, 0, mRotDecelCalc, mRotDecelCalc);
+        advmotctrls.accTwoEncConfig(0, speed, minPwrAtEndMovement, 0, mRotDecelCalc, mRotDecelCalc);
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
@@ -30,7 +30,7 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
             let out = advmotctrls.accTwoEnc(eml, emr);
-            console.log(`out.pwr: ${out.pwr}`);
+            // console.log(`out.pwr: ${out.pwr}`);
             if (out.isDone) break; // Проверка условия окончания
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
