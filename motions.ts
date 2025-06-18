@@ -1,6 +1,6 @@
 namespace motions {
 
-    export let minPwrAtEndMovement = 5; // Минимальная мощность при завершении движения
+    export let minPwrAtEndMovement = 10; // Минимальная мощность при завершении движения
 
     // Функция, которая выполняет действие после цикла с движением
     export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, speed?: number) { // 
