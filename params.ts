@@ -31,7 +31,7 @@ namespace params {
         if (newKd) motions.lineFollowCrossIntersection2SensorKd = newKd;
         if (newKf) motions.lineFollowCrossIntersection2SensorKf = newKf;
     }
-
+    
     /**
      * Пустые праметры для алгоритма с регулятором.
      */

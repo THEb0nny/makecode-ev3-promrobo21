@@ -144,10 +144,10 @@ namespace chassis {
      * Не рекомендуется устанавливать минимальную скорость меньше 20.
      * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей (мощностей) должны иметь одинаковый знак!
-     * @param accelDist расстояние ускорения в мм, eg: 50
-     * @param totalDist общее расстояние в мм, если его не указать значение будет равно accelDist, тогда, eg: 100
      * @param startSpeed начальная скорость (мощность) движени, eg: 20
      * @param maxSpeed максимальная скорость (мощность) движения, eg: 50
+     * @param accelDist расстояние ускорения в мм, eg: 50
+     * @param totalDist общее расстояние в мм, если его не указать значение будет равно accelDist, тогда, eg: 100
      */
     //% blockId="AccelStartLinearDistMove"
     //% block="acceleration in linear motion from $startSpeed\\% to $maxSpeed\\% per  $accelDist mm||at total distance $totalDist"
@@ -182,14 +182,15 @@ namespace chassis {
      * Синхронизация движения с плавным сбросом скорости (мощности) мм.
      * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
      * Значения скоростей (мощности) должны иметь одинаковый знак!
-     * @param decelDist расстояние замедления в мм, eg: 50
-     * @param totalDist общее расстояние в мм, если его не указать значение будет равно decelDist, eg: 100
      * @param speed изначальная скорость (мощность) движения, eg: 50
      * @param finishSpeed финишная скорость (мощность) движения, eg: 10
+     * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
+     * @param decelDist расстояние замедления в мм, eg: 50
+     * @param totalDist общее расстояние в мм, если его не указать значение будет равно decelDist, eg: 100
      */
     //% blockId="DecelFinishLinearDistMove"
-    //% block="deceleration in linear motion from $speed\\% to $finishSpeed\\% per $decelDist mm||at total distance of $totalDist"
-    //% block.loc.ru="замеделение при линейном движении c $speed\\% до $finishSpeed\\% за $decelDist мм||при общей дистанции $totalDist"
+    //% block="deceleration in linear motion from $speed\\% to $finishSpeed\\%|after motion $actionAfterMotion|per $decelDist mm||at total distance of $totalDist"
+    //% block.loc.ru="замеделение при линейном движении c $speed\\% до $finishSpeed\\%|действие после $actionAfterMotion|за $decelDist мм||при общей дистанции $totalDist"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% speed.shadow="motorSpeedPicker"
@@ -197,7 +198,7 @@ namespace chassis {
     //% weight="87" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function decelFinishLinearDistMove(speed: number, finishSpeed: number, decelDist: number, totalDist?: number) {
+    export function decelFinishLinearDistMove(speed: number, finishSpeed: number, actionAfterMotion: AfterMotion, decelDist: number, totalDist?: number) {
         if (speed == 0) {
             stop(Braking.Hold);
             return;
@@ -213,7 +214,8 @@ namespace chassis {
         const mRotTotalCalc = totalDist > 0 ? Math.calculateDistanceToEncRotate(totalDist) : mRotDecelCalc; // Рассчитываем общую дистанцию
 
         executeRampMovement(0, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
-        stop(Braking.Hold); // Тормоз с удержанием
+        // stop(Braking.Hold); // Тормоз с удержанием
+        motions.actionAfterMotion(actionAfterMotion, finishSpeed);
     }
 
     //% blockId="RampDistMove"
