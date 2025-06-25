@@ -90,7 +90,7 @@ namespace motions {
      * @param sensorsSelection определение датчиками, eg: LineSensorSelection.LeftAndRight
      * @param refCondition отражение больше или меньше, eg: Comparison.Greater
      * @param refTreshold пороговое значение отражения света, eg: 50
-     * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
+     * @param actionAfterMotion действие после, eg: AfterMotion.HoldStop
      * @param debug отладка, eg: false
      */
     //% blockId="MoveToReflectionZone"

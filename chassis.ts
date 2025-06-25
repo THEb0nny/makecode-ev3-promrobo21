@@ -184,7 +184,7 @@ namespace chassis {
      * Значения скоростей (мощности) должны иметь одинаковый знак!
      * @param speed изначальная скорость (мощность) движения, eg: 50
      * @param finishSpeed финишная скорость (мощность) движения, eg: 10
-     * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
+     * @param actionAfterMotion действие после, eg: AfterMotion.HoldStop
      * @param decelDist расстояние замедления в мм, eg: 50
      * @param totalDist общее расстояние в мм, если его не указать значение будет равно decelDist, eg: 100
      */
