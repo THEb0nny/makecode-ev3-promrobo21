@@ -131,7 +131,7 @@ namespace motions {
     //% weight="88"
     //% group="Свойства для датчиков"
     export function getLineRefTreshold(): number {
-        return lineRefTreshold
+        return lineRefTreshold;
     }
 
     /**
@@ -356,7 +356,7 @@ namespace motions {
 
 namespace motions {
 
-    export function lineFollowToIntersection(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
+    function lineFollowToIntersection(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         
     }
 
