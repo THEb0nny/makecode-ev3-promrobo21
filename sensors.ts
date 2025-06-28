@@ -28,13 +28,6 @@ namespace sensors {
     //% group="Line Sensor"
     export function setColorSensorsAsLineSensors(newLeftLineSensor: sensors.ColorSensor, newRightLineSensor: sensors.ColorSensor) {
         setLineSensor(newLeftLineSensor, newRightLineSensor);
-        if (leftLineSensor instanceof sensors.ColorSensor && rightLineSensor instanceof sensors.ColorSensor) {
-            for (let i = 0; i < 20; i++) { // Опрос датчиков, чтобы датчики дальше давали правильные показания
-                getLineSensorRawRefValue(LineSensor.Left);
-                getLineSensorRawRefValue(LineSensor.Right);
-                pause(10);
-            }
-        }
     }
 
     /**
@@ -58,6 +51,7 @@ namespace sensors {
         setLineSensor(newLeftLineSensor, newRightLineSensor);
     }
 
+    // Установить левый и правый датчик в качестве датчиков линии
     function setLineSensor(newLeftLineSensor: sensors.ColorSensor | sensors.NXTLightSensor, newRightLineSensor: sensors.ColorSensor | sensors.NXTLightSensor) {
         if (!leftLineSensor && !rightLineSensor) { // Если датчики до этого не были установлены
             if (newLeftLineSensor !== newRightLineSensor) { // Если сенсоры установили не одинаковые
@@ -70,6 +64,31 @@ namespace sensors {
         } else {
             console.log("Error: the line sensors have already been installed! You're doing it repeatedly!");
             control.assert(false, 2);
+        }
+    }
+
+    // Подготовить датчики к работе изначально
+    export function preparationLineSensor() {
+        if (leftLineSensor instanceof sensors.ColorSensor && rightLineSensor instanceof sensors.ColorSensor) { // Если датчики цвета были до этого установлены
+            for (let i = 0; i < 4; i++) {
+                if (i % 2 == 0) {
+                    leftLineSensor.setMode(ColorSensorMode.RgbRaw);
+                    rightLineSensor.setMode(ColorSensorMode.RgbRaw);
+                } else {
+                    leftLineSensor.setMode(ColorSensorMode.RefRaw);
+                    rightLineSensor.setMode(ColorSensorMode.RefRaw);
+                }
+                pause(200);
+            }
+        } else if (leftLineSensor instanceof sensors.NXTLightSensor && rightLineSensor instanceof sensors.NXTLightSensor) { // Если датчики отражения nxt были до этого установлены
+            for (let i = 0; i < 10; i++) { // Опрос датчиков, чтобы датчики дальше давали правильные показания
+                getLineSensorRawRefValue(LineSensor.Left);
+                getLineSensorRawRefValue(LineSensor.Right);
+                pause(1);
+            }
+        } else {
+            console.log("Error: the line sensors were not installed!");
+            // control.assert(false, 2);
         }
     }
 
