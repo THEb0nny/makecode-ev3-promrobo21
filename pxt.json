@@ -20,7 +20,6 @@
         "params.ts",
         "tune.ts",
         "chassis.ts",
-        "test.ts",
         "math.ts",
         "motors.ts",
         "navigation.ts",
@@ -28,7 +27,9 @@
         "line_follow.ts",
         "ramp_line_follow.ts"
     ],
-    "testFiles": [],
+    "testFiles": [
+        "test.ts"
+    ],
     "targetVersions": {
         "branch": "v1.4.40",
         "tag": "v1.4.40",
