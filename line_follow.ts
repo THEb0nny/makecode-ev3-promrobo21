@@ -234,7 +234,7 @@ namespace motions {
      */
     //% blockId="GetLineFollowLoopDt"
     //% block="get dt at regulator at line follow"
-    //% block.loc.ru="получить dt при регулирования движения по линии"
+    //% block.loc.ru="dt при регулирования движения по линии"
     //% inlineInputMode="inline"
     //% weight="98"
     //% group="Свойства"
@@ -262,7 +262,7 @@ namespace motions {
      */
     //% blockId="GetSteeringAtSearchLineForLineFollowOneSensor"
     //% block="get steering when searching line to follow line with one sensor"
-    //% block.loc.ru="получить рулевое управление при поиске линии в движении по линии одним датчиком"
+    //% block.loc.ru="рулевое управление при поиске линии в движении по линии одним датчиком"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Свойства движения"
