@@ -229,12 +229,21 @@ namespace motions {
         lineFollowLoopDt = dt;
     }
 
+    /**
+     * Получить dt для циклов регулирования при движении по линии.
+     */
+    //% blockId="GetLineFollowLoopDt"
+    //% block="get dt at regulator at line follow"
+    //% block.loc.ru="получить dt при регулирования движения по линии"
+    //% inlineInputMode="inline"
+    //% weight="98"
+    //% group="Свойства"
     export function getLineFollowLoopDt() {
         return lineFollowLoopDt;
     }
 
     /**
-     * Устновить рулевое управление для поиска линии при движение по линии одним датчиком.
+     * Установить рулевое управление для поиска линии при движение по линии одним датчиком.
      * @param newSteering получительное значение рулевого подворота к линии, eg: 15
      */
     //% blockId="SetSteeringAtSearchLineForLineFollowOneSensor"
@@ -248,6 +257,15 @@ namespace motions {
         steeringAtSearchLine = newSteering;
     }
 
+    /**
+     * Получить рулевое управление для поиска линии при движение по линии одним датчиком.
+     */
+    //% blockId="GetSteeringAtSearchLineForLineFollowOneSensor"
+    //% block="get steering when searching line to follow line with one sensor"
+    //% block.loc.ru="получить рулевое управление при поиске линии в движении по линии одним датчиком"
+    //% inlineInputMode="inline"
+    //% weight="88"
+    //% group="Свойства движения"
     export function getSteeringAtSearchLineForLineFollowOneSensor() {
         return steeringAtSearchLine;
     }
