@@ -2,7 +2,7 @@ namespace Math {
 
     // Вспомогательная функция расчёта движения на дистанцию в мм
     export function calculateDistanceToEncRotate(distance: number): number {
-        return (distance / (Math.PI * chassis.getWheelDiametr())) * 360; // Дистанция в мм, которую нужно пройти
+        return (distance / (Math.PI * chassis.getWheelDiametr())) * motors.cpr; // Дистанция в мм, которую нужно пройти
     }
 
     // This define returns the smallest of the three numbers
