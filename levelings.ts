@@ -240,12 +240,12 @@ namespace levelings {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (refLeftLS <= motions.getLineRefTreshold()) { // Левый датчик первый нашёл линию
+            if (refLeftLS <= motions.getLineRefThreshold()) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
                 encRightMot1 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
                 break;
-            } else if (refRightLS <= motions.getLineRefTreshold()) { // Правый датчик первый нашёл линию
+            } else if (refRightLS <= motions.getLineRefThreshold()) { // Правый датчик первый нашёл линию
                 firstSide = "RIGHT_SIDE";
                 encLeftMot1 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
@@ -262,13 +262,13 @@ namespace levelings {
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (firstSide == "LEFT_SIDE") {
-                if (refRightLS <= motions.getLineRefTreshold()) { // Левый датчик нашёл линию
+                if (refRightLS <= motions.getLineRefThreshold()) { // Левый датчик нашёл линию
                     encRightMot2 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол по новой
                     a = Math.abs(encRightMot2 - encRightMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;
                 }
             } else if (firstSide == "RIGHT_SIDE") {
-                if (refLeftLS <= motions.getLineRefTreshold()) { // Левый датчик нашёл линию
+                if (refLeftLS <= motions.getLineRefThreshold()) { // Левый датчик нашёл линию
                     encLeftMot2 = chassis.leftMotor.angle() - lMotEncPrev; // Считываем угол по новой
                     a = Math.abs(encLeftMot2 - encLeftMot1); // Рассчитываем длину стороны a в тиках энкодера
                     break;

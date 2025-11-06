@@ -1,8 +1,8 @@
 namespace motions {
 
-    let lineRefTreshold = 50; // Среднее значение серого для определения границы линии
-    let lineFollowRefTreshold = 40; // Пороговое значение определения заезда на перекрёсток
-    let lineFollowSetPoint = lineRefTreshold; // Среднее значение серого (уставка) для движения по линии
+    let lineRefThreshold = 50; // Среднее значение серого для определения границы линии
+    let lineFollowRefThreshold = 40; // Пороговое значение определения заезда на перекрёсток
+    let lineFollowSetPoint = lineRefThreshold; // Среднее значение серого (уставка) для движения по линии
 
     let lineFollowByOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
 
@@ -111,54 +111,54 @@ namespace motions {
      * Установить пороговое значение отражения для линии.
      * @param reflection значение отражения, eg: 50
      */
-    //% blockId="SetLineRefTreshold"
-    //% block="set reflection $reflection treshold"
+    //% blockId="SetLineRefThreshold"
+    //% block="set reflection $reflection threshold"
     //% block.loc.ru="установить пороговое значение $reflection отражения"
     //% inlineInputMode="inline"
     //% weight="89" blockGap="8"
     //% group="Свойства для датчиков"
-    export function setLineRefTreshold(reflection: number) {
-        lineRefTreshold = reflection;
+    export function setLineRefThreshold(reflection: number) {
+        lineRefThreshold = reflection;
     }
 
     /**
      * Получить пороговое значение отражения для линии.
      */
-    //% blockId="GetLineRefTreshold"
-    //% block="get reflection treshold"
+    //% blockId="GetLineRefThreshold"
+    //% block="get reflection threshold"
     //% block.loc.ru="пороговое значение отражения"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Свойства для датчиков"
-    export function getLineRefTreshold(): number {
-        return lineRefTreshold;
+    export function getLineRefThreshold(): number {
+        return lineRefThreshold;
     }
 
     /**
      * Установить пороговое значение отражения при движении по линии.
      * @param reflection значение отражения, eg: 40
      */
-    //% blockId="SetLineFollowRefTreshold"
-    //% block="set line follow $reflection reflection treshold"
+    //% blockId="SetLineFollowRefThreshold"
+    //% block="set line follow $reflection reflection threshold"
     //% block.loc.ru="установить пороговое значение $reflection отражения движения по линии"
     //% inlineInputMode="inline"
     //% weight="87" blockGap="8"
     //% group="Свойства для датчиков"
-    export function setLineFollowRefTreshold(reflection: number) {
-        lineFollowRefTreshold = reflection;
+    export function setLineFollowRefThreshold(reflection: number) {
+        lineFollowRefThreshold = reflection;
     }
 
     /**
      * Получить пороговое значение отражения при движении по линии.
      */
-    //% blockId="GetLineFollowRefTreshold"
-    //% block="get line follow reflection treshold"
+    //% blockId="GetLineFollowRefThreshold"
+    //% block="get line follow reflection threshold"
     //% block.loc.ru="пороговое значение отражения движения по линии"
     //% inlineInputMode="inline"
     //% weight="86"
     //% group="Свойства для датчиков"
-    export function getLineFollowRefTreshold(): number {
-        return lineFollowRefTreshold;
+    export function getLineFollowRefThreshold(): number {
+        return lineFollowRefThreshold;
     }
 
     /**
@@ -414,7 +414,7 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (refLeftLS < getLineFollowRefTreshold() && refRightLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток
+            if (refLeftLS < getLineFollowRefThreshold() && refRightLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
@@ -503,7 +503,7 @@ namespace motions {
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (lineLocation == LineLocation.Inside) error = getLineFollowSetPoint() - refRightLS; // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = refRightLS - getLineFollowSetPoint(); // Ошибка регулирования
-            if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refLeftLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
+            if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refLeftLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             chassis.regulatorSteering(U, lineFollowLeftIntersectionSpeed); // Команда моторам
@@ -559,7 +559,7 @@ namespace motions {
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (lineLocation == LineLocation.Inside) error = refLeftLS - getLineFollowSetPoint(); // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = getLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
-            if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refRightLS < getLineFollowRefTreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
+            if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refRightLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
             chassis.regulatorSteering(U, lineFollowRightIntersectionSpeed); // Команда моторам

@@ -182,7 +182,7 @@ namespace motions {
             let out = advmotctrls.accTwoEnc(eml, emr);
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            if (out.isDone && refLeftLS < getLineFollowRefTreshold() && refRightLS < getLineFollowRefTreshold()) break; // Проверка условия окончания движения на расстояние и на перекрёсток
+            if (out.isDone && refLeftLS < getLineFollowRefThreshold() && refRightLS < getLineFollowRefThreshold()) break; // Проверка условия окончания движения на расстояние и на перекрёсток
             let error = refLeftLS - refRightLS; // Ошибка регулирования
             pidLineFollow.setPoint(error); // Передать ошибку регулятору
             let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
