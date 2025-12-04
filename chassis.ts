@@ -240,6 +240,7 @@ namespace chassis {
         advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить ПИД регулятор
         
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
@@ -254,8 +255,8 @@ namespace chassis {
             if (out.isDone) break; // Проверка условия окончания
             // let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
             let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
-            pidChassisSync.setPoint(error); // Transfer control error to controller
-            let U = pidChassisSync.compute(dt, 0); // Find out and record the control action of the regulator
+            // pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, -error); // Find out and record the control action of the regulator
             // let powers = advmotctrls.getPwrSyncMotors(U);
             let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);

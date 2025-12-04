@@ -47,6 +47,7 @@ namespace motors {
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора
         pidRegMotor.setDerivativeFilter(regMotorKf); // Установить фильтр дифференциального регулятора
         pidRegMotor.setControlSaturation(-500, 500); // Установка интервала ПИД регулятора
+        // pidRegMotor.setPoint(pos); // Установить нулевую уставку регулятору
         pidRegMotor.reset(); // Сброс ПИД регулятора
 
         if (debug) console.log(`Start motors.setPosition(${pos})`);
@@ -62,8 +63,8 @@ namespace motors {
             let currentAngle = motor.angle();
             let error = pos - currentAngle; // Расчитываем ошибку положения
             if (Math.abs(error) <= errorThreshold && Math.abs(motor.speed()) <= minSpeedThreshold) break; // Угол был достигнут
-            pidRegMotor.setPoint(error); // Передать ошибку регулятору
-            let U = pidRegMotor.compute(dt, 0); // Управляющее воздействие
+            // pidRegMotor.setPoint(error); // Передать ошибку регулятору
+            let U = pidRegMotor.compute(dt, -error); // Управляющее воздействие
             U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             motor.run(U); // Установить мотору управляющее воздействие
             if (debug && currTime - prevDebugPrintTime >= 10) {

@@ -107,6 +107,7 @@ namespace motions {
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        chassis.pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
@@ -124,8 +125,8 @@ namespace motions {
             let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
             let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            chassis.pidChassisSync.setPoint(error);
-            let U = chassis.pidChassisSync.compute(dt, 0);
+            // chassis.pidChassisSync.setPoint(error);
+            let U = chassis.pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotors(U);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             if (debug) { // Отладка
@@ -183,6 +184,7 @@ namespace motions {
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        chassis.pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
@@ -213,8 +215,8 @@ namespace motions {
                 if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
             }
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            chassis.pidChassisSync.setPoint(error);
-            let U = chassis.pidChassisSync.compute(dt, 0);
+            // chassis.pidChassisSync.setPoint(error);
+            let U = chassis.pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotors(U);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
@@ -240,6 +242,7 @@ namespace motions {
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
+        chassis.pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
@@ -268,8 +271,8 @@ namespace motions {
                 if (lineIsFound && refLS >= 80) break; // Нашли белую часть посли линии
             }
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            chassis.pidChassisSync.setPoint(error);
-            let U = chassis.pidChassisSync.compute(dt, 0);
+            // chassis.pidChassisSync.setPoint(error);
+            let U = chassis.pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotors(U);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла

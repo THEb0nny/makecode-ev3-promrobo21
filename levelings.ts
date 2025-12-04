@@ -93,6 +93,8 @@ namespace levelings {
         pidRightSideLineAlignment.setDerivativeFilter(lineAlignmentRightSideKf); // Установить фильтр дифференциального регулятора для правой стороны
         pidLeftSideLineAlignment.setControlSaturation(-100, 100); // Устанавливаем ограничения левому регулятору
         pidRightSideLineAlignment.setControlSaturation(-100, 100);// Устанавливаем ограничения правому регулятору
+        pidLeftSideLineAlignment.setPoint(0); // Установить нулевую уставку регулятору
+        pidRightSideLineAlignment.setPoint(0); // Установить нулевую уставку регулятору
         pidLeftSideLineAlignment.reset(); // Сброс регулятора левой стороны
         pidRightSideLineAlignment.reset(); // Сброс регулятора правой стороны
 
@@ -115,9 +117,10 @@ namespace levelings {
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки (нахождения линии) достигнуто
             }
-            pidLeftSideLineAlignment.setPoint(errorL); pidRightSideLineAlignment.setPoint(errorR); // Передаём ошибки регуляторам
-            let uL = pidLeftSideLineAlignment.compute(dt, 0) * regulatorMultiplier; // Регулятор левой стороны
-            let uR = pidRightSideLineAlignment.compute(dt, 0) * regulatorMultiplier; // Регулятор правой стороны
+            // pidLeftSideLineAlignment.setPoint(errorL); // Передаём ошибки регуляторам
+            // pidRightSideLineAlignment.setPoint(errorR);
+            let uL = pidLeftSideLineAlignment.compute(dt, -errorL) * regulatorMultiplier; // Регулятор левой стороны
+            let uR = pidRightSideLineAlignment.compute(dt, -errorR) * regulatorMultiplier; // Регулятор правой стороны
             uL = Math.constrain(uL, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость левой стороны
             uR = Math.constrain(uR, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость правой стороны
             chassis.setSpeedsCommand(uL, uR); // Передаём управляющее воздействие на моторы
@@ -164,6 +167,7 @@ namespace levelings {
         pidLinePositioning.setGains(linePositioningKp, linePositioningKi, linePositioningKd); // Установка значений регулятору
         pidLinePositioning.setDerivativeFilter(linePositioningKf); // Установить фильтр дифференциального регулятора
         pidLinePositioning.setControlSaturation(-100, 100); // Ограничение ПИДа
+        pidLinePositioning.setPoint(0); // Установить нулевую уставку регулятору
         pidLinePositioning.reset(); // Сброс ПИДа
         
         control.timer7.reset(); // Сброс таймера
@@ -183,8 +187,8 @@ namespace levelings {
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
             }
-            pidLinePositioning.setPoint(error); // Устанавливаем ошибку в регулятор
-            let u = pidLinePositioning.compute(dt, 0); // Вычисляем и записываем значение с регулятора
+            // pidLinePositioning.setPoint(error); // Устанавливаем ошибку в регулятор
+            let u = pidLinePositioning.compute(dt, -error); // Вычисляем и записываем значение с регулятора
             u = Math.constrain(u, -linePositioningMaxSpeed, linePositioningMaxSpeed); // Ограничиваем скорость
             chassis.setSpeedsCommand(u, -u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
