@@ -33,6 +33,7 @@ namespace chassis {
         else if (deg < 0) advmotctrls.syncMotorsConfig(-speed, speed);
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
+        pidChassisSync.setPoint(0);
         pidChassisSync.reset(); // Сбросить регулятор
         let prevTime = 0; // Переменная для хранения предыдущего времени для цикла регулирования
         const startTime = control.millis(); // Стартовое время алгоритма
@@ -45,8 +46,8 @@ namespace chassis {
             let emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, 0);
+            // pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotors(U);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
@@ -89,6 +90,7 @@ namespace chassis {
         else return;
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
+        pidChassisSync.setPoint(0);
         pidChassisSync.reset(); // Сбросить регулятор
         let prevTime = 0; // Переменная для хранения предыдущего времени для цикла регулирования
         const startTime = control.millis(); // Стартовое время алгоритма
@@ -102,8 +104,8 @@ namespace chassis {
             if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) break;
             else if (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) break;
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, 0);
+            // pidChassisSync.setPoint(error);
+            let U = pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotors(U);
             if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(powers.pwrRight);
             else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
