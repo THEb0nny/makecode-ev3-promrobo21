@@ -319,7 +319,7 @@ namespace motions {
     export function steeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
         const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(steering, speed);
 
-        advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
+        // advmotctrls.syncMotorsConfig(speedLeft, speedRight); // Set motor speeds for subsequent regulation
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Setting the regulator coefficients
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Regulator limitation
@@ -336,7 +336,7 @@ namespace motions {
             let refLS = sensors.getNormalizedReflectionValue(lineSensor); // Нормализованное значение с датчика линии
             if (refLS < getLineFollowSetPoint()) break;
             let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
-            let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, speedLeft, speedRight); // Find out the error in motor speed control
             // chassis.pidChassisSync.setPoint(error); // Transfer control error to controller
             let U = chassis.pidChassisSync.compute(dt, -error); // Find out and record the control action of the regulator
             let powers = advmotctrls.getPwrSyncMotors(U); // Find out the power of motors for regulation

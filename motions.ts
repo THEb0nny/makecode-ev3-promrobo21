@@ -112,7 +112,7 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(turnRatio, speed);
-        advmotctrls.syncMotorsConfig(speedLeft, speedRight);
+        // advmotctrls.syncMotorsConfig(speedLeft, speedRight);
         
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
@@ -124,7 +124,7 @@ namespace motions {
             if (sensorsReflectionCondition(sensorsSelection, refCondition, refTreshold, refLeftLS, refRightLS)) break; // Проверка условия выхода
             let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
             let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
-            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, speedLeft, speedRight);
             // chassis.pidChassisSync.setPoint(error);
             let U = chassis.pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotors(U);

@@ -18,7 +18,6 @@ namespace chassis {
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
     export function spinTurn(deg: number, speed: number, timeOut?: number) {
-        //if (!motorsPair) return;
         if (deg == 0 || speed == 0) {
             stop(Braking.Hold);
             return;
@@ -29,8 +28,11 @@ namespace chassis {
         speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
-        if (deg > 0) advmotctrls.syncMotorsConfig(speed, -speed);
-        else if (deg < 0) advmotctrls.syncMotorsConfig(-speed, speed);
+        let vLeft = deg < 0 ? -speed : speed;
+        let vRight = deg > 0 ? -speed : speed;
+        // if (deg > 0) advmotctrls.syncMotorsConfig(speed, -speed);
+        // else if (deg < 0) advmotctrls.syncMotorsConfig(-speed, speed);
+        // else return;
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.setPoint(0);
@@ -45,7 +47,7 @@ namespace chassis {
             let eml = leftMotor.angle() - emlPrev;
             let emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
-            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
             // pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotors(U);
@@ -73,7 +75,6 @@ namespace chassis {
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
     export function pivotTurn(deg: number, speed: number, wheelPivot: WheelPivot, timeOut?: number) {
-        //if (!motorsPair) return;
         if (deg == 0 || speed == 0) {
             stop(Braking.Hold);
             return;
@@ -85,9 +86,11 @@ namespace chassis {
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
         stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
-        if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
-        else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
-        else return;
+        const vLeft = wheelPivot == WheelPivot.RightWheel ? speed : 0;
+        const vRight = wheelPivot == WheelPivot.LeftWheel ? speed : 0;
+        // if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
+        // else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
+        // else return;
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.setPoint(0);
@@ -103,7 +106,7 @@ namespace chassis {
             let emr = rightMotor.angle() - emrPrev;
             if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) break;
             else if (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) break;
-            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
             // pidChassisSync.setPoint(error);
             let U = pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotors(U);
