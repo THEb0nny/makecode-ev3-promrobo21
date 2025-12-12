@@ -1,19 +1,17 @@
 // Установить моторы в шасси и установить свойства инверсии
-// chassis.setChassisMotors(motors.mediumB, motors.mediumC, true, false);
+chassis.setChassisMotors(motors.mediumB, motors.mediumC, true, false);
 
 // Установить параметры регулирования синхронизации моторов шасси
-// chassis.setSyncRegulatorGains(0.02, 0.001, 0.5);
-
-// Установить стандартную синхронизацию моторов шасси
-// chassis.setSpeedRegulated(false);
+chassis.setSyncRegulatorGains(0.02, 0.001, 0.5);
 
 // Установить радиус колёс в шасси
-// chassis.setWheelDiametr(62.4, MeasurementUnit.Millimeters);
+chassis.setWheelDiametr(62.4);
 
 // Установить размер базы шасси
-// chassis.setBaseLength(172, MeasurementUnit.Millimeters);
+chassis.setBaseLength(172);
 
-// brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
+brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
+music.playTone(Note.C, BeatFraction.Half);
 
 // custom.functionsTune(0);
 
@@ -48,10 +46,9 @@
 // Установка сокращённых параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
 // params.setLineAlignmentShortParams(40, 0.3, 0.3, 0.5, 0.5)
 
-// brick.buttonEnter.pauseUntil(ButtonEvent.Bumped);
 // sensors.searchRgbMinMaxColorSensors(sensors.color4);
 
-// chassis.spinTurn(90, 50);
+chassis.rampDistMove(35, 70, 70, 200, 50, 50);
 
 // chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
 

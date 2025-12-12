@@ -28,14 +28,11 @@ namespace chassis {
         speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
-        let vLeft = deg < 0 ? -speed : speed;
-        let vRight = deg > 0 ? -speed : speed;
-        // if (deg > 0) advmotctrls.syncMotorsConfig(speed, -speed);
-        // else if (deg < 0) advmotctrls.syncMotorsConfig(-speed, speed);
-        // else return;
+        const vLeft = deg < 0 ? -speed : speed;
+        const vRight = deg > 0 ? -speed : speed;
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
-        pidChassisSync.setPoint(0);
+        pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить регулятор
         let prevTime = 0; // Переменная для хранения предыдущего времени для цикла регулирования
         const startTime = control.millis(); // Стартовое время алгоритма
@@ -48,9 +45,8 @@ namespace chassis {
             let emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
             let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
-            // pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotors(U);
+            let u = pidChassisSync.compute(dt, -error);
+            let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
@@ -88,12 +84,9 @@ namespace chassis {
         stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
         const vLeft = wheelPivot == WheelPivot.RightWheel ? speed : 0;
         const vRight = wheelPivot == WheelPivot.LeftWheel ? speed : 0;
-        // if (wheelPivot == WheelPivot.LeftWheel) advmotctrls.syncMotorsConfig(0, speed);
-        // else if (wheelPivot == WheelPivot.RightWheel) advmotctrls.syncMotorsConfig(speed, 0);
-        // else return;
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
-        pidChassisSync.setPoint(0);
+        pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить регулятор
         let prevTime = 0; // Переменная для хранения предыдущего времени для цикла регулирования
         const startTime = control.millis(); // Стартовое время алгоритма
@@ -107,9 +100,8 @@ namespace chassis {
             if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) break;
             else if (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) break;
             let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
-            // pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotors(U);
+            let u = pidChassisSync.compute(dt, -error);
+            let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
             if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(powers.pwrRight);
             else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
             control.pauseUntilTime(currTime, 1);

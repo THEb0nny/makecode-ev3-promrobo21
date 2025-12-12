@@ -230,6 +230,7 @@ namespace chassis {
     //% group="Синхронизированное движение с ускорениями"
     //% blockHidden="true"
     export function rampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+        // ToDo
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
@@ -251,12 +252,11 @@ namespace chassis {
             let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
             let out = advmotctrls.accTwoEnc(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
-            // let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
-            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
-            // pidChassisSync.setPoint(error);
-            let U = pidChassisSync.compute(dt, -error); // Find out and record the control action of the regulator
-            // let powers = advmotctrls.getPwrSyncMotors(U);
-            let powers = advmotctrls.getPwrSyncMotorsAtPwr(U, out.pwr, out.pwr);
+            let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
+            // let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
+            let u = pidChassisSync.compute(dt, -error); // Find out and record the control action of the regulator
+            let powers = advmotctrls.getPwrSyncMotors(u);
+            // let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwr, out.pwr);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }

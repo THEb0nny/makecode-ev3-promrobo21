@@ -125,9 +125,8 @@ namespace motions {
             let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
             let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, speedLeft, speedRight);
-            // chassis.pidChassisSync.setPoint(error);
-            let U = chassis.pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotors(U);
+            let u = chassis.pidChassisSync.compute(dt, -error);
+            let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, speedLeft, speedRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
@@ -271,9 +270,8 @@ namespace motions {
                 if (lineIsFound && refLS >= 80) break; // Нашли белую часть посли линии
             }
             let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            // chassis.pidChassisSync.setPoint(error);
-            let U = chassis.pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotors(U);
+            let u = chassis.pidChassisSync.compute(dt, -error);
+            let powers = advmotctrls.getPwrSyncMotors(u);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }

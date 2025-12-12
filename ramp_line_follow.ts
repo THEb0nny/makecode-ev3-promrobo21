@@ -35,10 +35,10 @@ namespace motions {
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
-            pidLineFollow.setPoint(error); // Передать ошибку регулятору
-            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, out.pwr); // Команда моторам
-            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
+            // pidLineFollow.setPoint(error); // Передать ошибку регулятору
+            let u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            chassis.regulatorSteering(u, out.pwr); // Команда моторам
+            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
         actionAfterMotion(braking); // Действие после алгоритма движения
@@ -90,6 +90,7 @@ namespace motions {
         pidLineFollow.setGains(rampLineFollowToDistance2SensorKp, rampLineFollowToDistance2SensorKi, rampLineFollowToDistance2SensorKd); // Установка коэффицентов ПИД регулятора
         pidLineFollow.setDerivativeFilter(rampLineFollowToDistance2SensorKf); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
@@ -111,10 +112,9 @@ namespace motions {
             let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             let error = refLeftLS - refRightLS; // Ошибка регулирования
-            pidLineFollow.setPoint(error); // Передать ошибку регулятору
-            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, out.pwr); // Команда моторам
-            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
+            let u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            chassis.regulatorSteering(u, out.pwr); // Команда моторам
+            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
@@ -163,6 +163,7 @@ namespace motions {
         pidLineFollow.setGains(rampLineFollowCrossIntersection2SensorKp, rampLineFollowCrossIntersection2SensorKi, rampLineFollowCrossIntersection2SensorKd); // Установка коэффицентов ПИД регулятора
         pidLineFollow.setDerivativeFilter(rampLineFollowCrossIntersection2SensorKf); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+        pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
@@ -184,10 +185,9 @@ namespace motions {
             let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (out.isDone && refLeftLS < getLineFollowRefThreshold() && refRightLS < getLineFollowRefThreshold()) break; // Проверка условия окончания движения на расстояние и на перекрёсток
             let error = refLeftLS - refRightLS; // Ошибка регулирования
-            pidLineFollow.setPoint(error); // Передать ошибку регулятору
-            let U = pidLineFollow.compute(dt, 0); // Управляющее воздействие
-            chassis.regulatorSteering(U, out.pwr); // Команда моторам
-            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, U, dt);
+            let u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            chassis.regulatorSteering(u, out.pwr); // Команда моторам
+            if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
