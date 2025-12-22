@@ -102,8 +102,9 @@ namespace chassis {
             let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
             let u = pidChassisSync.compute(dt, -error);
             let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
-            if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(powers.pwrRight);
-            else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
+            // if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(powers.pwrRight);
+            // else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
+            setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
         stop(Braking.Hold); // Удерживание при торможении
