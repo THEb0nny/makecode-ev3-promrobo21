@@ -124,7 +124,7 @@ namespace chassis {
         if (maxSpeed == 0 || totalDist == 0) {
             stop(Braking.Hold);
             return;
-        } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) || Math.abs(finishSpeed) > Math.abs(maxSpeed) || 
+        } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) || Math.abs(finishSpeed) > Math.abs(maxSpeed) ||
             totalDist < 0 || accelDist < 0 || decelDist < 0 || totalDist < accelDist + decelDist) {
             stop(Braking.Hold);
             console.log("Error: parameters passed incorrectly in rampLinearDistMove!");
@@ -236,7 +236,7 @@ namespace chassis {
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
         // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
-        advmotctrls.accTwoEncConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.accTwoEncLinearMotionConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
@@ -250,7 +250,7 @@ namespace chassis {
             let dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-            let out = advmotctrls.accTwoEnc(eml, emr);
+            let out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
             // let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);

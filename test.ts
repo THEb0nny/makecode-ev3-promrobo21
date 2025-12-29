@@ -12,6 +12,7 @@ chassis.setBaseLength(172);
 
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(Note.C, BeatFraction.Half);
+
 // chassis.pivotTurn(90, 50, WheelPivot.LeftWheel);
 // pause(1000);
 // chassis.pivotTurn(90, 50, WheelPivot.RightWheel);
@@ -52,13 +53,16 @@ music.playTone(Note.C, BeatFraction.Half);
 
 // sensors.searchRgbMinMaxColorSensors(sensors.color4);
 
-chassis.rampDistMove(35, 70, 70, 200, 50, 50);
+// chassis.rampDistMove(30, 70, 70, 200, 50, 50);
 
 // chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
 
 // motions.lineFollowToCrossIntersection(AfterLineMotion.HoldStop, { speed: 60, Kp: 0.5, Kd: 0.5 });
 
-// chassis.rampLinearDistMove(25, 50, 10, 300, 100, 100);
+// chassis.rampLinearDistMove(30, 70, 25, 500, 100, 200);
+// pause(1000);
+// chassis.rampLinearDistMove(-30, -70, -25, 500, 100, 200);
+
 // chassis.accelStartLinearDistMove(25, 50, 150, 300);
 // chassis.stop(true);
 // chassis.steeringCommand(0, 50);
