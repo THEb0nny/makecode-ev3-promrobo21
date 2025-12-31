@@ -25,28 +25,31 @@ namespace chassis {
             console.log("Error: the rotation speed relative to the center is negative!");
             control.assert(false, 7);
         }
+
         speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
         const vLeft = deg < 0 ? -speed : speed;
         const vRight = deg > 0 ? -speed : speed;
+
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить регулятор
-        let prevTime = 0; // Переменная для хранения предыдущего времени для цикла регулирования
+        
+        let prevTime = control.millis(); // Переменная для хранения предыдущего времени для цикла регулирования
         const startTime = control.millis(); // Стартовое время алгоритма
         while (true) {
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
+            const currTime = control.millis();
+            const dt = currTime - prevTime;
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
-            let eml = leftMotor.angle() - emlPrev;
-            let emr = rightMotor.angle() - emrPrev;
+            const eml = leftMotor.angle() - emlPrev;
+            const emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
-            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
-            let u = pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
+            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
+            const u = pidChassisSync.compute(dt, -error);
+            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
@@ -78,30 +81,33 @@ namespace chassis {
             console.log("Error: the angle of rotation relative to the wheel is negative!");
             control.assert(false, 8);
         }
+
         speed = Math.clamp(-100, 100, speed >> 0); // Ограничиваем скорость от -100 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
         stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
         const vLeft = wheelPivot == WheelPivot.RightWheel ? speed : 0;
         const vRight = wheelPivot == WheelPivot.LeftWheel ? speed : 0;
+
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить регулятор
-        let prevTime = 0; // Переменная для хранения предыдущего времени для цикла регулирования
+
+        let prevTime = control.millis(); // Переменная для хранения предыдущего времени для цикла регулирования
         const startTime = control.millis(); // Стартовое время алгоритма
         while (true) {
-            let currTime = control.millis();
-            let dt = currTime - prevTime;
+            const currTime = control.millis();
+            const dt = currTime - prevTime;
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
-            let eml = leftMotor.angle() - emlPrev;
-            let emr = rightMotor.angle() - emrPrev;
+            const eml = leftMotor.angle() - emlPrev;
+            const emr = rightMotor.angle() - emrPrev;
             if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) break;
             else if (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) break;
-            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
-            let u = pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
+            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
+            const u = pidChassisSync.compute(dt, -error);
+            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
             // if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(powers.pwrRight);
             // else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);

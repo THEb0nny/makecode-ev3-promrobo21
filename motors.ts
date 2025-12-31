@@ -52,21 +52,21 @@ namespace motors {
 
         if (debug) console.log(`Start motors.setPosition(${pos})`);
         
-        const startTime = control.millis(); // Переменная хранения времени старта алгоритма
         let prevDebugPrintTime = 0;
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
+        const startTime = control.millis(); // Переменная хранения времени старта алгоритма
         while (true) {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             if (regMotorTimeOut > 0 && currTime - startTime >= regMotorTimeOut) break; // Таймаут
-            let currentAngle = motor.angle();
-            let error = pos - currentAngle; // Расчитываем ошибку положения
+            const currentAngle = motor.angle();
+            const error = pos - currentAngle; // Расчитываем ошибку положения
             if (Math.abs(error) <= errorThreshold && Math.abs(motor.speed()) <= minSpeedThreshold) break; // Угол был достигнут
             // pidRegMotor.setPoint(error); // Передать ошибку регулятору
-            let U = pidRegMotor.compute(dt, -error); // Управляющее воздействие
-            U = Math.constrain(U, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
-            motor.run(U); // Установить мотору управляющее воздействие
+            let u = pidRegMotor.compute(dt, -error); // Управляющее воздействие
+            u = Math.constrain(u, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
+            motor.run(u); // Установить мотору управляющее воздействие
             if (debug && currTime - prevDebugPrintTime >= 10) {
                 // brick.clearScreen();
                 // brick.printString(`angle: ${motor.angle()}`, 1);
@@ -74,7 +74,7 @@ namespace motors {
                 // brick.printString(`U: ${U}`, 3);
                 // console.log(`millis: ${control.millis() - startTime}, angle: ${currentAngle}, error: ${error}, U: ${U}`);
                 control.runInParallel(function() {
-                    console.log(`${currentAngle}, ${error}, ${U}`);
+                    console.log(`${currentAngle}, ${error}, ${u}`);
                     prevDebugPrintTime = control.millis();
                 })
             }

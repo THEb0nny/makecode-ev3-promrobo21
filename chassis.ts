@@ -13,7 +13,7 @@ namespace chassis {
     //% weight="89"
     //% group="Move"
     export function regulatorSteering(u: number, speed: number) {
-        let mLeft = speed + u, mRight = speed - u;
+        const mLeft = speed + u, mRight = speed - u;
         setSpeedsCommand(mLeft, mRight);
     }
 
@@ -61,6 +61,7 @@ namespace chassis {
             music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
+
         const mRotCalc = Math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
         syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, braking);
     }
@@ -94,7 +95,6 @@ namespace chassis {
         }
 
         const mRotCalc = Math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
-        
         syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -244,19 +244,19 @@ namespace chassis {
         
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
 
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-            let out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
+            const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
-            let error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
-            // let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
-            let u = pidChassisSync.compute(dt, -error); // Find out and record the control action of the regulator
-            let powers = advmotctrls.getPwrSyncMotors(u);
-            // let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwr, out.pwr);
+            const error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
+            // const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
+            const u = pidChassisSync.compute(dt, -error); // Find out and record the control action of the regulator
+            const powers = advmotctrls.getPwrSyncMotors(u);
+            // const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwr, out.pwr);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }

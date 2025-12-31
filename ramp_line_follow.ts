@@ -23,20 +23,20 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-            let out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
+            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             // console.log(`out.pwr: ${out.pwr}`);
             if (out.isDone) break; // Проверка условия окончания
-            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            let error = refLeftLS - refRightLS; // Ошибка регулирования
+            const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            const error = refLeftLS - refRightLS; // Ошибка регулирования
             // pidLineFollow.setPoint(error); // Передать ошибку регулятору
-            let u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
@@ -101,18 +101,18 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-            let out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
+            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
-            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            let error = refLeftLS - refRightLS; // Ошибка регулирования
-            let u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            const error = refLeftLS - refRightLS; // Ошибка регулирования
+            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
@@ -174,18 +174,18 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
-            let out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
-            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
+            const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (out.isDone && refLeftLS < getLineFollowRefThreshold() && refRightLS < getLineFollowRefThreshold()) break; // Проверка условия окончания движения на расстояние и на перекрёсток
-            let error = refLeftLS - refRightLS; // Ошибка регулирования
-            let u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const error = refLeftLS - refRightLS; // Ошибка регулирования
+            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла

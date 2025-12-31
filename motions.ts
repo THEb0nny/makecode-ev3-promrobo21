@@ -114,19 +114,19 @@ namespace motions {
         const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(turnRatio, speed);
         // advmotctrls.syncMotorsConfig(speedLeft, speedRight);
         
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (sensorsReflectionCondition(sensorsSelection, refCondition, refTreshold, refLeftLS, refRightLS)) break; // Проверка условия выхода
-            let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
-            let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
-            let error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, speedLeft, speedRight);
-            let u = chassis.pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotorsAtPwr(u, speedLeft, speedRight);
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
+            const emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
+            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, speedLeft, speedRight);
+            const u = chassis.pidChassisSync.compute(dt, -error);
+            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, speedLeft, speedRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
@@ -198,13 +198,13 @@ namespace motions {
 
         let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
         let lineIsFound = false; // Переменная - флажок о том, что чёрная линия найдена
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
         while (true) { // Поворачиваем изначально, чтобы повернуться от линии
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время выполнения итерации цикла
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время выполнения итерации цикла
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
-            let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
-            let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
+            const emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             if (!preTurnIsDone && (Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) preTurnIsDone = true; // Если предвариательный поворот ещё не выполнен, то проверяем условия
             if (preTurnIsDone) { // Если предварительный поворот выполнен
                 const rgbCS = sensor.rgbRaw(); // Получаем от сенсора RGB
@@ -213,10 +213,10 @@ namespace motions {
                 if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
             }
-            let error = advmotctrls.getErrorSyncMotors(eml, emr);
+            const error = advmotctrls.getErrorSyncMotors(eml, emr);
             // chassis.pidChassisSync.setPoint(error);
-            let U = chassis.pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotors(U);
+            const u = chassis.pidChassisSync.compute(dt, -error);
+            const powers = advmotctrls.getPwrSyncMotors(u);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
         }
@@ -256,22 +256,22 @@ namespace motions {
 
         let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
         let lineIsFound = false; // Переменная - флажок о том, что чёрная линия найдена
-        let prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        let prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
         while (true) { // Поворачиваем изначально, чтобы повернуться от линии
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время выполнения итерации цикла
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время выполнения итерации цикла
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
-            let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
-            let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
+            const emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             if (!preTurnIsDone && (Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) preTurnIsDone = true; // Если предвариательный поворот ещё не выполнен, то проверяем условия
             if (preTurnIsDone) { // Если предварительный поворот выполнен
-                let refLS = sensors.getNormalizedReflectionValue(sensorSide); // Нормализованное значение с датчика линии
+                const refLS = sensors.getNormalizedReflectionValue(sensorSide); // Нормализованное значение с датчика линии
                 if (!lineIsFound && refLS <= 15) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && refLS >= 80) break; // Нашли белую часть посли линии
             }
-            let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            let u = chassis.pidChassisSync.compute(dt, -error);
-            let powers = advmotctrls.getPwrSyncMotors(u);
+            const error = advmotctrls.getErrorSyncMotors(eml, emr);
+            const u = chassis.pidChassisSync.compute(dt, -error);
+            const powers = advmotctrls.getPwrSyncMotors(u);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
