@@ -12,8 +12,12 @@ chassis.setBaseLength(172);
 
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
-chassis.rampSpinTurn(90, 30, 80, 30, 30);
-music.playTone(262, music.beat(BeatFraction.Half));
+
+// chassis.rampSpinTurn(90, 30, 80, 30, 30);
+
+// chassis.rampPivotTurn(WheelPivot.LeftWheel, 90, 40, 80);
+// pause(1000);
+// chassis.rampPivotTurn(WheelPivot.LeftWheel, 90, -40, -80, 30, 30);
 
 // chassis.pivotTurn(90, 50, WheelPivot.LeftWheel);
 // pause(1000);
