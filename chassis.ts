@@ -254,7 +254,7 @@ namespace chassis {
             if (out.isDone) break; // Проверка условия окончания
             const error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
             // const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
-            const u = pidChassisSync.compute(dt, -error); // Find out and record the control action of the regulator
+            const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
             const powers = advmotctrls.getPwrSyncMotors(u);
             // const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwr, out.pwr);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);

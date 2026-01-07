@@ -336,7 +336,7 @@ namespace motions {
             if (refLS < getLineFollowSetPoint()) break;
             const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
             const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, speedLeft, speedRight); // Find out the error in motor speed control
-            const u = chassis.pidChassisSync.compute(dt, -error); // Find out and record the control action of the regulator
+            const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
             const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, speedLeft, speedRight); // Find out the power of motors for regulation
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
             control.pauseUntilTime(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
@@ -361,7 +361,7 @@ namespace motions {
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             const error = refLeftLS - refRightLS; // Ошибка регулирования
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, speed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
@@ -416,7 +416,7 @@ namespace motions {
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (refLeftLS < getLineFollowRefThreshold() && refRightLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток
             const error = refLeftLS - refRightLS; // Ошибка регулирования
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowCrossIntersection2SensorSpeed); // Команда моторам
             // console.log(`refLS: ${refLeftLS} ${refRightLS}, error: ${error}, u: ${u}`);
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
@@ -493,7 +493,6 @@ namespace motions {
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
         music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
-        let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
             const currTime = control.millis(); // Текущее время
@@ -501,10 +500,11 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let error = 0; // Переменная для хранения ошибки регулирования
             if (lineLocation == LineLocation.Inside) error = getLineFollowSetPoint() - refRightLS; // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = refRightLS - getLineFollowSetPoint(); // Ошибка регулирования
             if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refLeftLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowLeftIntersectionSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
@@ -549,7 +549,6 @@ namespace motions {
         steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowRightIntersectionSpeed);
         music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
-        let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
             const currTime = control.millis(); // Текущее время
@@ -557,10 +556,11 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let error = 0; // Переменная для хранения ошибки регулирования
             if (lineLocation == LineLocation.Inside) error = refLeftLS - getLineFollowSetPoint(); // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = getLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
             if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refRightLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowRightIntersectionSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
@@ -617,7 +617,7 @@ namespace motions {
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             const error = refLeftLS - refRightLS; // Ошибка регулирования
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowToDistance2SensorSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
@@ -695,7 +695,6 @@ namespace motions {
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
         music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
-        let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Пока моторы не достигнули градусов вращения
             const currTime = control.millis(); // Текущее время
@@ -705,9 +704,10 @@ namespace motions {
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let error = 0; // Переменная для хранения ошибки регулирования
             if (lineLocation == LineLocation.Inside) error = refLeftLS - getLineFollowSetPoint(); // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = getLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowToDistanceLeftSensorSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
@@ -756,7 +756,6 @@ namespace motions {
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionSpeed);
         music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
-        let error = 0; // Переменная для хранения ошибки регулирования
         let prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
             const currTime = control.millis(); // Текущее время
@@ -766,9 +765,10 @@ namespace motions {
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            let error = 0; // Переменная для хранения ошибки регулирования
             if (lineLocation == LineLocation.Inside) error = getLineFollowSetPoint() - refRightLS; // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = refRightLS - getLineFollowSetPoint(); // Ошибка регулирования
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowToDistanceRightSensorSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла

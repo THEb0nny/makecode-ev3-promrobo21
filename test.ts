@@ -11,7 +11,9 @@ chassis.setWheelDiametr(62.4);
 chassis.setBaseLength(172);
 
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
-music.playTone(Note.C, BeatFraction.Half);
+music.playTone(262, music.beat(BeatFraction.Half));
+chassis.rampSpinTurn(90, 30, 80, 30, 30);
+music.playTone(262, music.beat(BeatFraction.Half));
 
 // chassis.pivotTurn(90, 50, WheelPivot.LeftWheel);
 // pause(1000);

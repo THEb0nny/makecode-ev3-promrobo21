@@ -125,7 +125,7 @@ namespace motions {
             const eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
             const emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, speedLeft, speedRight);
-            const u = chassis.pidChassisSync.compute(dt, -error);
+            const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, speedLeft, speedRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             if (debug) { // Отладка
@@ -215,7 +215,7 @@ namespace motions {
             }
             const error = advmotctrls.getErrorSyncMotors(eml, emr);
             // chassis.pidChassisSync.setPoint(error);
-            const u = chassis.pidChassisSync.compute(dt, -error);
+            const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
@@ -270,7 +270,7 @@ namespace motions {
                 if (lineIsFound && refLS >= 80) break; // Нашли белую часть посли линии
             }
             const error = advmotctrls.getErrorSyncMotors(eml, emr);
-            const u = chassis.pidChassisSync.compute(dt, -error);
+            const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла

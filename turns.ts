@@ -25,10 +25,9 @@ namespace chassis {
             console.log("Error: the rotation speed relative to the center is negative!");
             control.assert(false, 7);
         }
-
         speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
-        const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
+        const calcMotRot = Math.round((deg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
         const vLeft = deg < 0 ? -speed : speed;
         const vRight = deg > 0 ? -speed : speed;
 
@@ -44,11 +43,10 @@ namespace chassis {
             const dt = currTime - prevTime;
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
-            const eml = leftMotor.angle() - emlPrev;
-            const emr = rightMotor.angle() - emrPrev;
+            const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
             const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
-            const u = pidChassisSync.compute(dt, -error);
+            const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
@@ -73,7 +71,7 @@ namespace chassis {
     //% weight="98"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function pivotTurn(deg: number, speed: number, wheelPivot: WheelPivot, timeOut?: number) {
+    export function pivotTurn(wheelPivot: WheelPivot, deg: number, speed: number, timeOut?: number) {
         if (deg == 0 || speed == 0) {
             stop(Braking.Hold);
             return;
@@ -82,10 +80,10 @@ namespace chassis {
             control.assert(false, 8);
         }
 
+        stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
         speed = Math.clamp(-100, 100, speed >> 0); // Ограничиваем скорость от -100 до 100 и отсекаем дробную часть
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
-        stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
         const vLeft = wheelPivot == WheelPivot.RightWheel ? speed : 0;
         const vRight = wheelPivot == WheelPivot.LeftWheel ? speed : 0;
 
@@ -101,12 +99,11 @@ namespace chassis {
             const dt = currTime - prevTime;
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
-            const eml = leftMotor.angle() - emlPrev;
-            const emr = rightMotor.angle() - emrPrev;
+            const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) break;
             else if (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) break;
             const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
-            const u = pidChassisSync.compute(dt, -error);
+            const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
             // if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(powers.pwrRight);
             // else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
@@ -130,8 +127,8 @@ namespace chassis {
      * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisRampSpinTurn"
-    //% block="chassis smooth spin turn $deg\\° from vMin = $vMin\\% vMax = $vMax\\% relative to center wheel axis||at accel deg $accelDeg| decel $decelDeg"
-    //% block.loc.ru="плавный поворот шасси на $deg\\° с vMin = $vMin\\% vMax = $vMax\\% при относительно центра оси колёс||при угле ускорения $accelDeg|замедления $decelDeg"
+    //% block="chassis smooth spin turn $deg\\° from min $vMin\\% макс $vMax\\% relative to center wheel axis||at accel deg $accelDeg| decel $decelDeg"
+    //% block.loc.ru="плавный поворот шасси на $deg\\° с мин $vMin\\% макс $vMax\\% при относительно центра оси колёс||при угле ускорения $accelDeg|замедления $decelDeg"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% vMin.shadow="motorSpeedPicker"
@@ -139,7 +136,7 @@ namespace chassis {
     //% weight="89" blockGap="8"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты с ускорениями"
-    function rampSpinTurn(deg: number, vMin: number, vMax: number, accelDeg?: number, decelDeg?: number, timeOut?: number) {
+    export function rampSpinTurn(deg: number, vMin: number, vMax: number, accelDeg?: number, decelDeg?: number, timeOut?: number) {
         if (deg == 0 || vMax == 0) {
             stop(Braking.Hold);
             return;
@@ -166,13 +163,13 @@ namespace chassis {
             accelDeg *= ratio;
             decelDeg *= ratio;
         }
-        const accelCalcMotRot = Math.round(accelDeg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота для ускорения
-        const decelCalcMotRot = Math.round(decelDeg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота для замедления
-        const calcMotRot = Math.round(absDeg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота общего угла
+        const accelCalcMotRot = Math.round((accelDeg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота для ускорения
+        const decelCalcMotRot = Math.round((decelDeg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота для замедления
+        const totalCalcMotRot = Math.round((absDeg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота общего угла
         const vLeftMax = deg > 0 ? vMax : -vMax;
         const vRightMax = deg > 0 ? -vMax : vMax;
 
-        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, calcMotRot);
+        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, totalCalcMotRot);
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
@@ -188,9 +185,9 @@ namespace chassis {
             const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncComplexMotionCompute(eml, emr);
             if (out.isDoneLeft || out.isDoneRight
-                || ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot))) break;
+                || ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(totalCalcMotRot))) break;
             const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrLeft, out.pwrRight);
-            const u = pidChassisSync.compute(dt, -error);
+            const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwrLeft, out.pwrRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
@@ -213,7 +210,7 @@ namespace chassis {
     //% weight="88"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты с ускорениями"
-    function rampPivotTurn(deg: number, minSpeed: number, maxSpeed: number, wheelPivot: WheelPivot) {
+    function rampPivotTurn(wheelPivot: WheelPivot, deg: number, minSpeed: number, maxSpeed: number) {
         return;
     }
 

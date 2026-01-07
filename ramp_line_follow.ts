@@ -36,7 +36,7 @@ namespace motions {
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             const error = refLeftLS - refRightLS; // Ошибка регулирования
             // pidLineFollow.setPoint(error); // Передать ошибку регулятору
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
@@ -112,7 +112,7 @@ namespace motions {
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             const error = refLeftLS - refRightLS; // Ошибка регулирования
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
@@ -185,7 +185,7 @@ namespace motions {
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (out.isDone && refLeftLS < getLineFollowRefThreshold() && refRightLS < getLineFollowRefThreshold()) break; // Проверка условия окончания движения на расстояние и на перекрёсток
             const error = refLeftLS - refRightLS; // Ошибка регулирования
-            const u = pidLineFollow.compute(dt, -error); // Управляющее воздействие
+            const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла

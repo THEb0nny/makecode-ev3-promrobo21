@@ -137,7 +137,7 @@ namespace chassis {
             const errorR = calcMotRot * -1 - rMotEnc; // Ошибки регулирования правой стороны
             const error = errorL - errorR; // Расчитываем общую ошибку
             pidSmartTurns.setPoint(error); // Передаём ошибку регулятору
-            let u = pidSmartTurns.compute(dt, 0); // Вычисляем и записываем значение с регулятора
+            let u = pidSmartTurns.compute(dt == 0 ? 1 : dt, 0); // Вычисляем и записываем значение с регулятора
             u = Math.constrain(u, -smartSpinTurnSpeed, smartSpinTurnSpeed); // Ограничение скорости
             if (!isTurned && Math.abs(error) <= smartTurnConditionErrDifference && Math.abs(u) <= smartTurnConditionRegDifference) { // Если почти повернулись до конца при маленькой ошибке и маленькой мощности регулятора
                 isTurned = true; // Повернулись до нужного градуса
@@ -213,7 +213,7 @@ namespace chassis {
             const error = calcMotRot - motEnc; // Ошибка регулирования
             if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartPivotTurnTimeOut) break; // Дорегулируемся
             pidSmartTurns.setPoint(error); // Передаём ошибку регулятору
-            let u = pidSmartTurns.compute(dt, 0); // Записываем в переменную управляющее воздействие регулятора
+            let u = pidSmartTurns.compute(dt == 0 ? 1 : dt, 0); // Записываем в переменную управляющее воздействие регулятора
             u = Math.constrain(u, -smartPivotTurnSpeed, smartPivotTurnSpeed); // Ограничить скорость по входному параметру
             if (!isTurned && Math.abs(error) <= smartTurnConditionErrDifference && Math.abs(u) <= smartTurnConditionRegDifference) { // Если почти повернулись до конца
                 isTurned = true; // Повернулись до нужного градуса

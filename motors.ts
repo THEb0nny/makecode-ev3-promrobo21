@@ -62,7 +62,7 @@ namespace motors {
             const error = pos - currentAngle; // Расчитываем ошибку положения
             if (Math.abs(error) <= errorThreshold && Math.abs(motor.speed()) <= minSpeedThreshold) break; // Угол был достигнут
             // pidRegMotor.setPoint(error); // Передать ошибку регулятору
-            let u = pidRegMotor.compute(dt, -error); // Управляющее воздействие
+            let u = pidRegMotor.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             u = Math.constrain(u, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
             motor.run(u); // Установить мотору управляющее воздействие
             if (debug && currTime - prevDebugPrintTime >= 10) {

@@ -103,7 +103,7 @@ namespace levelings {
         const regulatorMultiplier = (lineLocation == VerticalLineLocation.Front ? -1 : 1); // MovementOnLine.Front - линия спереди, а MovementOnLine.Backword - назад
         
         let isOnLine = false; // Переменная флажок, что робот на линии датчиками для включения даймера дорегулирования
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (control.timer7.millis() < timeOut) { // Цикл работает пока время не вышло
             let currTime = control.millis(); // Текущее время
             let dt = currTime - prevTime; // Время за которое выполнился цикл
@@ -119,8 +119,8 @@ namespace levelings {
             }
             // pidLeftSideLineAlignment.setPoint(errorL); // Передаём ошибки регуляторам
             // pidRightSideLineAlignment.setPoint(errorR);
-            let uL = pidLeftSideLineAlignment.compute(dt, -errorL) * regulatorMultiplier; // Регулятор левой стороны
-            let uR = pidRightSideLineAlignment.compute(dt, -errorR) * regulatorMultiplier; // Регулятор правой стороны
+            let uL = pidLeftSideLineAlignment.compute(dt == 0 ? 1 : dt, -errorL) * regulatorMultiplier; // Регулятор левой стороны
+            let uR = pidRightSideLineAlignment.compute(dt == 0 ? 1 : dt, -errorR) * regulatorMultiplier; // Регулятор правой стороны
             uL = Math.constrain(uL, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость левой стороны
             uR = Math.constrain(uR, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость правой стороны
             chassis.setSpeedsCommand(uL, uR); // Передаём управляющее воздействие на моторы
@@ -173,22 +173,22 @@ namespace levelings {
         control.timer7.reset(); // Сброс таймера
         const timeOut = (regTime > linePositioningTimeOut ? regTime : linePositioningTimeOut); // Максимальное время регулирования для защиты
         let isOnLine = false; // Переменная флажок для включения даймера дорегулирования
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (control.timer7.millis() < linePositioningTimeOut) { // Пока время не вышло
             let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             if (isOnLine && control.timer8.millis() >= regTime) break; // Условие выхода из цикла при дорегулировании
-            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-            let error = refLeftLS - refRightLS; // Находим ошибку
+            const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            const error = refLeftLS - refRightLS; // Находим ошибку
             if (!isOnLine && Math.abs(error) <= motions.getLineFollowSetPoint()) { // Включаем таймер дорегулирования при достежении ошибки меньше порогового значения
                 isOnLine = true; // Переменная флажок, о начале дорегулирования
                 control.timer8.reset(); // Сброс таймера дорегулирования
                 music.playToneInBackground(294, 100); // Сигнал о том, что пороговое значение ошибки достигнуто
             }
             // pidLinePositioning.setPoint(error); // Устанавливаем ошибку в регулятор
-            let u = pidLinePositioning.compute(dt, -error); // Вычисляем и записываем значение с регулятора
+            let u = pidLinePositioning.compute(dt == 0 ? 1 : dt, -error); // Вычисляем и записываем значение с регулятора
             u = Math.constrain(u, -linePositioningMaxSpeed, linePositioningMaxSpeed); // Ограничиваем скорость
             chassis.setSpeedsCommand(u, -u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
@@ -236,14 +236,14 @@ namespace levelings {
         let encLeftMot1 = 0, encLeftMot2 = 0, encRightMot1 = 0, encRightMot2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
         let a = 0, b = distanceBetweenLineSensors, c = 0;
         chassis.regulatorSteering(0, speed); // Команда двигаться вперёд
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         // Первая часть - датчик, который замечает линию первым
         while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (refLeftLS <= motions.getLineRefThreshold()) { // Левый датчик первый нашёл линию
                 firstSide = "LEFT_SIDE";
                 encRightMot1 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол
@@ -258,13 +258,13 @@ namespace levelings {
             control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из первого цикла
-        prevTime = 0; // Переменная предыдущего времения для цикла регулирования
+        prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
         while (true) { // Ждём, чтобы датчик с другой стороны нашёл линию
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.millis(); // Текущее время
+            const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            let refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-            let refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+            const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+            const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (firstSide == "LEFT_SIDE") {
                 if (refRightLS <= motions.getLineRefThreshold()) { // Левый датчик нашёл линию
                     encRightMot2 = chassis.rightMotor.angle() - rMotEncPrev; // Считываем угол по новой
