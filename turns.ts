@@ -2,39 +2,39 @@ namespace chassis {
 
     /**
      * Синхронизированный поворот шасси относительно центра на нужный угол с определенной скоростью.
-     * Например, если градусов > 0, то робот будет поворачиваться вправо, а если градусов < 0, то влево.
-     * Скорость должна быть положительной!
+     * Для вращения вправо устанавливается положительный угол deg, а влево - отрицательный.
+     * Скорость v всегда должна быть положительной (отрицательное значение будет взято по модулю).
      * Если указать timeOut, тогда после  указанного времени в мсек алгоритм прервётся, например, если робот застрял.
      * @param deg угол вращения в градусах, eg: 90
-     * @param speed скорость поворота, eg: 50
+     * @param v скорость поворота, eg: 50
      * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisSpinTurn"
-    //% block="chassis spin turn $deg\\° at $speed\\% relative to center wheel axis||timeout $timeOut ms"
-    //% block.loc.ru="поворот шасси на $deg\\° с $speed\\% относительно центра оси колёс||таймаут $timeOut мс"
+    //% block="chassis spin turn $deg\\° at $v\\% relative to center wheel axis||timeout $timeOut ms"
+    //% block.loc.ru="поворот шасси на $deg\\° с $v\\% относительно центра оси колёс||таймаут $timeOut мс"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% v.shadow="motorSpeedPicker"
     //% weight="99" blockGap="8"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function spinTurn(deg: number, speed: number, timeOut?: number) {
-        if (deg == 0 || speed == 0) {
+    export function spinTurn(deg: number, v: number, timeOut?: number) {
+        if (deg == 0 || v == 0) {
             stop(Braking.Hold);
             return;
-        } else if (speed < 0) {
-            console.log("Error: the rotation speed relative to the center is negative!");
-            control.assert(false, 7);
+        }
+        if (v < 0) {
+            console.log(`Warning: v is negative (${v}). Using absolute value.`);
         }
 
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
         
-        speed = Math.clamp(0, 100, speed >> 0); // Ограничиваем скорость от 0 до 100 и отсекаем дробную часть
+        v = Math.clamp(0, 100, Math.abs(v) >> 0); // Берём модуль скорости, ограничиваем от 0 до 100 и отсекаем дробную часть
         
         const calcMotRot = Math.round((deg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
         
-        const vLeft = deg < 0 ? -speed : speed;
-        const vRight = deg > 0 ? -speed : speed;
+        const vLeft = deg < 0 ? -v : v;
+        const vRight = deg > 0 ? -v : v;
 
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
@@ -61,41 +61,43 @@ namespace chassis {
 
     /**
      * Синхронизированный поворот на нужный угол относительно одного из колес.
-     * Для вращения вперёд устанавливается положительная скорость, а назад - отрицательная.
-     * Значение угла deg поворота всегда положительное!
+     * Для вращения вперёд устанавливается положительный угол deg, а назад - отрицательный.
+     * Скорость v всегда должна быть положительной (отрицательное значение будет взято по модулю).
      * Если указать timeOut, тогда после  указанного времени в мсек алгоритм прервётся, например, если робот застрял.
+     * @param wheelPivot колесо, относительно которого происходит поворот, eg: WheelPivot.LeftWheel
      * @param deg угол вращения в градусах, eg: 90
-     * @param speed скорость вращения, eg: 50
+     * @param v скорость вращения, eg: 50
      * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisPivotTurn"
-    //% block="chassis pivot turn $deg\\° at $speed\\% pivot $wheelPivot||timeout $timeOut ms"
-    //% block.loc.ru="поворот шасси на $deg\\° с $speed\\% относительно $wheelPivot||таймаут $timeOut мс"
+    //% block="chassis pivot turn $deg\\° at $v\\% pivot $wheelPivot||timeout $timeOut ms"
+    //% block.loc.ru="поворот шасси на $deg\\° с $v\\% относительно $wheelPivot||таймаут $timeOut мс"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% v.shadow="motorSpeedPicker"
     //% weight="98"
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
-    export function pivotTurn(wheelPivot: WheelPivot, deg: number, speed: number, timeOut?: number) {
-        if (deg == 0 || speed == 0) {
+    export function pivotTurn(wheelPivot: WheelPivot, deg: number, v: number, timeOut?: number) {
+        if (deg == 0 || v == 0) {
             stop(Braking.Hold);
             return;
-        } else if (deg < 0) {
-            console.log("Error: the angle of rotation relative to the wheel is negative!");
-            control.assert(false, 8);
+        }
+        if (v < 0) {
+            console.log(`Warning: v is negative (${v}). Using absolute value.`);
         }
 
         stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
 
         const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
         
-        speed = Math.clamp(-100, 100, speed >> 0); // Ограничиваем скорость от -100 до 100 и отсекаем дробную часть
+        v = Math.clamp(0, 100, Math.abs(v) >> 0); // Берём модуль скорости, ограничиваем от 0 до 100 и отсекаем дробную часть
         
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
         
-        const vLeft = wheelPivot == WheelPivot.RightWheel ? speed : 0;
-        const vRight = wheelPivot == WheelPivot.LeftWheel ? speed : 0;
+        const vSign = deg > 0 ? 1 : -1; // Определяем направление по знаку deg
+        const vLeft = wheelPivot == WheelPivot.RightWheel ? v * vSign : 0;
+        const vRight = wheelPivot == WheelPivot.LeftWheel ? v * vSign : 0;
 
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
@@ -110,13 +112,13 @@ namespace chassis {
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
             const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
-            if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) break;
-            else if (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) break;
+            if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot ||
+                wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) {
+                break;
+            } // Условие выхода: проверяем только движущееся колесо
             const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
-            // if (wheelPivot == WheelPivot.LeftWheel) rightMotor.run(powers.pwrRight);
-            // else if (wheelPivot == WheelPivot.RightWheel) leftMotor.run(powers.pwrLeft);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
@@ -233,6 +235,7 @@ namespace chassis {
      * Скорость vMin не должна быть выше vMax.
      * Если не указать accelDeg или decelDeg, тогда их значение будет 25% от всего угла поворота.
      * Если указать timeOut, тогда после указанного времени в мсек алгоритм прервётся, например, если робот застрял.
+     * @param wheelPivot колесо, относительно которого происходит поворот, eg: WheelPivot.LeftWheel
      * @param deg угол вращения в градусах, eg: 90
      * @param vMin мин скорость вращения, eg: 30
      * @param vMax макс скорость вращения, eg: 80
@@ -294,9 +297,9 @@ namespace chassis {
         const decelCalcMotRot = Math.round(((absDecelDeg * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота для замедления
         const totalCalcMotRot = Math.round(((absDeg * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота общего угла
         
-        const v = deg > 0 ? vMax : -vMax;
-        const vLeftMax = wheelPivot === WheelPivot.LeftWheel ? 0 : v;
-        const vRightMax = wheelPivot === WheelPivot.LeftWheel ? v : 0;
+        const vSign = deg > 0 ? 1 : -1;
+        const vLeftMax = wheelPivot === WheelPivot.LeftWheel ? 0 : vMax * vSign;
+        const vRightMax = wheelPivot === WheelPivot.LeftWheel ? vMax * vSign : 0;
 
         advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, totalCalcMotRot);
         
