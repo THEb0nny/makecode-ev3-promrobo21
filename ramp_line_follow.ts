@@ -19,7 +19,7 @@ namespace motions {
     export function rampRollingLineFollowingByTwoSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(rollingDist)); // Расчитываем расстояние замедления
 
-        advmotctrls.accTwoEncLinearMotionConfig(0, speed, minPwrAtEndMovement, 0, mRotDecelCalc, mRotDecelCalc);
+        advmotctrls.accTwoEncLinearMotionConfig(0, speed, minPwrAtEndMovement, mRotDecelCalc, 0, mRotDecelCalc);
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
@@ -97,7 +97,7 @@ namespace motions {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
-        advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowToDistance2SensorStartSpeed, rampLineFollowToDistance2SensorMaxSpeed, rampLineFollowToDistance2SensorFinishSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowToDistance2SensorStartSpeed, rampLineFollowToDistance2SensorMaxSpeed, rampLineFollowToDistance2SensorFinishSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
@@ -170,7 +170,7 @@ namespace motions {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
-        advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowCrossIntersection2SensorStartSpeed, rampLineFollowCrossIntersection2SensorMaxSpeed, rampLineFollowCrossIntersection2SensorFinishSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowCrossIntersection2SensorStartSpeed, rampLineFollowCrossIntersection2SensorMaxSpeed, rampLineFollowCrossIntersection2SensorFinishSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 

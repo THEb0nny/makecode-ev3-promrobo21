@@ -3,141 +3,173 @@ namespace chassis {
     /**
      * Команда руления моторами шасси от регулятора.
      * @param u управляющее воздействие, eg: 0
-     * @param speed скорость (мощность) движения, eg: 50
+     * @param v скорость (мощность) движения, eg: 50
      */
     //% blockId="RegulatorSteering"
-    //% block="regulator steering on u = $u at $speed\\%"
-    //% block.loc.ru="руление регулятором на u = $u на $speed\\%"
+    //% block="regulator steering on u = $u at $v\\%"
+    //% block.loc.ru="руление регулятором на u = $u на $v\\%"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% v.shadow="motorSpeedPicker"
     //% weight="89"
     //% group="Move"
-    export function regulatorSteering(u: number, speed: number) {
-        const mLeft = speed + u, mRight = speed - u;
+    export function regulatorSteering(u: number, v: number) {
+        const mLeft = v + u, mRight = v - u;
         setSpeedsCommand(mLeft, mRight);
     }
 
     /**
      * Команда нормализованного руления моторами шасси от регулятора.
      * @param u управляющее воздействие, eg: 0
-     * @param speed скорость (мощность) движения, eg: 50
+     * @param v скорость (мощность) движения, eg: 50
      */
     //% blockId="NormalizedRegulatorSteering"
-    //% block="normalized regulator steering on u = $u at $speed\\%"
-    //% block.loc.ru="нормализованное руление регулятором по u = $u на $speed\\%"
+    //% block="normalized regulator steering on u = $u at $v\\%"
+    //% block.loc.ru="нормализованное руление регулятором по u = $u на $v\\%"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% v.shadow="motorSpeedPicker"
     //% weight="88"
     //% group="Move"
-    export function normalizedRegulatorSteering(u: number, speed: number) {
-        let mLeft = speed + u, mRight = speed - u;
-        const z = speed / Math.max(Math.abs(mLeft), Math.abs(mRight));
+    export function normalizedRegulatorSteering(u: number, v: number) {
+        let mLeft = v + u, mRight = v - u;
+        const z = v / Math.max(Math.abs(mLeft), Math.abs(mRight));
         mLeft *= z, mRight *= z;
         setSpeedsCommand(mLeft, mRight);
     }
 
     /**
      * Линейное движение на расстояние в мм с постоянной скоростью (мощностью).
-     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
+     * Для движения вперёд устанавливается положительная дистанция, а назад - отрицательная.
+     * Скорость v всегда должна быть положительной (отрицательное значение будет взято по модулю).
      * @param dist дистанция движения в мм, eg: 100
-     * @param speed скорость (мощность) движения, eg: 60
+     * @param v скорость (мощность) движения, eg: 60
      * @param braking тип торможения, eg: MotionBraking.Hold
      */
     //% blockId="LinearDistMove"
-    //% block="linear distance moving $dist mm at $speed\\% braking $braking"
-    //% block.loc.ru="линейное движение на расстояние $dist мм с $speed\\% торможение $braking"
+    //% block="linear distance moving $dist mm at $v\\% braking $braking"
+    //% block.loc.ru="линейное движение на расстояние $dist мм с $v\\% торможение $braking"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% v.shadow="motorSpeedPicker"
     //% weight="79" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function linearDistMove(dist: number, speed: number, braking: MotionBraking = MotionBraking.Hold) {
-        if (speed == 0 || dist == 0) {
+    export function linearDistMove(dist: number, v: number, braking: MotionBraking = MotionBraking.Hold) {
+        if (v == 0 || dist == 0) {
             stop(Braking.Hold);
-            return;
-        } else if (dist < 0) {
-            stop(Braking.Hold);
-            console.log("Error: the driving distance is negative!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
+        if (v < 0) {
+            console.log(`Warning: v is negative (${v}). Using absolute value.`);
+        }
+        v = Math.abs(v); // Берём модуль скорости
+        const vSign = dist > 0 ? 1 : -1; // Определяем направление по знаку dist
 
-        const mRotCalc = Math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
-        syncMovement(speed, speed, mRotCalc, MoveUnit.Degrees, braking);
+        const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
+        syncMovement(v * vSign, v * vSign, mRotCalc, MoveUnit.Degrees, braking);
     }
 
     /**
      * Движение на расстояние в мм с независимыми скоростями (мощностями) на моторы.
-     * Значение дистанции должно быть положительным! Если значение скорости (мощностей) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
+     * Для движения вперёд устанавливается положительная дистанция, а назад - отрицательная.
+     * Скорости vLeft и vRight всегда должны быть положительными (отрицательные значения будут взяты по модулю).
+     * Разные скорости позволяют роботу ехать по дуге. Обе скорости должны быть больше нуля!
      * @param dist дистанция движения в мм, eg: 100
-     * @param speedLeft скорость (мощность) левого мотора, eg: 50
-     * @param speedRight скорость (мощность) правого мотора, eg: 50
+     * @param vLeft скорость (мощность) левого мотора, eg: 50
+     * @param vRight скорость (мощность) правого мотора, eg: 50
      * @param braking тип торможения, eg: Braking.Hold
      */
     //% blockId="DistMove"
-    //% block="distance moving $dist mm at $speedLeft\\% $speedRight\\% braking $braking"
-    //% block.loc.ru="движение на расстояние $dist мм с $speedLeft\\% $speedRight\\% торможение $braking"
+    //% block="distance moving $dist mm at $vLeft\\% $vRight\\% braking $braking"
+    //% block.loc.ru="движение на расстояние $dist мм с $vLeft\\% $vRight\\% торможение $braking"
     //% inlineInputMode="inline"
-    //% speedLeft.shadow="motorSpeedPicker"
-    //% speedRight.shadow="motorSpeedPicker"
+    //% vLeft.shadow="motorSpeedPicker"
+    //% vRight.shadow="motorSpeedPicker"
     //% weight="78"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function distMove(dist: number, speedLeft: number, speedRight: number, braking: MotionBraking = MotionBraking.Hold) {
-        if (dist == 0 || speedLeft == 0 && speedRight == 0) {
+    export function distMove(dist: number, vLeft: number, vRight: number, braking: MotionBraking = MotionBraking.Hold) {
+        if (dist == 0 || vLeft == 0 || vRight == 0) {
             stop(Braking.Hold);
-            return;
-        } else if (dist < 0) {
-            stop(Braking.Hold);
-            console.log("Error: the driving distance is negative!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
+        if (vLeft < 0) {
+            console.log(`Warning: vLeft is negative (${vLeft}). Using absolute value.`);
+        }
+        if (vRight < 0) {
+            console.log(`Warning: vRight is negative (${vRight}). Using absolute value.`);
+        }
 
-        const mRotCalc = Math.calculateDistanceToEncRotate(dist); // Расчёт угла поворота на дистанцию
-        syncMovement(speedLeft, speedRight, mRotCalc, MoveUnit.Degrees, braking);
+        vLeft = Math.abs(vLeft); // Берём модуль скорости
+        vRight = Math.abs(vRight); // Берём модуль скорости
+        const vSign = dist > 0 ? 1 : -1; // Определяем направление по знаку DistMove
+
+        const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
+        
+        syncMovement(vLeft * vSign, vRight * vSign, mRotCalc, MoveUnit.Degrees, braking);
     }
 
     /**
      * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
-     * Не рекомендуется использоваться стартовую скорость (мощность) меньше 20.
-     * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
-     * Значения скоростей (мощностей) должны иметь одинаковый знак!
+     * Для движения вперёд устанавливается положительная дистанция, а назад - отрицательная.
+     * Скорости всегда должны быть положительными (отрицательные значения будут взяты по модулю).
+     * Расстояния ускорения и замедления всегда должны быть положительными (отрицательные значения будут взяты по модулю).
      * @param totalDist общее расстояние в мм, eg: 300
      * @param accelDist расстояние ускорения в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 150
-     * @param startSpeed начальная скорость (мощность) движения, eg: 20
-     * @param maxSpeed максимальная скорость (мощность) движения, eg: 70
-     * @param finishSpeed финишная скорость (мощность) движения, eg: 10
+     * @param vStart начальная скорость (мощность) движения, eg: 30
+     * @param vMax максимальная скорость (мощность) движения, eg: 70
+     * @param vFinish финишная скорость (мощность) движения, eg: 20
      */
     //% blockId="RampLinearDistMove"
     //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|from start $startSpeed\\% max $maxSpeed\\% finish $finishSpeed\\%"
     //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c стартовой $startSpeed\\% макс $maxSpeed\\% финишной $finishSpeed\\%"
     //% inlineInputMode="inline"
-    //% startSpeed.shadow="motorSpeedPicker"
-    //% maxSpeed.shadow="motorSpeedPicker"
-    //% finishSpeed.shadow="motorSpeedPicker"
+    //% vStart.shadow="motorSpeedPicker"
+    //% vMax.shadow="motorSpeedPicker"
+    //% vFinish.shadow="motorSpeedPicker"
     //% weight="89"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function rampLinearDistMove(startSpeed: number, maxSpeed: number, finishSpeed: number, totalDist: number, accelDist: number, decelDist: number) {
-        if (maxSpeed == 0 || totalDist == 0) {
+    export function rampLinearDistMove(vStart: number, vMax: number, vFinish: number, totalDist: number, accelDist: number, decelDist: number) {
+        if (vMax == 0 || totalDist == 0) {
             stop(Braking.Hold);
-            return;
-        } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) || 
-            Math.abs(finishSpeed) > Math.abs(maxSpeed) ||
-            totalDist < 0 || accelDist < 0 || decelDist < 0 || totalDist < accelDist + decelDist) {
-            stop(Braking.Hold);
-            console.log("Error: parameters passed incorrectly in rampLinearDistMove!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
+        if (vStart < 0) {
+            console.log(`Warning: vStart is negative (${vStart}). Using absolute value.`);
+        }
+        if (vMax < 0) {
+            console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
+        }
+        if (vFinish < 0) {
+            console.log(`Warning: vFinish is negative (${vFinish}). Using absolute value.`);
+        }
+        if (accelDist < 0) {
+            console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
+        }
+        if (decelDist < 0) {
+            console.log(`Warning: decelDist is negative (${decelDist}). Using absolute value.`);
+        }
+
+        vStart = Math.abs(vStart);
+        vMax = Math.abs(vMax);
+        vFinish = Math.abs(vFinish);
+        accelDist = Math.abs(accelDist);
+        decelDist = Math.abs(decelDist);
+        const absTotalDist = Math.abs(totalDist);
+
+        if (vStart > vMax || vFinish > vMax || absTotalDist < accelDist + decelDist) {
+            stop(Braking.Hold);
+            console.log("Error: parameters passed incorrectly in rampLinearDistMove!");
+            return;
+        }
+
+        const vSign = totalDist > 0 ? 1 : -1; // Определяем направление по знаку totalDist
         
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
-        const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
 
-        syncRampMovement(startSpeed, maxSpeed, finishSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
+        syncRampMovement(vStart * vSign, vMax * vSign, vFinish * vSign, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
     /**
@@ -175,7 +207,7 @@ namespace chassis {
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
         const mRotTotalCalc = totalDist ? Math.calculateDistanceToEncRotate(totalDist) : mRotAccelCalc; // Рассчитываем общую дистанцию
 
-        executeRampMovement(startSpeed, maxSpeed, 0, mRotAccelCalc, 0, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(startSpeed, maxSpeed, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
         steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
     }
 
@@ -214,7 +246,7 @@ namespace chassis {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
         const mRotTotalCalc = totalDist > 0 ? Math.calculateDistanceToEncRotate(totalDist) : mRotDecelCalc; // Рассчитываем общую дистанцию
 
-        executeRampMovement(0, speed, finishSpeed, 0, mRotDecelCalc, mRotTotalCalc); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(0, speed, finishSpeed, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
         // stop(Braking.Hold); // Тормоз с удержанием
         motions.actionAfterMotion(actionAfterMotion, finishSpeed);
     }
@@ -237,7 +269,7 @@ namespace chassis {
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
         // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
-        advmotctrls.accTwoEncLinearMotionConfig(minSpeed, maxSpeedRight, minSpeed, mRotAccelCalc, mRotDecelCalc, mRotTotalCalc);
+        advmotctrls.accTwoEncLinearMotionConfig(minSpeed, maxSpeedRight, minSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору

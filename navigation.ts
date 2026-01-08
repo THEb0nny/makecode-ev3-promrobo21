@@ -10,7 +10,7 @@ namespace navigation {
     // Матрица весов
     let weightMatrix: number[][] = [];
 
-    let lineFollowByPathMoveStartSpeed = 20
+    let lineFollowByPathMoveStartSpeed = 20;
     let lineFollowByPathMoveMaxSpeed = 50;
     let lineFollowByPathTurnSpeed = 60;
     let lineFollowByPathAccelStartDist = 0;

@@ -201,7 +201,7 @@ namespace chassis {
         const vLeftMax = deg > 0 ? vMax : -vMax;
         const vRightMax = deg > 0 ? -vMax : vMax;
 
-        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, totalCalcMotRot); // Установить конфигурация синхронизированного движения с ускорениями
+        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, totalCalcMotRot, accelCalcMotRot, decelCalcMotRot); // Установить конфигурация синхронизированного движения с ускорениями
         
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
@@ -301,7 +301,7 @@ namespace chassis {
         const vLeftMax = wheelPivot === WheelPivot.LeftWheel ? 0 : vMax * vSign;
         const vRightMax = wheelPivot === WheelPivot.LeftWheel ? vMax * vSign : 0;
 
-        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, totalCalcMotRot); // Установить конфигурация синхронизированного движения с ускорениями
+        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, totalCalcMotRot, accelCalcMotRot, decelCalcMotRot); // Установить конфигурация синхронизированного движения с ускорениями
         
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
