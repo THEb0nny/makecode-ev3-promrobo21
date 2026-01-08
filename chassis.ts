@@ -176,11 +176,12 @@ namespace chassis {
      * Синхронизация движения с плавным стартом в мм.
      * Для движения вперёд устанавливается положительная totalDist дистанция, а назад - отрицательная.
      * Скорости всегда должны быть положительными (отрицательные значения будут взяты по модулю).
-     * Расстояние ускорения всегда должно быть положительным (отрицательное значение будет взято по модулю).
+     * Расстояние ускорений всегда должны быть положительными (отрицательное значение будет взято по модулю).
+     * Если accelDist больше totalDist, то accelDist будет обрезан до значения totalDist.
      * @param vStart начальная скорость (мощность) движени, eg: 30
      * @param vMax максимальная скорость (мощность) движения, eg: 70
-     * @param accelDist расстояние ускорения в мм, eg: 50
-     * @param totalDist общее расстояние в мм, если его не указать значение будет равно accelDist, тогда, eg: 100
+     * @param totalDist общее расстояние, eg: 100
+     * @param accelDist расстояние ускорения в мм, eg: 80
      */
     //% blockId="AccelStartLinearDistMove"
     //% block="acceleration in linear motion from $vStart\\% to $vMax\\% per $accelDist mm||at total distance $totalDist"
@@ -192,11 +193,11 @@ namespace chassis {
     //% weight="88" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function accelStartLinearDistMove(vStart: number, vMax: number, accelDist: number, totalDist?: number) {
-        if (vMax == 0 || accelDist == 0) {
+    export function accelStartLinearDistMove(vStart: number, vMax: number, totalDist: number, accelDist: number) {
+        if (vMax == 0 || totalDist == 0 || accelDist == 0) {
             stop(Braking.Hold);
             return;
-        } 
+        }
         if (vStart < 0) {
             console.log(`Warning: vStart is negative (${vStart}). Using absolute value.`);
         }
@@ -206,14 +207,14 @@ namespace chassis {
         if (accelDist < 0) {
             console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
         }
-        if (totalDist !== undefined && totalDist < 0) {
-            console.log(`Warning: totalDist is negative (${totalDist}). Using absolute value.`);
+        if (accelDist < 0) {
+            console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
         }
 
         vStart = Math.abs(vStart);
         vMax = Math.abs(vMax);
         accelDist = Math.abs(accelDist);
-        if (totalDist !== undefined) totalDist = Math.abs(totalDist);
+        const absTotalDist = Math.abs(totalDist);
 
         if (vStart > vMax) {
             const tempV = vStart;
@@ -221,17 +222,18 @@ namespace chassis {
             vMax = tempV;
             console.log(`Warning: vStart was greater than vMax. Swapped: vStart=${vStart}, vMax=${vMax}`);
         }
-        if (totalDist !== undefined && totalDist < accelDist) {
-            stop(Braking.Hold);
-            console.log("Error: totalDist is less than accelDist in accelStartLinearDistMove!");
-            return;
+        if (absTotalDist < accelDist) {
+            accelDist = absTotalDist;
+            console.log(`Warning: totalDist (${absTotalDist}) is less than accelDist (${accelDist}). Using totalDist as accelDist.`);
         }
 
-        const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
-        const mRotTotalCalc = totalDist ? Math.calculateDistanceToEncRotate(totalDist) : mRotAccelCalc; // Рассчитываем общую дистанцию
+        const vSign = totalDist > 0 ? 1 : -1; // Определяем направление по знаку totalDist
 
-        executeRampMovement(vStart, vMax, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
-        steeringCommand(0, vMax); // Без команды торможения, а просто ехать дальше вперёд
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
+        const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
+
+        executeRampMovement(vStart * vSign, vMax * vSign, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
+        steeringCommand(0, vMax * vSign); // Без команды торможения, а просто ехать дальше вперёд
     }
 
     /**
