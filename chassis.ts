@@ -109,7 +109,7 @@ namespace chassis {
 
     /**
      * Линейное движение на заданное расстояние с ускорением и замедлением в мм.
-     * Для движения вперёд устанавливается положительная дистанция, а назад - отрицательная.
+     * Для движения вперёд устанавливается положительная totalDist дистанция, а назад - отрицательная.
      * Скорости всегда должны быть положительными (отрицательные значения будут взяты по модулю).
      * Расстояния ускорения и замедления всегда должны быть положительными (отрицательные значения будут взяты по модулю).
      * @param totalDist общее расстояние в мм, eg: 300
@@ -174,41 +174,64 @@ namespace chassis {
 
     /**
      * Синхронизация движения с плавным стартом в мм.
-     * Не рекомендуется устанавливать минимальную скорость меньше 20.
-     * Значение дистанции должно быть положительным! Если значение скорости (мощности) положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
-     * Значения скоростей (мощностей) должны иметь одинаковый знак!
-     * @param startSpeed начальная скорость (мощность) движени, eg: 20
-     * @param maxSpeed максимальная скорость (мощность) движения, eg: 50
+     * Для движения вперёд устанавливается положительная totalDist дистанция, а назад - отрицательная.
+     * Скорости всегда должны быть положительными (отрицательные значения будут взяты по модулю).
+     * Расстояние ускорения всегда должно быть положительным (отрицательное значение будет взято по модулю).
+     * @param vStart начальная скорость (мощность) движени, eg: 30
+     * @param vMax максимальная скорость (мощность) движения, eg: 70
      * @param accelDist расстояние ускорения в мм, eg: 50
      * @param totalDist общее расстояние в мм, если его не указать значение будет равно accelDist, тогда, eg: 100
      */
     //% blockId="AccelStartLinearDistMove"
-    //% block="acceleration in linear motion from $startSpeed\\% to $maxSpeed\\% per  $accelDist mm||at total distance $totalDist"
-    //% block.loc.ru="ускорение при линейном движении c $startSpeed\\% до $maxSpeed\\% за $accelDist мм||при общей дистанции $totalDist"
+    //% block="acceleration in linear motion from $vStart\\% to $vMax\\% per $accelDist mm||at total distance $totalDist"
+    //% block.loc.ru="ускорение при линейном движении c $vStart\\% до $vMax\\% за $accelDist мм||при общей дистанции $totalDist"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
-    //% startSpeed.shadow="motorSpeedPicker"
-    //% maxSpeed.shadow="motorSpeedPicker"
+    //% vStart.shadow="motorSpeedPicker"
+    //% vMax.shadow="motorSpeedPicker"
     //% weight="88" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function accelStartLinearDistMove(startSpeed: number, maxSpeed: number, accelDist: number, totalDist?: number) {
-        if (maxSpeed == 0 || accelDist == 0) {
+    export function accelStartLinearDistMove(vStart: number, vMax: number, accelDist: number, totalDist?: number) {
+        if (vMax == 0 || accelDist == 0) {
             stop(Braking.Hold);
             return;
-        } else if (Math.abs(startSpeed) > Math.abs(maxSpeed) || 
-            accelDist < 0 || totalDist < 0 || totalDist < accelDist) {
+        } 
+        if (vStart < 0) {
+            console.log(`Warning: vStart is negative (${vStart}). Using absolute value.`);
+        }
+        if (vMax < 0) {
+            console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
+        }
+        if (accelDist < 0) {
+            console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
+        }
+        if (totalDist !== undefined && totalDist < 0) {
+            console.log(`Warning: totalDist is negative (${totalDist}). Using absolute value.`);
+        }
+
+        vStart = Math.abs(vStart);
+        vMax = Math.abs(vMax);
+        accelDist = Math.abs(accelDist);
+        if (totalDist !== undefined) totalDist = Math.abs(totalDist);
+
+        if (vStart > vMax) {
+            const tempV = vStart;
+            vStart = vMax;
+            vMax = tempV;
+            console.log(`Warning: vStart was greater than vMax. Swapped: vStart=${vStart}, vMax=${vMax}`);
+        }
+        if (totalDist !== undefined && totalDist < accelDist) {
             stop(Braking.Hold);
-            console.log("Error: parameters passed incorrectly in accelStartLinearDistMove!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
+            console.log("Error: totalDist is less than accelDist in accelStartLinearDistMove!");
             return;
         }
 
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
         const mRotTotalCalc = totalDist ? Math.calculateDistanceToEncRotate(totalDist) : mRotAccelCalc; // Рассчитываем общую дистанцию
 
-        executeRampMovement(startSpeed, maxSpeed, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
-        steeringCommand(0, maxSpeed); // Без команды торможения, а просто ехать дальше вперёд
+        executeRampMovement(vStart, vMax, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
+        steeringCommand(0, vMax); // Без команды торможения, а просто ехать дальше вперёд
     }
 
     /**
