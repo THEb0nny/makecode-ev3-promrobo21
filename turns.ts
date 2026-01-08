@@ -201,7 +201,7 @@ namespace chassis {
         const vLeftMax = deg > 0 ? vMax : -vMax;
         const vRightMax = deg > 0 ? -vMax : vMax;
 
-        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, totalCalcMotRot);
+        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, totalCalcMotRot); // Установить конфигурация синхронизированного движения с ускорениями
         
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
@@ -217,8 +217,8 @@ namespace chassis {
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
             const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncComplexMotionCompute(eml, emr);
-            if (out.isDoneLeft || out.isDoneRight
-                || ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(totalCalcMotRot))) break;
+            if (out.isDoneLeft || out.isDoneRight || 
+                ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(totalCalcMotRot))) break;
             const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrLeft, out.pwrRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwrLeft, out.pwrRight);
@@ -301,7 +301,7 @@ namespace chassis {
         const vLeftMax = wheelPivot === WheelPivot.LeftWheel ? 0 : vMax * vSign;
         const vRightMax = wheelPivot === WheelPivot.LeftWheel ? vMax * vSign : 0;
 
-        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, totalCalcMotRot);
+        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, accelCalcMotRot, decelCalcMotRot, totalCalcMotRot); // Установить конфигурация синхронизированного движения с ускорениями
         
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
