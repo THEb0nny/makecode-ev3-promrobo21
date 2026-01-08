@@ -184,10 +184,9 @@ namespace chassis {
      * @param accelDist расстояние ускорения в мм, eg: 80
      */
     //% blockId="AccelStartLinearDistMove"
-    //% block="acceleration in linear motion from $vStart\\% to $vMax\\% per $accelDist mm||at total distance $totalDist"
-    //% block.loc.ru="ускорение при линейном движении c $vStart\\% до $vMax\\% за $accelDist мм||при общей дистанции $totalDist"
+    //% block="acceleration in linear motion from $vStart\\% to $vMax\\% per $accelDist mm|at total distance $totalDist"
+    //% block.loc.ru="ускорение при линейном движении c $vStart\\% до $vMax\\% за $accelDist мм|при общей дистанции $totalDist"
     //% inlineInputMode="inline"
-    //% expandableArgumentMode="enabled"
     //% vStart.shadow="motorSpeedPicker"
     //% vMax.shadow="motorSpeedPicker"
     //% weight="88" blockGap="8"
@@ -237,43 +236,65 @@ namespace chassis {
     }
 
     /**
-     * Синхронизация движения с плавным сбросом скорости (мощности) мм.
-     * Значение дистанции должно быть положительным! Если значение скорости положительное, тогда моторы крутятся вперёд, а если отрицательно, тогда назад.
-     * Значения скоростей (мощности) должны иметь одинаковый знак!
-     * @param speed изначальная скорость (мощность) движения, eg: 50
-     * @param finishSpeed финишная скорость (мощность) движения, eg: 10
-     * @param actionAfterMotion действие после, eg: AfterMotion.HoldStop
+     * Синхронизация движения с плавным сбросом скорости (мощности) в мм.
+     * Для движения вперёд устанавливается положительная totalDist дистанция, а назад - отрицательная.
+     * Скорости всегда должны быть положительными (отрицательные значения будут взяты по модулю).
+     * Расстояние замедления всегда должно быть положительным (отрицательное значение будет взято по модулю).
+     * Если decelDist больше totalDist, то decelDist будет обрезан до значения totalDist.
+     * @param v начальная скорость (мощность) движения, eg: 50
+     * @param vFinish финишная скорость (мощность) движения, eg: 20
+     * @param totalDist общее расстояние в мм, eg: 100
      * @param decelDist расстояние замедления в мм, eg: 50
-     * @param totalDist общее расстояние в мм, если его не указать значение будет равно decelDist, eg: 100
+     * @param actionAfterMotion действие после, eg: AfterMotion.HoldStop
      */
     //% blockId="DecelFinishLinearDistMove"
-    //% block="deceleration in linear motion from $speed\\% to $finishSpeed\\%|after motion $actionAfterMotion|per $decelDist mm||at total distance of $totalDist"
-    //% block.loc.ru="замеделение при линейном движении c $speed\\% до $finishSpeed\\%|действие после $actionAfterMotion|за $decelDist мм||при общей дистанции $totalDist"
+    //% block="deceleration in linear motion from $v\\% to $vFinish\\%|after motion $actionAfterMotion|per $decelDist mm|at total distance of $totalDist"
+    //% block.loc.ru="замеделение при линейном движении c $v\\% до $vFinish\\%|действие после $actionAfterMotion|за $decelDist мм|при общей дистанции $totalDist"
     //% inlineInputMode="inline"
-    //% expandableArgumentMode="enabled"
-    //% speed.shadow="motorSpeedPicker"
-    //% finishSpeed.shadow="motorSpeedPicker"
+    //% v.shadow="motorSpeedPicker"
+    //% vFinish.shadow="motorSpeedPicker"
     //% weight="87" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function decelFinishLinearDistMove(speed: number, finishSpeed: number, actionAfterMotion: AfterMotion, decelDist: number, totalDist?: number) {
-        if (speed == 0) {
+    export function decelFinishLinearDistMove(v: number, vFinish: number, actionAfterMotion: AfterMotion, totalDist: number, decelDist: number) {
+        if (v == 0 || totalDist == 0 || decelDist == 0) {
             stop(Braking.Hold);
-            return;
-        } else if (Math.abs(finishSpeed) > Math.abs(speed) || 
-            decelDist < 0 || totalDist < 0 || totalDist < decelDist) {
-            stop(Braking.Hold);
-            console.log("Error: parameters passed incorrectly in decelFinishLinearDistMove!");
-            music.playSoundEffect(sounds.systemGeneralAlert);
             return;
         }
+        if (v < 0) {
+            console.log(`Warning: v is negative (${v}). Using absolute value.`);
+        }
+        if (vFinish < 0) {
+            console.log(`Warning: vFinish is negative (${vFinish}). Using absolute value.`);
+        }
+        if (decelDist < 0) {
+            console.log(`Warning: decelDist is negative (${decelDist}). Using absolute value.`);
+        }
 
+        v = Math.abs(v);
+        vFinish = Math.abs(vFinish);
+        decelDist = Math.abs(decelDist);
+        const absTotalDist = Math.abs(totalDist);
+
+        if (vFinish > v) {
+            const tempV = v;
+            v = vFinish;
+            vFinish = tempV;
+            console.log(`Warning: vFinish was greater than v. Swapped: vStart=${v}, vFinish=${vFinish}`);
+        }
+
+        if (absTotalDist < decelDist) {
+            decelDist = absTotalDist;
+            console.log(`Warning: totalDist (${absTotalDist}) is less than decelDist (${decelDist}). Using totalDist as decelDist.`);
+        }
+
+        const vSign = totalDist > 0 ? 1 : -1; // Определяем направление по знаку totalDist
+
+        const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
-        const mRotTotalCalc = totalDist > 0 ? Math.calculateDistanceToEncRotate(totalDist) : mRotDecelCalc; // Рассчитываем общую дистанцию
 
-        executeRampMovement(0, speed, finishSpeed, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
-        // stop(Braking.Hold); // Тормоз с удержанием
-        motions.actionAfterMotion(actionAfterMotion, finishSpeed);
+        executeRampMovement(0, v * vSign, vFinish * vSign, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
+        motions.actionAfterMotion(actionAfterMotion, vFinish * vSign); // stop(Braking.Hold); // Тормоз с удержанием
     }
 
     //% blockId="RampDistMove"
