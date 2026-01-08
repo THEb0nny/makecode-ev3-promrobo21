@@ -13,18 +13,19 @@ chassis.setBaseLength(172);
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
-// chassis.rampSpinTurn(90, 30, 80, 30, 30);
-
-// chassis.rampPivotTurn(WheelPivot.LeftWheel, 90, 40, 80);
+// chassis.rampSpinTurn(90, 30, 70, 30, 30);
 // pause(1000);
-// chassis.rampPivotTurn(WheelPivot.LeftWheel, 90, -40, -80, 30, 30);
-
-// chassis.pivotTurn(90, 50, WheelPivot.LeftWheel);
+// chassis.rampSpinTurn(-90, 30, 70, 30, 30);
 // pause(1000);
-// chassis.pivotTurn(90, 50, WheelPivot.RightWheel);
-// pause(5000);
+// chassis.rampSpinTurn(180, 30, 80, 45, 45);
 
-// custom.functionsTune(0);
+// chassis.rampPivotTurn(WheelPivot.LeftWheel, 90, 30, 80);
+// pause(1000);
+// chassis.rampPivotTurn(WheelPivot.LeftWheel, -90, 30, 80, 30, 30);
+// pause(1000);
+// chassis.rampPivotTurn(WheelPivot.RightWheel, 90, 30, 80);
+// pause(1000);
+// chassis.rampPivotTurn(WheelPivot.RightWheel, -90, 30, 80, 30, 30);
 
 // sensors.searchRgbMinMaxColorSensors(sensors.color3);
 
