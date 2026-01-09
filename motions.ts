@@ -86,7 +86,7 @@ namespace motions {
     /**
      * Движение по направлению с постоянной скоростью до зоны с определённым отражением.
      * @param turnRatio рулевое направление движения, eg: 0
-     * @param speed скорость движения, eg: 50
+     * @param v скорость движения, eg: 50
      * @param sensorsSelection определение датчиками, eg: LineSensorSelection.LeftAndRight
      * @param refCondition отражение больше или меньше, eg: Comparison.Greater
      * @param refTreshold пороговое значение отражения света, eg: 50
@@ -94,16 +94,16 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="MoveToReflectionZone"
-    //% block="move in direction $turnRatio at $speed\\%| before determining reflection $sensorsSelection $refCondition $refTreshold|action after $actionAfterMotion||debug $debug"
-    //% block.loc.ru="движение по направлению $turnRatio на $speed\\%| до определения отражения $sensorsSelection $refCondition $refTreshold|действие после $actionAfterMotion||отладка $debug"
+    //% block="move in direction $turnRatio at $v\\%| before determining reflection $sensorsSelection $refCondition $refTreshold|action after $actionAfterMotion||debug $debug"
+    //% block.loc.ru="движение по направлению $turnRatio на $v\\%| до определения отражения $sensorsSelection $refCondition $refTreshold|действие после $actionAfterMotion||отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="toggle"
     //% debug.shadow="toggleOnOff"
     //% turnRatio.shadow="motorTurnRatioPicker"
-    //% speed.shadow="motorSpeedPicker"
+    //% v.shadow="motorSpeedPicker"
     //% weight="89"
     //% group="Move"
-    export function moveToReflectionZone(turnRatio: number, speed: number, sensorsSelection: LineSensorSelection, refCondition: Comparison, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    export function moveToReflectionZone(turnRatio: number, v: number, sensorsSelection: LineSensorSelection, refCondition: Comparison, refTreshold: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
@@ -111,7 +111,7 @@ namespace motions {
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(turnRatio, speed);
+        const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(turnRatio, v);
         // advmotctrls.syncMotorsConfig(speedLeft, speedRight);
         
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
@@ -137,26 +137,27 @@ namespace motions {
             control.pauseUntilTime(currTime, 1); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(277, 200); // Сигнал о завершении
-        motions.actionAfterMotion(actionAfterMotion, speed); // Действие после цикла управления
+        motions.actionAfterMotion(actionAfterMotion, v); // Действие после цикла управления
     }
 
     /**
      * Поворот на линию с помощью датчиков линии.
      * После поворота выполняется позиционирование на линии за 100 мсек, поэтому нужно заранее установить значения регулятора этому алгоритму.
      * @param rotateSide в какую сторону вращаться в поиске линии, eg: TurnSide.Left
-     * @param speed скорость вращения, eg: 50
+     * @param v скорость вращения, eg: 50
      * @param debug отладка на экран, eg: false
     */
     //% blockId="SpinTurnToLine"
-    //% block="turn to line $rotateSide at $speed\\% relative to center of wheel axis||params: $params|debug $debug"
-    //% block.loc.ru="поворот до линии $rotateSide на $speed\\% относительно центра оси колёс||параметры: $params|отладка $debug"
+    //% block="turn to line $rotateSide at $v\\% relative to center of wheel axis||params: $params|debug $debug"
+    //% block.loc.ru="поворот до линии $rotateSide на $v\\% относительно центра оси колёс||параметры: $params|отладка $debug"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% debug.shadow="toggleOnOff"
+    //% v.shadow="motorSpeedPicker"
     //% params.shadow="LinePositioningEmptyParams"
     //% weight="99"
     //% group="Поворот на линию"
-    export function spinTurnToLine(rotateSide: TurnSide, speed: number, params?: params.LinePositioning, debug: boolean = false) {
+    export function spinTurnToLine(rotateSide: TurnSide, v: number, params?: params.LinePositioning, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.maxSpeed >= 0) levelings.linePositioningMaxSpeed = Math.abs(params.maxSpeed);
             if (params.timeOut >= 0) levelings.linePositioningTimeOut = Math.abs(params.timeOut);
@@ -167,14 +168,14 @@ namespace motions {
         }
 
         if (sensors.leftLineSensor instanceof sensors.ColorSensor && sensors.rightLineSensor instanceof sensors.ColorSensor) {
-            spinTurnToLineAtColorSensor(rotateSide, speed, debug);
+            spinTurnToLineAtColorSensor(rotateSide, v, debug);
         } else if (sensors.leftLineSensor instanceof sensors.NXTLightSensor && sensors.rightLineSensor instanceof sensors.NXTLightSensor) {
-            spinTurnToLineAtNxtLightSensor(rotateSide, speed, debug);
+            spinTurnToLineAtNxtLightSensor(rotateSide, v, debug);
         }
     }
 
     // Функция поворота на линию датчиком цвета ev3
-    function spinTurnToLineAtColorSensor(rotateSide: TurnSide, speed: number, debug: boolean = false) {
+    function spinTurnToLineAtColorSensor(rotateSide: TurnSide, v: number, debug: boolean = false) {
         let sensor: sensors.ColorSensor; // Инициализируем переменную сенсора
         if (rotateSide == TurnSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
         else if (rotateSide == TurnSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
@@ -190,10 +191,10 @@ namespace motions {
         let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
 
         if (rotateSide == TurnSide.Left) {
-            advmotctrls.syncMotorsConfig(-speed, speed);
+            advmotctrls.syncMotorsConfig(-v, v);
             calcMotRot *= -1; // Умножаем на -1, чтобы вращаться влево
         } else if (rotateSide == TurnSide.Right) {
-            advmotctrls.syncMotorsConfig(speed, -speed);
+            advmotctrls.syncMotorsConfig(v, -v);
         }
 
         let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
@@ -224,7 +225,7 @@ namespace motions {
     }
 
     // Функция поворота на лицию датчиком отражения nxt
-    function spinTurnToLineAtNxtLightSensor(rotateSide: TurnSide, speed: number, debug: boolean = false) {
+    function spinTurnToLineAtNxtLightSensor(rotateSide: TurnSide, v: number, debug: boolean = false) {
         let sensorSide: LineSensor; // Инициализируем переменную сенсора
         let sensorBlackRefRaw = 0, sensorWhiteRefRaw = 0;
         if (rotateSide == TurnSide.Left) {
@@ -248,10 +249,10 @@ namespace motions {
         let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
 
         if (rotateSide == TurnSide.Left) {
-            advmotctrls.syncMotorsConfig(-speed, speed);
+            advmotctrls.syncMotorsConfig(-v, v);
             calcMotRot *= -1; // Умножаем на -1, чтобы вращаться влево
         } else if (rotateSide == TurnSide.Right) {
-            advmotctrls.syncMotorsConfig(speed, -speed);
+            advmotctrls.syncMotorsConfig(v, -v);
         }
 
         let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
