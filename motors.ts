@@ -1,13 +1,13 @@
 namespace motors {
 
-    let regMotorMaxSpeed = 80; // Максимальная скорость регулирования положения мотором
+    let regMotorMaxV = 80; // Максимальная скорость регулирования положения мотором
     let regMotorKp = 1; // Пропорциональный коэффицент регулирования положения мотора
     let regMotorKi = 0; // Интегральный коэффицент регулирования положения мотора
     let regMotorKd = 0; // Дифференциальный коэффицент регулирования положения мотора
     let regMotorKf = 0; // Фильтр дифференциального коэффицента регулирования положения мотора
     let regMotorTimeOut = 2000; // Максимальное время работы
     let errorThreshold = 1; // Допустимая погрешность (в тиках энкодера)
-    let minSpeedThreshold = 5; // Порог минимальной скорости
+    let vMinThreshold = 5; // Порог минимальной скорости
 
     export const pidRegMotor = new automation.PIDController(); // PID для регулирования положения мотора
     
@@ -30,13 +30,13 @@ namespace motors {
     //% group="Управление положением"
     export function setPosition(motor: motors.Motor, pos: number, braking: Braking, params?: params.MotorRegulator, debug: boolean = false) {
         if (params) {
-            if (params.maxSpeed >= 0) regMotorMaxSpeed = params.maxSpeed;
+            if (params.vMax >= 0) regMotorMaxV = params.vMax;
             if (params.Kp >= 0) regMotorKp = params.Kp;
             if (params.Ki >= 0) regMotorKi = params.Ki;
             if (params.Kd >= 0) regMotorKd = params.Kd;
             if (params.Kf >= 0) regMotorKf = params.Kf;
             if (params.errorThreshold >= 0) errorThreshold = params.errorThreshold;
-            if (params.minSpeedThreshold >= 0) minSpeedThreshold = params.minSpeedThreshold;
+            if (params.vMinThreshold >= 0) vMinThreshold = params.vMinThreshold;
             if (params.timeOut >= 0) regMotorTimeOut = params.timeOut;
         }
 
@@ -60,10 +60,10 @@ namespace motors {
             if (regMotorTimeOut > 0 && currTime - startTime >= regMotorTimeOut) break; // Таймаут
             const currentAngle = motor.angle();
             const error = pos - currentAngle; // Расчитываем ошибку положения
-            if (Math.abs(error) <= errorThreshold && Math.abs(motor.speed()) <= minSpeedThreshold) break; // Угол был достигнут
+            if (Math.abs(error) <= errorThreshold && Math.abs(motor.speed()) <= vMinThreshold) break; // Угол был достигнут
             // pidRegMotor.setPoint(error); // Передать ошибку регулятору
             let u = pidRegMotor.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
-            u = Math.constrain(u, -regMotorMaxSpeed, regMotorMaxSpeed); // Ограничиваем
+            u = Math.constrain(u, -regMotorMaxV, regMotorMaxV); // Ограничиваем
             motor.run(u); // Установить мотору управляющее воздействие
             if (debug && currTime - prevDebugPrintTime >= 10) {
                 // brick.clearScreen();

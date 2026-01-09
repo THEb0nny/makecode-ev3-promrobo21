@@ -3,13 +3,13 @@ namespace motions {
     export let minPwrAtEndMovement = 10; // Минимальная мощность при завершении движения
 
     // Функция, которая выполняет действие после цикла с движением
-    export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, speed?: number) { // 
+    export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, v?: number) { // 
         if (actionAfterMotion == AfterMotion.HoldStop || actionAfterMotion == MotionBraking.Hold) { // Тормоз с жёстким торможением (удержанием)
             chassis.stop(Braking.Hold);
         } else if (actionAfterMotion == AfterMotion.FloatStop || actionAfterMotion == MotionBraking.Float) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
             chassis.stop(Braking.Float);
         } else if (actionAfterMotion == AfterMotion.NoStop || actionAfterMotion == MotionBraking.Coasting) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
-            chassis.steeringCommand(0, speed);
+            chassis.steeringCommand(0, v);
         }
     }
 

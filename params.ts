@@ -549,10 +549,10 @@ namespace params {
 namespace params {
 
     export interface MotorRegulator {
-        maxSpeed?: number;
+        vMax?: number;
         timeOut?: number;
         errorThreshold?: number;
-        minSpeedThreshold?: number;
+        vMinThreshold?: number;
         Kp?: number;
         Ki?: number;
         Kd?: number;
