@@ -26,8 +26,8 @@ namespace custom {
                         min: 0,
                         max: 5000
                     },
-                    speed: {
-                        val: motions.lineFollowToDistance2SensorSpeed,
+                    v: {
+                        val: motions.lineFollowToDistance2SensorV,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -54,13 +54,13 @@ namespace custom {
             },
             SYNC_RAMP_DIST_MOVE: {
                 params: {
-                    minSpeed: {
+                    minV: {
                         val: 10,
                         changeStep: 5,
                         min: -100,
                         max: 100
                     },
-                    maxSpeed: {
+                    maxV: {
                         val: 50,
                         changeStep: 5,
                         min: -100,
@@ -109,8 +109,8 @@ namespace custom {
                     debug: {
                         val: true
                     },
-                    speed: {
-                        val: motions.lineFollowCrossIntersection2SensorSpeed,
+                    v: {
+                        val: motions.lineFollowCrossIntersection2SensorV,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -146,8 +146,8 @@ namespace custom {
                     debug: {
                         val: true
                     },
-                    speed: {
-                        val: motions.lineFollowToDistance2SensorSpeed,
+                    v: {
+                        val: motions.lineFollowToDistance2SensorV,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -183,8 +183,8 @@ namespace custom {
                     debug: {
                         val: true
                     },
-                    speed: {
-                        val: motions.lineFollowToDistance2SensorSpeed,
+                    v: {
+                        val: motions.lineFollowToDistance2SensorV,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -217,7 +217,7 @@ namespace custom {
                         min: -360,
                         max: 360
                     },
-                    speed: {
+                    v: {
                         val: 40,
                         changeStep: 5,
                         min: 5,
@@ -245,7 +245,7 @@ namespace custom {
                         val: WheelPivot.LeftWheel,
                         changeStep: 1
                     },
-                    speed: {
+                    v: {
                         val: 40,
                         changeStep: 5,
                         min: 5,
@@ -278,8 +278,8 @@ namespace custom {
                         min: 100,
                         max: 250
                     },
-                    speed: {
-                        val: chassis.smartSpinTurnSpeed,
+                    v: {
+                        val: chassis.smartSpinTurnV,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -325,8 +325,8 @@ namespace custom {
                         min: 100,
                         max: 250
                     },
-                    speed: {
-                        val: chassis.smartPivotTurnSpeed,
+                    v: {
+                        val: chassis.smartPivotTurnV,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -368,8 +368,8 @@ namespace custom {
                     debug: {
                         val: true
                     },
-                    maxSpeed: {
-                        val: levelings.lineAlignmentMaxSpeed,
+                    maxV: {
+                        val: levelings.lineAlignmentMaxV,
                         changeStep: 5,
                         min: 5,
                         max: 100
@@ -418,7 +418,7 @@ namespace custom {
             },
             LINE_ALIGNMET_IN_MOTION: {
                 params: {
-                    speed: {
+                    v: {
                         val: 30,
                         changeStep: 5,
                         min: -100,
@@ -613,19 +613,19 @@ namespace custom {
                     // Запускаем выполнение теста
                     if (screenName == "SYNC_DIST_MOVE") {
                         const dist = methodScreens[screenName].params.dist.val;
-                        const speed = methodScreens[screenName].params.speed.val;
+                        const v = methodScreens[screenName].params.v.val;
                         const params = {
-                            speed: methodScreens[screenName].params.speed.val,
+                            v: methodScreens[screenName].params.v.val,
                             Kp: methodScreens[screenName].params.Kp.val,
                             Ki: methodScreens[screenName].params.Ki.val,
                             Kd: methodScreens[screenName].params.Kd.val,
                             N: methodScreens[screenName].params.N.val
                         };
                         chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
-                        chassis.linearDistMove(dist, speed, MotionBraking.Hold);
+                        chassis.linearDistMove(dist, v, MotionBraking.Hold);
                     } else if (screenName == "SYNC_RAMP_DIST_MOVE") {
-                        const minSpeed = methodScreens[screenName].params.minSpeed.val;
-                        const maxSpeed = methodScreens[screenName].params.maxSpeed.val;
+                        const minV = methodScreens[screenName].params.minV.val;
+                        const maxV = methodScreens[screenName].params.maxV.val;
                         const totalDist = methodScreens[screenName].params.totalDist.val;
                         const accelDist = methodScreens[screenName].params.accelDist.val;
                         const decelDist = methodScreens[screenName].params.totalDist.val;
@@ -636,11 +636,11 @@ namespace custom {
                             N: methodScreens[screenName].params.N.val
                         };
                         chassis.setSyncRegulatorGains(params.Kp, params.Ki, params.Kd);
-                        chassis.rampLinearDistMove(minSpeed, maxSpeed, minSpeed, totalDist, accelDist, decelDist);
+                        chassis.rampLinearDistMove(minV, maxV, minV, totalDist, accelDist, decelDist);
                     } else if (screenName == "LW_2S_TO_INTERSECTION") {
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
-                            speed: methodScreens[screenName].params.speed.val,
+                            v: methodScreens[screenName].params.v.val,
                             Kp: methodScreens[screenName].params.Kp.val,
                             Ki: methodScreens[screenName].params.Ki.val,
                             Kd: methodScreens[screenName].params.Kd.val,
@@ -651,7 +651,7 @@ namespace custom {
                         const dist = methodScreens[screenName].params.dist.val;
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
-                            speed: methodScreens[screenName].params.speed.val,
+                            v: methodScreens[screenName].params.v.val,
                             Kp: methodScreens[screenName].params.Kp.val,
                             Ki: methodScreens[screenName].params.Ki.val,
                             Kd: methodScreens[screenName].params.Kd.val,
@@ -663,7 +663,7 @@ namespace custom {
                         const lineLocation = methodScreens[screenName].params.lineLocation.val;
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
-                            speed: methodScreens[screenName].params.speed.val,
+                            v: methodScreens[screenName].params.v.val,
                             Kp: methodScreens[screenName].params.Kp.val,
                             Ki: methodScreens[screenName].params.Ki.val,
                             Kd: methodScreens[screenName].params.Kd.val,
@@ -672,25 +672,25 @@ namespace custom {
                         motions.lineFollowToSideIntersection(junction, AfterLineMotion.HoldStop, params, debug);
                     } else if (screenName == "CHASSIS_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
-                        const speed = methodScreens[screenName].params.speed.val;
+                        const v = methodScreens[screenName].params.v.val;
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
-                        chassis.spinTurn(deg, speed);
+                        chassis.spinTurn(deg, v);
                     } else if (screenName == "CHASSIS_PIVOT_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const pivot = methodScreens[screenName].params.pivot.val;
-                        const speed = methodScreens[screenName].params.speed.val;
+                        const v = methodScreens[screenName].params.v.val;
                         const debug = methodScreens[screenName].params.debug.val;
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
-                        chassis.pivotTurn(deg, speed, pivot);
+                        chassis.pivotTurn(deg, v, pivot);
                     } else if (screenName == "SMART_SPIN_TURN") {
                         const deg = methodScreens[screenName].params.deg.val;
                         const debug = methodScreens[screenName].params.debug.val;
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
                         const params = {
-                            speed: methodScreens[screenName].params.speed.val,
+                            v: methodScreens[screenName].params.v.val,
                             Kp: methodScreens[screenName].params.Kp.val,
                             Ki: methodScreens[screenName].params.Ki.val,
                             Kd: methodScreens[screenName].params.Kd.val,
@@ -704,7 +704,7 @@ namespace custom {
                         const baseLength = methodScreens[screenName].params.base_length.val;
                         chassis.setBaseLength(baseLength);
                         const params = {
-                            speed: methodScreens[screenName].params.speed.val,
+                            v: methodScreens[screenName].params.v.val,
                             Kp: methodScreens[screenName].params.Kp.val,
                             Ki: methodScreens[screenName].params.Ki.val,
                             Kd: methodScreens[screenName].params.Kd.val,
@@ -716,7 +716,7 @@ namespace custom {
                         const time = methodScreens[screenName].params.time.val;
                         const debug = methodScreens[screenName].params.debug.val;
                         const params = {
-                            maxSpeed: methodScreens[screenName].params.maxSpeed.val,
+                            maxV: methodScreens[screenName].params.maxV.val,
                             timeOut: methodScreens[screenName].params.timeOut.val,
                             leftKp: methodScreens[screenName].params.leftKp.val,
                             rightKp: methodScreens[screenName].params.rightKp.val,
@@ -729,9 +729,9 @@ namespace custom {
                         };
                         levelings.lineAlignment(lineLocation, time, params, debug);
                     } else if (screenName == "LINE_ALIGNMET_IN_MOTION") {
-                        const speed = methodScreens[screenName].params.speed.val;
+                        const v = methodScreens[screenName].params.v.val;
                         const debug = methodScreens[screenName].params.debug.val;
-                        levelings.lineAlignmentInMotion(speed, AfterMotion.HoldStop, debug)
+                        levelings.lineAlignmentInMotion(v, AfterMotion.HoldStop, debug)
                     }
                 } else { // Если нажали на обычную строку с параметром, то подтверждаем для возможности его изменения
                     music.playToneInBackground(Note.F, 50); // Сигнал

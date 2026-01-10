@@ -7,13 +7,13 @@ namespace chassis {
     export let smartTurnConditionErrDifference = 10; // Пороговое значения ошибки для регулятора умного поворота, что поворот выполнен
     export let smartTurnConditionRegDifference = 10; // Пороговое значение регулятора (мощности регулятора) умного поворота для определения выполненного поворота
 
-    export let smartSpinTurnSpeed = 50; // Переменная для хранения скорости при повороте относительно центра оси
+    export let smartSpinTurnV = 50; // Переменная для хранения скорости при повороте относительно центра оси
     export let smartSpinTurnKp = 0.25; // Переменная для хранения коэффицента пропорционального регулятора при повороте относительно центра оси
     export let smartSpinTurnKi = 0; // Переменная для хранения коэффицента интегорального регулятора при повороте относительно центра оси
     export let smartSpinTurnKd = 2; // Переменная для хранения коэффицента дифференциального регулятора при повороте относительно центра оси
     export let smartSpinTurnKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при повороте относительно центра оси
 
-    export let smartPivotTurnSpeed = 60; // Переменная для хранения скорости при повороте относительно колеса
+    export let smartPivotTurnV = 60; // Переменная для хранения скорости при повороте относительно колеса
     export let smartPivotTurnKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при повороте относительно колеса
     export let smartPivotTurnKi = 0; // Переменная для хранения коэффицента интегорального регулятора при повороте относительно колеса
     export let smartPivotTurnKd = 2; // Переменная для хранения коэффицента дифференциального регулятора при повороте относительно колеса
@@ -108,7 +108,7 @@ namespace chassis {
     export function smartSpinTurn(deg: number, params?: params.LineFollow, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
-            if (params.speed >= 0) smartSpinTurnSpeed = params.speed;
+            if (params.v >= 0) smartSpinTurnV = params.v;
             if (params.Kp >= 0) smartSpinTurnKp = params.Kp;
             if (params.Ki >= 0) smartSpinTurnKi = params.Ki;
             if (params.Kd >= 0) smartSpinTurnKd = params.Kd;
@@ -138,7 +138,7 @@ namespace chassis {
             const error = errorL - errorR; // Расчитываем общую ошибку
             pidSmartTurns.setPoint(error); // Передаём ошибку регулятору
             let u = pidSmartTurns.compute(dt == 0 ? 1 : dt, 0); // Вычисляем и записываем значение с регулятора
-            u = Math.constrain(u, -smartSpinTurnSpeed, smartSpinTurnSpeed); // Ограничение скорости
+            u = Math.constrain(u, -smartSpinTurnV, smartSpinTurnV); // Ограничение скорости
             if (!isTurned && Math.abs(error) <= smartTurnConditionErrDifference && Math.abs(u) <= smartTurnConditionRegDifference) { // Если почти повернулись до конца при маленькой ошибке и маленькой мощности регулятора
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
@@ -180,7 +180,7 @@ namespace chassis {
     export function smartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: params.LineFollow, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
-            if (params.speed >= 0) smartPivotTurnSpeed = params.speed;
+            if (params.v >= 0) smartPivotTurnV = params.v;
             if (params.Kp >= 0) smartPivotTurnKp = params.Kp;
             if (params.Ki >= 0) smartPivotTurnKi = params.Ki;
             if (params.Kd >= 0) smartPivotTurnKd = params.Kd;
@@ -214,7 +214,7 @@ namespace chassis {
             if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartPivotTurnTimeOut) break; // Дорегулируемся
             pidSmartTurns.setPoint(error); // Передаём ошибку регулятору
             let u = pidSmartTurns.compute(dt == 0 ? 1 : dt, 0); // Записываем в переменную управляющее воздействие регулятора
-            u = Math.constrain(u, -smartPivotTurnSpeed, smartPivotTurnSpeed); // Ограничить скорость по входному параметру
+            u = Math.constrain(u, -smartPivotTurnV, smartPivotTurnV); // Ограничить скорость по входному параметру
             if (!isTurned && Math.abs(error) <= smartTurnConditionErrDifference && Math.abs(u) <= smartTurnConditionRegDifference) { // Если почти повернулись до конца
                 isTurned = true; // Повернулись до нужного градуса
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования

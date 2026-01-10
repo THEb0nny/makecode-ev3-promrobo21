@@ -159,7 +159,7 @@ namespace motions {
     //% group="Поворот на линию"
     export function spinTurnToLine(rotateSide: TurnSide, v: number, params?: params.LinePositioning, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed >= 0) levelings.linePositioningMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.vMax >= 0) levelings.linePositioningMaxV = Math.abs(params.vMax);
             if (params.timeOut >= 0) levelings.linePositioningTimeOut = Math.abs(params.timeOut);
             if (params.Kp >= 0) levelings.linePositioningKp = params.Kp;
             if (params.Ki >= 0) levelings.linePositioningKi = params.Ki;

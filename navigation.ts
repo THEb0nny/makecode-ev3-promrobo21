@@ -325,7 +325,7 @@ namespace navigation {
     }
 
     // Поворот с помощью направления навигации
-    export function directionSpinTurn(inputDirection: number, speed: number, debug: boolean = false) {
+    export function directionSpinTurn(inputDirection: number, v: number, debug: boolean = false) {
         let turnDeg = 0; // Переменная для значения поворота
         while (true) {
             if (inputDirection > direction && (direction != 0 || inputDirection != 3) || (direction == 3 && inputDirection == 0)) {
@@ -339,13 +339,13 @@ namespace navigation {
             } else break; // Иначе поворот не требуется
         }
         if (debug) console.log(`inputDirection: ${inputDirection}, turnDeg: ${turnDeg}`);
-        chassis.spinTurn(turnDeg, speed); // Поворот относительно центра шасси
+        chassis.spinTurn(turnDeg, v); // Поворот относительно центра шасси
     }
 
     function processingFollowLineByPathInputParams(params?: params.NavLineFollow) {
-        if (params.moveStartSpeed >= 0) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveStartSpeed);
-        if (params.moveMaxSpeed >= 0) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveMaxSpeed);
-        if (params.turnSpeed >= 0) lineFollowByPathTurnSpeed = Math.abs(params.turnSpeed);
+        if (params.moveStartV >= 0) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveStartV);
+        if (params.moveMaxV >= 0) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveMaxV);
+        if (params.turnV >= 0) lineFollowByPathTurnSpeed = Math.abs(params.turnV);
         if (params.accelStartDist >= 0) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist);
         if (params.Kp >= 0) lineFollowByPathKp = Math.abs(params.Kp);
         if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
@@ -376,7 +376,7 @@ namespace navigation {
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
         for (let i = 0; i < path.length - 1; i++) {
             directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { speed: lineFollowByPathMoveMaxSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
+            motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
@@ -405,8 +405,8 @@ namespace navigation {
             if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
                     motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Coasting, {
-                        startSpeed: lineFollowByPathMoveStartSpeed,
-                        maxSpeed: lineFollowByPathMoveMaxSpeed,
+                        vStart: lineFollowByPathMoveStartSpeed,
+                        vMax: lineFollowByPathMoveMaxSpeed,
                         Kp: lineFollowByPathKp,
                         Ki: lineFollowByPathKi,
                         Kd: lineFollowByPathKd,
@@ -414,7 +414,7 @@ namespace navigation {
                     }); // Движение на расстояние для разгона
                 }
                 motions.lineFollowToCrossIntersection(afterMotion, { 
-                    speed: lineFollowByPathMoveMaxSpeed,
+                    v: lineFollowByPathMoveMaxSpeed,
                     Kp: lineFollowByPathKp,
                     Ki: lineFollowByPathKi,
                     Kd: lineFollowByPathKd, 
@@ -422,7 +422,7 @@ namespace navigation {
                 }); // Движение до перекрёстка
             } else {
                 motions.lineFollowToCrossIntersection(afterMotion, {
-                    speed: lineFollowByPathMoveMaxSpeed,
+                    v: lineFollowByPathMoveMaxSpeed,
                     Kp: lineFollowByPathKp,
                     Ki: lineFollowByPathKi,
                     Kd: lineFollowByPathKd,

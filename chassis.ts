@@ -119,8 +119,8 @@ namespace chassis {
      * @param vFinish финишная скорость (мощность) движения, eg: 20
      */
     //% blockId="RampLinearDistMove"
-    //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|from start $startSpeed\\% max $maxSpeed\\% finish $finishSpeed\\%"
-    //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c стартовой $startSpeed\\% макс $maxSpeed\\% финишной $finishSpeed\\%"
+    //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|from start $vStart\\% max $vMax\\% finish $vFinish\\%"
+    //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c стартовой $vStart\\% макс $vMax\\% финишной $vFinish\\%"
     //% inlineInputMode="inline"
     //% vStart.shadow="motorSpeedPicker"
     //% vMax.shadow="motorSpeedPicker"

@@ -1,6 +1,6 @@
 namespace levelings {
 
-    export let lineAlignmentMaxSpeed = 50; // Переменная для хранения максимальной скорости при регулировании на линии
+    export let lineAlignmentMaxV = 50; // Переменная для хранения максимальной скорости при регулировании на линии
     export let lineAlignmentTimeOut = 1000; // Переменная для хранения максимального времени выравнивания
 
     export let lineAlignmentLeftSideKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
@@ -13,7 +13,7 @@ namespace levelings {
     export let lineAlignmentRightSideKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при регулировании на линии правой стороны
     export let lineAlignmentRightSideKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при регулировании на линии правой стороны
 
-    export let linePositioningMaxSpeed = 50; // Переменная для хранения максимальной скорости при позиционировании на линии
+    export let linePositioningMaxV = 50; // Переменная для хранения максимальной скорости при позиционировании на линии
     export let linePositioningTimeOut = 1000; // Переменная для хранения максимального времени позиционирования
 
     export let linePositioningKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при регулировании на линии левой стороны
@@ -75,7 +75,7 @@ namespace levelings {
     //% group="Линия"
     export function lineAlignment(lineLocation: VerticalLineLocation, regulatorTime: number, params?: params.LineAlignment, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed >= 0) lineAlignmentMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.vMax >= 0) lineAlignmentMaxV = Math.abs(params.vMax);
             if (params.timeOut >= 0) lineAlignmentTimeOut = Math.abs(params.timeOut);
             if (params.leftKp >= 0) lineAlignmentLeftSideKp = params.leftKp;
             if (params.leftKi >= 0) lineAlignmentLeftSideKi = params.leftKi;
@@ -121,8 +121,8 @@ namespace levelings {
             // pidRightSideLineAlignment.setPoint(errorR);
             let uL = pidLeftSideLineAlignment.compute(dt == 0 ? 1 : dt, -errorL) * regulatorMultiplier; // Регулятор левой стороны
             let uR = pidRightSideLineAlignment.compute(dt == 0 ? 1 : dt, -errorR) * regulatorMultiplier; // Регулятор правой стороны
-            uL = Math.constrain(uL, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость левой стороны
-            uR = Math.constrain(uR, -lineAlignmentMaxSpeed, lineAlignmentMaxSpeed); // Ограничиваем скорость правой стороны
+            uL = Math.constrain(uL, -lineAlignmentMaxV, lineAlignmentMaxV); // Ограничиваем скорость левой стороны
+            uR = Math.constrain(uR, -lineAlignmentMaxV, lineAlignmentMaxV); // Ограничиваем скорость правой стороны
             chassis.setSpeedsCommand(uL, uR); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
@@ -156,7 +156,7 @@ namespace levelings {
     //% group="Линия"
     export function linePositioning(regTime: number, params?: params.LinePositioning, debug: boolean = false) {
         if (params) { // Если были переданы параметры
-            if (params.maxSpeed >= 0) linePositioningMaxSpeed = Math.abs(params.maxSpeed);
+            if (params.vMax >= 0) linePositioningMaxV = Math.abs(params.vMax);
             if (params.timeOut >= 0) linePositioningTimeOut = Math.abs(params.timeOut);
             if (params.Kp >= 0) linePositioningKp = params.Kp;
             if (params.Ki >= 0) linePositioningKi = params.Ki;
@@ -189,7 +189,7 @@ namespace levelings {
             }
             // pidLinePositioning.setPoint(error); // Устанавливаем ошибку в регулятор
             let u = pidLinePositioning.compute(dt == 0 ? 1 : dt, -error); // Вычисляем и записываем значение с регулятора
-            u = Math.constrain(u, -linePositioningMaxSpeed, linePositioningMaxSpeed); // Ограничиваем скорость
+            u = Math.constrain(u, -linePositioningMaxV, linePositioningMaxV); // Ограничиваем скорость
             chassis.setSpeedsCommand(u, -u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
