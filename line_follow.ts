@@ -274,12 +274,12 @@ namespace motions {
 
 namespace motions {
 
-    export function printDubugLineFollow(refLeftLS: number, refRightLS: number, error: number, U: number, dt: number) {
+    export function printDubugLineFollow(refLeftLS: number, refRightLS: number, error: number, u: number, dt: number) {
         brick.clearScreen(); // Очистка экрана
         brick.printValue("refLeftLS", refLeftLS, 1);
         brick.printValue("refRightLS", refRightLS, 2);
         brick.printValue("error", error, 3);
-        brick.printValue("U", U, 4);
+        brick.printValue("u", u, 4);
         brick.printValue("dt", dt, 12);
     }
 
@@ -290,7 +290,7 @@ namespace motions {
         } else if (actionAfterMotion == AfterLineMotion.SmoothRolling) { // Прокатка, чтобы вставать на линию с мягким торможением после определния перекрёстка
             chassis.decelFinishLinearDistMove(v, minPwrAtEndMovement, AfterMotion.HoldStop, motions.getDistRollingAfterIntersection(), motions.getDistRollingAfterIntersection());
         } else if (actionAfterMotion == AfterLineMotion.ContinueRoll) { // Прокатка с линии
-            // motions.rollingMoveOutFromLine(motions.getDistRollingFromLineAfterIntersection(), speed);
+            // motions.rollingMoveOutFromLine(motions.getDistRollingFromLineAfterIntersection(), v);
             chassis.linearDistMove(motions.getDistRollingFromLineAfterIntersection(), v, MotionBraking.Coasting);
         } else if (actionAfterMotion == AfterLineMotion.LineRolling) { // Прокатка с движением по линии с тормозом
             rollingLineFollowing(motions.getDistRollingAfterIntersection(), v, AfterMotion.HoldStop);
@@ -316,8 +316,8 @@ namespace motions {
     }
 
     // Вспомогательная функция для движения по линии одним датчиком и для того, чтобы подрулувать с ожиданием нахождения линии
-    export function steeringUntilFindLine(lineSensor: LineSensor, steering: number, speed: number) {
-        const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(steering, speed);
+    export function steeringUntilFindLine(lineSensor: LineSensor, steering: number, v: number) {
+        const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(steering, v);
 
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулятора
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
