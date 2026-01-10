@@ -98,8 +98,7 @@ namespace chassis {
             console.log(`Warning: vRight is negative (${vRight}). Using absolute value.`);
         }
 
-        vLeft = Math.abs(vLeft); // Берём модуль скорости
-        vRight = Math.abs(vRight); // Берём модуль скорости
+        vLeft = Math.abs(vLeft), vRight = Math.abs(vRight); // Берём модуль скорости
         const vSign = dist > 0 ? 1 : -1; // Определяем направление по знаку DistMove
 
         const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию

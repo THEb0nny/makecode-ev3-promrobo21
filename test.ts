@@ -1,5 +1,5 @@
 // Установить моторы в шасси и установить свойства инверсии
-chassis.setChassisMotors(motors.mediumB, motors.mediumC, true, false);
+chassis.setMotors(motors.mediumB, motors.mediumC, true, false);
 
 // Установить параметры регулирования синхронизации моторов шасси
 chassis.setSyncRegulatorGains(0.02, 0.001, 0.5);

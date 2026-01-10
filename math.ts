@@ -5,6 +5,11 @@ namespace Math {
         return (distance / (Math.PI * chassis.getWheelDiametr())) * motors.cpr; // Дистанция в мм, которую нужно пройти
     }
 
+    // Вспомогательная функция расчёта поворота в градусах
+    export function calculateRotateToEncRotate(degrees: number): number {
+        return ((degrees * chassis.getBaseLength()) / chassis.getWheelDiametr()) * (motors.cpr / 360);
+    }
+
     // This define returns the smallest of the three numbers
     export function min3(a: number, b: number, c: number): number {
         return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c);

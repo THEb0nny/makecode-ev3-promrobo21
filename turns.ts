@@ -31,7 +31,7 @@ namespace chassis {
         
         v = Math.clamp(0, 100, Math.abs(v) >> 0); // Берём модуль скорости, ограничиваем от 0 до 100 и отсекаем дробную часть
         
-        const calcMotRot = Math.round((deg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
+        const calcMotRot = Math.round(Math.calculateRotateToEncRotate(deg)); // Расчёт угла поворота моторов для поворота
         
         const vLeft = deg < 0 ? -v : v;
         const vRight = deg > 0 ? -v : v;
@@ -168,9 +168,9 @@ namespace chassis {
         vMax = Math.clamp(0, 100, Math.abs(vMax) >> 0); // Ограничиваем макс скорость от 0 до 100, берём модули и отсекаем дробную часть
         
         if (vMin > vMax) { // Проверка перепутанных скоростей ПОСЛЕ clamp
-            const temp = vMin;
+            const tempV = vMin;
             vMin = vMax;
-            vMax = temp;
+            vMax = tempV;
             console.log(`Warning: vMin was greater than vMax. Swapped: vMin=${vMin}, vMax=${vMax}`);
         }
         if (vMin === vMax) { // Проверка равенства скоростей
@@ -194,9 +194,9 @@ namespace chassis {
             absDecelDeg *= ratio;
         }
 
-        const accelCalcMotRot = Math.round((absAccelDeg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота для ускорения
-        const decelCalcMotRot = Math.round((absDecelDeg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота для замедления
-        const totalCalcMotRot = Math.round((absDeg * getBaseLength()) / getWheelDiametr()); // Расчёт угла поворота моторов для поворота общего угла
+        const accelCalcMotRot = Math.round(Math.calculateRotateToEncRotate(absAccelDeg)); // Расчёт угла поворота моторов для поворота для ускорения
+        const decelCalcMotRot = Math.round(Math.calculateRotateToEncRotate(absDecelDeg)); // Расчёт угла поворота моторов для поворота для замедления
+        const totalCalcMotRot = Math.round(Math.calculateRotateToEncRotate(deg)); // Расчёт угла поворота моторов для поворота общего угла
         
         const vLeftMax = deg > 0 ? vMax : -vMax;
         const vRightMax = deg > 0 ? -vMax : vMax;
@@ -273,9 +273,9 @@ namespace chassis {
         vMax = Math.clamp(-100, 100, Math.abs(vMax) >> 0); // Ограничиваем макс скорость от -100 до 100, берём модули и отсекаем дробную часть
         
         if (vMin > vMax) { // Проверка перепутанных скоростей по модулю
-            const temp = vMin;
+            const tempV = vMin;
             vMin = vMax;
-            vMax = temp;
+            vMax = tempV;
             console.log(`Warning: vMin was greater than vMax. Swapped: vMin=${vMin}, vMax=${vMax}`);
         }
         if (vMin == vMax) { // Проверка равенства скоростей
