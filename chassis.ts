@@ -75,7 +75,7 @@ namespace chassis {
      * @param dist дистанция движения в мм, eg: 100
      * @param vLeft скорость (мощность) левого мотора, eg: 50
      * @param vRight скорость (мощность) правого мотора, eg: 50
-     * @param braking тип торможения, eg: Braking.Hold
+     * @param braking тип торможения, eg: MotionBraking.Hold
      */
     //% blockId="DistMove"
     //% block="distance moving $dist mm at $vLeft\\% $vRight\\% braking $braking"
@@ -243,19 +243,19 @@ namespace chassis {
      * @param v начальная скорость (мощность) движения, eg: 50
      * @param vFinish финишная скорость (мощность) движения, eg: 20
      * @param totalDist общее расстояние в мм, eg: 100
-     * @param decelDist расстояние замедления в мм, eg: 50
+     * @param decelDist расстояние замедления в мм, eg: 90
      * @param actionAfterMotion действие после, eg: AfterMotion.HoldStop
      */
     //% blockId="DecelFinishLinearDistMove"
-    //% block="deceleration in linear motion from $v\\% to $vFinish\\%|after motion $actionAfterMotion|per $decelDist mm|at total distance of $totalDist"
-    //% block.loc.ru="замеделение при линейном движении c $v\\% до $vFinish\\%|действие после $actionAfterMotion|за $decelDist мм|при общей дистанции $totalDist"
+    //% block="deceleration in linear motion from $v\\% to $vFinish\\%|per $decelDist mm|at total distance of $totalDist|after motion $actionAfterMotion"
+    //% block.loc.ru="замеделение при линейном движении c $v\\% до $vFinish\\%|за $decelDist мм|при общей дистанции $totalDist|действие после $actionAfterMotion"
     //% inlineInputMode="inline"
     //% v.shadow="motorSpeedPicker"
     //% vFinish.shadow="motorSpeedPicker"
     //% weight="87" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение с ускорениями в мм"
-    export function decelFinishLinearDistMove(v: number, vFinish: number, actionAfterMotion: AfterMotion, totalDist: number, decelDist: number) {
+    export function decelFinishLinearDistMove(v: number, vFinish: number, totalDist: number, decelDist: number, actionAfterMotion: AfterMotion) {
         if (v == 0 || totalDist == 0 || decelDist == 0) {
             stop(Braking.Hold);
             return;
