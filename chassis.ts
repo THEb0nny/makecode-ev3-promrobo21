@@ -13,8 +13,8 @@ namespace chassis {
     //% weight="89"
     //% group="Move"
     export function regulatorSteering(u: number, v: number) {
-        const mLeft = v + u, mRight = v - u;
-        setSpeedsCommand(mLeft, mRight);
+        const pLeft = v + u, pRight = v - u;
+        setSpeedsCommand(pLeft, pRight);
     }
 
     /**
@@ -30,10 +30,10 @@ namespace chassis {
     //% weight="88"
     //% group="Move"
     export function normalizedRegulatorSteering(u: number, v: number) {
-        let mLeft = v + u, mRight = v - u;
-        const z = v / Math.max(Math.abs(mLeft), Math.abs(mRight));
-        mLeft *= z, mRight *= z;
-        setSpeedsCommand(mLeft, mRight);
+        let pLeft = v + u, pRight = v - u;
+        const z = v / Math.max(Math.abs(pLeft), Math.abs(pRight));
+        pLeft *= z, pRight *= z;
+        setSpeedsCommand(pLeft, pRight);
     }
 
     /**
