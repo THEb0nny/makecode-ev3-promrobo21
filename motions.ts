@@ -179,23 +179,21 @@ namespace motions {
         let sensor: sensors.ColorSensor; // Инициализируем переменную сенсора
         if (rotateSide == TurnSide.Left) sensor = (sensors.leftLineSensor as sensors.ColorSensor);
         else if (rotateSide == TurnSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
-        sensor.rgbRaw(); // Обращаемся к режиму датчика заранее, чтобы тот включился
+        sensor.rgbRaw(); // Обращаемся к режиму датчика заранее, чтобы тот включился в нужном режиме
+
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+
+        const calcMotRot = Math.round(Math.calculateRotateToEncRotate(30)); // Расчёт угла поворота моторов для поворота
+
+        // const [vLeft, vRight] = rotateSide == TurnSide.Left ? [-v, v] : [v, -v];
+        const vLeft = rotateSide == TurnSide.Left ? -v : v;
+        const vRight = rotateSide == TurnSide.Left ? v : -v;
 
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         chassis.pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
-
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
-
-        if (rotateSide == TurnSide.Left) {
-            advmotctrls.syncMotorsConfig(-v, v);
-            calcMotRot *= -1; // Умножаем на -1, чтобы вращаться влево
-        } else if (rotateSide == TurnSide.Right) {
-            advmotctrls.syncMotorsConfig(v, -v);
-        }
 
         let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
         let lineIsFound = false; // Переменная - флажок о том, что чёрная линия найдена
@@ -212,12 +210,11 @@ namespace motions {
                 const hsvlCS = sensors.convertRgbToHsvl(rgbCS); // Переводим RGB в HSV
                 const colorCS = sensors.convertHsvlToColorNum(hsvlCS, sensors.getHsvlToColorNumParams(sensor)); // Узнаём какой цвет
                 if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
-                if (lineIsFound && colorCS == 6) break; // Нашли белую часть посли линии
+                if (lineIsFound && colorCS == 6) break; // Нашли белую часть после линии
             }
-            const error = advmotctrls.getErrorSyncMotors(eml, emr);
-            // chassis.pidChassisSync.setPoint(error);
+            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
-            const powers = advmotctrls.getPwrSyncMotors(u);
+            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
         }
@@ -239,21 +236,18 @@ namespace motions {
         }
         sensors.getLineSensorRawRefValue(sensorSide); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
+        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+
+        const calcMotRot = Math.round(Math.calculateRotateToEncRotate(30)); // Расчёт угла поворота моторов для поворота
+
+        const vLeft = rotateSide == TurnSide.Left ? -v : v;
+        const vRight = rotateSide == TurnSide.Left ? v : -v;
+
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
         chassis.pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
-
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        let calcMotRot = Math.round(30 * chassis.getBaseLength() / chassis.getWheelDiametr()); // Расчитать градусы для поворота в градусы для мотора
-
-        if (rotateSide == TurnSide.Left) {
-            advmotctrls.syncMotorsConfig(-v, v);
-            calcMotRot *= -1; // Умножаем на -1, чтобы вращаться влево
-        } else if (rotateSide == TurnSide.Right) {
-            advmotctrls.syncMotorsConfig(v, -v);
-        }
 
         let preTurnIsDone = false; // Переменная - флажок о том, что предварительный поворот выполнен
         let lineIsFound = false; // Переменная - флажок о том, что чёрная линия найдена
@@ -270,9 +264,9 @@ namespace motions {
                 if (!lineIsFound && refLS <= 15) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && refLS >= 80) break; // Нашли белую часть посли линии
             }
-            const error = advmotctrls.getErrorSyncMotors(eml, emr);
+            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
-            const powers = advmotctrls.getPwrSyncMotors(u);
+            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
         }
