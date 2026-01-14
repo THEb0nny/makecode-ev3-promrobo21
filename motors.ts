@@ -74,7 +74,7 @@ namespace motors {
             }
             control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла за нужную частоту
         }
-        if (debug) console.log(`Stop motors.setPosition, angle: ${motor.angle()}`);
+        if (debug) console.log(`Stop motors.setPosition(${pos}), currAngle: ${motor.angle()}`);
         music.playToneInBackground(988, 50); // Сигнал о завершении
         motor.stop(); // Останавливаем
     }

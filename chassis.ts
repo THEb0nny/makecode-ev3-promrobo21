@@ -57,14 +57,13 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (v < 0) {
-            console.log(`Warning: v is negative (${v}). Using absolute value.`);
-        }
-        v = Math.abs(v); // Берём модуль скорости
-        const vSign = dist > 0 ? 1 : -1; // Определяем направление по знаку dist
+        if (v < 0) console.log(`Warning: v is negative (${v}). Using absolute value.`);
+
+        v = Math.abs(v); // Берём модуль Скорости
+        const dirSign = dist >= 0 ? 1 : -1; // Определяем направление по знаку dist
 
         const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
-        syncMovement(v * vSign, v * vSign, mRotCalc, MoveUnit.Degrees, braking);
+        syncMovement(v * dirSign, v * dirSign, mRotCalc, MoveUnit.Degrees, braking);
     }
 
     /**
@@ -91,19 +90,15 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (vLeft < 0) {
-            console.log(`Warning: vLeft is negative (${vLeft}). Using absolute value.`);
-        }
-        if (vRight < 0) {
-            console.log(`Warning: vRight is negative (${vRight}). Using absolute value.`);
-        }
+        if (vLeft < 0) console.log(`Warning: vLeft is negative (${vLeft}). Using absolute value.`);
+        if (vRight < 0) console.log(`Warning: vRight is negative (${vRight}). Using absolute value.`);
 
         vLeft = Math.abs(vLeft), vRight = Math.abs(vRight); // Берём модуль скорости
-        const vSign = dist > 0 ? 1 : -1; // Определяем направление по знаку DistMove
+        const dirSign = dist >= 0 ? 1 : -1; // Определяем направление по знаку DistMove
 
         const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
         
-        syncMovement(vLeft * vSign, vRight * vSign, mRotCalc, MoveUnit.Degrees, braking);
+        syncMovement(vLeft * dirSign, vRight * dirSign, mRotCalc, MoveUnit.Degrees, braking);
     }
 
     /**
@@ -133,21 +128,11 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (vStart < 0) {
-            console.log(`Warning: vStart is negative (${vStart}). Using absolute value.`);
-        }
-        if (vMax < 0) {
-            console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
-        }
-        if (vFinish < 0) {
-            console.log(`Warning: vFinish is negative (${vFinish}). Using absolute value.`);
-        }
-        if (accelDist < 0) {
-            console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
-        }
-        if (decelDist < 0) {
-            console.log(`Warning: decelDist is negative (${decelDist}). Using absolute value.`);
-        }
+        if (vStart < 0) console.log(`Warning: vStart is negative (${vStart}). Using absolute value.`);
+        if (vMax < 0) console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
+        if (vFinish < 0) console.log(`Warning: vFinish is negative (${vFinish}). Using absolute value.`);
+        if (accelDist < 0) console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
+        if (decelDist < 0) console.log(`Warning: decelDist is negative (${decelDist}). Using absolute value.`);
 
         vStart = Math.abs(vStart);
         vMax = Math.abs(vMax);
@@ -162,13 +147,13 @@ namespace chassis {
             return;
         }
 
-        const vSign = totalDist > 0 ? 1 : -1; // Определяем направление по знаку totalDist
+        const dirSign = totalDist >= 0 ? 1 : -1; // Определяем направление по знаку totalDist
         
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
 
-        syncRampMovement(vStart * vSign, vMax * vSign, vFinish * vSign, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
+        syncRampMovement(vStart * dirSign, vMax * dirSign, vFinish * dirSign, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
     }
 
     /**
@@ -196,18 +181,10 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (vStart < 0) {
-            console.log(`Warning: vStart is negative (${vStart}). Using absolute value.`);
-        }
-        if (vMax < 0) {
-            console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
-        }
-        if (accelDist < 0) {
-            console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
-        }
-        if (accelDist < 0) {
-            console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
-        }
+        if (vStart < 0) console.log(`Warning: vStart is negative (${vStart}). Using absolute value.`);
+        if (vMax < 0) console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
+        if (accelDist < 0) console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
+        if (accelDist < 0) console.log(`Warning: accelDist is negative (${accelDist}). Using absolute value.`);
 
         vStart = Math.abs(vStart);
         vMax = Math.abs(vMax);
@@ -225,13 +202,13 @@ namespace chassis {
             console.log(`Warning: totalDist (${absTotalDist}) is less than accelDist (${accelDist}). Using totalDist as accelDist.`);
         }
 
-        const vSign = totalDist > 0 ? 1 : -1; // Определяем направление по знаку totalDist
+        const dirSign = totalDist >= 0 ? 1 : -1; // Определяем направление по знаку totalDist
 
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
 
-        executeRampMovement(vStart * vSign, vMax * vSign, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
-        steeringCommand(0, vMax * vSign); // Без команды торможения, а просто ехать дальше вперёд
+        executeRampMovement(vStart * dirSign, vMax * dirSign, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
+        steeringCommand(0, vMax * dirSign); // Без команды торможения, а просто ехать дальше вперёд
     }
 
     /**
@@ -260,15 +237,9 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (v < 0) {
-            console.log(`Warning: v is negative (${v}). Using absolute value.`);
-        }
-        if (vFinish < 0) {
-            console.log(`Warning: vFinish is negative (${vFinish}). Using absolute value.`);
-        }
-        if (decelDist < 0) {
-            console.log(`Warning: decelDist is negative (${decelDist}). Using absolute value.`);
-        }
+        if (v < 0) console.log(`Warning: v is negative (${v}). Using absolute value.`);
+        if (vFinish < 0) console.log(`Warning: vFinish is negative (${vFinish}). Using absolute value.`);
+        if (decelDist < 0) console.log(`Warning: decelDist is negative (${decelDist}). Using absolute value.`);
 
         v = Math.abs(v);
         vFinish = Math.abs(vFinish);
@@ -281,19 +252,18 @@ namespace chassis {
             vFinish = tempV;
             console.log(`Warning: vFinish was greater than v. Swapped: vStart=${v}, vFinish=${vFinish}`);
         }
-
         if (absTotalDist < decelDist) {
             decelDist = absTotalDist;
             console.log(`Warning: totalDist (${absTotalDist}) is less than decelDist (${decelDist}). Using totalDist as decelDist.`);
         }
 
-        const vSign = totalDist > 0 ? 1 : -1; // Определяем направление по знаку totalDist
+        const dirSign = totalDist >= 0 ? 1 : -1; // Определяем направление по знаку totalDist
 
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
 
-        executeRampMovement(0, v * vSign, vFinish * vSign, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
-        motions.actionAfterMotion(actionAfterMotion, vFinish * vSign); // stop(Braking.Hold); // Тормоз с удержанием
+        executeRampMovement(0, v * dirSign, vFinish * dirSign, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
+        motions.actionAfterMotion(actionAfterMotion, vFinish * dirSign); // stop(Braking.Hold); // Тормоз с удержанием
     }
 
     //% blockId="RampDistMove"
@@ -313,7 +283,6 @@ namespace chassis {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
 
-        // advmotctrls.syncMotorsConfig(maxSpeedLeft, maxSpeedRight);
         advmotctrls.accTwoEncLinearMotionConfig(minSpeed, maxSpeedRight, minSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
         pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
@@ -330,10 +299,8 @@ namespace chassis {
             const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
             const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
-            // const error = advmotctrls.getErrorSyncMotors(eml, emr); // Find out the error in motor speed control
             const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
-            // const powers = advmotctrls.getPwrSyncMotors(u);
             const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwr, out.pwr);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);

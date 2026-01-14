@@ -13,6 +13,10 @@ chassis.setBaseLength(172);
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
+// chassis.syncRampMovement(40, 80, 20, 500, 100, 100);
+// pause(100);
+// chassis.syncRampMovement(40, 80, 20, -500, 100, 100);
+
 // sensors.searchRgbMinMaxColorSensors(sensors.color3);
 
 // Установить датчики линии
