@@ -404,7 +404,7 @@ namespace navigation {
             directionSpinTurn(newDirection, lineFollowByPathTurnSpeed); // Поворот
             if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
-                    motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Coasting, {
+                    motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
                         vStart: lineFollowByPathMoveStartSpeed,
                         vMax: lineFollowByPathMoveMaxSpeed,
                         Kp: lineFollowByPathKp,

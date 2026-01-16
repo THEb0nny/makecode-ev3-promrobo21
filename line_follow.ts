@@ -291,7 +291,7 @@ namespace motions {
             chassis.decelFinishLinearDistMove(v, minPwrAtEndMovement, AfterMotion.HoldStop, motions.getDistRollingAfterIntersection(), motions.getDistRollingAfterIntersection());
         } else if (actionAfterMotion == AfterLineMotion.ContinueRoll) { // Прокатка с линии
             // motions.rollingMoveOutFromLine(motions.getDistRollingFromLineAfterIntersection(), v);
-            chassis.linearDistMove(motions.getDistRollingFromLineAfterIntersection(), v, MotionBraking.Coasting);
+            chassis.linearDistMove(motions.getDistRollingFromLineAfterIntersection(), v, MotionBraking.Continue);
         } else if (actionAfterMotion == AfterLineMotion.LineRolling) { // Прокатка с движением по линии с тормозом
             rollingLineFollowing(motions.getDistRollingAfterIntersection(), v, AfterMotion.HoldStop);
         } else if (actionAfterMotion == AfterLineMotion.LineSmoothRolling) { // Прокатка с движением по линии с плавным торможением
