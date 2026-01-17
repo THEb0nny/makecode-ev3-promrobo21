@@ -10,9 +10,9 @@ namespace navigation {
     // Матрица весов
     let weightMatrix: number[][] = [];
 
-    let lineFollowByPathMoveStartSpeed = 20;
-    let lineFollowByPathMoveMaxSpeed = 50;
-    let lineFollowByPathTurnSpeed = 60;
+    let lineFollowByPathMoveStartV = 20;
+    let lineFollowByPathMoveMaxV = 50;
+    let lineFollowByPathTurnV = 60;
     let lineFollowByPathAccelStartDist = 0;
     let lineFollowByPathKp = 1;
     let lineFollowByPathKi = 0;
@@ -343,9 +343,9 @@ namespace navigation {
     }
 
     function processingFollowLineByPathInputParams(params?: params.NavLineFollow) {
-        if (params.moveStartV >= 0) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveStartV);
-        if (params.moveMaxV >= 0) lineFollowByPathMoveMaxSpeed = Math.abs(params.moveMaxV);
-        if (params.turnV >= 0) lineFollowByPathTurnSpeed = Math.abs(params.turnV);
+        if (params.moveStartV >= 0) lineFollowByPathMoveMaxV = Math.abs(params.moveStartV);
+        if (params.moveMaxV >= 0) lineFollowByPathMoveMaxV = Math.abs(params.moveMaxV);
+        if (params.turnV >= 0) lineFollowByPathTurnV = Math.abs(params.turnV);
         if (params.accelStartDist >= 0) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist);
         if (params.Kp >= 0) lineFollowByPathKp = Math.abs(params.Kp);
         if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
@@ -375,8 +375,8 @@ namespace navigation {
         else return;
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
         for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnSpeed); // Поворот
-            motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxSpeed, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
+            directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnV); // Поворот
+            motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxV, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
             currentPos = path[i]; // Записываем новую позицию в глобальную переменную
         }
         currentPos = newPos; // Записываем новую позицию в глобальную переменную
@@ -401,12 +401,12 @@ namespace navigation {
             const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.ContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
             if (debug) console.log(`path[i]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
             const directionChanged = direction != newDirection;
-            directionSpinTurn(newDirection, lineFollowByPathTurnSpeed); // Поворот
+            directionSpinTurn(newDirection, lineFollowByPathTurnV); // Поворот
             if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
                     motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
-                        vStart: lineFollowByPathMoveStartSpeed,
-                        vMax: lineFollowByPathMoveMaxSpeed,
+                        vStart: lineFollowByPathMoveStartV,
+                        vMax: lineFollowByPathMoveMaxV,
                         Kp: lineFollowByPathKp,
                         Ki: lineFollowByPathKi,
                         Kd: lineFollowByPathKd,
@@ -414,7 +414,7 @@ namespace navigation {
                     }); // Движение на расстояние для разгона
                 }
                 motions.lineFollowToCrossIntersection(afterMotion, { 
-                    v: lineFollowByPathMoveMaxSpeed,
+                    v: lineFollowByPathMoveMaxV,
                     Kp: lineFollowByPathKp,
                     Ki: lineFollowByPathKi,
                     Kd: lineFollowByPathKd, 
@@ -422,7 +422,7 @@ namespace navigation {
                 }); // Движение до перекрёстка
             } else {
                 motions.lineFollowToCrossIntersection(afterMotion, {
-                    v: lineFollowByPathMoveMaxSpeed,
+                    v: lineFollowByPathMoveMaxV,
                     Kp: lineFollowByPathKp,
                     Ki: lineFollowByPathKi,
                     Kd: lineFollowByPathKd,
