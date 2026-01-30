@@ -118,7 +118,7 @@ namespace motions {
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        actionAfterMotion(rampLineFollowToDistance2SensorFinishV, braking); // Действие после алгоритма движения
+        actionAfterMotion(braking, rampLineFollowToDistance2SensorFinishV); // Действие после алгоритма движения
     }
 
     /**
