@@ -60,7 +60,7 @@ namespace chassis {
         if (v < 0) console.log(`Warning: v is negative (${v}). Using absolute value.`);
 
         v = Math.abs(v); // Берём модуль Скорости
-        const dirSign = dist >= 0 ? 1 : -1; // Определяем направление по знаку dist
+        const dirSign = Math.sign(dist); // Определяем направление по знаку dist
 
         const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
         syncMovement(v * dirSign, v * dirSign, mRotCalc, MoveUnit.Degrees, braking);
@@ -94,7 +94,7 @@ namespace chassis {
         if (vRight < 0) console.log(`Warning: vRight is negative (${vRight}). Using absolute value.`);
 
         vLeft = Math.abs(vLeft), vRight = Math.abs(vRight); // Берём модуль скорости
-        const dirSign = dist >= 0 ? 1 : -1; // Определяем направление по знаку DistMove
+        const dirSign = Math.sign(dist); // Определяем направление по знаку DistMove
 
         const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
         
@@ -147,7 +147,7 @@ namespace chassis {
             return;
         }
 
-        const dirSign = totalDist >= 0 ? 1 : -1; // Определяем направление по знаку totalDist
+        const dirSign = Math.sign(totalDist); // Определяем направление по знаку totalDist
         
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
@@ -202,7 +202,7 @@ namespace chassis {
             console.log(`Warning: totalDist (${absTotalDist}) is less than accelDist (${accelDist}). Using totalDist as accelDist.`);
         }
 
-        const dirSign = totalDist >= 0 ? 1 : -1; // Определяем направление по знаку totalDist
+        const dirSign = Math.sign(totalDist); // Определяем направление по знаку totalDist
 
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
         const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
@@ -257,7 +257,7 @@ namespace chassis {
             console.log(`Warning: totalDist (${absTotalDist}) is less than decelDist (${decelDist}). Using totalDist as decelDist.`);
         }
 
-        const dirSign = totalDist >= 0 ? 1 : -1; // Определяем направление по знаку totalDist
+        const dirSign = Math.sign(totalDist); // Определяем направление по знаку totalDist
 
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления

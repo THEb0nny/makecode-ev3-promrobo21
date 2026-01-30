@@ -288,7 +288,7 @@ namespace motions {
         if (actionAfterMotion == AfterLineMotion.Rolling) { // Прокатка, чтобы встать на линию после определния перекрёстка
             chassis.linearDistMove(motions.getDistRollingAfterIntersection(), v, MotionBraking.Hold);
         } else if (actionAfterMotion == AfterLineMotion.SmoothRolling) { // Прокатка, чтобы вставать на линию с мягким торможением после определния перекрёстка
-            chassis.decelFinishLinearDistMove(v, minPwrAtEndMovement, motions.getDistRollingAfterIntersection(), motions.getDistRollingAfterIntersection(), AfterMotion.HoldStop);
+            chassis.decelFinishLinearDistMove(v, motions.getMinPwrAtEndMovement(), motions.getDistRollingAfterIntersection(), motions.getDistRollingAfterIntersection(), AfterMotion.HoldStop);
         } else if (actionAfterMotion == AfterLineMotion.ContinueRoll) { // Прокатка с линии
             // motions.rollingMoveOutFromLine(motions.getDistRollingFromLineAfterIntersection(), v);
             chassis.linearDistMove(motions.getDistRollingFromLineAfterIntersection(), v, MotionBraking.Continue);

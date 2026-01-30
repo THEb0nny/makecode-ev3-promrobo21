@@ -1,6 +1,15 @@
 namespace motions {
 
-    export let minPwrAtEndMovement = 20; // Минимальная мощность при завершении движения
+    let minPwrAtEndMovement = 20; // Минимальная мощность при завершении движения
+
+    export function setMinPwrAtEndMovement(pwr: number) {
+        if (pwr < 0) console.log("Warning: min pwr is negative, using absolute value.");
+        minPwrAtEndMovement = Math.abs(pwr);
+    }
+
+    export function getMinPwrAtEndMovement() {
+        return minPwrAtEndMovement;
+    }
 
     // Функция, которая выполняет действие после цикла с движением
     export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, v?: number) { // 

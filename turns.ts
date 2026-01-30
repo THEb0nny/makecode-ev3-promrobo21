@@ -95,7 +95,7 @@ namespace chassis {
         
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
         
-        const vSign = deg > 0 ? 1 : -1; // Определяем направление по знаку deg
+        const vSign = Math.sign(deg); // Определяем направление по знаку deg
         const vLeft = wheelPivot == WheelPivot.RightWheel ? v * vSign : 0;
         const vRight = wheelPivot == WheelPivot.LeftWheel ? v * vSign : 0;
 
@@ -297,7 +297,7 @@ namespace chassis {
         const decelCalcMotRot = Math.round(((absDecelDeg * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота для замедления
         const totalCalcMotRot = Math.round(((absDeg * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота общего угла
         
-        const vSign = deg > 0 ? 1 : -1;
+        const vSign = Math.sign(deg);
         const vLeftMax = wheelPivot === WheelPivot.LeftWheel ? 0 : vMax * vSign;
         const vRightMax = wheelPivot === WheelPivot.LeftWheel ? vMax * vSign : 0;
 

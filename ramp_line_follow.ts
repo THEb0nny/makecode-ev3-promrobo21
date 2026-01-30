@@ -19,7 +19,7 @@ namespace motions {
     export function rampRollingLineFollowingByTwoSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(rollingDist)); // Расчитываем расстояние замедления
 
-        advmotctrls.accTwoEncLinearMotionConfig(0, speed, minPwrAtEndMovement, mRotDecelCalc, 0, mRotDecelCalc);
+        advmotctrls.accTwoEncLinearMotionConfig(0, speed, motions.getMinPwrAtEndMovement(), mRotDecelCalc, 0, mRotDecelCalc);
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
