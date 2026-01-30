@@ -343,14 +343,14 @@ namespace navigation {
     }
 
     function processingFollowLineByPathInputParams(params?: params.NavLineFollow) {
-        if (params.moveStartV >= 0) lineFollowByPathMoveMaxV = Math.abs(params.moveStartV);
+        if (params.moveStartV >= 0) lineFollowByPathMoveStartV = Math.abs(params.moveStartV);
         if (params.moveMaxV >= 0) lineFollowByPathMoveMaxV = Math.abs(params.moveMaxV);
         if (params.turnV >= 0) lineFollowByPathTurnV = Math.abs(params.turnV);
         if (params.accelStartDist >= 0) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist);
         if (params.Kp >= 0) lineFollowByPathKp = Math.abs(params.Kp);
         if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
         if (params.Kd >= 0) lineFollowByPathKd = Math.abs(params.Kd);
-        if (params.Kf >= 0) lineFollowByPathKf = Math.abs(params.Kf);
+        if (params.Kf && params.Kf >= 0) lineFollowByPathKf = Math.abs(params.Kf);
     }
 
     /**
@@ -399,7 +399,7 @@ namespace navigation {
         for (let i = 0; i < path.length - 1; i++) {
             const newDirection = navMatrix[path[i]][path[i + 1]];
             const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.ContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
-            if (debug) console.log(`path[i]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
+            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
             const directionChanged = direction != newDirection;
             directionSpinTurn(newDirection, lineFollowByPathTurnV); // Поворот
             if (i == 0 || directionChanged) {
