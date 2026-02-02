@@ -252,14 +252,14 @@ namespace sensors {
     let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
     let maxRgbColorSensors: number[][] = [[255, 255, 255], [255, 255, 255], [255, 255, 255], [255, 255, 255]]; // Максимальные значения RGB для датчиков цвета
 
-    let colorBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let whiteBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let blackBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let redBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let brownBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let yellowBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let greenBoundaryColorSensors: number[] = [0, 0, 0, 0];
-    let blueBoundaryColorSensors: number[] = [0, 0, 0, 0];
+    let colorBoundaryColorSensors: number[] = [50, 50, 50, 50];
+    let whiteBoundaryColorSensors: number[] = [4, 4, 4, 4];
+    let blackBoundaryColorSensors: number[] = [1, 1, 1, 1];
+    let redBoundaryColorSensors: number[] = [25, 25, 25, 25];
+    let brownBoundaryColorSensors: number[] = [60, 60, 60, 60];
+    let yellowBoundaryColorSensors: number[] = [100, 100, 100, 100];
+    let greenBoundaryColorSensors: number[] = [170, 170, 170, 170];
+    let blueBoundaryColorSensors: number[] = [270, 270, 270, 270];
 
     /**
      * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
