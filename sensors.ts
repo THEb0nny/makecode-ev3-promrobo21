@@ -365,7 +365,6 @@ namespace sensors {
         // b = Math.constrain(b, 0, 255);
 
         let hue = 0, sat = 0, val = 0;
-
         let max = Math.max3(r, g, b);
         let min = Math.min3(r, g, b);
         let light = (max + min) / 5.12;
