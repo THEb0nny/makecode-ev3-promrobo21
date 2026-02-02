@@ -212,6 +212,7 @@ namespace sensors {
 
     /**
      * Получить нормализованные значения RGB с датчика цвета.
+     * Возвращает массив RGB.
      */
     //% blockId="GetNormalizeRgb"
     //% block="**color sensor** $sensor normalize RGB"
@@ -237,8 +238,19 @@ namespace sensors {
 
 namespace sensors {
 
+    interface HsvlToColorNumber {
+        colorBoundary: number;
+        whiteBoundary: number;
+        blackBoundary: number;
+        redBoundary: number;
+        brownBoundary: number;
+        yellowBoundary: number;
+        greenBoundary: number;
+        blueBoundary: number;
+    }
+
     let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
-    let maxRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Максимальные значения RGB для датчиков цвета
+    let maxRgbColorSensors: number[][] = [[255, 255, 255], [255, 255, 255], [255, 255, 255], [255, 255, 255]]; // Максимальные значения RGB для датчиков цвета
 
     let colorBoundaryColorSensors: number[] = [0, 0, 0, 0];
     let whiteBoundaryColorSensors: number[] = [0, 0, 0, 0];
@@ -331,15 +343,81 @@ namespace sensors {
         return maxRgbColorSensors[index];
     }
 
-    interface HsvlToColorNumber {
-        colorBoundary: number;
-        whiteBoundary: number;
-        blackBoundary: number;
-        redBoundary: number;
-        brownBoundary: number;
-        yellowBoundary: number;
-        greenBoundary: number;
-        blueBoundary: number;
+    /**
+     * Перевод значений цветового пространства rgb в hsvl.
+     * @param rgbArr массив значений rgb
+     */
+    //% blockId="ConvertRgbToHsvl"
+    //% block="convert rgb $rgbArr to hsvl"
+    //% block.loc.ru="перевести rgb $rgbArr в hsvl"
+    //% inlineInputMode="inline"
+    //% weight="52" blockGap="8"
+    //% group="Color Sensor"
+    export function convertRgbToHsvl(rgbArr: number[]): number[] {
+        // https://en.wikipedia.org/wiki/HSL_and_HSV#/media/File:Hsl-hsv_models.svg
+        // https://github.com/ofdl-robotics-tw/EV3-CLEV3R-Modules/blob/main/Mods/Color.bpm
+        let r = rgbArr[0], g = rgbArr[1], b = rgbArr[2];
+
+        // https://clev3r.ru/codesamples/
+        // HT Color sensor V2 RGB Maxmium is 255
+        // r = Math.constrain(r, 0, 255);
+        // g = Math.constrain(g, 0, 255);
+        // b = Math.constrain(b, 0, 255);
+
+        let hue = 0, sat = 0, val = 0;
+
+        let max = Math.max3(r, g, b);
+        let min = Math.min3(r, g, b);
+        let light = (max + min) / 5.12;
+        val = max / 2.56;
+        if (Math.round(val) == 0 && Math.round(light) == 0) { // It's black, there's no way to tell hue and sat
+            hue = -1;
+            sat = -1;
+        }
+
+        if (hue != -1 && sat != -1) {
+            r = r / max;
+            g = g / max;
+            b = b / max;
+            max = Math.max3(r, g, b);
+            min = Math.min3(r, g, b);
+            sat = (max - min) * 100;
+            if (Math.round(sat) == 0) hue = -1;
+
+            if (hue != -1) { // It's white, there's no way to tell hue
+                r = (r - min) / (max - min);
+                g = (g - min) / (max - min);
+                b = (b - min) / (max - min);
+                max = Math.max3(r, g, b);
+                min = Math.min3(r, g, b);
+
+                if (Math.round(max) == Math.round(r)) {
+                    hue = 0 + 60 * (g - b);
+                    if (hue < 0) hue += 360;
+                } else if (Math.round(max) == Math.round(g)) hue = 120 + 60 * (b - r);
+                else hue = 240 + 60 * (r - g);
+            }
+        }
+        return [Math.round(hue), Math.round(sat), Math.round(val), Math.round(light)];
+    }
+
+    /**
+     * Получить значения HSVL с нормализованных значений RGB с датчика цвета.
+     * Возвращает массив HSVL.
+     */
+    //% blockId="GetHsvl"
+    //% block="**color sensor** $sensor HSVL from RGB"
+    //% block.loc.ru="**датчика цвета** $sensor HSVL с RGB"
+    //% inlineInputMode="inline"
+    //% sensor.fieldEditor="images"
+    //% sensor.fieldOptions.columns="4"
+    //% sensor.fieldOptions.width="300"
+    //% weight="88" blockGap="8"
+    //% group="Color Sensor"
+    export function getHsvl(sensor: sensors.ColorSensor): number[] {
+        const rgb = getNormalizeRgb(sensor);
+        const hsvl = convertRgbToHsvl(rgb);
+        return hsvl;
     }
 
     /**
@@ -421,66 +499,6 @@ namespace sensors {
             greenBoundary: greenBoundaryColorSensors[index],
             blueBoundary: blueBoundaryColorSensors[index]
         }
-    }
-
-    /**
-     * Перевод значений цветового пространства rgb в hsvl.
-     * @param refRawValCS текущее сырое значение отражения, eg: 0
-     * @param bRefRawValCS сырое значение отражения на чёрном, eg: 500
-     * @param wRefRawValCS сырое значение отражения на белом, eg: 650
-     */
-    //% blockId="ConvertRgbToHsvl"
-    //% block="convert rgb $rgbArr to hsvl"
-    //% block.loc.ru="перевести rgb $rgbArr в hsvl"
-    //% inlineInputMode="inline"
-    //% weight="52" blockGap="8"
-    //% group="Color Sensor"
-    export function convertRgbToHsvl(rgbArr: number[]): number[] {
-        // https://en.wikipedia.org/wiki/HSL_and_HSV#/media/File:Hsl-hsv_models.svg
-        // https://github.com/ofdl-robotics-tw/EV3-CLEV3R-Modules/blob/main/Mods/Color.bpm
-        let r = rgbArr[0], g = rgbArr[1], b = rgbArr[2];
-
-        // https://clev3r.ru/codesamples/
-        // HT Color sensor V2 RGB Maxmium is 255
-        // r = Math.constrain(r, 0, 255);
-        // g = Math.constrain(g, 0, 255);
-        // b = Math.constrain(b, 0, 255);
-
-        let hue = 0, sat = 0, val = 0;
-
-        let max = Math.max3(r, g, b);
-        let min = Math.min3(r, g, b);
-        let light = (max + min) / 5.12;
-        val = max / 2.56;
-        if (Math.round(val) == 0 && Math.round(light) == 0) { // It's black, there's no way to tell hue and sat
-            hue = -1;
-            sat = -1;
-        }
-
-        if (hue != -1 && sat != -1) {
-            r = r / max;
-            g = g / max;
-            b = b / max;
-            max = Math.max3(r, g, b);
-            min = Math.min3(r, g, b);
-            sat = (max - min) * 100;
-            if (Math.round(sat) == 0) hue = -1;
-
-            if (hue != -1) { // It's white, there's no way to tell hue
-                r = (r - min) / (max - min);
-                g = (g - min) / (max - min);
-                b = (b - min) / (max - min);
-                max = Math.max3(r, g, b);
-                min = Math.min3(r, g, b);
-
-                if (Math.round(max) == Math.round(r)) {
-                    hue = 0 + 60 * (g - b);
-                    if (hue < 0) hue += 360;
-                } else if (Math.round(max) == Math.round(g)) hue = 120 + 60 * (b - r);
-                else hue = 240 + 60 * (r - g);
-            }
-        }
-        return [Math.round(hue), Math.round(sat), Math.round(val), Math.round(light)];
     }
 
     /**
