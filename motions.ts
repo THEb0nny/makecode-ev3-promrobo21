@@ -7,7 +7,7 @@ namespace motions {
      * @param pwr минимальное значение мощности, eg: 20
      */
     //% blockId="SetMinPwrAtEndMovement"
-    //% block="set $pwr min pwr at deceleration
+    //% block="set $pwr min pwr at deceleration"
     //% block.loc.ru="установить $pwr минимальную мощность при замедлениях"
     //% inlineInputMode="inline"
     //% weight="99" blockGap="8"
