@@ -290,7 +290,6 @@ namespace motions {
         } else if (actionAfterMotion == AfterLineMotion.SmoothRolling) { // Прокатка, чтобы вставать на линию с мягким торможением после определния перекрёстка
             chassis.decelFinishLinearDistMove(v, motions.getMinPwrAtEndMovement(), motions.getDistRollingAfterIntersection(), motions.getDistRollingAfterIntersection(), AfterMotion.HoldStop);
         } else if (actionAfterMotion == AfterLineMotion.ContinueRoll) { // Прокатка с линии
-            // motions.rollingMoveOutFromLine(motions.getDistRollingFromLineAfterIntersection(), v);
             chassis.linearDistMove(motions.getDistRollingFromLineAfterIntersection(), v, MotionBraking.Continue);
         } else if (actionAfterMotion == AfterLineMotion.LineRolling) { // Прокатка с движением по линии с тормозом
             rollingLineFollowing(motions.getDistRollingAfterIntersection(), v, AfterMotion.HoldStop);

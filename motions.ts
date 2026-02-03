@@ -22,43 +22,6 @@ namespace motions {
         }
     }
 
-    // Вспомогательная функция для типа торможения движения на расстоние без торможения
-    // Например, для съезда с линии, чтобы её не считал алгоритм движения по линии повторно
-    /*
-    export function rollingMoveOutFromLine(dist: number, speed: number) {
-        if (dist == 0 || speed == 0) {
-            chassis.stop(true);
-            return;
-        }
-
-        chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
-        chassis.pidChassisSync.setDerivativeFilter(chassis.getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
-        chassis.pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора
-        chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
-
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
-        const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно пройти
-        advmotctrls.syncMotorsConfig(speed, speed);
-
-        let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-        while (true) { // Пока моторы не достигнули градусов вращения
-            let currTime = control.millis(); // Текущее время
-            let dt = currTime - prevTime; // Время за которое выполнился цикл
-            prevTime = currTime; // Новое время в переменную предыдущего времени
-            let eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
-            let emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
-            if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
-            let error = advmotctrls.getErrorSyncMotors(eml, emr);
-            chassis.pidChassisSync.setPoint(error);
-            let U = chassis.pidChassisSync.compute(dt, 0);
-            let powers = advmotctrls.getPwrSyncMotors(U);
-            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
-        }
-        // Команды для остановки не нужно, в этом и смысл функции
-    }
-    */
-
 }
 
 namespace motions {
