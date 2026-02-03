@@ -17,6 +17,15 @@ namespace motions {
         minPwrAtEndMovement = Math.abs(pwr);
     }
 
+    /**
+     * Получить минимальную мощность при завершений движений при фазе замедления.
+     */
+    //% blockId="GetMinPwrAtEndMovement"
+    //% block="get min pwr at deceleration"
+    //% block.loc.ru="получить минимальную мощность при замедлениях"
+    //% inlineInputMode="inline"
+    //% weight="98"
+    //% group="Свойства движения"
     export function getMinPwrAtEndMovement() {
         return minPwrAtEndMovement;
     }
