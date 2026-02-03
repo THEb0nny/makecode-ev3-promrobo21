@@ -64,10 +64,6 @@ const enum AfterLineMotion {
     //% block="smooth rolling"
     //% block.loc.ru="плавная прокатка"
     SmoothRolling,
-    //% block="roll no stop"
-    //% block.loc.ru="прокатка без торможения"
-    //% deprecated=true
-    ContinueRoll,
 
     //% block="line rolling"
     //% block.loc.ru="прокатка по линии"
@@ -75,7 +71,7 @@ const enum AfterLineMotion {
     //% block="line decel rolling"
     //% block.loc.ru="плавная прокатка по линии"
     LineSmoothRolling,
-    //% block="line rollno stop"
+    //% block="line roll no stop"
     //% block.loc.ru="прокатка по линии без торможения"
     LineContinueRoll,
 
@@ -83,11 +79,11 @@ const enum AfterLineMotion {
     //% block.loc.ru="тормоз с удержанием"
     HoldStop,
     //% block="float stop"
-    //% block.loc.ru="тормоз с освобождением"
+    //% block.loc.ru="торможение накатом"
     FloatStop,
     //% block="no stop"
     //% block.loc.ru="не тормозить"
-    NoStop
+    Continue
 }
 
 // Перечисление о расположении линии при движении по линии
@@ -172,7 +168,7 @@ const enum Side {
     Right
 }
 
-// Перечисление о цветах, переводимых из HSV
+// Перечисление о цветах
 const enum SensorColors {
     //% block="empty"
     //% block.loc.ru="пусто"

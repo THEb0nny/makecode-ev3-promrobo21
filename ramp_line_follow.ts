@@ -1,21 +1,22 @@
 namespace motions {
 
     export let rampLineFollowCrossIntersection2SensorStartV = 20; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
-    export let rampLineFollowCrossIntersection2SensorMaxV = 50; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
-    export let rampLineFollowCrossIntersection2SensorFinishV = 10; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
+    export let rampLineFollowCrossIntersection2SensorMaxV = 60; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
+    export let rampLineFollowCrossIntersection2SensorFinishV = 20; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
     export let rampLineFollowCrossIntersection2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     export let rampLineFollowCrossIntersection2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
     export let rampLineFollowCrossIntersection2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
     export let rampLineFollowCrossIntersection2SensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
     export let rampLineFollowToDistance2SensorStartV = 20; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
-    export let rampLineFollowToDistance2SensorMaxV = 50; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
-    export let rampLineFollowToDistance2SensorFinishV = 10; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
+    export let rampLineFollowToDistance2SensorMaxV = 60; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
+    export let rampLineFollowToDistance2SensorFinishV = 20; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
     export let rampLineFollowToDistance2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     export let rampLineFollowToDistance2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
     export let rampLineFollowToDistance2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
     export let rampLineFollowToDistance2SensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
+    // Вспомогательная функция движения по линии на расстояние при обнаружении линии, для съезда с линии и последующего движения по ней с замедлением
     export function rampRollingLineFollowingByTwoSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(rollingDist)); // Расчитываем расстояние замедления
 
@@ -30,12 +31,10 @@ namespace motions {
             prevTime = currTime; // Новое время в переменную предыдущего времени
             const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
             const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
-            // console.log(`out.pwr: ${out.pwr}`);
             if (out.isDone) break; // Проверка условия окончания
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             const error = refLeftLS - refRightLS; // Ошибка регулирования
-            // pidLineFollow.setPoint(error); // Передать ошибку регулятору
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);

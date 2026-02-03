@@ -398,7 +398,7 @@ namespace navigation {
         if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
         for (let i = 0; i < path.length - 1; i++) {
             const newDirection = navMatrix[path[i]][path[i + 1]];
-            const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.ContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
+            const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
             if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
             const directionChanged = direction != newDirection;
             directionSpinTurn(newDirection, lineFollowByPathTurnV); // Поворот
