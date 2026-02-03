@@ -171,10 +171,10 @@ namespace motions {
         if (params) { // Если были переданы параметры
             if (params.vMax >= 0) levelings.linePositioningMaxV = Math.abs(params.vMax);
             if (params.timeOut >= 0) levelings.linePositioningTimeOut = Math.abs(params.timeOut);
-            if (params.Kp >= 0) levelings.linePositioningKp = params.Kp;
-            if (params.Ki >= 0) levelings.linePositioningKi = params.Ki;
-            if (params.Kd >= 0) levelings.linePositioningKd = params.Kd;
-            if (params.Kf >= 0) levelings.linePositioningKf = params.Kf;
+            if (params.Kp >= 0) levelings.linePositioningKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) levelings.linePositioningKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) levelings.linePositioningKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) levelings.linePositioningKf = Math.abs(params.Kf);
         }
 
         if (sensors.leftLineSensor instanceof sensors.ColorSensor && sensors.rightLineSensor instanceof sensors.ColorSensor) {

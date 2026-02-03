@@ -396,10 +396,10 @@ namespace motions {
     export function lineFollowToCrossIntersection(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.v >= 0) lineFollowCrossIntersection2SensorV = Math.abs(params.v);
-            if (params.Kp >= 0) lineFollowCrossIntersection2SensorKp = params.Kp;
-            if (params.Ki >= 0) lineFollowCrossIntersection2SensorKi = params.Ki;
-            if (params.Kd >= 0) lineFollowCrossIntersection2SensorKd = params.Kd;
-            if (params.Kf >= 0) lineFollowCrossIntersection2SensorKf = params.Kf;
+            if (params.Kp >= 0) lineFollowCrossIntersection2SensorKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) lineFollowCrossIntersection2SensorKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) lineFollowCrossIntersection2SensorKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) lineFollowCrossIntersection2SensorKf = Math.abs(params.Kf);
         }
 
         pidLineFollow.setGains(lineFollowCrossIntersection2SensorKp, lineFollowCrossIntersection2SensorKi, lineFollowCrossIntersection2SensorKd); // Установка коэффицентов ПИД регулятора
@@ -478,10 +478,10 @@ namespace motions {
     export function lineFollowToLeftIntersection(lineLocation: LineLocation, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.v >= 0) lineFollowLeftIntersectionV = Math.abs(params.v);
-            if (params.Kp >= 0) lineFollowLeftIntersectionKp = params.Kp;
-            if (params.Ki >= 0) lineFollowLeftIntersectionKi = params.Ki;
-            if (params.Kd >= 0) lineFollowLeftIntersectionKd = params.Kd;
-            if (params.Kf >= 0) lineFollowLeftIntersectionKf = params.Kf;
+            if (params.Kp >= 0) lineFollowLeftIntersectionKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) lineFollowLeftIntersectionKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) lineFollowLeftIntersectionKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) lineFollowLeftIntersectionKf = Math.abs(params.Kf);
         }
 
         pidLineFollow.setGains(lineFollowLeftIntersectionKp, lineFollowLeftIntersectionKi, lineFollowLeftIntersectionKd); // Установка коэффицентов регулятора
@@ -534,10 +534,10 @@ namespace motions {
     export function lineFollowToRightIntersection(lineLocation: LineLocation, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.v >= 0) lineFollowRightIntersectionV = Math.abs(params.v);
-            if (params.Kp >= 0) lineFollowRightIntersectionKp = params.Kp;
-            if (params.Ki >= 0) lineFollowRightIntersectionKi = params.Ki;
-            if (params.Kd >= 0) lineFollowRightIntersectionKd = params.Kd;
-            if (params.Kf >= 0) lineFollowRightIntersectionKf = params.Kf;
+            if (params.Kp >= 0) lineFollowRightIntersectionKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) lineFollowRightIntersectionKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) lineFollowRightIntersectionKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) lineFollowRightIntersectionKf = Math.abs(params.Kf);
         }
 
         pidLineFollow.setGains(lineFollowRightIntersectionKp, lineFollowRightIntersectionKi, lineFollowRightIntersectionKd); // Установка коэффицентов регулятора
@@ -593,10 +593,10 @@ namespace motions {
     export function lineFollowToDistanceByTwoSensors(dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.v >= 0) lineFollowToDistance2SensorV = Math.abs(params.v);
-            if (params.Kp >= 0) lineFollowToDistance2SensorKp = params.Kp;
-            if (params.Ki >= 0) lineFollowToDistance2SensorKi = params.Ki;
-            if (params.Kd >= 0) lineFollowToDistance2SensorKd = params.Kd;
-            if (params.Kf >= 0) lineFollowToDistance2SensorKf = params.Kf;
+            if (params.Kp >= 0) lineFollowToDistance2SensorKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) lineFollowToDistance2SensorKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) lineFollowToDistance2SensorKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) lineFollowToDistance2SensorKf = Math.abs(params.Kf);
         }
 
         pidLineFollow.setGains(lineFollowToDistance2SensorKp, lineFollowToDistance2SensorKi, lineFollowToDistance2SensorKd); // Установка коэффицентов ПИД регулятора
@@ -677,10 +677,10 @@ namespace motions {
     export function lineFollowToDistanceByLeftSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.v >= 0) lineFollowToDistanceLeftSensorV = Math.abs(params.v);
-            if (params.Kp >= 0) lineFollowToDistanceLeftSensorKp = params.Kp;
-            if (params.Ki >= 0) lineFollowToDistanceLeftSensorKi = params.Ki;
-            if (params.Kd >= 0) lineFollowToDistanceLeftSensorKd = params.Kd;
-            if (params.Kf >= 0) lineFollowToDistanceLeftSensorKf = params.Kf;
+            if (params.Kp >= 0) lineFollowToDistanceLeftSensorKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) lineFollowToDistanceLeftSensorKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) lineFollowToDistanceLeftSensorKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) lineFollowToDistanceLeftSensorKf = Math.abs(params.Kf);
         }
 
         pidLineFollow.setGains(lineFollowToDistanceLeftSensorKp, lineFollowToDistanceLeftSensorKi, lineFollowToDistanceLeftSensorKd); // Установка коэффицентов ПИД регулятора
@@ -738,10 +738,10 @@ namespace motions {
     export function lineFollowToDistanceByRightSensor(lineLocation: LineLocation, dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (params) { // Если были переданы параметры
             if (params.v >= 0) lineFollowToDistanceRightSensorV = Math.abs(params.v);
-            if (params.Kp >= 0) lineFollowToDistanceRightSensorKp = params.Kp;
-            if (params.Ki >= 0) lineFollowToDistanceRightSensorKi = params.Ki;
-            if (params.Kd >= 0) lineFollowToDistanceRightSensorKd = params.Kd;
-            if (params.Kf >= 0) lineFollowToDistanceRightSensorKf = params.Kf;
+            if (params.Kp >= 0) lineFollowToDistanceRightSensorKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) lineFollowToDistanceRightSensorKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) lineFollowToDistanceRightSensorKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) lineFollowToDistanceRightSensorKf = Math.abs(params.Kf);
         }
 
         pidLineFollow.setGains(lineFollowToDistanceRightSensorKp, lineFollowToDistanceRightSensorKi, lineFollowToDistanceRightSensorKd); // Установка коэффицентов ПИД регулятора

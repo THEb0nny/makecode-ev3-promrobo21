@@ -32,10 +32,10 @@ namespace motors {
     export function setPosition(motor: motors.Motor, pos: number, braking: Braking, params?: params.MotorRegulator, debug: boolean = false) {
         if (params) {
             if (params.vMax >= 0) regMotorMaxV = Math.abs(params.vMax);
-            if (params.Kp >= 0) regMotorKp = params.Kp;
-            if (params.Ki >= 0) regMotorKi = params.Ki;
-            if (params.Kd >= 0) regMotorKd = params.Kd;
-            if (params.Kf >= 0) regMotorKf = params.Kf;
+            if (params.Kp >= 0) regMotorKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) regMotorKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) regMotorKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) regMotorKf = Math.abs(params.Kf);
             if (params.errorThreshold >= 0) errorThreshold = Math.abs(params.errorThreshold);
             if (params.vMinThreshold >= 0) vMinThreshold = Math.abs(params.vMinThreshold);
             if (params.timeOut >= 0) regMotorTimeOut = Math.abs(params.timeOut);

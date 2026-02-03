@@ -77,14 +77,14 @@ namespace levelings {
         if (params) { // Если были переданы параметры
             if (params.vMax >= 0) lineAlignmentMaxV = Math.abs(params.vMax);
             if (params.timeOut >= 0) lineAlignmentTimeOut = Math.abs(params.timeOut);
-            if (params.leftKp >= 0) lineAlignmentLeftSideKp = params.leftKp;
-            if (params.leftKi >= 0) lineAlignmentLeftSideKi = params.leftKi;
-            if (params.leftKd >= 0) lineAlignmentLeftSideKd = params.leftKd;
-            if (params.leftKf >= 0) lineAlignmentLeftSideKf = params.leftKf;
-            if (params.rightKp >= 0) lineAlignmentRightSideKp = params.rightKp;
-            if (params.rightKi >= 0) lineAlignmentRightSideKi = params.rightKi;
-            if (params.rightKd >= 0) lineAlignmentRightSideKd = params.rightKd;
-            if (params.rightKf >= 0) lineAlignmentRightSideKf = params.rightKf;
+            if (params.leftKp >= 0) lineAlignmentLeftSideKp = Math.abs(params.leftKp);
+            if (params.leftKi >= 0) lineAlignmentLeftSideKi = Math.abs(params.leftKi);
+            if (params.leftKd >= 0) lineAlignmentLeftSideKd = Math.abs(params.leftKd);
+            if (params.leftKf >= 0) lineAlignmentLeftSideKf = Math.abs(params.leftKf);
+            if (params.rightKp >= 0) lineAlignmentRightSideKp = Math.abs(params.rightKp);
+            if (params.rightKi >= 0) lineAlignmentRightSideKi = Math.abs(params.rightKi);
+            if (params.rightKd >= 0) lineAlignmentRightSideKd = Math.abs(params.rightKd);
+            if (params.rightKf >= 0) lineAlignmentRightSideKf = Math.abs(params.rightKf);
         }
 
         pidLeftSideLineAlignment.setGains(lineAlignmentLeftSideKp, lineAlignmentLeftSideKi, lineAlignmentLeftSideKd); // Установка значений регулятору для левой стороны
@@ -158,10 +158,10 @@ namespace levelings {
         if (params) { // Если были переданы параметры
             if (params.vMax >= 0) linePositioningMaxV = Math.abs(params.vMax);
             if (params.timeOut >= 0) linePositioningTimeOut = Math.abs(params.timeOut);
-            if (params.Kp >= 0) linePositioningKp = params.Kp;
-            if (params.Ki >= 0) linePositioningKi = params.Ki;
-            if (params.Kd >= 0) linePositioningKd = params.Kd;
-            if (params.Kf >= 0) linePositioningKf = params.Kf;
+            if (params.Kp >= 0) linePositioningKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) linePositioningKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) linePositioningKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) linePositioningKf = Math.abs(params.Kf);
         }
 
         pidLinePositioning.setGains(linePositioningKp, linePositioningKi, linePositioningKd); // Установка значений регулятору

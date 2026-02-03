@@ -108,11 +108,11 @@ namespace chassis {
     export function smartSpinTurn(deg: number, params?: params.LineFollow, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
-            if (params.v >= 0) smartSpinTurnV = params.v;
-            if (params.Kp >= 0) smartSpinTurnKp = params.Kp;
-            if (params.Ki >= 0) smartSpinTurnKi = params.Ki;
-            if (params.Kd >= 0) smartSpinTurnKd = params.Kd;
-            if (params.Kf >= 0) smartSpinTurnKf = params.Kf;
+            if (params.v >= 0) smartSpinTurnV = Math.abs(params.v);
+            if (params.Kp >= 0) smartSpinTurnKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) smartSpinTurnKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) smartSpinTurnKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) smartSpinTurnKf = Math.abs(params.Kf);
         }
         const lMotEncPrev = leftMotor.angle(), rMotEncPrev = rightMotor.angle(); // Считываем значение с энкодера левого мотора и правого мотора перед стартом алгаритма
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
@@ -180,11 +180,11 @@ namespace chassis {
     export function smartPivotTurn(deg: number, wheelPivot: WheelPivot, params?: params.LineFollow, debug: boolean = false) {
         if (deg == 0) return;
         if (params) {
-            if (params.v >= 0) smartPivotTurnV = params.v;
-            if (params.Kp >= 0) smartPivotTurnKp = params.Kp;
-            if (params.Ki >= 0) smartPivotTurnKi = params.Ki;
-            if (params.Kd >= 0) smartPivotTurnKd = params.Kd;
-            if (params.Kf >= 0) smartPivotTurnKf = params.Kf;
+            if (params.v >= 0) smartPivotTurnV = Math.abs(params.v);
+            if (params.Kp >= 0) smartPivotTurnKp = Math.abs(params.Kp);
+            if (params.Ki >= 0) smartPivotTurnKi = Math.abs(params.Ki);
+            if (params.Kd >= 0) smartPivotTurnKd = Math.abs(params.Kd);
+            if (params.Kf >= 0) smartPivotTurnKf = Math.abs(params.Kf);
         }
         stop(Braking.Hold); // Остановить и установить жёсткий тормоз для моторов
 
