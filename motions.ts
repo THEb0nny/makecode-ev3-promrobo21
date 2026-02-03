@@ -1,7 +1,17 @@
 namespace motions {
 
-    let minPwrAtEndMovement = 20; // Минимальная мощность при завершении движения
+    let minPwrAtEndMovement = 25; // Минимальная мощность при завершении движения
 
+    /**
+     * Установить минимальную мощность при завершений движений при фазе замедления.
+     * @param pwr минимальное значение мощности, eg: 20
+     */
+    //% blockId="SetMinPwrAtEndMovement"
+    //% block="set $pwr min pwr at deceleration
+    //% block.loc.ru="установить $pwr минимальную мощность при замедлениях"
+    //% inlineInputMode="inline"
+    //% weight="99" blockGap="8"
+    //% group="Свойства движения"
     export function setMinPwrAtEndMovement(pwr: number) {
         if (pwr < 0) console.log("Warning: min pwr is negative, using absolute value.");
         minPwrAtEndMovement = Math.abs(pwr);
