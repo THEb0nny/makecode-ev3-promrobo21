@@ -85,7 +85,6 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
         const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(turnRatio, v);
-        // advmotctrls.syncMotorsConfig(speedLeft, speedRight);
         
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках

@@ -59,7 +59,7 @@ namespace chassis {
         }
         if (v < 0) console.log(`Warning: v is negative (${v}). Using absolute value.`);
 
-        v = Math.abs(v); // Берём модуль Скорости
+        v = Math.abs(v); // Берём модуль скорости (мощности)
         const dirSign = Math.sign(dist); // Определяем направление по знаку dist
 
         const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
