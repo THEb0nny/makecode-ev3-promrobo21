@@ -669,7 +669,7 @@ namespace motions {
     //% weight="76"
     //% subcategory="По линии"
     //% group="Движение по линии на расстояние"
-    export function lineFollowToDistanceByOneSensor(followLineSensor: FollowLineSensor, dist: number, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
+    export function lineFollowToDistanceByOneSensor(dist: number, followLineSensor: FollowLineSensor, actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
         if (followLineSensor == FollowLineSensor.LeftInside) {
             lineFollowToDistanceByLeftSensor(LineLocation.Inside, dist, actionAfterMotion, params, debug);
         } else if (followLineSensor == FollowLineSensor.LeftOutside) {
