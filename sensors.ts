@@ -227,8 +227,9 @@ namespace sensors {
         const rgbRaw = sensor.rgbRaw(); // Получить сырые значения датчика цвета
         let normRgb: number[] = [0, 0, 0];
         for(let i = 0; i < 3; i++) {
-            const toHighMap = getMaxRgbColorSensor(sensor)[i] < 255 ? getMaxRgbColorSensor(sensor)[i] : 255;
-            normRgb[i] = Math.map(rgbRaw[i], getMinRgbColorSensor(sensor)[i], getMaxRgbColorSensor(sensor)[i], 0, toHighMap);
+            const maxRgb = getMaxRgbColorSensor(sensor)[i];
+            // const toHighMap = maxRgb < 255 ? maxRgb : 255;
+            normRgb[i] = Math.map(rgbRaw[i], getMinRgbColorSensor(sensor)[i], maxRgb, 0, 255);
             normRgb[i] = Math.round(Math.constrain(normRgb[i], 0, 255));
         }
         return normRgb;
