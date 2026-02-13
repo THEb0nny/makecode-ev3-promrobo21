@@ -547,7 +547,7 @@ namespace sensors {
         
         while (!brick.buttonEnter.isPressed()) { // while (!brick.buttonEnter.wasPressed())
             let currTime = control.millis();
-            let loopTime = currTime - prevTime;
+            let dt = currTime - prevTime;
             prevTime = currTime;
 
             if (brick.buttonUp.isPressed()) {
@@ -618,25 +618,17 @@ namespace sensors {
     }
 
     export function hueByVectorSum(normRgb: number[]): number {
-        // let r = rgb[0], g = rgb[1], b = rgb[2];
-        // const total = r + g + b;
-        // if (total < 10) return -1; // Порог чёрного
-        // if (total > 400) return -2; // Порог белого
-
-        // Векторы: R=0°, G=120°, B=240°
-        const angles = [0, 120, 240];
-        // const normRgb = [r / 255, g / 255, b / 255];
-
+        const anglesRGB = [0, 120, 240]; // Векторы: R=0°, G=120°, B=240°
         let x = 0, y = 0;
         for (let i = 0; i < 3; i++) {
-            x += normRgb[i] * cosTable[angles[i]];
-            y += normRgb[i] * sinTable[angles[i]];
+            x += normRgb[i] * cosTable[anglesRGB[i]];
+            y += normRgb[i] * sinTable[anglesRGB[i]];
         }
 
         let hue = Math.atan2(y, x) * 180 / Math.PI;
         if (hue < 0) hue += 360;
 
-        return Math.round(hue)  // 0-359 — твой цвет по кольцу!
+        return Math.round(hue); // 0-359 — твой цвет по кольцу!
     }
 
 }
