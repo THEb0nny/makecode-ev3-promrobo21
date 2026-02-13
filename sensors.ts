@@ -604,3 +604,38 @@ namespace sensors {
     }
 
 }
+
+namespace sensors {
+
+    // Предвычисленные таблицы (делаешь один раз)
+    const sinTable: number[] = [];
+    const cosTable: number[] = [];
+    
+    for (let i = 0; i < 360; i++) {
+        sinTable.push(Math.sin(i * Math.PI / 180));
+        cosTable.push(Math.cos(i * Math.PI / 180));
+    }
+
+    export function hueByVectorSum(normRgb: number[]): number {
+        // let r = rgb[0], g = rgb[1], b = rgb[2];
+        // const total = r + g + b;
+        // if (total < 10) return -1; // Порог чёрного
+        // if (total > 400) return -2; // Порог белого
+
+        // Векторы: R=0°, G=120°, B=240°
+        const angles = [0, 120, 240];
+        // const normRgb = [r / 255, g / 255, b / 255];
+
+        let x = 0, y = 0;
+        for (let i = 0; i < 3; i++) {
+            x += normRgb[i] * cosTable[angles[i]];
+            y += normRgb[i] * sinTable[angles[i]];
+        }
+
+        let hue = Math.atan2(y, x) * 180 / Math.PI;
+        if (hue < 0) hue += 360;
+
+        return Math.round(hue)  // 0-359 — твой цвет по кольцу!
+    }
+
+}

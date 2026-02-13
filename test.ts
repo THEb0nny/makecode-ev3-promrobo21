@@ -13,6 +13,22 @@ chassis.setBaseLength(172);
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
+while (true) {
+    const rgb = sensors.color2.rgbRaw();
+    const total = rgb[0] + rgb[1] + rgb[2];
+    const normRgb = [rgb[0] / 255, rgb[1] / 255, rgb[2] / 255];
+    // let normRgb = [];
+    // for (let i = 0; i < 3; i++) {
+    //     normRgb[i] = Math.map(rgb[i], 0, );
+    // }
+    const hue = sensors.hueByVectorSum(normRgb);
+    brick.clearScreen();
+    brick.printValue("r", rgb[0], 1);
+    brick.printValue("g", rgb[1], 2);
+    brick.printValue("b", rgb[2], 3);
+    brick.printValue("hue", hue, 5);
+}
+
 // chassis.syncRampMovement(40, 80, 20, 500, 100, 100);
 // pause(100);
 // chassis.syncRampMovement(40, 80, 20, -500, 100, 100);
