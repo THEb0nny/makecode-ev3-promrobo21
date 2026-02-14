@@ -1,5 +1,7 @@
 namespace sensors {
 
+    // https://github.com/THEb0nny/makecode-ev3-promrobo21/blob/master/color_hue.png
+
     export let leftLineSensor: sensors.ColorSensor | sensors.NXTLightSensor; // Левый датчик для движения по линии
     export let rightLineSensor: sensors.ColorSensor | sensors.NXTLightSensor; // Правый датчик для движения по линии
 
