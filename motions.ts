@@ -199,7 +199,7 @@ namespace motions {
             if (preTurnIsDone) { // Если предварительный поворот выполнен
                 const rgbNormCS = sensors.getNormalizeRgb(sensor); // Получаем от сенсора RGB
                 const hsvlCS = sensors.rgbToHsvl(rgbNormCS); // Переводим RGB в HSV
-                const colorCS = sensors.convertHsvlToColorNum(hsvlCS, sensors.getHsvlToColorNumParams(sensor)); // Узнаём какой цвет
+                const colorCS = sensors.convertHsvlToColorNum(hsvlCS, sensors.getHsvlToColorNumBoundaries(sensor)); // Узнаём какой цвет
                 if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && colorCS == 6) break; // Нашли белую часть после линии
             }

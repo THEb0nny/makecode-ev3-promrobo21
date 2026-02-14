@@ -14,54 +14,57 @@ sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
 sensors.preparationLineSensor();
 
 sensors.setColorSensorMinRgbValues(sensors.color4, 1, 1, 1);
-sensors.setColorSensorMaxRgbValues(sensors.color4, 370, 381, 262);
+sensors.setColorSensorMaxRgbValues(sensors.color4, 235, 249, 178);
+sensors.setHsvlToColorNumBoundaries(sensors.color4, {
+    whiteBoundary: 50,
+    blackBoundary: 10,
+    coloredBoundary: 50,
+    redBoundary: 20,
+    brownBoundary: 25,
+    yellowBoundary: 90,
+    greenBoundary: 190,
+    blueBoundary: 300
+});
 
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
-let minIntensity = 35 // самый тёмный объект (чёрный)
-let maxIntensity = 571 // самый яркий (белый)
 let prevTime = 0;
 while (true) {
     let currTime = control.millis();
     let dt = currTime - prevTime;
     prevTime = currTime;
-    // const rgbRaw = sensors.color4.rgbRaw();
+    const rgbRaw = sensors.color4.rgbRaw();
     const rgbNorm = sensors.getNormalizeRgb(sensors.color4);
-    // const rgbNorm = [rgb[0] / 255, rgb[1] / 255, rgb[2] / 255];
-    // const intensity = Math.sqrt(rgb[0] ** 2 + rgb[1] ** 2 + rgb[2] ** 2);
-    const intensity = rgbNorm[0] + rgbNorm[1] + rgbNorm[2];
-    // Пороги от калибровки
-    const blackThreshold = minIntensity + (maxIntensity - minIntensity) * 0.05  // 5%
-    const whiteThreshold = maxIntensity * 0.7  // 70%
     // РАЗБРОС RGB
-    const maxC = Math.max3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
-    const minC = Math.min3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
-    const variance = maxC - minC;
+    let max = Math.max3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
+    let min = Math.min3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
+    let light = (max + min) / 5.12;
+    let val = max / 2.56;
+    let hue = -1;
+    if (Math.round(val) == 0 && Math.round(light) == 0) {
+        hue = -1;
+    }
 
     brick.clearScreen();
     brick.printValue("r", rgbNorm[0], 1);
     brick.printValue("g", rgbNorm[1], 2);
     brick.printValue("b", rgbNorm[2], 3);
-    brick.printValue("intensity", intensity, 4);
-    brick.printValue("variance", variance, 5);
-    let color = -1, hue = -1;
-    if (intensity < 10) { // ПУСТОТА
+    brick.printValue("light", light, 5);
+    brick.printValue("val", val, 6);
+    let color = -1;
+    hue = sensors.hueByVectorSum(rgbNorm);
+    if (val < 1) { // ПУСТОТА
         color = 0;
-    } else if (intensity < blackThreshold) {
+    } else if (val < 15) {
         color = 1;  // ЧЁРНЫЙ
-    } else if (intensity > whiteThreshold) { // БЕЛЫЙ
+    } else if (val > 75) { // БЕЛЫЙ
         color = 6;
     } else {
-        const distanceNorm = Math.max(0, Math.min(1, intensity / 200))  // 0=далеко, 1=близко
-        if (variance < 0.35 || distanceNorm < 0.2) {  // слишком далеко
-            color = 1  // ЧЁРНЫЙ
-        } else {
-            const hue = sensors.hueByVectorSum(rgbNorm);
-            color = sensors.hueToColorNum(hue, sensors.getHsvlToColorNumParams(sensors.color4));
-        }
+        color = sensors.hueToColorNum(hue, sensors.getHsvlToColorNumBoundaries(sensors.color4));
     }
-    brick.printValue("color", color, 6);
+    brick.printValue("hue", hue, 8);
+    brick.printValue("color", color, 9);
     brick.printValue("dt", dt, 12);
 }
 

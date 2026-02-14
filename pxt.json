@@ -14,7 +14,6 @@
         "enums.ts",
         "motions.ts",
         "turns.ts",
-        "sensors.ts",
         "ns.ts",
         "levelings.ts",
         "params.ts",
@@ -25,7 +24,9 @@
         "navigation.ts",
         "smart_turns.ts",
         "line_follow.ts",
-        "ramp_line_follow.ts"
+        "ramp_line_follow.ts",
+        "line_sensor.ts",
+        "color_sensor.ts"
     ],
     "testFiles": [
         "test.ts"
