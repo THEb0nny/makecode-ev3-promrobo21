@@ -241,9 +241,9 @@ namespace sensors {
 namespace sensors {
 
     interface ColorBoundaries {
-        coloredBoundary: number;
         whiteBoundary: number;
         blackBoundary: number;
+        coloredBoundary: number;
         redBoundary: number;
         brownBoundary: number;
         yellowBoundary: number;
@@ -254,9 +254,9 @@ namespace sensors {
     let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
     let maxRgbColorSensors: number[][] = [[255, 255, 255], [255, 255, 255], [255, 255, 255], [255, 255, 255]]; // Максимальные значения RGB для датчиков цвета
 
-    let coloredBoundaryColorSensors: number[] = [50, 50, 50, 50];
     let whiteBoundaryColorSensors: number[] = [5, 5, 5, 5];
     let blackBoundaryColorSensors: number[] = [1, 1, 1, 1];
+    let coloredBoundaryColorSensors: number[] = [50, 50, 50, 50];
     let redBoundaryColorSensors: number[] = [25, 25, 25, 25];
     let brownBoundaryColorSensors: number[] = [60, 60, 60, 60];
     let yellowBoundaryColorSensors: number[] = [100, 100, 100, 100];
@@ -345,18 +345,18 @@ namespace sensors {
 
     /**
      * Перевод значений цветового пространства rgb в hsvl.
-     * @param rgbArr массив значений rgb
+     * @param normRgb массив значений rgb
      */
-    //% blockId="ConvertRgbToHsvl"
-    //% block="convert rgb $rgbArr to hsvl"
-    //% block.loc.ru="перевести rgb $rgbArr в hsvl"
+    //% blockId="rgbToHsvl"
+    //% block="convert rgb $normRgb to hsvl"
+    //% block.loc.ru="перевести rgb $normRgb в hsvl"
     //% inlineInputMode="inline"
     //% weight="52" blockGap="8"
     //% group="Color Sensor"
-    export function convertRgbToHsvl(rgbArr: number[]): number[] {
+    export function rgbToHsvl(normRgb: number[]): number[] {
         // https://en.wikipedia.org/wiki/HSL_and_HSV#/media/File:Hsl-hsv_models.svg
         // https://github.com/ofdl-robotics-tw/EV3-CLEV3R-Modules/blob/main/Mods/Color.bpm
-        let r = rgbArr[0], g = rgbArr[1], b = rgbArr[2];
+        let r = normRgb[0], g = normRgb[1], b = normRgb[2];
 
         // https://clev3r.ru/codesamples/
         // HT Color sensor V2 RGB Maxmium is 255
@@ -414,8 +414,8 @@ namespace sensors {
     //% weight="88" blockGap="8"
     //% group="Color Sensor"
     export function getHsvl(sensor: sensors.ColorSensor): number[] {
-        const rgb = getNormalizeRgb(sensor);
-        const hsvl = convertRgbToHsvl(rgb);
+        const normRgb = getNormalizeRgb(sensor);
+        const hsvl = rgbToHsvl(normRgb);
         return hsvl;
     }
 
@@ -438,9 +438,9 @@ namespace sensors {
     //% group="Color Sensor"
     export function hsvlToColorNumParams(newColoredBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): ColorBoundaries {
         return {
-            coloredBoundary: newColoredBoundary,
             whiteBoundary: newWhiteBoundary,
             blackBoundary: newBlackBoundary,
+            coloredBoundary: newColoredBoundary,
             redBoundary: newRedBoundary,
             brownBoundary: newBrownBoundary,
             yellowBoundary: newYellowBoundary,
@@ -464,9 +464,9 @@ namespace sensors {
     //% group="Color Sensor"
     export function setHsvlToColorNumParams(sensor: sensors.ColorSensor, boundaries: ColorBoundaries) {
         const index = sensor.port() - 1;
-        coloredBoundaryColorSensors[index] = boundaries.coloredBoundary;
         whiteBoundaryColorSensors[index] = boundaries.whiteBoundary;
         blackBoundaryColorSensors[index] = boundaries.blackBoundary;
+        coloredBoundaryColorSensors[index] = boundaries.coloredBoundary;
         redBoundaryColorSensors[index] = boundaries.redBoundary;
         brownBoundaryColorSensors[index] = boundaries.brownBoundary;
         yellowBoundaryColorSensors[index] = boundaries.yellowBoundary;
@@ -489,9 +489,9 @@ namespace sensors {
     export function getHsvlToColorNumParams(sensor: sensors.ColorSensor): ColorBoundaries {
         const index = sensor.port() - 1;
         return {
-            coloredBoundary: coloredBoundaryColorSensors[index],
             whiteBoundary: whiteBoundaryColorSensors[index],
             blackBoundary: blackBoundaryColorSensors[index],
+            coloredBoundary: coloredBoundaryColorSensors[index],
             redBoundary: redBoundaryColorSensors[index],
             brownBoundary: brownBoundaryColorSensors[index],
             yellowBoundary: yellowBoundaryColorSensors[index],

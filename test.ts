@@ -13,32 +13,47 @@ chassis.setBaseLength(172);
 sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
 sensors.preparationLineSensor();
 
+sensors.setColorSensorMinRgbValues(sensors.color4, 1, 1, 1);
+sensors.setColorSensorMaxRgbValues(sensors.color4, 370, 381, 262);
+
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
+let minIntensity = 9999;
+let maxIntensity = 0;
 let prevTime = 0;
 while (true) {
     let currTime = control.millis();
     let dt = currTime - prevTime;
     prevTime = currTime;
-    const rgb = sensors.color4.rgbRaw();
-    // const intensity = rgb[0] + rgb[1] + rgb[2];
-    const intensity = Math.sqrt(rgb[0] ** 2 + rgb[1] ** 2 + rgb[2] ** 2);
-    let color = -1, hue = -1;
-    if (intensity < 5) color = 0;
-    else if (intensity < 10) color = 1;
-    else if (intensity > 150) color = 6;
-    else {
-        const normRgb = [rgb[0] / 255, rgb[1] / 255, rgb[2] / 255];
-        hue = sensors.hueByVectorSum(normRgb);
-    }
+    const rgbRaw = sensors.color4.rgbRaw();
+    const rgbNorm = sensors.getNormalizeRgb(sensors.color4);
+    const intensity = rgbNorm[0] + rgbNorm[1] + rgbNorm[2];
+    minIntensity = Math.min(minIntensity, intensity)
+    maxIntensity = Math.max(maxIntensity, intensity)
+    // Пороги от калибровки
+    const blackThreshold = minIntensity + (maxIntensity - minIntensity) * 0.05  // 5%
+    const whiteThreshold = maxIntensity * 0.8  // 80%
+    // const intensity = Math.sqrt(rgb[0] ** 2 + rgb[1] ** 2 + rgb[2] ** 2);
     brick.clearScreen();
-    brick.printValue("r", rgb[0], 1);
-    brick.printValue("g", rgb[1], 2);
-    brick.printValue("b", rgb[2], 3);
+    brick.printValue("r", rgbNorm[0], 1);
+    brick.printValue("g", rgbNorm[1], 2);
+    brick.printValue("b", rgbNorm[2], 3);
     brick.printValue("intensity", intensity, 4);
-    brick.printValue("hue", hue, 6);
-    brick.printValue("color", color, 7);
+    let color = -1, hue = -1;
+    if (intensity < 10) { // ПУСТОТА
+        color = 0
+    } else if (intensity < blackThreshold) { // ЧЁРНЫЙ  
+        color = 1
+    } else if (intensity > whiteThreshold) { // БЕЛЫЙ
+        color = 6
+    } else {
+        // const rgbNorm = [rgb[0] / 255, rgb[1] / 255, rgb[2] / 255];
+        hue = sensors.hueByVectorSum(rgbNorm);
+        color = 2 + Math.floor(hue / 60);
+        brick.printValue("hue", hue, 7);
+    }
+    brick.printValue("color", color, 6);
     brick.printValue("dt", dt, 12);
 }
 

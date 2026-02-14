@@ -197,8 +197,8 @@ namespace motions {
             const emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             if (!preTurnIsDone && (Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) preTurnIsDone = true; // Если предвариательный поворот ещё не выполнен, то проверяем условия
             if (preTurnIsDone) { // Если предварительный поворот выполнен
-                const rgbCS = sensor.rgbRaw(); // Получаем от сенсора RGB
-                const hsvlCS = sensors.convertRgbToHsvl(rgbCS); // Переводим RGB в HSV
+                const rgbNormCS = sensors.getNormalizeRgb(sensor); // Получаем от сенсора RGB
+                const hsvlCS = sensors.rgbToHsvl(rgbNormCS); // Переводим RGB в HSV
                 const colorCS = sensors.convertHsvlToColorNum(hsvlCS, sensors.getHsvlToColorNumParams(sensor)); // Узнаём какой цвет
                 if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && colorCS == 6) break; // Нашли белую часть после линии
