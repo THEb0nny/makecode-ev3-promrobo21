@@ -513,16 +513,21 @@ namespace sensors {
     export function convertHsvlToColorNum(hsvl: number[], boundaries: ColorBoundaries): number {
         const H = hsvl[0], S = hsvl[1], V = hsvl[2], L = hsvl[3];
         if (S > boundaries.coloredBoundary) { // Граница цветности
-            if (H < boundaries.redBoundary) return SensorColors.Red; // red
-            else if (H < boundaries.brownBoundary) return SensorColors.Brown; // brown
-            else if (H < boundaries.yellowBoundary) return SensorColors.Yellow; // yellow
-            else if (H < boundaries.greenBoundary) return SensorColors.Green; // green
-            else if (H < boundaries.blueBoundary) return SensorColors.Blue; // blue
-            else if (H < 360) return SensorColors.Red; // red
-            else return -1; // error
-        } else if (V >= boundaries.whiteBoundary) return SensorColors.White; // white
-        else if (V >= boundaries.blackBoundary) return SensorColors.Black; // black
-        return SensorColors.None; // Empty
+            return hueToColorNum(H, boundaries);
+        } else if (V >= boundaries.whiteBoundary) return SensorColors.White; // Белый
+        else if (V >= boundaries.blackBoundary) return SensorColors.Black; // Чёрный
+        return SensorColors.None; // Пусто
+    }
+
+    // Перевод hue в цветовой код
+    export function hueToColorNum(hue: number, boundaries: ColorBoundaries): number {
+        if (hue < boundaries.redBoundary) return SensorColors.Red; // Красный
+        else if (hue < boundaries.brownBoundary) return SensorColors.Brown; // Коричневый
+        else if (hue < boundaries.yellowBoundary) return SensorColors.Yellow; // Желтый
+        else if (hue < boundaries.greenBoundary) return SensorColors.Green; // Зелёный
+        else if (hue < boundaries.blueBoundary) return SensorColors.Blue; // Синий
+        else if (hue < 360) return SensorColors.Red; // Красный
+        else return -1; // Ошибка
     }
 
     /**

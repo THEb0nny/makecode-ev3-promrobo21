@@ -19,8 +19,8 @@ sensors.setColorSensorMaxRgbValues(sensors.color4, 370, 381, 262);
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
-let minIntensity = 35   // самый тёмный объект (чёрный)
-let maxIntensity = 571  // самый яркий (белый)
+let minIntensity = 35 // самый тёмный объект (чёрный)
+let maxIntensity = 571 // самый яркий (белый)
 let prevTime = 0;
 while (true) {
     let currTime = control.millis();
@@ -57,8 +57,8 @@ while (true) {
         if (variance < 0.35 || distanceNorm < 0.2) {  // слишком далеко
             color = 1  // ЧЁРНЫЙ
         } else {
-            const hue = sensors.hueByVectorSum(rgbNorm)
-            color = 2 + Math.floor(hue / 60)
+            const hue = sensors.hueByVectorSum(rgbNorm);
+            color = sensors.hueToColorNum(hue, sensors.getHsvlToColorNumParams(sensors.color4));
         }
     }
     brick.printValue("color", color, 6);
