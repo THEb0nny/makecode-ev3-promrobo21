@@ -10,6 +10,9 @@ chassis.setWheelDiametr(62.4);
 // Установить размер базы шасси
 chassis.setBaseLength(172);
 
+sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
+sensors.preparationLineSensor();
+
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 

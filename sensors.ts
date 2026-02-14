@@ -70,6 +70,7 @@ namespace sensors {
     // Подготовить датчики к работе изначально
     export function preparationLineSensor() {
         if (leftLineSensor instanceof sensors.ColorSensor && rightLineSensor instanceof sensors.ColorSensor) { // Если датчики цвета были до этого установлены
+            pauseUntil(() => leftLineSensor.isActive() && rightLineSensor.isActive()); // Ждать пока датчики не станут активными
             for (let i = 0; i < 4; i++) {
                 if (i % 2 == 0) {
                     leftLineSensor.setMode(ColorSensorMode.RgbRaw);
@@ -78,12 +79,12 @@ namespace sensors {
                     leftLineSensor.setMode(ColorSensorMode.RefRaw);
                     rightLineSensor.setMode(ColorSensorMode.RefRaw);
                 }
-                pause(200);
+                pause(100);
             }
         } else if (leftLineSensor instanceof sensors.NXTLightSensor && rightLineSensor instanceof sensors.NXTLightSensor) { // Если датчики отражения nxt были до этого установлены
             for (let i = 0; i < 10; i++) { // Опрос датчиков, чтобы датчики дальше давали правильные показания
-                getLineSensorRawRefValue(LineSensor.Left);
-                getLineSensorRawRefValue(LineSensor.Right);
+                leftLineSensor.reflectetLightRaw();
+                rightLineSensor.reflectetLightRaw();
                 pause(1);
             }
         } else {
