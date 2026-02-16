@@ -20,10 +20,12 @@ sensors.setHsvlToColorNumBoundaries(sensors.color4, {
     blackBoundary: 10,
     coloredBoundary: 50,
     redBoundary: 20,
-    brownBoundary: 25,
+    orangeBoundary: -1,
+    brownBoundary: -1,
     yellowBoundary: 90,
     greenBoundary: 190,
-    blueBoundary: 300
+    blueBoundary: 300,
+    purpleBoundary: -1
 });
 
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);

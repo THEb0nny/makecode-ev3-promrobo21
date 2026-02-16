@@ -35,10 +35,12 @@ namespace sensors {
         blackBoundary: number;
         coloredBoundary: number;
         redBoundary: number;
+        orangeBoundary: number;
         brownBoundary: number;
         yellowBoundary: number;
         greenBoundary: number;
         blueBoundary: number;
+        purpleBoundary: number;
     }
 
     let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
@@ -48,10 +50,12 @@ namespace sensors {
     let blackBoundaryColorSensors: number[] = [1, 1, 1, 1];
     let coloredBoundaryColorSensors: number[] = [50, 50, 50, 50];
     let redBoundaryColorSensors: number[] = [25, 25, 25, 25];
-    let brownBoundaryColorSensors: number[] = [60, 60, 60, 60];
+    let orangeBoundaryColorSensors: number[] = [-1, -1, -1, -1];
+    let brownBoundaryColorSensors: number[] = [-1, -1, -1, -1];
     let yellowBoundaryColorSensors: number[] = [100, 100, 100, 100];
     let greenBoundaryColorSensors: number[] = [170, 170, 170, 170];
     let blueBoundaryColorSensors: number[] = [270, 270, 270, 270];
+    let purpleBoundaryColorSensors: number[] = [-1, -1, -1, -1];
 
     /**
      * Установить минимальные значения RGB для датчика цвета. Максимальные значения получаются на белом.
@@ -215,27 +219,31 @@ namespace sensors {
      * @param newWhiteBoundary значение границы белого V, если значение V ≥ этому, тогда объект будет считаться белым, eg: 10
      * @param newBlackBoundary значение границы чёрного V, если значение ≥ этому числу, но меньше белого числа, тогда будет считаться чёрным цветом, а всё что ниже этого будет считаться, что цвета нет, eg: 1
      * @param newRedBoundary значение границы красного H, от 0 до этого значения, eg: 25
+     * @param newOrangeBoundary значение границы оранжевого H, от 0 до этого значения, eg: 35
      * @param newBrownBoundary значение границы коричневого H, от красного до этого значения, eg: 40
      * @param newYellowBoundary значение границы жёлтого H, от коричневого до этого значения, eg: 100
      * @param newGreenBoundary значение границы зелёного H, от жёлтого до этого значения, eg: 180
-     * @param newBlueBoundary значение границы синего H, от зелёного до этого значения, а после до 360 (включительно) снова идёт красный, eg: 260
+     * @param newBlueBoundary значение границы синего H, от зелёного до этого значения, eg: 260
+     * @param newPurpleBoundary значение границы пурпурного H, от синего до этого значения, а после до 360 (включительно) снова идёт красный, eg: 260
      */
     //% blockId="HsvlToColorNumBoundaries"
-    //% block="converting params HSVL to color at boundars chroma = $newColoredBoundary white = $newWhiteBoundary black = $newBlackBoundary|red = $newRedBoundary brown = $newBrownBoundary yellow = $newYellowBoundary|green = $newGreenBoundary blue = $newBlueBoundary"
-    //% block.loc.ru="параметры перевода HSVL в цвет при границах цветности = $newColoredBoundary белого = $newWhiteBoundary чёрного = $newBlackBoundary|красного = $newRedBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary|зелёного = $newGreenBoundary синего = $newBlueBoundary"
+    //% block="converting params HSVL to color at boundars chroma = $newColoredBoundary white = $newWhiteBoundary black = $newBlackBoundary|red = $newRedBoundary orange = $newOrangeBoundary brown = $newBrownBoundary yellow = $newYellowBoundary|green = $newGreenBoundary blue = $newBlueBoundary purple = $newPurpleBoundary"
+    //% block.loc.ru="параметры перевода HSVL в цвет при границах цветности = $newColoredBoundary белого = $newWhiteBoundary чёрного = $newBlackBoundary|красного = $newRedBoundary оранжевого = $newOrangeBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary|зелёного = $newGreenBoundary синего = $newBlueBoundary пурпурный = $newPurpleBoundary"
     //% inlineInputMode="external"
     //% weight="55" blockGap="8"
     //% group="Color Sensor"
-    export function hsvlToColorNumBoundaries(newColoredBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number): ColorBoundaries {
+    export function hsvlToColorNumBoundaries(newColoredBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newOrangeBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number, newPurpleBoundary: number): ColorBoundaries {
         return {
             whiteBoundary: newWhiteBoundary,
             blackBoundary: newBlackBoundary,
             coloredBoundary: newColoredBoundary,
             redBoundary: newRedBoundary,
+            orangeBoundary: newOrangeBoundary,
             brownBoundary: newBrownBoundary,
             yellowBoundary: newYellowBoundary,
             greenBoundary: newGreenBoundary,
-            blueBoundary: newBlueBoundary
+            blueBoundary: newBlueBoundary,
+            purpleBoundary: newPurpleBoundary
         }
     }
 
@@ -258,10 +266,12 @@ namespace sensors {
         blackBoundaryColorSensors[index] = boundaries.blackBoundary;
         coloredBoundaryColorSensors[index] = boundaries.coloredBoundary;
         redBoundaryColorSensors[index] = boundaries.redBoundary;
+        orangeBoundaryColorSensors[index] = boundaries.orangeBoundary;
         brownBoundaryColorSensors[index] = boundaries.brownBoundary;
         yellowBoundaryColorSensors[index] = boundaries.yellowBoundary;
         greenBoundaryColorSensors[index] = boundaries.greenBoundary;
         blueBoundaryColorSensors[index] = boundaries.blueBoundary;
+        purpleBoundaryColorSensors[index] = boundaries.purpleBoundary;
     }
 
     /**
@@ -283,10 +293,12 @@ namespace sensors {
             blackBoundary: blackBoundaryColorSensors[index],
             coloredBoundary: coloredBoundaryColorSensors[index],
             redBoundary: redBoundaryColorSensors[index],
+            orangeBoundary: orangeBoundaryColorSensors[index],
             brownBoundary: brownBoundaryColorSensors[index],
             yellowBoundary: yellowBoundaryColorSensors[index],
             greenBoundary: greenBoundaryColorSensors[index],
-            blueBoundary: blueBoundaryColorSensors[index]
+            blueBoundary: blueBoundaryColorSensors[index],
+            purpleBoundary: purpleBoundaryColorSensors[index]
         }
     }
 
