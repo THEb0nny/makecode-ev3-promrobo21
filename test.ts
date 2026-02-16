@@ -11,7 +11,7 @@ chassis.setWheelDiametr(62.4);
 chassis.setBaseLength(172);
 
 sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
-sensors.preparationLineSensor();
+// sensors.preparationLineSensor();
 
 sensors.setColorSensorMinRgbValues(sensors.color4, 1, 1, 1);
 sensors.setColorSensorMaxRgbValues(sensors.color4, 235, 249, 178);
@@ -41,9 +41,11 @@ while (true) {
     let min = Math.min3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
     let light = (max + min) / 5.12;
     let val = max / 2.56;
-    let hue = -1;
-    if (Math.round(val) == 0 && Math.round(light) == 0) {
+    let color = -1, hue = -1;
+    if (val == 0 && light == 0) {
         hue = -1;
+    } else {
+        hue = sensors.hueByVectorSum(rgbNorm);
     }
 
     brick.clearScreen();
@@ -52,8 +54,7 @@ while (true) {
     brick.printValue("b", rgbNorm[2], 3);
     brick.printValue("light", light, 5);
     brick.printValue("val", val, 6);
-    let color = -1;
-    hue = sensors.hueByVectorSum(rgbNorm);
+    
     if (val < 1) { // ПУСТОТА
         color = 0;
     } else if (val < 15) {

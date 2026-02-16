@@ -311,12 +311,12 @@ namespace sensors {
 
     // Перевод hue в цветовой код
     export function hueToColorNum(hue: number, boundaries: ColorBoundaries): number {
-        if (hue < boundaries.redBoundary) return SensorColors.Red; // Красный
-        else if (hue < boundaries.brownBoundary) return SensorColors.Brown; // Коричневый
-        else if (hue < boundaries.yellowBoundary) return SensorColors.Yellow; // Желтый
-        else if (hue < boundaries.greenBoundary) return SensorColors.Green; // Зелёный
-        else if (hue < boundaries.blueBoundary) return SensorColors.Blue; // Синий
-        else if (hue < 360) return SensorColors.Red; // Красный
+        if (boundaries.redBoundary != -1 && hue < boundaries.redBoundary) return SensorColors.Red; // Красный
+        else if (boundaries.brownBoundary != -1 && hue < boundaries.brownBoundary) return SensorColors.Brown; // Коричневый
+        else if (boundaries.yellowBoundary != -1 && hue < boundaries.yellowBoundary) return SensorColors.Yellow; // Желтый
+        else if (boundaries.greenBoundary != -1 && hue < boundaries.greenBoundary) return SensorColors.Green; // Зелёный
+        else if (boundaries.blueBoundary != -1 && hue < boundaries.blueBoundary) return SensorColors.Blue; // Синий
+        else if (boundaries.redBoundary != -1 && hue < 360) return SensorColors.Red; // Снова красный
         else return -1; // Ошибка
     }
 
