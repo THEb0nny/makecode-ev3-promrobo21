@@ -29,47 +29,47 @@ sensors.setHsvlToColorNumBoundaries(sensors.color4, {
 });
 
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
-music.playTone(262, music.beat(BeatFraction.Half));
+// music.playTone(262, music.beat(BeatFraction.Half));
 
-let prevTime = 0;
-while (true) {
-    let currTime = control.millis();
-    let dt = currTime - prevTime;
-    prevTime = currTime;
-    const rgbRaw = sensors.color4.rgbRaw();
-    const rgbNorm = sensors.getNormalizeRgb(sensors.color4);
-    // РАЗБРОС RGB
-    let max = Math.max3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
-    let min = Math.min3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
-    let light = (max + min) / 5.12;
-    let val = max / 2.56;
-    let color = -1, hue = -1;
-    if (val == 0 && light == 0) {
-        hue = -1;
-    } else {
-        hue = sensors.hueByVectorSum(rgbNorm);
-    }
+// let prevTime = 0;
+// while (true) {
+//     let currTime = control.millis();
+//     let dt = currTime - prevTime;
+//     prevTime = currTime;
+//     const rgbRaw = sensors.color4.rgbRaw();
+//     const rgbNorm = sensors.getNormalizeRgb(sensors.color4);
+//     // РАЗБРОС RGB
+//     let max = Math.max3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
+//     let min = Math.min3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
+//     let light = (max + min) / 5.12;
+//     let val = max / 2.56;
+//     let color = -1, hue = -1;
+//     if (val == 0 && light == 0) {
+//         hue = -1;
+//     } else {
+//         hue = sensors.hueByVectorSum(rgbNorm);
+//     }
 
-    brick.clearScreen();
-    brick.printValue("r", rgbNorm[0], 1);
-    brick.printValue("g", rgbNorm[1], 2);
-    brick.printValue("b", rgbNorm[2], 3);
-    brick.printValue("light", light, 5);
-    brick.printValue("val", val, 6);
+//     brick.clearScreen();
+//     brick.printValue("r", rgbNorm[0], 1);
+//     brick.printValue("g", rgbNorm[1], 2);
+//     brick.printValue("b", rgbNorm[2], 3);
+//     brick.printValue("light", light, 5);
+//     brick.printValue("val", val, 6);
     
-    if (val < 1) { // ПУСТОТА
-        color = 0;
-    } else if (val < 15) {
-        color = 1;  // ЧЁРНЫЙ
-    } else if (val > 75) { // БЕЛЫЙ
-        color = 6;
-    } else {
-        color = sensors.hueToColorNum(hue, sensors.getHsvlToColorNumBoundaries(sensors.color4));
-    }
-    brick.printValue("hue", hue, 8);
-    brick.printValue("color", color, 9);
-    brick.printValue("dt", dt, 12);
-}
+//     if (val < 1) { // ПУСТОТА
+//         color = 0;
+//     } else if (val < 15) {
+//         color = 1;  // ЧЁРНЫЙ
+//     } else if (val > 75) { // БЕЛЫЙ
+//         color = 6;
+//     } else {
+//         color = sensors.hueToColorNum(hue, sensors.getHsvlToColorNumBoundaries(sensors.color4));
+//     }
+//     brick.printValue("hue", hue, 8);
+//     brick.printValue("color", color, 9);
+//     brick.printValue("dt", dt, 12);
+// }
 
 // chassis.syncRampMovement(40, 80, 20, 500, 100, 100);
 // pause(100);
@@ -202,3 +202,30 @@ console.log(`travelBFS: ${navigation.algorithmBFS(1, 23).join(', ')}`);
 // navigation.followLineToNode(GraphTraversal.Dijkstra, 1, {moveSpeed: 70, turnSpeed: 50, Kp: 0.5 });
 navigation.followLineByPath(navigation.algorithmBFS(1, 23), null, true);
 */
+
+function lineFollowTest() {
+    motions.pidLineFollow.setGains(motions.lineFollowCrossIntersection2SensorKp, motions.lineFollowCrossIntersection2SensorKi, motions.lineFollowCrossIntersection2SensorKd); // Установка коэффицентов ПИД регулятора
+    motions.pidLineFollow.setDerivativeFilter(motions.lineFollowCrossIntersection2SensorKf); // Установить фильтр дифференциального регулятора
+    motions.pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+    motions.pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
+    motions.pidLineFollow.reset(); // Сброс ПИД регулятора
+    let i = 0;
+    let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
+    control.timer1.reset();
+    while (control.timer1.millis() < 1000) { // Цикл регулирования движения по линии
+        const currTime = control.millis(); // Текущее время
+        const dt = currTime - prevTime; // Время за которое выполнился цикл
+        prevTime = currTime; // Новое время в переменную предыдущего времени
+        const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+        const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+        const error = refLeftLS - refRightLS; // Ошибка регулирования
+        const u = motions.pidLineFollow.compute(1, -error); // Управляющее воздействие
+        chassis.regulatorSteering(u, 100); // Команда моторам
+        i++;
+    }
+    console.log(`i: ${i}`);
+    chassis.stop();
+}
+
+pause(100);
+lineFollowTest();

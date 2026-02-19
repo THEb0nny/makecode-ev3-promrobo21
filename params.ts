@@ -11,7 +11,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newV скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
      * @param newKi интегральный коэффицент, eg: 0
@@ -20,7 +20,7 @@ namespace params {
      */
     //% blockId="SetLineFollow2SensorParams"
     //% block="set line follow params at v = $newV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
-    //% block.loc.ru="установить параметры движения по линии на скорости = $newV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
+    //% block.loc.ru="установить параметры движения по линии на v = $newV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="99"
@@ -47,12 +47,12 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v.
      * @param newV скорость движения, eg: 50
      */
     //% blockId="LineFollowOneParams"
     //% block="v = $newV\\%"
-    //% block.loc.ru="скорость = $newV\\%"
+    //% block.loc.ru="v = $newV\\%"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры движения по линии"
@@ -63,13 +63,13 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp.
      * @param newV скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
      */
     //% blockId="LineFollowTwoParams"
     //% block="v = $newV\\% Kp = $newKp"
-    //% block.loc.ru="скорость = $newV\\% Kp = $newKp"
+    //% block.loc.ru="v = $newV\\% Kp = $newKp"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры движения по линии"
@@ -81,7 +81,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newV скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
      * @param newKd дифференциальный коэффицент, eg: 0
@@ -104,7 +104,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newV скорость движения, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
      * @param newKi интегральный коэффицент, eg: 0
@@ -113,7 +113,7 @@ namespace params {
      */
     //% blockId="LineFollowAllParams"
     //% block="v = $newV\\% Kp = $newKp Ki = $newKi Kd = $newKd||Kf = $newKf"
-    //% block.loc.ru="скорость = $newV\\% Kp = $newKp Ki = $newKi Kd = $newKd||Kf = $newKf"
+    //% block.loc.ru="v = $newV\\% Kp = $newKp Ki = $newKi Kd = $newKd||Kf = $newKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
@@ -144,7 +144,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newMinStartV начальная скорость движения, eg: 10
      * @param newMaxV максимальная скорость движения, eg: 50
      * @param newMinFihishV конечная скорость движения, eg: 10
@@ -155,7 +155,7 @@ namespace params {
      */
     //% blockId="SetRampLineFollow2SensorParams"
     //% block="set line follow params at start v = $newMinStartV\\% max = $newMaxV\\% final = $newMinFihishV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
-    //% block.loc.ru="установить параметры движения по линии при начальной скорости = $newMinStartV\\% макс = $newMaxV\\% конечной = $newMinFihishV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
+    //% block.loc.ru="установить параметры движения по линии при начальной v = $newMinStartV\\% макс = $newMaxV\\% конечной = $newMinFihishV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="99"
@@ -184,14 +184,14 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v.
      * @param newStartV начальная скорость движения, eg: 10
      * @param newMaxV максимальная скорость движения, eg: 50
      * @param newFinishV конечная скорость движения, eg: 10
      */
     //% blockId="RampLineFollowThreeParams"
     //% block="start v = $newStartV\\% max = $newMaxV\\% finally $newFinishV\\%"
-    //% block.loc.ru="начальная скорость = $newStartV\\% макс = $newMaxV\\% конечная $newFinishV\\%"
+    //% block.loc.ru="начальная v = $newStartV\\% макс = $newMaxV\\% конечная $newFinishV\\%"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
@@ -204,7 +204,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp.
      * @param newStartV начальная скорость движения, eg: 10
      * @param newMaxV максимальная скорость движения, eg: 50
      * @param newFinishV конечная скорость движения, eg: 10
@@ -212,7 +212,7 @@ namespace params {
      */
     //% blockId="RampLineFollowFourParams"
     //% block="start v = $newStartV\\% max = $newMaxV\\% finaly $newFinishV\\% Kp = $newKp"
-    //% block.loc.ru="начальная скорость = $newStartV\\% макс = $newMaxV\\% конечная $newFinishV\\% Kp = $newKp"
+    //% block.loc.ru="начальная v = $newStartV\\% макс = $newMaxV\\% конечная $newFinishV\\% Kp = $newKp"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
@@ -226,7 +226,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newStartV начальная скорость движения, eg: 10
      * @param newMaxV максимальная скорость движения, eg: 50
      * @param newFinishV конечная скорость движения, eg: 10
@@ -236,7 +236,7 @@ namespace params {
      */
     //% blockId="RampLineFollowSixParams"
     //% block="start v = $newStartV\\% max = $newMaxV\\% finaly $newFinishV\\% Kp = $newKp Kd = $newKd||Kf = $newKf"
-    //% block.loc.ru="начальная скорость = $newStartV\\% макс = $newMaxV\\% конечная $newFinishV\\% Kp = $newKp Kd = $newKd||Kf = $newKf"
+    //% block.loc.ru="начальная v = $newStartV\\% макс = $newMaxV\\% конечная $newFinishV\\% Kp = $newKp Kd = $newKd||Kf = $newKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="86"
@@ -253,7 +253,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newStartV начальная скорость движения, eg: 10
      * @param newMaxV максимальная скорость движения, eg: 50
      * @param newFinishV конечная скорость движения, eg: 10
@@ -264,7 +264,7 @@ namespace params {
      */
     //% blockId="RampLineFollowAllParams"
     //% block="start v = $newStartV\\% max = $newMaxV\\% finaly $newFinishV\\% Kp = $newKp Ki = $newKi Kd = $newKd||Kf = $newKf"
-    //% block.loc.ru="начальная скорость = $newStartV\\% макс = $newMaxV\\% конечная $newFinishV\\% Kp = $newKp Ki = $newKi Kd = $newKd||Kf = $newKf"
+    //% block.loc.ru="начальная v = $newStartV\\% макс = $newMaxV\\% конечная $newFinishV\\% Kp = $newKp Ki = $newKi Kd = $newKd||Kf = $newKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
@@ -300,7 +300,7 @@ namespace params {
     }
 
     /**
-     * Установка параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Установка параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newV скорость движения, eg: 50
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
@@ -313,7 +313,7 @@ namespace params {
      */
     //% blockId="SetLineAlignmentParams"
     //% block="set line alignment params at v = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
-    //% block.loc.ru="установить параметры выравнивания на линии с макс скоростью = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
+    //% block.loc.ru="установить параметры выравнивания на линии с макс v = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="99"
@@ -331,7 +331,7 @@ namespace params {
     }
 
     /**
-     * Установка сокращённых параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Установка сокращённых параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newV скорость движения, eg: 50
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
@@ -342,7 +342,7 @@ namespace params {
      */
     //% blockId="SetLineAlignmentShortParams"
     //% block="set line alignment params at v = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
-    //% block.loc.ru="установить параметры выравнивания на линии с макс скоростью = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
+    //% block.loc.ru="установить параметры выравнивания на линии с макс скоростью v = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="98"
@@ -371,12 +371,12 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v.
      * @param newV максимальная скорость выравнивания, eg: 40
      */
     //% blockId="LineAlignmentOneParams"
     //% block="v = $newV\\%"
-    //% block.loc.ru="скорость = $newV\\%"
+    //% block.loc.ru="v = $newV\\%"
     //% inlineInputMode="inline"
     //% weight="88"
     //% group="Параметры перпендикулярного выравнивания на линии"
@@ -387,14 +387,14 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp.
      * @param newV максимальная скорость выравнивания, eg: 40
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
      */
     //% blockId="LineAlignmentThreeParams"
     //% block="v = $newV\\%|leftKp = $newLeftKp|rightKp = $newRightKp"
-    //% block.loc.ru="скорость = $newV\\%|leftKp = $newLeftKp|rightKp = $newRightKp"
+    //% block.loc.ru="v = $newV\\%|leftKp = $newLeftKp|rightKp = $newRightKp"
     //% inlineInputMode="inline"
     //% weight="87"
     //% group="Параметры перпендикулярного выравнивания на линии"
@@ -407,7 +407,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newV максимальная скорость выравнивания, eg: 40
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
@@ -418,7 +418,7 @@ namespace params {
      */
     //% blockId="LineAlignmentSevenParams"
     //% block="v = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
-    //% block.loc.ru="скорость = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
+    //% block.loc.ru="v = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="86"
@@ -436,7 +436,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newV максимальная скорость выравнивания, eg: 40
      * @param newLeftKp пропорциональный коэффицент левой стороны, eg: 1
      * @param newRightKp пропорциональный коэффицент правой стороны, eg: 1
@@ -449,7 +449,7 @@ namespace params {
      */
     //% blockId="LineAlignmentAllParams"
     //% block="v = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
-    //% block.loc.ru="скорость = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
+    //% block.loc.ru="v = $newV\\%|leftKp = $newLeftKp rightKp = $newRightKp|leftKi = $newLeftKi rightKi = $newRightKi|leftKd = $newLeftKd rightKd = $newRightKd||leftKf = $newLeftKf rightKf = $newRightKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="85"
@@ -483,7 +483,7 @@ namespace params {
     }
 
     /**
-     * Установка параметров для алгоритма позицианирования (выравнивание) на линии датчиками линии с возможностью установить скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Установка параметров для алгоритма позицианирования (выравнивание) на линии датчиками линии с возможностью установить скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newV максимальная скорость выравнивания, eg: 40
      * @param newKp пропорциональный коэффицент, eg: 1
      * @param newKi интегральный коэффицент, eg: 0
@@ -519,7 +519,7 @@ namespace params {
     }
 
     /**
-     * Параметры для алгоритма с регулятором с возможностью установить время таймаута, макс скорость, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
+     * Параметры для алгоритма с регулятором с возможностью установить время таймаута, макс скорость v, Kp, Ki, Kd, и Kf - фильтр дифференциального регулятора.
      * @param newTimeOut максимальная время работы алгоритма, eg: 2000
      * @param newMaxV максимальная скорость выравнивания, eg: 50
      * @param newKp пропорциональный коэффицент, eg: 1
@@ -529,7 +529,7 @@ namespace params {
      */
     //% blockId="LinePositioningAllParams"
     //% block="timeout = $newTimeOut|max v = $newMaxV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
-    //% block.loc.ru="таймаут = $newTimeOut|макс скорость = $newMaxV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
+    //% block.loc.ru="таймаут = $newTimeOut|макс v = $newMaxV\\%|Kp = $newKp|Ki = $newKi|Kd = $newKd||Kf = $newKf"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% weight="88"
