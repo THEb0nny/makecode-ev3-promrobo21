@@ -100,7 +100,6 @@ namespace motions {
 
         const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
 
-        console.log(`rampLineFollowToDistanceByTwoSensors(): start`);
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
             const currTime = control.millis(); // Текущее время
@@ -117,11 +116,8 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        console.log(`rampLineFollowToDistanceByTwoSensors(): finish`);
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        console.log(`actionAfterMotion(): start`);
         actionAfterMotion(braking, rampLineFollowToDistance2SensorFinishV); // Действие после алгоритма движения
-        console.log(`actionAfterMotion(): finish`);
     }
 
     /**
