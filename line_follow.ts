@@ -333,9 +333,9 @@ namespace motions {
             const refLS = sensors.getNormalizedReflectionValue(lineSensor); // Нормализованное значение с датчика линии
             if (refLS < getLineFollowSetPoint()) break;
             const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
-            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, speedLeft, speedRight); // Find out the error in motor speed control
+            const error = advmotctrls.getErrorSyncMotors(eml, emr, speedLeft, speedRight); // Find out the error in motor speed control
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
-            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, speedLeft, speedRight); // Find out the power of motors for regulation
+            const powers = advmotctrls.getPwrSyncMotors(u, speedLeft, speedRight); // Find out the power of motors for regulation
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
             control.pauseUntilTime(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
         }

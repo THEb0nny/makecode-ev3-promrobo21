@@ -50,9 +50,9 @@ namespace chassis {
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
             const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
-            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
+            const error = advmotctrls.getErrorSyncMotors(eml, emr, vLeft, vRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
-            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
+            const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
@@ -116,9 +116,9 @@ namespace chassis {
                 wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) {
                 break;
             } // Условие выхода: проверяем только движущееся колесо
-            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, vLeft, vRight);
+            const error = advmotctrls.getErrorSyncMotors(eml, emr, vLeft, vRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
-            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, vLeft, vRight);
+            const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
@@ -219,9 +219,9 @@ namespace chassis {
             const out = advmotctrls.accTwoEncComplexMotionCompute(eml, emr);
             if (out.isDoneLeft || out.isDoneRight || 
                 ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(totalCalcMotRot))) break;
-            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrLeft, out.pwrRight);
+            const error = advmotctrls.getErrorSyncMotors(eml, emr, out.pwrLeft, out.pwrRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
-            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwrLeft, out.pwrRight);
+            const powers = advmotctrls.getPwrSyncMotors(u, out.pwrLeft, out.pwrRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
@@ -321,9 +321,9 @@ namespace chassis {
                 wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= totalCalcMotRot) {
                 break;
             } // Условие выхода: проверяем только движущееся колесо
-            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwrLeft, out.pwrRight);
+            const error = advmotctrls.getErrorSyncMotors(eml, emr, out.pwrLeft, out.pwrRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
-            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwrLeft, out.pwrRight);
+            const powers = advmotctrls.getPwrSyncMotors(u, out.pwrLeft, out.pwrRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }

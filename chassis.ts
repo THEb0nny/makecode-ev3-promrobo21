@@ -300,9 +300,9 @@ namespace chassis {
             const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
             const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
-            const error = advmotctrls.getErrorSyncMotorsAtPwr(eml, emr, out.pwr, out.pwr);
+            const error = advmotctrls.getErrorSyncMotors(eml, emr, out.pwr, out.pwr);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
-            const powers = advmotctrls.getPwrSyncMotorsAtPwr(u, out.pwr, out.pwr);
+            const powers = advmotctrls.getPwrSyncMotors(u, out.pwr, out.pwr);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTime(currTime, 1);
         }
