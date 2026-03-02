@@ -29,7 +29,7 @@ sensors.setHsvlToColorNumBoundaries(sensors.color4, {
 });
 
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
-// music.playTone(262, music.beat(BeatFraction.Half));
+music.playTone(262, music.beat(BeatFraction.Half));
 
 // let prevTime = 0;
 // while (true) {
