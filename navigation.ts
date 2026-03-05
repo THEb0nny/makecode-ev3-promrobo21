@@ -7,7 +7,7 @@ namespace navigation {
 
     export interface NavNeighbor {
         to: number
-        direction: number
+        dir: number
         weight: number
     }
 
@@ -210,7 +210,7 @@ namespace navigation {
 
         for (let node of graph) {
             for (let n of node.neighbors) {
-                navMatrix[node.node][n.to] = n.direction;
+                navMatrix[node.node][n.to] = n.dir;
                 weightMatrix[node.node][n.to] = n.weight;
             }
         }

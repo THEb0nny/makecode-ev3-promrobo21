@@ -34,18 +34,18 @@ music.playTone(262, music.beat(BeatFraction.Half));
 let graph: navigation.NavNode[] = [{
     node: 0,
     neighbors: [
-        { to: 1, direction: 0, weight: 40 },
-        { to: 3, direction: 3, weight: 50 }
+        { to: 1, dir: 0, weight: 40 },
+        { to: 3, dir: 3, weight: 50 }
     ]
 }, {
     node: 1,
     neighbors: [
-        { to: 2, direction: 0, weight: 30 }
+        { to: 2, dir: 0, weight: 30 }
     ]
 }, {
     node: 2,
     neighbors: [
-        { to: 3, direction: 3, weight: 20 }
+        { to: 3, dir: 3, weight: 20 }
     ]
 }];
 
