@@ -205,3 +205,18 @@ const enum GraphTraversal {
     //% block="A*"
     // A_STAR // A* (для поиска пути)
 }
+
+const enum NavDirection {
+    //% block="right"
+    //% block.loc.ru="вправо"
+    Right = 0,
+    //% block="up"
+    //% block.loc.ru="вверх"
+    Up = 1,
+    //% block="left"
+    //% block.loc.ru="влевоё"
+    Left = 2,
+    //% block="down"
+    //% block.loc.ru="вниз"
+    Down = 3
+}
