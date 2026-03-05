@@ -1,36 +1,56 @@
 namespace navigation {
 
     let currentPos = 0; // Текущая позиция на узле (местоположение)
-    let direction = 0; // Направление для навигации
-    let numNodes = 0; // Количество узлов
+    let direction = 0; // Направление робота для навигации
+    let numNodes = 0; // Количество узлов (вершин)
 
-    // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
-    let navMatrix: number[][] = [];
+    let navMatrix: number[][] = []; // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
+    let weightMatrix: number[][] = []; // Матрица весов
 
-    // Матрица весов
-    let weightMatrix: number[][] = [];
+    let lineFollowByPathMoveStartV = 23; // Переменная для хранения минимальной скорости на старте при движении по линии двумя датчиками
+    let lineFollowByPathMoveMaxV = 50; // Переменная для хранения максимальной скорости при движении по линии двумя датчиками
+    let lineFollowByPathTurnV = 60; // Переменная для хранения скорости при завершени при движении по линии двумя датчиками
+    let lineFollowByPathAccelStartDist = 0; // Переменная для хранения дистанции плавного ускорения при движения по линии двумя датчиками
+    let lineFollowByPathKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
+    let lineFollowByPathKi = 0; // Переменная для хранения коэффицента интегрального регулятора при движения по линии двумя датчиками
+    let lineFollowByPathKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
+    let lineFollowByPathKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
-    let lineFollowByPathMoveStartV = 20;
-    let lineFollowByPathMoveMaxV = 50;
-    let lineFollowByPathTurnV = 60;
-    let lineFollowByPathAccelStartDist = 0;
-    let lineFollowByPathKp = 1;
-    let lineFollowByPathKi = 0;
-    let lineFollowByPathKd = 0;
-    let lineFollowByPathKf = 0;
+    // Вспомогательная функция, которая проверяет, чтобы массив-матрица была квадратной
+    function isSquareMatrix(matrix: number[][], expectedSize: number): boolean {
+        if (!matrix || matrix.length !== expectedSize) return false;
+        for (let i = 0; i < expectedSize; i++) {
+            if (!matrix[i] || matrix[i].length !== expectedSize) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Вспомогательная функция проверки матрицы-массива на валидные значения
+    function isValidNavMatrix(matrix: number[][]): boolean {
+        const size = matrix.length;
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                const v = matrix[i][j];
+                if (v < -1 || v > 3) return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Установить количество узловых точек.
-     * @param newMumNodes количество узлов, eg: 25
+     * @param newNumNodes количество узлов, eg: 25
      */
     //% blockId="NavigationSetNodesNumber"
-    //% block="set nodes number $newMumNodes"
-    //% block.loc.ru="установить количество узлов $newMumNodes"
+    //% block="set nodes number $newNumNodes"
+    //% block.loc.ru="установить количество узлов $newNumNodes"
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Свойства"
-    export function setNodesNumber(newMumNodes: number) {
-        numNodes = newMumNodes;
+    export function setNodesNumber(newNumNodes: number) {
+        numNodes = newNumNodes;
     }
 
     /**
@@ -111,6 +131,10 @@ namespace navigation {
     //% weight="89"
     //% group="Матрица смежности"
     export function setNavigationMatrix(newNavMatrix: number[][]) {
+        if (!isSquareMatrix(newNavMatrix, numNodes)) {
+            console.log("Navigation matrix must be square");
+            return;
+        }
         navMatrix = newNavMatrix;
     }
 
@@ -138,6 +162,10 @@ namespace navigation {
     //% weight="87"
     //% group="Матрица смежности"
     export function setWeightMatrix(newWeightMatrix: number[][]) {
+        if (!isSquareMatrix(newWeightMatrix, numNodes)) {
+            console.log("Weight matrix must be square");
+            return;
+        }
         weightMatrix = newWeightMatrix;
     }
 
@@ -153,7 +181,6 @@ namespace navigation {
     export function getWeightMatrix(): number[][] {
         return weightMatrix;
     }
-    
 
     /**
      * Алгоритм поиска в глубину (Depth-first search, DFS).
