@@ -1,11 +1,26 @@
 namespace navigation {
 
-    let currentPos = 0; // Текущая позиция на узле (местоположение)
-    let direction = 0; // Направление робота для навигации
+    export interface NavNode {
+        node: number
+        neighbors: NavNeighbor[]
+    }
+
+    export interface NavNeighbor {
+        to: number
+        direction: number
+        weight: number
+    }
+
     let numNodes = 0; // Количество узлов (вершин)
+
+    let graph: NavNode[] = [];
+    let currentNodeBuilder: NavNode = null;
 
     let navMatrix: number[][] = []; // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
     let weightMatrix: number[][] = []; // Матрица весов
+
+    let currentPos = 0; // Текущая позиция на узле (местоположение)
+    let direction = 0; // Направление робота для навигации
 
     let lineFollowByPathMoveStartV = 30; // Переменная для хранения минимальной скорости на старте при движении по линии двумя датчиками
     let lineFollowByPathMoveMaxV = 50; // Переменная для хранения максимальной скорости при движении по линии двумя датчиками
@@ -181,6 +196,26 @@ namespace navigation {
     export function getWeightMatrix(): number[][] {
         return weightMatrix;
     }
+
+    /* Построить граф заполнив матрицы */
+    export function buildGraph() {
+        for (let i = 0; i < numNodes; i++) {
+            navMatrix[i] = [];
+            weightMatrix[i] = [];
+            for (let j = 0; j < numNodes; j++) {
+                navMatrix[i][j] = -1;
+                weightMatrix[i][j] = -1;
+            }
+        }
+
+        for (let node of graph) {
+            for (let n of node.neighbors) {
+                navMatrix[node.node][n.to] = n.direction;
+                weightMatrix[node.node][n.to] = n.weight;
+            }
+        }
+    }
+
 
     /**
      * Алгоритм поиска в глубину (Depth-first search, DFS).
