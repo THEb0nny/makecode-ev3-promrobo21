@@ -1,14 +1,10 @@
-// Установить моторы в шасси и установить свойства инверсии
-chassis.setMotors(motors.mediumB, motors.mediumC, true, false);
+chassis.setMotors(motors.mediumB, motors.mediumC, true, false); // Установить моторы в шасси и установить свойства инверсии
 
-// Установить параметры регулирования синхронизации моторов шасси
-chassis.setSyncRegulatorGains(0.02, 0.001, 0.5);
+chassis.setSyncRegulatorGains(0.02, 0.001, 0.5); // Установить параметры регулирования синхронизации моторов шасси
 
-// Установить радиус колёс в шасси
-chassis.setWheelDiametr(62.4);
+chassis.setWheelDiametr(62.4); // Установить радиус колёс в шасси
 
-// Установить размер базы шасси
-chassis.setBaseLength(172);
+chassis.setBaseLength(172); // Установить размер базы шасси
 
 sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
 // sensors.preparationLineSensor();
@@ -28,9 +24,6 @@ sensors.setHsvlToColorNumBoundaries(sensors.color4, {
     purpleBoundary: -1
 });
 
-brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
-music.playTone(262, music.beat(BeatFraction.Half));
-
 let graph: navigation.NavNode[] = [{
     node: 0,
     neighbors: [
@@ -48,6 +41,9 @@ let graph: navigation.NavNode[] = [{
         { to: 3, dir: 3, weight: 20 }
     ]
 }];
+
+brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
+music.playTone(262, music.beat(BeatFraction.Half));
 
 // let prevTime = 0;
 // while (true) {
