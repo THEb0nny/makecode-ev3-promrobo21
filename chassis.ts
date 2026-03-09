@@ -153,7 +153,8 @@ namespace chassis {
         const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
         const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
 
-        syncRampMovement(vStart, vMax, vFinish, mRotTotalCalc * dirSign, mRotAccelCalc, mRotDecelCalc);
+        executeRampMovement(vStart, vMax, vFinish, mRotTotalCalc * dirSign, mRotAccelCalc, mRotDecelCalc);
+        stop(Braking.Hold); // Остановить с удержанием
     }
 
     /**
