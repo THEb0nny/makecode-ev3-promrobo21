@@ -193,9 +193,7 @@ namespace chassis {
         const absTotalDist = Math.abs(totalDist);
 
         if (vStart > vMax) {
-            const tempV = vStart;
-            vStart = vMax;
-            vMax = tempV;
+            [vStart, vMax] = [vMax, vStart];
             console.log(`Warning: vStart was greater than vMax. Swapped: vStart=${vStart}, vMax=${vMax}`);
         }
         if (absTotalDist < accelDist) {
@@ -248,9 +246,7 @@ namespace chassis {
         const absTotalDist = Math.abs(totalDist);
 
         if (vFinish > v) {
-            const tempV = v;
-            v = vFinish;
-            vFinish = tempV;
+            [v, vFinish] = [vFinish, v];
             console.log(`Warning: vFinish was greater than v. Swapped: vStart=${v}, vFinish=${vFinish}`);
         }
         if (absTotalDist < decelDist) {

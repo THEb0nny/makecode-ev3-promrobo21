@@ -42,9 +42,7 @@ namespace chassis {
         vMax = Math.clamp(0, 100, Math.abs(vMax) >> 0); // Ограничиваем макс скорость от 0 до 100, берём модули и отсекаем дробную часть
 
         if (vMin > vMax) { // Проверка перепутанных скоростей ПОСЛЕ clamp
-            const tempV = vMin;
-            vMin = vMax;
-            vMax = tempV;
+            [vMin, vMax] = [vMax, vMin];
             console.log(`Warning: vMin was greater than vMax. Swapped: vMin=${vMin}, vMax=${vMax}`);
         }
         if (vMin === vMax) { // Проверка равенства скоростей
@@ -148,9 +146,7 @@ namespace chassis {
         vMax = Math.clamp(-100, 100, Math.abs(vMax) >> 0); // Ограничиваем макс скорость от -100 до 100, берём модули и отсекаем дробную часть
 
         if (vMin > vMax) { // Проверка перепутанных скоростей по модулю
-            const tempV = vMin;
-            vMin = vMax;
-            vMax = tempV;
+            [vMin, vMax] = [vMax, vMin];
             console.log(`Warning: vMin was greater than vMax. Swapped: vMin=${vMin}, vMax=${vMax}`);
         }
         if (vMin == vMax) { // Проверка равенства скоростей
