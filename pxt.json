@@ -26,7 +26,8 @@
         "line_follow.ts",
         "ramp_line_follow.ts",
         "line_sensor.ts",
-        "color_sensor.ts"
+        "color_sensor.ts",
+        "ramp_turns.ts"
     ],
     "testFiles": [
         "test.ts"
