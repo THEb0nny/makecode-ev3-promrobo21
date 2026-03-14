@@ -196,7 +196,7 @@ namespace sensors {
 
     /**
      * Получить значения RGB и HSVL с нормализованных значений RGB с датчика цвета.
-     * Возвращает массив массивов RGB и HSVL.
+     * Возвращает массив массивами RGB и HSVL.
      */
     //% blockId="GetRgbHsvl"
     //% block="**color sensor** $sensor RGB&HSVL from RGB"
