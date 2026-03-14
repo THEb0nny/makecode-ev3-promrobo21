@@ -27,6 +27,15 @@ sensors.setHsvlToColorNumBoundaries(sensors.color4, {
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
+// navigation.buildGraph([
+//     { from: 0, to: 1, direction: NavDirection.Right, weight: 40 },
+//     { from: 1, to: 2, direction: NavDirection.Right, weight: 40 },
+//     { from: 0, to: 3, direction: NavDirection.Down, weight: 50 },
+//     { from: 1, to: 4, direction: NavDirection.Down, weight: 50 },
+//     { from: 3, to: 4, direction: NavDirection.Right, weight: 40 },
+//     { from: 4, to: 5, direction: NavDirection.Right, weight: 40 }
+// ]);
+
 // let prevTime = 0;
 // while (true) {
 //     let currTime = control.millis();

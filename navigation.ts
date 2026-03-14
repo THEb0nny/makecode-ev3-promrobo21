@@ -9,18 +9,18 @@ namespace navigation {
     }
 
     let nodesCount = 0; // Количество узлов (вершин)
-
-    let navMatrix: number[][] = []; // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
+    
+    let navigationMatrix: number[][] = []; // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
     let weightMatrix: number[][] = []; // Матрица весов путей
 
     let currentPositon = 0; // Текущая позиция на узле (местоположение)
-    let direction = 0; // Направление робота для навигации
+    let currentDirection = 0; // Направление робота для навигации
 
     let lineFollowByPathMoveStartV = 30; // Переменная для хранения минимальной скорости на старте при движении по линии двумя датчиками
     let lineFollowByPathMoveMaxV = 50; // Переменная для хранения максимальной скорости при движении по линии двумя датчиками
     let lineFollowByPathTurnV = 60; // Переменная для хранения скорости при завершени при движении по линии двумя датчиками
     let lineFollowByPathAccelStartDist = 0; // Переменная для хранения дистанции плавного ускорения при движения по линии двумя датчиками
-    let lineFollowByPathKp = 1; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
+    let lineFollowByPathKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     let lineFollowByPathKi = 0; // Переменная для хранения коэффицента интегрального регулятора при движения по линии двумя датчиками
     let lineFollowByPathKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
     let lineFollowByPathKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
@@ -48,22 +48,22 @@ namespace navigation {
 
     /**
      * Установить количество узловых точек.
-     * @param newnodesCount количество узлов, eg: 25
+     * @param newNodesCount количество узлов, eg: 25
      */
-    //% blockId="NavigationSetNodesNumber"
-    //% block="set nodes number $newnodesCount"
-    //% block.loc.ru="установить количество узлов $newnodesCount"
+    //% blockId="NavigationSetNodesCount"
+    //% block="set nodes count $newNodesCount"
+    //% block.loc.ru="установить количество узлов $newNodesCount"
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Свойства"
-    export function setNodesNumber(newnodesCount: number) {
-        nodesCount = newnodesCount;
+    export function setNodesCount(newNodesCount: number) {
+        nodesCount = newNodesCount;
         // Создаём сразу нужный размер
         for (let i = 0; i < nodesCount; i++) {
-            navMatrix[i] = [];
+            navigationMatrix[i] = [];
             weightMatrix[i] = [];
             for (let j = 0; j < nodesCount; j++) {
-                navMatrix[i][j] = -1;
+                navigationMatrix[i][j] = -1;
                 weightMatrix[i][j] = -1;
             }
         }
@@ -72,13 +72,13 @@ namespace navigation {
     /**
      * Получить количество узловых точек.
      */
-    //% blockId="NavigationGetNodesNumber"
-    //% block="get nodes number"
+    //% blockId="NavigationGetNodesCount"
+    //% block="get nodes count"
     //% block.loc.ru="получить количество узлов"
     //% inlineInputMode="inline"
     //% weight="98"
     //% group="Свойства"
-    export function getNodesNumber(): number {
+    export function getNodesCount(): number {
         return nodesCount;
     }
 
@@ -120,7 +120,7 @@ namespace navigation {
     //% weight="95"
     //% group="Свойства"
     export function setCurrentDirection(newDirection: number) {
-        direction = newDirection;
+        currentDirection = newDirection;
     }
 
     /**
@@ -133,7 +133,7 @@ namespace navigation {
     //% weight="94"
     //% group="Свойства"
     export function getCurrentDirection() {
-        return direction;
+        return currentDirection;
     }
     
     /**
@@ -151,7 +151,7 @@ namespace navigation {
             console.log("Navigation matrix must be square");
             return;
         }
-        navMatrix = newNavMatrix;
+        navigationMatrix = newNavMatrix;
     }
 
     /**
@@ -164,7 +164,7 @@ namespace navigation {
     //% weight="88"
     //% group="Матрица смежности"
     export function getNavigationMatrix(): number[][] {
-        return navMatrix;
+        return navigationMatrix;
     }
 
     /**
@@ -214,16 +214,16 @@ namespace navigation {
         // Очищаем старые матрицы
         for (let i = 0; i < nodesCount; i++) {
             for (let j = 0; j < nodesCount; j++) {
-                navMatrix[i][j] = -1;
+                navigationMatrix[i][j] = -1;
                 weightMatrix[i][j] = -1;
             }
         }
         // Заполняем по путям
         for (let path of paths) {
-            if (navMatrix[path.from][path.to] != -1) console.log("Duplicate path");
+            if (navigationMatrix[path.from][path.to] != -1) console.log("Duplicate path");
             if (path.from < 0 || path.from >= nodesCount) continue;
             if (path.to < 0 || path.to >= nodesCount) continue;
-            navMatrix[path.from][path.to] = path.direction;
+            navigationMatrix[path.from][path.to] = path.direction;
             weightMatrix[path.from][path.to] = path.weight;
         }
     }
@@ -259,7 +259,7 @@ namespace navigation {
             if (!visited[current]) { // Обработка текущего узла
                 visited[current] = true; // Помечаем как посещённый
                 for (let i = nodesCount - 1; i >= 0; i--) { // Обход соседей в обратном порядке
-                    if (navMatrix[current][i] !== -1 && !visited[i]) {
+                    if (navigationMatrix[current][i] !== -1 && !visited[i]) {
                         parent[i] = current; // Запоминаем родителя
                         stack.push(i); // Добавляем в стек
                     }
@@ -311,7 +311,7 @@ namespace navigation {
                 break;
             }
             for (let i = 0; i < nodesCount; i++) {
-                if (navMatrix[current][i] != -1 && !visited[i]) {
+                if (navigationMatrix[current][i] != -1 && !visited[i]) {
                     visited[i] = true;
                     parent[i] = current;
                     queue.push(i);
@@ -373,7 +373,7 @@ namespace navigation {
             // Обновляем расстояния до соседей
             for (let i = 0; i < nodesCount; i++) {
                 const weight = weightMatrix[current][i];
-                if (navMatrix[current][i] !== -1 && !visited[i] && weight !== -1) {
+                if (navigationMatrix[current][i] !== -1 && !visited[i] && weight !== -1) {
                     const newDist = dist[current] + weight;
                     if (newDist < dist[i]) {
                         dist[i] = newDist;
@@ -401,13 +401,13 @@ namespace navigation {
     export function directionSpinTurn(inputDirection: number, v: number, debug: boolean = false) {
         let turnDeg = 0; // Переменная для значения поворота
         while (true) {
-            if (inputDirection > direction && (direction != 0 || inputDirection != 3) || (direction == 3 && inputDirection == 0)) {
-                direction += 1; // Изменяем глобальное значение направления
-                if (direction > 3) direction = 0; // Если записали направление больше 3, то его сбросить до 0
+            if (inputDirection > currentDirection && (currentDirection != 0 || inputDirection != 3) || (currentDirection == 3 && inputDirection == 0)) {
+                currentDirection += 1; // Изменяем глобальное значение направления
+                if (currentDirection > 3) currentDirection = 0; // Если записали направление больше 3, то его сбросить до 0
                 turnDeg -= 90; // Добавляем в переменную итогового поворота
-            } else if (inputDirection < direction && (direction != 3 || inputDirection != 0) || (direction == 0 && inputDirection == 3)) {
-                direction -= 1; // Изменяем глобальное значение направления
-                if (direction < 0) direction = 3; // Если записали направление меньше 0, то его сбросить до 3
+            } else if (inputDirection < currentDirection && (currentDirection != 3 || inputDirection != 0) || (currentDirection == 0 && inputDirection == 3)) {
+                currentDirection -= 1; // Изменяем глобальное значение направления
+                if (currentDirection < 0) currentDirection = 3; // Если записали направление меньше 0, то его сбросить до 3
                 turnDeg += 90; // Добавляем в переменную итогового поворота
             } else break; // Иначе поворот не требуется
         }
@@ -448,7 +448,7 @@ namespace navigation {
         else return;
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
         for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnV); // Поворот
+            directionSpinTurn(navigationMatrix[path[i]][path[i + 1]], lineFollowByPathTurnV); // Поворот
             motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxV, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
             currentPositon = path[i]; // Записываем новую позицию в глобальную переменную
         }
@@ -470,10 +470,10 @@ namespace navigation {
     export function followLineByPath(path: number[], params?: params.NavLineFollow, debug: boolean = false) {
         if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
         for (let i = 0; i < path.length - 1; i++) {
-            const newDirection = navMatrix[path[i]][path[i + 1]];
-            const afterMotion = (newDirection == navMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
-            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, direction: ${direction}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
-            const directionChanged = direction != newDirection;
+            const newDirection = navigationMatrix[path[i]][path[i + 1]];
+            const afterMotion = (newDirection == navigationMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
+            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, direction: ${currentDirection}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
+            const directionChanged = currentDirection != newDirection;
             directionSpinTurn(newDirection, lineFollowByPathTurnV); // Поворот
             if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
