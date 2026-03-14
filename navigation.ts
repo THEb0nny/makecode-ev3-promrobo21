@@ -1,7 +1,7 @@
 namespace navigation {
 
     // Интерфейс путей / рёбер
-    interface NavPath {
+    export interface NavPath {
         from: number
         to: number
         direction: NavDirection
@@ -14,7 +14,7 @@ namespace navigation {
     let weightMatrix: number[][] = []; // Матрица весов путей
 
     let currentPosition = 0; // Текущая позиция на узле (местоположение)
-    let currentDirection = 0; // Направление робота для навигации
+    let currentDirection: NavDirection = NavDirection.Right; // Направление робота для навигации
 
     let lineFollowByPathMoveStartV = 30; // Переменная для хранения минимальной скорости на старте при движении по линии двумя датчиками
     let lineFollowByPathMoveMaxV = 50; // Переменная для хранения максимальной скорости при движении по линии двумя датчиками
@@ -59,6 +59,7 @@ namespace navigation {
     export function setNodesCount(newNodesCount: number) {
         nodesCount = newNodesCount;
         // Создаём сразу нужный размер
+        navigationMatrix = [], weightMatrix = [];
         for (let i = 0; i < nodesCount; i++) {
             navigationMatrix[i] = [];
             weightMatrix[i] = [];
@@ -220,7 +221,7 @@ namespace navigation {
      * Построить граф.
      */
     //% blockId="NavigationBuildGraph"
-    //% block="buld graph $paths"
+    //% block="build graph $paths"
     //% block.loc.ru="построить граф $paths"
     //% inlineInputMode="inline"
     //% weight="88"
@@ -235,10 +236,14 @@ namespace navigation {
         }
         // Заполняем по путям
         for (let path of paths) {
-            if (navigationMatrix[path.from][path.to] != -1) console.log(`Duplicate path ${path.from}, ${path.to}`);
-            if (navigationMatrix[path.to][path.from] != -1) console.log(`Duplicate reverse path ${path.to}, ${path.from}`);
+            if (path.from == path.to) { // Защита, чтобы не допускать ребро из узла в самого себя
+                console.log(`Self-loop path ${path.from}`);
+                continue;
+            }
             if (path.from < 0 || path.from >= nodesCount) continue;
             if (path.to < 0 || path.to >= nodesCount) continue;
+            if (navigationMatrix[path.from][path.to] != -1) console.log(`Duplicate path ${path.from}, ${path.to}`);
+            if (navigationMatrix[path.to][path.from] != -1) console.log(`Duplicate reverse path ${path.to}, ${path.from}`);
             let dirAB = path.direction, dirBA = -1;
             switch (path.direction) {
                 case NavDirection.RightLeft:
@@ -280,6 +285,9 @@ namespace navigation {
     //% weight="69"
     //% group="Алгоритм нахождения пути"
     export function algorithmDFS(startNode: number, finishNode: number): number[] {
+        if (startNode < 0 || startNode >= nodesCount) return [];
+        if (finishNode < 0 || finishNode >= nodesCount) return [];
+
         let stack: number[] = [startNode]; // Стек для хранения узлов в порядке обхода
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
@@ -299,7 +307,7 @@ namespace navigation {
             }
             if (!visited[current]) { // Обработка текущего узла
                 visited[current] = true; // Помечаем как посещённый
-                for (let i = nodesCount - 1; i >= 0; i--) { // Обход соседей в обратном порядке
+                for (let i = nodesCount - 1; i >= 0; i--) { // Обход в обратном порядке чтобы сохранить естественный порядок при использовании стека
                     if (navigationMatrix[current][i] !== -1 && !visited[i]) {
                         parent[i] = current; // Запоминаем родителя
                         stack.push(i); // Добавляем в стек
@@ -333,10 +341,12 @@ namespace navigation {
     //% weight="68"
     //% group="Алгоритм нахождения пути"
     export function algorithmBFS(startNode: number, finishNode: number): number[] {
+        if (startNode < 0 || startNode >= nodesCount) return [];
+        if (finishNode < 0 || finishNode >= nodesCount) return [];
+
         let queue: number[] = [startNode];
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
-        visited[startNode] = true;
         let found = false; // Флаг для обнаружения finishNode
 
         // Инициализация массивов
@@ -344,6 +354,8 @@ namespace navigation {
             visited.push(false); // Все узлы изначально не посещены
             parent.push(-1); // Специальное значение "нет родителя"
         }
+
+        visited[startNode] = true;
 
         while (queue.length > 0) {
             const current = queue.shift();
@@ -387,7 +399,6 @@ namespace navigation {
         let dist: number[] = []; // Для записи расстояний до узлов
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
-        dist[startNode] = 0; // Расстояние до старта = 0
 
         // Инициализация массивов
         for (let i = 0; i < nodesCount; i++) {
@@ -395,6 +406,8 @@ namespace navigation {
             visited.push(false); // Все узлы изначально не посещены
             parent.push(-1); // Специальное значение "нет родителя"
         }
+
+        dist[startNode] = 0; // Расстояние до старта = 0
 
         for (let step = 0; step < nodesCount; step++) {
             // Находим узел с минимальным расстоянием
