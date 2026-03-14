@@ -144,7 +144,7 @@ namespace navigation {
     //% block="set navigation matrix $newNavMatrix"
     //% block.loc.ru="установить матрицу навигации $newNavMatrix"
     //% inlineInputMode="inline"
-    //% weight="89"
+    //% weight="79"
     //% group="Матрица смежности"
     export function setNavigationMatrix(newNavMatrix: number[][]) {
         if (!isSquareMatrix(newNavMatrix, nodesCount)) {
@@ -161,7 +161,7 @@ namespace navigation {
     //% block="get navigation matrix"
     //% block.loc.ru="получить матрицу навигации"
     //% inlineInputMode="inline"
-    //% weight="88"
+    //% weight="78"
     //% group="Матрица смежности"
     export function getNavigationMatrix(): number[][] {
         return navigationMatrix;
@@ -175,7 +175,7 @@ namespace navigation {
     //% block="set weight matrix $newWeightMatrix"
     //% block.loc.ru="установить матрицу весов $newWeightMatrix"
     //% inlineInputMode="inline"
-    //% weight="87"
+    //% weight="77"
     //% group="Матрица смежности"
     export function setWeightMatrix(newWeightMatrix: number[][]) {
         if (!isSquareMatrix(newWeightMatrix, nodesCount)) {
@@ -192,15 +192,21 @@ namespace navigation {
     //% block="get weight matrix"
     //% block.loc.ru="получить матрицу весов"
     //% inlineInputMode="inline"
-    //% weight="86"
+    //% weight="76"
     //% group="Матрица смежности"
     export function getWeightMatrix(): number[][] {
         return weightMatrix;
     }
-
+    
+    /**
+     * Создать ребро графа.
+     */
     //% blockId="NavigationCreatePath"
-    //% block="path from $fromNode to $toNode direction $direction weight $weight"
-    //% weight=90
+    //% block="create path from $fromNode to $toNode direction $direction weight $weight"
+    //% block.loc.ru="создать ребро из $fromNode в $toNode направление $direction вес $weight"
+    //% inlineInputMode="inline"
+    //% weight="89"
+    //% group="Граф"
     export function createPath(fromNode: number, toNode: number, direction: NavDirection, weight: number): NavPath {
         return {
             from: fromNode,
@@ -210,6 +216,15 @@ namespace navigation {
         }
     }
 
+    /**
+     * Построить граф.
+     */
+    //% blockId="NavigationBuildGraph"
+    //% block="buld graph $paths"
+    //% block.loc.ru="построить граф $paths"
+    //% inlineInputMode="inline"
+    //% weight="88"
+    //% group="Граф"
     export function buildGraph(paths: NavPath[]) {
         // Очищаем старые матрицы
         for (let i = 0; i < nodesCount; i++) {
@@ -220,11 +235,11 @@ namespace navigation {
         }
         // Заполняем по путям
         for (let path of paths) {
-            if (navigationMatrix[path.from][path.to] != -1) console.log("Duplicate graph path!");
+            if (navigationMatrix[path.from][path.to] != -1) console.log(`Duplicate path ${path.from}, ${path.to}`);
+            if (navigationMatrix[path.to][path.from] != -1) console.log(`Duplicate reverse path ${path.to}, ${path.from}`);
             if (path.from < 0 || path.from >= nodesCount) continue;
             if (path.to < 0 || path.to >= nodesCount) continue;
-            let dirAB = path.direction;
-            let dirBA = -1;
+            let dirAB = path.direction, dirBA = -1;
             switch (path.direction) {
                 case NavDirection.RightLeft:
                     dirAB = NavDirection.Right;
@@ -262,7 +277,7 @@ namespace navigation {
     //% block="path of DFS algorithm at start $startNode final $finishNode nodes"
     //% block.loc.ru="путь алгоритмом DFS при начальной $startNode конечной $finishNode узлах"
     //% inlineInputMode="inline"
-    //% weight="79"
+    //% weight="69"
     //% group="Алгоритм нахождения пути"
     export function algorithmDFS(startNode: number, finishNode: number): number[] {
         let stack: number[] = [startNode]; // Стек для хранения узлов в порядке обхода
@@ -315,7 +330,7 @@ namespace navigation {
     //% block="path of BFS algorithm at start $startNode final $finishNode nodes"
     //% block.loc.ru="путь алгоритмом BFS при начальной $startNode конечной $finishNode узлах"
     //% inlineInputMode="inline"
-    //% weight="78"
+    //% weight="68"
     //% group="Алгоритм нахождения пути"
     export function algorithmBFS(startNode: number, finishNode: number): number[] {
         let queue: number[] = [startNode];
@@ -366,7 +381,7 @@ namespace navigation {
     //% block="path of Dijkstra algorithm at start $startNode final $finishNode nodes"
     //% block.loc.ru="путь алгоритмом Дейкрсты при начальной $startNode конечной $finishNode узлах"
     //% inlineInputMode="inline"
-    //% weight="77"
+    //% weight="67"
     //% group="Алгоритм нахождения пути"
     export function algorithmDijkstra(startNode: number, finishNode: number): number[] {
         let dist: number[] = []; // Для записи расстояний до узлов
@@ -463,7 +478,7 @@ namespace navigation {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% weight="69"
+    //% weight="66"
     //% group="Алгоритм движения"
     export function followLineToNode(algorithm: GraphTraversal, newPos: number, params?: params.NavLineFollow, debug: boolean = false) {
         if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
@@ -491,7 +506,7 @@ namespace navigation {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% weight="68"
+    //% weight="65"
     //% group="Алгоритм движения"
     export function followLineByPath(path: number[], params?: params.NavLineFollow, debug: boolean = false) {
         if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
