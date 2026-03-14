@@ -8,6 +8,13 @@ namespace navigation {
         weight: number
     }
 
+    const directionMap: { [key: number]: NavDirection[] } = {
+        [NavDirection.RightLeft]: [NavDirection.Right, NavDirection.Left],
+        [NavDirection.LeftRight]: [NavDirection.Left, NavDirection.Right],
+        [NavDirection.UpDown]: [NavDirection.Up, NavDirection.Down],
+        [NavDirection.DownUp]: [NavDirection.Down, NavDirection.Up]
+    };
+
     let nodesCount = 0; // Количество узлов (вершин)
     
     let navigationMatrix: number[][] = []; // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
@@ -242,33 +249,22 @@ namespace navigation {
             }
             if (path.from < 0 || path.from >= nodesCount) continue;
             if (path.to < 0 || path.to >= nodesCount) continue;
-            if (navigationMatrix[path.from][path.to] != -1) console.log(`Duplicate path ${path.from}, ${path.to}`);
-            if (navigationMatrix[path.to][path.from] != -1) console.log(`Duplicate reverse path ${path.to}, ${path.from}`);
-            let dirAB = path.direction, dirBA = -1;
-            switch (path.direction) {
-                case NavDirection.RightLeft:
-                    dirAB = NavDirection.Right;
-                    dirBA = NavDirection.Left;
-                    break;
-                case NavDirection.LeftRight:
-                    dirAB = NavDirection.Left;
-                    dirBA = NavDirection.Right;
-                    break;
-                case NavDirection.UpDown:
-                    dirAB = NavDirection.Up;
-                    dirBA = NavDirection.Down;
-                    break;
-                case NavDirection.DownUp:
-                    dirAB = NavDirection.Down;
-                    dirBA = NavDirection.Up;
-                    break;
+            if (navigationMatrix[path.from][path.to] != -1) {
+                console.log(`Duplicate path ${path.from}, ${path.to}`);
             }
-            // From → to
-            navigationMatrix[path.from][path.to] = dirAB;
+            if (navigationMatrix[path.to][path.from] != -1) {
+                console.log(`Duplicate reverse path ${path.to}, ${path.from}`);
+            }
+
+            const pair = directionMap[path.direction];
+
+            // Направление from → to
+            navigationMatrix[path.from][path.to] = pair ? pair[0] : path.direction;
             weightMatrix[path.from][path.to] = path.weight;
-            // To → from
-            if (dirBA != -1) {
-                navigationMatrix[path.to][path.from] = dirBA;
+
+            // Направление to → from (если дорога двусторонняя)
+            if (pair) {
+                navigationMatrix[path.to][path.from] = pair[1];
                 weightMatrix[path.to][path.from] = path.weight;
             }
         }
@@ -523,9 +519,10 @@ namespace navigation {
     //% group="Алгоритм движения"
     export function followLineByPath(path: number[], params?: params.NavLineFollow, debug: boolean = false) {
         if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
+        if (!path || path.length < 2) return; // Если был передан пустой путь или только с начальной точкой
         for (let i = 0; i < path.length - 1; i++) {
             const newDirection = navigationMatrix[path[i]][path[i + 1]];
-            const afterMotion = (newDirection == navigationMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
+            const afterMotion = (i != path.length - 2) && (newDirection == navigationMatrix[path[i + 1]][path[i + 2]]) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
             if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, direction: ${currentDirection}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
             const directionChanged = currentDirection != newDirection;
             directionSpinTurn(newDirection, lineFollowByPathTurnV); // Поворот
