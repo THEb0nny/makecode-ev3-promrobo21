@@ -25,18 +25,16 @@ namespace navigation {
     let lineFollowByPathKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
     let lineFollowByPathKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
-    // // Вспомогательная функция, которая проверяет, чтобы массив-матрица была квадратной
-    // function isSquareMatrix(matrix: number[][], expectedSize: number): boolean {
-    //     if (!matrix || matrix.length !== expectedSize) return false;
-    //     for (let i = 0; i < expectedSize; i++) {
-    //         if (!matrix[i] || matrix[i].length !== expectedSize) {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // }
+    // Вспомогательная функция, которая проверяет, чтобы массив-матрица была квадратной
+    function isSquareMatrix(matrix: number[][], expectedSize: number): boolean {
+        if (!matrix || matrix.length !== expectedSize) return false;
+        for (let i = 0; i < expectedSize; i++) {
+            if (!matrix[i] || matrix[i].length !== expectedSize) return false;
+        }
+        return true;
+    }
 
-    // // Вспомогательная функция проверки матрицы-массива на валидные значения
+    // Вспомогательная функция проверки матрицы-массива на валидные значения
     // function isValidNavMatrix(matrix: number[][]): boolean {
     //     const size = matrix.length;
     //     for (let i = 0; i < size; i++) {
@@ -138,23 +136,23 @@ namespace navigation {
         return direction;
     }
     
-    // /**
-    //  * Установить матрицу навигаций, т.е. направление движения узловых точек относительно друг друга.
-    //  * @param newNavMatrix новая матрица навигации
-    //  */
-    // //% blockId="NavigationSetNavigationMatrix"
-    // //% block="set navigation matrix $newNavMatrix"
-    // //% block.loc.ru="установить матрицу навигации $newNavMatrix"
-    // //% inlineInputMode="inline"
-    // //% weight="89"
-    // //% group="Матрица смежности"
-    // export function setNavigationMatrix(newNavMatrix: number[][]) {
-    //     if (!isSquareMatrix(newNavMatrix, nodesCount)) {
-    //         console.log("Navigation matrix must be square");
-    //         return;
-    //     }
-    //     navMatrix = newNavMatrix;
-    // }
+    /**
+     * Установить матрицу навигаций, т.е. направление движения узловых точек относительно друг друга.
+     * @param newNavMatrix новая матрица навигации
+     */
+    //% blockId="NavigationSetNavigationMatrix"
+    //% block="set navigation matrix $newNavMatrix"
+    //% block.loc.ru="установить матрицу навигации $newNavMatrix"
+    //% inlineInputMode="inline"
+    //% weight="89"
+    //% group="Матрица смежности"
+    export function setNavigationMatrix(newNavMatrix: number[][]) {
+        if (!isSquareMatrix(newNavMatrix, nodesCount)) {
+            console.log("Navigation matrix must be square");
+            return;
+        }
+        navMatrix = newNavMatrix;
+    }
 
     /**
      * Получить матрицу навигации.
@@ -169,23 +167,23 @@ namespace navigation {
         return navMatrix;
     }
 
-    // /**
-    //  * Установить матрицу весов рёбер, т.е. длины путей.
-    //  * @param newWeightMatrix новая матрица весов
-    //  */
-    // //% blockId="NavigationSetWeightMatrix"
-    // //% block="set weight matrix $newWeightMatrix"
-    // //% block.loc.ru="установить матрицу весов $newWeightMatrix"
-    // //% inlineInputMode="inline"
-    // //% weight="87"
-    // //% group="Матрица смежности"
-    // export function setWeightMatrix(newWeightMatrix: number[][]) {
-    //     if (!isSquareMatrix(newWeightMatrix, nodesCount)) {
-    //         console.log("Weight matrix must be square");
-    //         return;
-    //     }
-    //     weightMatrix = newWeightMatrix;
-    // }
+    /**
+     * Установить матрицу весов рёбер, т.е. длины путей.
+     * @param newWeightMatrix новая матрица весов
+     */
+    //% blockId="NavigationSetWeightMatrix"
+    //% block="set weight matrix $newWeightMatrix"
+    //% block.loc.ru="установить матрицу весов $newWeightMatrix"
+    //% inlineInputMode="inline"
+    //% weight="87"
+    //% group="Матрица смежности"
+    export function setWeightMatrix(newWeightMatrix: number[][]) {
+        if (!isSquareMatrix(newWeightMatrix, nodesCount)) {
+            console.log("Weight matrix must be square");
+            return;
+        }
+        weightMatrix = newWeightMatrix;
+    }
 
     /**
      * Получить матрицу весов рёбер.
@@ -201,12 +199,12 @@ namespace navigation {
     }
 
     //% blockId="NavigationCreatePath"
-    //% block="path from $from to $to direction $direction weight $weight"
+    //% block="path from $fromNode to $toNode direction $direction weight $weight"
     //% weight=90
-    export function createPath(from: number, to: number, direction: NavDirection, weight: number): NavPath {
+    export function createPath(fromNode: number, toNode: number, direction: NavDirection, weight: number): NavPath {
         return {
-            from: from,
-            to: to,
+            from: fromNode,
+            to: toNode,
             direction: direction,
             weight: weight
         }
