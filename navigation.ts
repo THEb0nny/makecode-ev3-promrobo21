@@ -4,7 +4,7 @@ namespace navigation {
     interface NavPath {
         from: number
         to: number
-        direction: number
+        direction: NavDirection
         weight: number
     }
 
@@ -220,11 +220,37 @@ namespace navigation {
         }
         // Заполняем по путям
         for (let path of paths) {
-            if (navigationMatrix[path.from][path.to] != -1) console.log("Duplicate path");
+            if (navigationMatrix[path.from][path.to] != -1) console.log("Duplicate graph path!");
             if (path.from < 0 || path.from >= nodesCount) continue;
             if (path.to < 0 || path.to >= nodesCount) continue;
-            navigationMatrix[path.from][path.to] = path.direction;
+            let dirAB = path.direction;
+            let dirBA = -1;
+            switch (path.direction) {
+                case NavDirection.RightLeft:
+                    dirAB = NavDirection.Right;
+                    dirBA = NavDirection.Left;
+                    break;
+                case NavDirection.LeftRight:
+                    dirAB = NavDirection.Left;
+                    dirBA = NavDirection.Right;
+                    break;
+                case NavDirection.UpDown:
+                    dirAB = NavDirection.Up;
+                    dirBA = NavDirection.Down;
+                    break;
+                case NavDirection.DownUp:
+                    dirAB = NavDirection.Down;
+                    dirBA = NavDirection.Up;
+                    break;
+            }
+            // From → to
+            navigationMatrix[path.from][path.to] = dirAB;
             weightMatrix[path.from][path.to] = path.weight;
+            // To → from
+            if (dirBA != -1) {
+                navigationMatrix[path.to][path.from] = dirBA;
+                weightMatrix[path.to][path.from] = path.weight;
+            }
         }
     }
 

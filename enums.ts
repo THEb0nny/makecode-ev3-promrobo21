@@ -207,6 +207,7 @@ const enum GraphTraversal {
 }
 
 const enum NavDirection {
+    // Односторонее
     //% block="right"
     //% block.loc.ru="вправо"
     Right = 0,
@@ -218,5 +219,10 @@ const enum NavDirection {
     Left = 2,
     //% block="down"
     //% block.loc.ru="вниз"
-    Down = 3
+    Down = 3,
+    // Двухсторонее
+    UpDown = 4,
+    DownUp = 5,
+    RightLeft = 6,
+    LeftRight = 7
 }
