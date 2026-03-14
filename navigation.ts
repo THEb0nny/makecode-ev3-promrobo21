@@ -1,25 +1,19 @@
 namespace navigation {
 
-    export interface NavNode {
-        node: number
-        neighbors: NavNeighbor[]
-    }
-
-    export interface NavNeighbor {
+    // Интерфейс путей / рёбер
+    interface NavPath {
+        from: number
         to: number
-        dir: number
+        direction: number
         weight: number
     }
 
-    let numNodes = 0; // Количество узлов (вершин)
-
-    let graph: NavNode[] = [];
-    let currentNodeBuilder: NavNode = null;
+    let nodesCount = 0; // Количество узлов (вершин)
 
     let navMatrix: number[][] = []; // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
-    let weightMatrix: number[][] = []; // Матрица весов
+    let weightMatrix: number[][] = []; // Матрица весов путей
 
-    let currentPos = 0; // Текущая позиция на узле (местоположение)
+    let currentPositon = 0; // Текущая позиция на узле (местоположение)
     let direction = 0; // Направление робота для навигации
 
     let lineFollowByPathMoveStartV = 30; // Переменная для хранения минимальной скорости на старте при движении по линии двумя датчиками
@@ -31,41 +25,50 @@ namespace navigation {
     let lineFollowByPathKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
     let lineFollowByPathKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
-    // Вспомогательная функция, которая проверяет, чтобы массив-матрица была квадратной
-    function isSquareMatrix(matrix: number[][], expectedSize: number): boolean {
-        if (!matrix || matrix.length !== expectedSize) return false;
-        for (let i = 0; i < expectedSize; i++) {
-            if (!matrix[i] || matrix[i].length !== expectedSize) {
-                return false;
-            }
-        }
-        return true;
-    }
+    // // Вспомогательная функция, которая проверяет, чтобы массив-матрица была квадратной
+    // function isSquareMatrix(matrix: number[][], expectedSize: number): boolean {
+    //     if (!matrix || matrix.length !== expectedSize) return false;
+    //     for (let i = 0; i < expectedSize; i++) {
+    //         if (!matrix[i] || matrix[i].length !== expectedSize) {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 
-    // Вспомогательная функция проверки матрицы-массива на валидные значения
-    function isValidNavMatrix(matrix: number[][]): boolean {
-        const size = matrix.length;
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
-                const v = matrix[i][j];
-                if (v < -1 || v > 3) return false;
-            }
-        }
-        return true;
-    }
+    // // Вспомогательная функция проверки матрицы-массива на валидные значения
+    // function isValidNavMatrix(matrix: number[][]): boolean {
+    //     const size = matrix.length;
+    //     for (let i = 0; i < size; i++) {
+    //         for (let j = 0; j < size; j++) {
+    //             const v = matrix[i][j];
+    //             if (v < -1 || v > 3) return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 
     /**
      * Установить количество узловых точек.
-     * @param newNumNodes количество узлов, eg: 25
+     * @param newnodesCount количество узлов, eg: 25
      */
     //% blockId="NavigationSetNodesNumber"
-    //% block="set nodes number $newNumNodes"
-    //% block.loc.ru="установить количество узлов $newNumNodes"
+    //% block="set nodes number $newnodesCount"
+    //% block.loc.ru="установить количество узлов $newnodesCount"
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Свойства"
-    export function setNodesNumber(newNumNodes: number) {
-        numNodes = newNumNodes;
+    export function setNodesNumber(newnodesCount: number) {
+        nodesCount = newnodesCount;
+        // Создаём сразу нужный размер
+        for (let i = 0; i < nodesCount; i++) {
+            navMatrix[i] = [];
+            weightMatrix[i] = [];
+            for (let j = 0; j < nodesCount; j++) {
+                navMatrix[i][j] = -1;
+                weightMatrix[i][j] = -1;
+            }
+        }
     }
 
     /**
@@ -78,7 +81,7 @@ namespace navigation {
     //% weight="98"
     //% group="Свойства"
     export function getNodesNumber(): number {
-        return numNodes;
+        return nodesCount;
     }
 
     /**
@@ -92,7 +95,7 @@ namespace navigation {
     //% weight="97"
     //% group="Свойства"
     export function setCurrentPositon(newPos: number) {
-        currentPos = newPos;
+        currentPositon = newPos;
     }
 
     /**
@@ -105,7 +108,7 @@ namespace navigation {
     //% weight="96"
     //% group="Свойства"
     export function getCurrentPositon(): number {
-        return currentPos;
+        return currentPositon;
     }
 
     /**
@@ -135,23 +138,23 @@ namespace navigation {
         return direction;
     }
     
-    /**
-     * Установить матрицу навигаций, т.е. направление движения узловых точек относительно друг друга.
-     * @param newNavMatrix новая матрица навигации
-     */
-    //% blockId="NavigationSetNavigationMatrix"
-    //% block="set navigation matrix $newNavMatrix"
-    //% block.loc.ru="установить матрицу навигации $newNavMatrix"
-    //% inlineInputMode="inline"
-    //% weight="89"
-    //% group="Матрица смежности"
-    export function setNavigationMatrix(newNavMatrix: number[][]) {
-        if (!isSquareMatrix(newNavMatrix, numNodes)) {
-            console.log("Navigation matrix must be square");
-            return;
-        }
-        navMatrix = newNavMatrix;
-    }
+    // /**
+    //  * Установить матрицу навигаций, т.е. направление движения узловых точек относительно друг друга.
+    //  * @param newNavMatrix новая матрица навигации
+    //  */
+    // //% blockId="NavigationSetNavigationMatrix"
+    // //% block="set navigation matrix $newNavMatrix"
+    // //% block.loc.ru="установить матрицу навигации $newNavMatrix"
+    // //% inlineInputMode="inline"
+    // //% weight="89"
+    // //% group="Матрица смежности"
+    // export function setNavigationMatrix(newNavMatrix: number[][]) {
+    //     if (!isSquareMatrix(newNavMatrix, nodesCount)) {
+    //         console.log("Navigation matrix must be square");
+    //         return;
+    //     }
+    //     navMatrix = newNavMatrix;
+    // }
 
     /**
      * Получить матрицу навигации.
@@ -166,23 +169,23 @@ namespace navigation {
         return navMatrix;
     }
 
-    /**
-     * Установить матрицу весов рёбер, т.е. длины путей.
-     * @param newWeightMatrix новая матрица весов
-     */
-    //% blockId="NavigationSetWeightMatrix"
-    //% block="set weight matrix $newWeightMatrix"
-    //% block.loc.ru="установить матрицу весов $newWeightMatrix"
-    //% inlineInputMode="inline"
-    //% weight="87"
-    //% group="Матрица смежности"
-    export function setWeightMatrix(newWeightMatrix: number[][]) {
-        if (!isSquareMatrix(newWeightMatrix, numNodes)) {
-            console.log("Weight matrix must be square");
-            return;
-        }
-        weightMatrix = newWeightMatrix;
-    }
+    // /**
+    //  * Установить матрицу весов рёбер, т.е. длины путей.
+    //  * @param newWeightMatrix новая матрица весов
+    //  */
+    // //% blockId="NavigationSetWeightMatrix"
+    // //% block="set weight matrix $newWeightMatrix"
+    // //% block.loc.ru="установить матрицу весов $newWeightMatrix"
+    // //% inlineInputMode="inline"
+    // //% weight="87"
+    // //% group="Матрица смежности"
+    // export function setWeightMatrix(newWeightMatrix: number[][]) {
+    //     if (!isSquareMatrix(newWeightMatrix, nodesCount)) {
+    //         console.log("Weight matrix must be square");
+    //         return;
+    //     }
+    //     weightMatrix = newWeightMatrix;
+    // }
 
     /**
      * Получить матрицу весов рёбер.
@@ -197,25 +200,35 @@ namespace navigation {
         return weightMatrix;
     }
 
-    /* Построить граф заполнив матрицы */
-    export function buildGraph() {
-        for (let i = 0; i < numNodes; i++) {
-            navMatrix[i] = [];
-            weightMatrix[i] = [];
-            for (let j = 0; j < numNodes; j++) {
+    //% blockId="NavigationCreatePath"
+    //% block="path from $from to $to direction $direction weight $weight"
+    //% weight=90
+    export function createPath(from: number, to: number, direction: NavDirection, weight: number): NavPath {
+        return {
+            from: from,
+            to: to,
+            direction: direction,
+            weight: weight
+        }
+    }
+
+    export function buildGraph(paths: NavPath[]) {
+        // Очищаем старые матрицы
+        for (let i = 0; i < nodesCount; i++) {
+            for (let j = 0; j < nodesCount; j++) {
                 navMatrix[i][j] = -1;
                 weightMatrix[i][j] = -1;
             }
         }
-
-        for (let node of graph) {
-            for (let n of node.neighbors) {
-                navMatrix[node.node][n.to] = n.dir;
-                weightMatrix[node.node][n.to] = n.weight;
-            }
+        // Заполняем по путям
+        for (let path of paths) {
+            if (navMatrix[path.from][path.to] != -1) console.log("Duplicate path");
+            if (path.from < 0 || path.from >= nodesCount) continue;
+            if (path.to < 0 || path.to >= nodesCount) continue;
+            navMatrix[path.from][path.to] = path.direction;
+            weightMatrix[path.from][path.to] = path.weight;
         }
     }
-
 
     /**
      * Алгоритм поиска в глубину (Depth-first search, DFS).
@@ -234,7 +247,7 @@ namespace navigation {
         let found: boolean = false; // Флаг для остановки при нахождении цели
 
         // Инициализация массивов
-        for (let i = 0; i < numNodes; i++) {
+        for (let i = 0; i < nodesCount; i++) {
             visited.push(false); // Все узлы изначально не посещены
             parent.push(-1); // Специальное значение "нет родителя"
         }
@@ -247,7 +260,7 @@ namespace navigation {
             }
             if (!visited[current]) { // Обработка текущего узла
                 visited[current] = true; // Помечаем как посещённый
-                for (let i = numNodes - 1; i >= 0; i--) { // Обход соседей в обратном порядке
+                for (let i = nodesCount - 1; i >= 0; i--) { // Обход соседей в обратном порядке
                     if (navMatrix[current][i] !== -1 && !visited[i]) {
                         parent[i] = current; // Запоминаем родителя
                         stack.push(i); // Добавляем в стек
@@ -288,7 +301,7 @@ namespace navigation {
         let found = false; // Флаг для обнаружения finishNode
 
         // Инициализация массивов
-        for (let i = 0; i < numNodes; i++) {
+        for (let i = 0; i < nodesCount; i++) {
             visited.push(false); // Все узлы изначально не посещены
             parent.push(-1); // Специальное значение "нет родителя"
         }
@@ -299,7 +312,7 @@ namespace navigation {
                 found = true; // Путь найден
                 break;
             }
-            for (let i = 0; i < numNodes; i++) {
+            for (let i = 0; i < nodesCount; i++) {
                 if (navMatrix[current][i] != -1 && !visited[i]) {
                     visited[i] = true;
                     parent[i] = current;
@@ -338,17 +351,17 @@ namespace navigation {
         dist[startNode] = 0; // Расстояние до старта = 0
 
         // Инициализация массивов
-        for (let i = 0; i < numNodes; i++) {
+        for (let i = 0; i < nodesCount; i++) {
             dist.push(Infinity); // Infinity символизирует, что путь до узла пока не обнаружен
             visited.push(false); // Все узлы изначально не посещены
             parent.push(-1); // Специальное значение "нет родителя"
         }
 
-        for (let step = 0; step < numNodes; step++) {
+        for (let step = 0; step < nodesCount; step++) {
             // Находим узел с минимальным расстоянием
             let current = -1;
             let minDist = Infinity;
-            for (let i = 0; i < numNodes; i++) {
+            for (let i = 0; i < nodesCount; i++) {
                 if (!visited[i] && dist[i] < minDist) {
                     minDist = dist[i];
                     current = i;
@@ -360,7 +373,7 @@ namespace navigation {
 
             visited[current] = true;
             // Обновляем расстояния до соседей
-            for (let i = 0; i < numNodes; i++) {
+            for (let i = 0; i < nodesCount; i++) {
                 const weight = weightMatrix[current][i];
                 if (navMatrix[current][i] !== -1 && !visited[i] && weight !== -1) {
                     const newDist = dist[current] + weight;
@@ -431,17 +444,17 @@ namespace navigation {
     export function followLineToNode(algorithm: GraphTraversal, newPos: number, params?: params.NavLineFollow, debug: boolean = false) {
         if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
         let path: number[] = []; // Для массива пути, по которому нужно пройти
-        if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPos, newPos); // Алгоритм DFS
-        else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPos, newPos); // Алгоритм BFS
-        else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPos, newPos); // Алгоритм Дейкрсты
+        if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPositon, newPos); // Алгоритм DFS
+        else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPositon, newPos); // Алгоритм BFS
+        else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPositon, newPos); // Алгоритм Дейкрсты
         else return;
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
         for (let i = 0; i < path.length - 1; i++) {
             directionSpinTurn(navMatrix[path[i]][path[i + 1]], lineFollowByPathTurnV); // Поворот
             motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxV, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
-            currentPos = path[i]; // Записываем новую позицию в глобальную переменную
+            currentPositon = path[i]; // Записываем новую позицию в глобальную переменную
         }
-        currentPos = newPos; // Записываем новую позицию в глобальную переменную
+        currentPositon = newPos; // Записываем новую позицию в глобальную переменную
     }
 
     /**
@@ -491,9 +504,9 @@ namespace navigation {
                     Kf: lineFollowByPathKf
                 }); // Движение до перекрёстка
             }
-            currentPos = path[i]; // Записываем новую позицию в глобальную переменную
+            currentPositon = path[i]; // Записываем новую позицию в глобальную переменную
         }
-        currentPos = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
+        currentPositon = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
     }
 
 }

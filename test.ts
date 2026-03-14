@@ -24,24 +24,6 @@ sensors.setHsvlToColorNumBoundaries(sensors.color4, {
     purpleBoundary: -1
 });
 
-let graph: navigation.NavNode[] = [{
-    node: 0,
-    neighbors: [
-        { to: 1, dir: 0, weight: 40 },
-        { to: 3, dir: 3, weight: 50 }
-    ]
-}, {
-    node: 1,
-    neighbors: [
-        { to: 2, dir: 0, weight: 30 }
-    ]
-}, {
-    node: 2,
-    neighbors: [
-        { to: 3, dir: 3, weight: 20 }
-    ]
-}];
-
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
