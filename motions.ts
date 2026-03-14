@@ -102,7 +102,8 @@ namespace motions {
         chassis.pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         chassis.pidChassisSync.reset(); // Сбросить ПИД регулятор
 
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
         const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(turnRatio, v);
         
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
@@ -172,7 +173,8 @@ namespace motions {
         else if (rotateSide == TurnSide.Right) sensor = (sensors.rightLineSensor as sensors.ColorSensor);
         sensor.rgbRaw(); // Обращаемся к режиму датчика заранее, чтобы тот включился в нужном режиме
 
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         const calcMotRot = Math.round(Math.calculateRotateToEncRotate(30)); // Расчёт угла поворота моторов для поворота
 
@@ -227,7 +229,8 @@ namespace motions {
         }
         sensors.getLineSensorRawRefValue(sensorSide); // Обращаемся к режиму датчика заранее, чтобы тот включился
 
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         const calcMotRot = Math.round(Math.calculateRotateToEncRotate(30)); // Расчёт угла поворота моторов для поворота
 

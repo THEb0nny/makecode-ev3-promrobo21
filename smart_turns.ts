@@ -114,13 +114,16 @@ namespace chassis {
             if (params.Kd >= 0) smartSpinTurnKd = Math.abs(params.Kd);
             if (params.Kf >= 0) smartSpinTurnKf = Math.abs(params.Kf);
         }
-        const lMotEncPrev = leftMotor.angle(), rMotEncPrev = rightMotor.angle(); // Считываем значение с энкодера левого мотора и правого мотора перед стартом алгаритма
+        
         const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
 
         pidSmartTurns.setGains(smartSpinTurnKp, smartSpinTurnKi, smartSpinTurnKd); // Установка коэффициентов ПИД регулятора
         pidSmartTurns.setDerivativeFilter(smartSpinTurnKf); // Установить фильтр дифференциального регулятора
         pidSmartTurns.setControlSaturation(-100, 100); // Устанавливаем интервал ПИД регулятора
         pidSmartTurns.reset(); // Сброс ПИД регулятора
+
+        const emlPrev = leftMotor.angle(); // Считываем значение с энкодера левого мотора и правого мотора перед стартом алгаритма
+        const emrPrev = rightMotor.angle();
 
         let isTurned = false; // Флажок о повороте
         let deregStartTime = 0; // Переменная для хранения времени старта таймера дорегулирования
@@ -131,8 +134,8 @@ namespace chassis {
             const dt = currTime - prevTime; // Время выполнения итерации цикла
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
             if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartSpinTurnTimeOut) break; // Дорегулируемся
-            const lMotEnc = leftMotor.angle() - lMotEncPrev; // Значение энкодера с левого мотора в текущий момент
-            const rMotEnc = rightMotor.angle() - rMotEncPrev; // Значение энкодера с правого мотора в текущий момент
+            const lMotEnc = leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
+            const rMotEnc = rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
             const errorL = calcMotRot - lMotEnc; // Ошибки регулирования левой стороны
             const errorR = calcMotRot * -1 - rMotEnc; // Ошибки регулирования правой стороны
             const error = errorL - errorR; // Расчитываем общую ошибку
@@ -188,10 +191,10 @@ namespace chassis {
         }
         stop(Braking.Hold); // Остановить и установить жёсткий тормоз для моторов
 
-        let motEncPrev = 0; // Инициализируем переменную хранения значения с энкодера мотора
+        let emPrev = 0; // Инициализируем переменную хранения значения с энкодера мотора
         // Записываем текущее значение с энкодера нужного мотора и ставим тормоз нужному мотору
-        if (wheelPivot == WheelPivot.LeftWheel) motEncPrev = rightMotor.angle(); // Если вращаться нужно вокруг левого, тогда записываем с правого
-        else if (wheelPivot == WheelPivot.RightWheel) motEncPrev = leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
+        if (wheelPivot == WheelPivot.LeftWheel) emPrev = rightMotor.angle(); // Если вращаться нужно вокруг левого, тогда записываем с правого
+        else if (wheelPivot == WheelPivot.RightWheel) emPrev = leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
         const calcMotRot = Math.round(((deg * getBaseLength()) / getWheelDiametr()) * 2); // Рассчитываем сколько градусов вращать мотор
         
         pidSmartTurns.setGains(smartPivotTurnKp, smartPivotTurnKi, smartPivotTurnKd); // Устанавливаем коэффиценты ПИД регулятора
@@ -199,7 +202,7 @@ namespace chassis {
         pidSmartTurns.setControlSaturation(-100, 100); // Устанавливаем интервал ПИД регулятора
         pidSmartTurns.reset(); // Сбросить ПИД регулятора
 
-        let motEnc = 0; // Переменная для хранения значения с энкодера
+        let em = 0; // Переменная для хранения значения с энкодера
         let isTurned = false; // Флажок о повороте
         let deregStartTime = 0; // Переменная для хранения времени старта таймера дорегулирования 
         let prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
@@ -208,9 +211,9 @@ namespace chassis {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время выполнения итерации цикла
             prevTime = currTime; // Обновляем переменную предыдущего времени на текущее время для следующей итерации
-            if (wheelPivot == WheelPivot.LeftWheel) motEnc = rightMotor.angle() - motEncPrev; // Значение левого энкодера мотора в текущий момент
-            else if (wheelPivot == WheelPivot.RightWheel) motEnc = leftMotor.angle() - motEncPrev; // Значение правого энкодера мотора в текущий момент
-            const error = calcMotRot - motEnc; // Ошибка регулирования
+            if (wheelPivot == WheelPivot.LeftWheel) em = rightMotor.angle() - emPrev; // Значение левого энкодера мотора в текущий момент
+            else if (wheelPivot == WheelPivot.RightWheel) em = leftMotor.angle() - emPrev; // Значение правого энкодера мотора в текущий момент
+            const error = calcMotRot - em; // Ошибка регулирования
             if (isTurned && currTime - deregStartTime >= smartTurnDeregTimeOut || currTime - startTime >= smartPivotTurnTimeOut) break; // Дорегулируемся
             pidSmartTurns.setPoint(error); // Передаём ошибку регулятору
             let u = pidSmartTurns.compute(dt == 0 ? 1 : dt, 0); // Записываем в переменную управляющее воздействие регулятора
@@ -225,7 +228,7 @@ namespace chassis {
             if (debug) { // Выводим для отладки на экран
                 brick.clearScreen();
                 brick.showValue("calcMotRot", calcMotRot, 1);
-                brick.showValue("motEnc", motEnc, 2);
+                brick.showValue("em", em, 2);
                 brick.showValue("error", error, 3);
                 brick.showValue("u", u, 4);
                 brick.showValue("dt", dt, 12);

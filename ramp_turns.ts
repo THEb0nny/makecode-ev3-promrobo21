@@ -36,7 +36,8 @@ namespace chassis {
             console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
         }
 
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
+        const emlPrev = leftMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
+        const emrPrev = rightMotor.angle();
 
         vMin = Math.clamp(0, 100, Math.abs(vMin) >> 0); // Ограничиваем мин скорость от 0 до 100, берём модули и отсекаем дробную часть
         vMax = Math.clamp(0, 100, Math.abs(vMax) >> 0); // Ограничиваем макс скорость от 0 до 100, берём модули и отсекаем дробную часть
@@ -88,7 +89,8 @@ namespace chassis {
             const dt = currTime - prevTime;
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
-            const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
+            const eml = leftMotor.angle() - emlPrev;
+            const emr = rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncComplexMotionCompute(eml, emr);
             if (out.isDoneLeft || out.isDoneRight ||
                 ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(totalCalcMotRot))) break;
@@ -140,7 +142,8 @@ namespace chassis {
 
         stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
 
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
+        const emlPrev = leftMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
+        const emrPrev = rightMotor.angle();
 
         vMin = Math.clamp(-100, 100, Math.abs(vMin) >> 0); // Ограничиваем мин скорость от -100 до 100, берём модули и отсекаем дробную часть
         vMax = Math.clamp(-100, 100, Math.abs(vMax) >> 0); // Ограничиваем макс скорость от -100 до 100, берём модули и отсекаем дробную часть
@@ -187,7 +190,8 @@ namespace chassis {
             const dt = currTime - prevTime;
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
-            const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
+            const eml = leftMotor.angle() - emlPrev;
+            const emr = rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncComplexMotionCompute(eml, emr);
             if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= totalCalcMotRot ||
                 wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= totalCalcMotRot) {

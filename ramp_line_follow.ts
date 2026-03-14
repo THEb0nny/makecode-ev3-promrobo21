@@ -22,14 +22,16 @@ namespace motions {
 
         advmotctrls.accTwoEncLinearMotionConfig(0, speed, motions.getMinPwrAtEndMovement(), mRotDecelCalc, 0, mRotDecelCalc);
 
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
+            const emr = chassis.rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
@@ -98,14 +100,16 @@ namespace motions {
 
         advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowToDistance2SensorStartV, rampLineFollowToDistance2SensorMaxV, rampLineFollowToDistance2SensorFinishV, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
 
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
+            const emr = chassis.rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
@@ -171,14 +175,16 @@ namespace motions {
 
         advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowCrossIntersection2SensorStartV, rampLineFollowCrossIntersection2SensorMaxV, rampLineFollowCrossIntersection2SensorFinishV, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
 
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
+            const emr = chassis.rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии

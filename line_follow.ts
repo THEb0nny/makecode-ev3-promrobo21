@@ -323,7 +323,8 @@ namespace motions {
         chassis.pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         chassis.pidChassisSync.reset(); // Сброс ПИД регулятора
 
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // We read the value from the encoder from the left and right motor before starting
+        const emlPrev = chassis.leftMotor.angle(); // We read the value from the encoder from the left and right motor before starting
+        const emrPrev = chassis.rightMotor.angle();
 
         let prevTime = control.millis(); // Last time time variable for loop
         while (true) { // Synchronized motion control cycle
@@ -332,7 +333,8 @@ namespace motions {
             prevTime = currTime;
             const refLS = sensors.getNormalizedReflectionValue(lineSensor); // Нормализованное значение с датчика линии
             if (refLS < getLineFollowSetPoint()) break;
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Get left motor and right motor encoder current value
+            const eml = chassis.leftMotor.angle() - emlPrev; // Get left motor and right motor encoder current value
+            const emr = chassis.rightMotor.angle() - emrPrev;
             const error = advmotctrls.getErrorSyncMotors(eml, emr, speedLeft, speedRight); // Find out the error in motor speed control
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
             const powers = advmotctrls.getPwrSyncMotors(u, speedLeft, speedRight); // Find out the power of motors for regulation
@@ -343,7 +345,8 @@ namespace motions {
 
     // Вспомогательная функция движения по линии на расстояние при обнаружении линии, для съезда с линии и последующего движения по ней
     export function rollingLineFollowingByTwoSensors(rollingDist: number, v: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
         
         const calcMotRot = Math.calculateDistanceToEncRotate(rollingDist); // Дистанция в мм, которую нужно проехать по линии
 
@@ -355,7 +358,8 @@ namespace motions {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
+            const emr = chassis.rightMotor.angle() - emrPrev;
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -370,7 +374,8 @@ namespace motions {
 
     // Вспомогательная функция движения по линии на расстояние при обнаружении линии, для съезда с линии и последующего движения по ней
     export function rollingLineFollowingByLeftSensor(rollingDist: number, v: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         const calcMotRot = Math.calculateDistanceToEncRotate(rollingDist); // Дистанция в мм, которую нужно проехать по линии
 
@@ -382,7 +387,8 @@ namespace motions {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
+            const emr = chassis.rightMotor.angle() - emrPrev;
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -631,14 +637,16 @@ namespace motions {
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
         const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Пока моторы не достигнули градусов вращения
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
+            const emr = chassis.rightMotor.angle() - emrPrev;
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -715,7 +723,8 @@ namespace motions {
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
         const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
@@ -726,7 +735,8 @@ namespace motions {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторы
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторы
+            const emr = chassis.rightMotor.angle() - emrPrev;
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -776,7 +786,8 @@ namespace motions {
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
         const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
-        const emlPrev = chassis.leftMotor.angle(), emrPrev = chassis.rightMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
+        const emrPrev = chassis.rightMotor.angle();
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
@@ -787,7 +798,8 @@ namespace motions {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = chassis.leftMotor.angle() - emlPrev, emr = chassis.rightMotor.angle() - emrPrev; // Значения с энкодеров моторы
+            const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторы
+            const emr = chassis.rightMotor.angle() - emrPrev;
             if (Math.abs(eml) >= Math.abs(calcMotRot) || Math.abs(emr) >= Math.abs(calcMotRot)) break;
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии

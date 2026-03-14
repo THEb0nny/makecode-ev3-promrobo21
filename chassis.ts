@@ -287,14 +287,16 @@ namespace chassis {
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить ПИД регулятор
         
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
+        const emlPrev = leftMotor.angle(); // Перед запуском мы считываем значение с энкодера на левом и правом двигателе
+        const emrPrev = rightMotor.angle();
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
-            const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev; // Значения с энкодеров моторов
+            const eml = leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
+            const emr = rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
             const error = advmotctrls.getErrorSyncMotors(eml, emr, out.pwr, out.pwr);

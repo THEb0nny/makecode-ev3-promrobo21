@@ -27,7 +27,8 @@ namespace chassis {
             console.log(`Warning: v is negative (${v}). Using absolute value.`);
         }
 
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
+        const emlPrev = leftMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
+        const emrPrev = rightMotor.angle();
         
         v = Math.clamp(0, 100, Math.abs(v) >> 0); // Берём модуль скорости, ограничиваем от 0 до 100 и отсекаем дробную часть
         
@@ -49,7 +50,8 @@ namespace chassis {
             const dt = currTime - prevTime;
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
-            const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
+            const eml = leftMotor.angle() - emlPrev;
+            const emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
             const error = advmotctrls.getErrorSyncMotors(eml, emr, vLeft, vRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
@@ -90,8 +92,6 @@ namespace chassis {
 
         stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
 
-        const emlPrev = leftMotor.angle(), emrPrev = rightMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
-        
         v = Math.clamp(0, 100, Math.abs(v) >> 0); // Берём модуль скорости, ограничиваем от 0 до 100 и отсекаем дробную часть
         
         const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
@@ -106,6 +106,9 @@ namespace chassis {
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить регулятор
 
+        const emlPrev = leftMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
+        const emrPrev = rightMotor.angle();
+
         let prevTime = control.millis(); // Переменная для хранения предыдущего времени для цикла регулирования
         const startTime = control.millis(); // Стартовое время алгоритма
         while (true) {
@@ -113,7 +116,8 @@ namespace chassis {
             const dt = currTime - prevTime;
             prevTime = currTime;
             if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
-            const eml = leftMotor.angle() - emlPrev, emr = rightMotor.angle() - emrPrev;
+            const eml = leftMotor.angle() - emlPrev;
+            const emr = rightMotor.angle() - emrPrev;
             if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot ||
                 wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) {
                 break;
