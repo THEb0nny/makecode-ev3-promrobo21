@@ -500,7 +500,7 @@ namespace navigation {
         for (let i = 0; i < path.length - 1; i++) {
             directionSpinTurn(navigationMatrix[path[i]][path[i + 1]], lineFollowByPathTurnV); // Поворот
             motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxV, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
-            currentPosition = path[i]; // Записываем новую позицию в глобальную переменную
+            currentPosition = path[i + 1]; // Записываем новую позицию в глобальную переменную
         }
         currentPosition = newPos; // Записываем новую позицию в глобальную переменную
     }
