@@ -478,28 +478,18 @@ namespace navigation {
             if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
                     motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
-                        vStart: lineFollowByPathMoveStartV,
-                        vMax: lineFollowByPathMoveMaxV,
-                        Kp: lineFollowByPathKp,
-                        Ki: lineFollowByPathKi,
-                        Kd: lineFollowByPathKd,
-                        Kf: lineFollowByPathKf
+                        vStart: lineFollowByPathMoveStartV, vMax: lineFollowByPathMoveMaxV,
+                        Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                     }); // Движение на расстояние для разгона
                 }
                 motions.lineFollowToCrossIntersection(afterMotion, { 
                     v: lineFollowByPathMoveMaxV,
-                    Kp: lineFollowByPathKp,
-                    Ki: lineFollowByPathKi,
-                    Kd: lineFollowByPathKd, 
-                    Kf: lineFollowByPathKf
+                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                 }); // Движение до перекрёстка
             } else {
                 motions.lineFollowToCrossIntersection(afterMotion, {
                     v: lineFollowByPathMoveMaxV,
-                    Kp: lineFollowByPathKp,
-                    Ki: lineFollowByPathKi,
-                    Kd: lineFollowByPathKd,
-                    Kf: lineFollowByPathKf
+                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                 }); // Движение до перекрёстка
             }
             currentPositon = path[i]; // Записываем новую позицию в глобальную переменную

@@ -16,7 +16,6 @@
         "turns.ts",
         "ns.ts",
         "levelings.ts",
-        "params.ts",
         "tune.ts",
         "chassis.ts",
         "math.ts",
@@ -27,7 +26,11 @@
         "ramp_line_follow.ts",
         "line_sensor.ts",
         "color_sensor.ts",
-        "ramp_turns.ts"
+        "ramp_turns.ts",
+        "ramp_line_follow_params.ts",
+        "line_follow_params.ts",
+        "levelings_params.ts",
+        "motors_params.ts"
     ],
     "testFiles": [
         "test.ts"
