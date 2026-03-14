@@ -440,7 +440,7 @@ namespace navigation {
     //% weight="69"
     //% group="Алгоритм движения"
     export function followLineToNode(algorithm: GraphTraversal, newPos: number, params?: params.NavLineFollow, debug: boolean = false) {
-        if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
+        if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
         let path: number[] = []; // Для массива пути, по которому нужно пройти
         if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPositon, newPos); // Алгоритм DFS
         else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPositon, newPos); // Алгоритм BFS
@@ -468,7 +468,7 @@ namespace navigation {
     //% weight="68"
     //% group="Алгоритм движения"
     export function followLineByPath(path: number[], params?: params.NavLineFollow, debug: boolean = false) {
-        if (params) processingFollowLineByPathInputParams(params) // Если были переданы параметры
+        if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
         for (let i = 0; i < path.length - 1; i++) {
             const newDirection = navigationMatrix[path[i]][path[i + 1]];
             const afterMotion = (newDirection == navigationMatrix[path[i + 1]][path[i + 2]]) && (i != path.length - 2) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
