@@ -13,7 +13,7 @@ namespace navigation {
     let navigationMatrix: number[][] = []; // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
     let weightMatrix: number[][] = []; // Матрица весов путей
 
-    let currentPositon = 0; // Текущая позиция на узле (местоположение)
+    let currentPosition = 0; // Текущая позиция на узле (местоположение)
     let currentDirection = 0; // Направление робота для навигации
 
     let lineFollowByPathMoveStartV = 30; // Переменная для хранения минимальной скорости на старте при движении по линии двумя датчиками
@@ -86,27 +86,27 @@ namespace navigation {
      * Установить текущую позицию на узловой точке.
      * @param newPos новый текущий узел, eg: 0
      */
-    //% blockId="NavigationSetCurrentPositon"
+    //% blockId="NavigationSetcurrentPosition"
     //% block="set node position $newPos"
     //% block.loc.ru="установить узловую позицию $newPos"
     //% inlineInputMode="inline"
     //% weight="97"
     //% group="Свойства"
-    export function setCurrentPositon(newPos: number) {
-        currentPositon = newPos;
+    export function setcurrentPosition(newPos: number) {
+        currentPosition = newPos;
     }
 
     /**
      * Получить текущую позицию на узловой точке.
      */
-    //% blockId="NavigationGetCurrentPositon"
+    //% blockId="NavigationGetcurrentPosition"
     //% block="get current node position"
     //% block.loc.ru="получить текущую узловую позцию"
     //% inlineInputMode="inline"
     //% weight="96"
     //% group="Свойства"
-    export function getCurrentPositon(): number {
-        return currentPositon;
+    export function getcurrentPosition(): number {
+        return currentPosition;
     }
 
     /**
@@ -483,17 +483,17 @@ namespace navigation {
     export function followLineToNode(algorithm: GraphTraversal, newPos: number, params?: params.NavLineFollow, debug: boolean = false) {
         if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
         let path: number[] = []; // Для массива пути, по которому нужно пройти
-        if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPositon, newPos); // Алгоритм DFS
-        else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPositon, newPos); // Алгоритм BFS
-        else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPositon, newPos); // Алгоритм Дейкрсты
+        if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPosition, newPos); // Алгоритм DFS
+        else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPosition, newPos); // Алгоритм BFS
+        else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPosition, newPos); // Алгоритм Дейкрсты
         else return;
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
         for (let i = 0; i < path.length - 1; i++) {
             directionSpinTurn(navigationMatrix[path[i]][path[i + 1]], lineFollowByPathTurnV); // Поворот
             motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxV, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
-            currentPositon = path[i]; // Записываем новую позицию в глобальную переменную
+            currentPosition = path[i]; // Записываем новую позицию в глобальную переменную
         }
-        currentPositon = newPos; // Записываем новую позицию в глобальную переменную
+        currentPosition = newPos; // Записываем новую позицию в глобальную переменную
     }
 
     /**
@@ -533,9 +533,9 @@ namespace navigation {
                     Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                 }); // Движение до перекрёстка
             }
-            currentPositon = path[i]; // Записываем новую позицию в глобальную переменную
+            currentPosition = path[i]; // Записываем новую позицию в глобальную переменную
         }
-        currentPositon = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
+        currentPosition = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
     }
 
 }
