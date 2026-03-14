@@ -196,7 +196,7 @@ namespace sensors {
 
     /**
      * Получить значения RGB и HSVL с нормализованных значений RGB с датчика цвета.
-     * Возвращает массив RGB и HSVL.
+     * Возвращает массив массивов RGB и HSVL.
      */
     //% blockId="GetRgbHsvl"
     //% block="**color sensor** $sensor RGB&HSVL from RGB"
@@ -207,10 +207,10 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="88" blockGap="8"
     //% group="Color Sensor"
-    export function getRgbHsvl(sensor: sensors.ColorSensor): number[] {
+    export function getRgbHsvl(sensor: sensors.ColorSensor): number[][] {
         const normRgb = getNormalizeRgb(sensor);
         const hsvl = rgbToHsvl(normRgb);
-        return normRgb, hsvl;
+        return [normRgb, hsvl];
     }
 
     /**
