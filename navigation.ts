@@ -94,26 +94,26 @@ namespace navigation {
      * Установить текущую позицию на узловой точке.
      * @param newPos новый текущий узел, eg: 0
      */
-    //% blockId="NavigationSetcurrentPosition"
+    //% blockId="NavigationSetCurrentPosition"
     //% block="set node position $newPos"
     //% block.loc.ru="установить узловую позицию $newPos"
     //% inlineInputMode="inline"
     //% weight="97"
     //% group="Свойства"
-    export function setcurrentPosition(newPos: number) {
+    export function setCurrentPosition(newPos: number) {
         currentPosition = newPos;
     }
 
     /**
      * Получить текущую позицию на узловой точке.
      */
-    //% blockId="NavigationGetcurrentPosition"
+    //% blockId="NavigationGetCurrentPosition"
     //% block="get current node position"
     //% block.loc.ru="получить текущую узловую позцию"
     //% inlineInputMode="inline"
     //% weight="96"
     //% group="Свойства"
-    export function getcurrentPosition(): number {
+    export function getCurrentPosition(): number {
         return currentPosition;
     }
 
