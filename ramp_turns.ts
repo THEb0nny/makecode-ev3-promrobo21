@@ -67,9 +67,9 @@ namespace chassis {
             absDecelDeg *= ratio;
         }
 
-        const accelCalcMotRot = Math.round(Math.calculateRotateToEncRotate(absAccelDeg)); // Расчёт угла поворота моторов для поворота для ускорения
-        const decelCalcMotRot = Math.round(Math.calculateRotateToEncRotate(absDecelDeg)); // Расчёт угла поворота моторов для поворота для замедления
-        const totalCalcMotRot = Math.round(Math.calculateRotateToEncRotate(deg)); // Расчёт угла поворота моторов для поворота общего угла
+        const accelCalcMotRot = Math.round(Math.turnToTicks(absAccelDeg)); // Расчёт угла поворота моторов для поворота для ускорения
+        const decelCalcMotRot = Math.round(Math.turnToTicks(absDecelDeg)); // Расчёт угла поворота моторов для поворота для замедления
+        const totalCalcMotRot = Math.round(Math.turnToTicks(deg)); // Расчёт угла поворота моторов для поворота общего угла
 
         const vLeftMax = deg > 0 ? vMax : -vMax;
         const vRightMax = deg > 0 ? -vMax : vMax;
@@ -167,9 +167,9 @@ namespace chassis {
             decelDeg *= ratio;
         }
 
-        const accelCalcMotRot = Math.round(((absAccelDeg * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота для ускорения
-        const decelCalcMotRot = Math.round(((absDecelDeg * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота для замедления
-        const totalCalcMotRot = Math.round(((absDeg * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота общего угла
+        const accelCalcMotRot = Math.round(Math.turnToTicks(absAccelDeg) * 2); // Расчёт угла поворота моторов для поворота для ускорения
+        const decelCalcMotRot = Math.round(Math.turnToTicks(absDecelDeg) * 2); // Расчёт угла поворота моторов для поворота для замедления
+        const totalCalcMotRot = Math.round(Math.turnToTicks(absDeg) * 2); // Расчёт угла поворота моторов для поворота общего угла
 
         const vSign = Math.sign(deg);
         const vLeftMax = wheelPivot === WheelPivot.LeftWheel ? 0 : vMax * vSign;

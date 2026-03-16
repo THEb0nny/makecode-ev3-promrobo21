@@ -115,7 +115,7 @@ namespace chassis {
             if (params.Kf >= 0) smartSpinTurnKf = Math.abs(params.Kf);
         }
         
-        const calcMotRot = Math.round(deg * getBaseLength() / getWheelDiametr()); // Расчёт угла поворота моторов для поворота
+        const calcMotRot = Math.round(Math.turnToTicks(deg)); // Расчёт угла поворота моторов для поворота
 
         pidSmartTurns.setGains(smartSpinTurnKp, smartSpinTurnKi, smartSpinTurnKd); // Установка коэффициентов ПИД регулятора
         pidSmartTurns.setDerivativeFilter(smartSpinTurnKf); // Установить фильтр дифференциального регулятора
@@ -195,7 +195,7 @@ namespace chassis {
         // Записываем текущее значение с энкодера нужного мотора и ставим тормоз нужному мотору
         if (wheelPivot == WheelPivot.LeftWheel) emPrev = rightMotor.angle(); // Если вращаться нужно вокруг левого, тогда записываем с правого
         else if (wheelPivot == WheelPivot.RightWheel) emPrev = leftMotor.angle(); // Если вращаться нужно вокруг правого, тогда записываем с левого
-        const calcMotRot = Math.round(((deg * getBaseLength()) / getWheelDiametr()) * 2); // Рассчитываем сколько градусов вращать мотор
+        const calcMotRot = Math.round(Math.turnToTicks(deg) * 2); // Рассчитываем сколько градусов вращать мотор
         
         pidSmartTurns.setGains(smartPivotTurnKp, smartPivotTurnKi, smartPivotTurnKd); // Устанавливаем коэффиценты ПИД регулятора
         pidSmartTurns.setDerivativeFilter(smartPivotTurnKf); // Установить фильтр дифференциального регулятора

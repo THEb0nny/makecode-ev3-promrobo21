@@ -18,7 +18,7 @@ namespace motions {
 
     // Вспомогательная функция движения по линии на расстояние при обнаружении линии, для съезда с линии и последующего движения по ней с замедлением
     export function rampRollingLineFollowingByTwoSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
-        const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(rollingDist)); // Расчитываем расстояние замедления
+        const mRotDecelCalc = Math.distanceToTicks(Math.abs(rollingDist)); // Расчитываем расстояние замедления
 
         advmotctrls.accTwoEncLinearMotionConfig(0, speed, motions.getMinPwrAtEndMovement(), mRotDecelCalc, 0, mRotDecelCalc);
 
@@ -94,9 +94,9 @@ namespace motions {
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
-        const mRotAccelCalc = Math.calculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
-        const mRotTotalCalc = Math.calculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = Math.distanceToTicks(Math.abs(accelDist)); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = Math.distanceToTicks(Math.abs(decelDist)); // Расчитываем расстояние замедления
+        const mRotTotalCalc = Math.distanceToTicks(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
         advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowToDistance2SensorStartV, rampLineFollowToDistance2SensorMaxV, rampLineFollowToDistance2SensorFinishV, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
 
@@ -169,9 +169,9 @@ namespace motions {
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
-        const mRotAccelCalc = Math.calculateDistanceToEncRotate(Math.abs(accelDist)); // Расчитываем расстояние ускорения
-        const mRotDecelCalc = Math.calculateDistanceToEncRotate(Math.abs(decelDist)); // Расчитываем расстояние замедления
-        const mRotTotalCalc = Math.calculateDistanceToEncRotate(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
+        const mRotAccelCalc = Math.distanceToTicks(Math.abs(accelDist)); // Расчитываем расстояние ускорения
+        const mRotDecelCalc = Math.distanceToTicks(Math.abs(decelDist)); // Расчитываем расстояние замедления
+        const mRotTotalCalc = Math.distanceToTicks(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
         advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowCrossIntersection2SensorStartV, rampLineFollowCrossIntersection2SensorMaxV, rampLineFollowCrossIntersection2SensorFinishV, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
 

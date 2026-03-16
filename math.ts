@@ -1,12 +1,12 @@
 namespace Math {
 
     // Вспомогательная функция расчёта движения на дистанцию в мм
-    export function calculateDistanceToEncRotate(distance: number): number {
+    export function distanceToTicks(distance: number): number {
         return (distance / (Math.PI * chassis.getWheelDiametr())) * motors.cpr; // Дистанция в мм, которую нужно пройти
     }
 
     // Вспомогательная функция расчёта поворота в градусах
-    export function calculateRotateToEncRotate(degrees: number): number {
+    export function turnToTicks(degrees: number): number {
         return ((degrees * chassis.getBaseLength()) / chassis.getWheelDiametr()) * (motors.cpr / 360);
     }
 

@@ -62,7 +62,7 @@ namespace chassis {
         v = Math.abs(v); // Берём модуль скорости (мощности)
         const dirSign = Math.sign(dist); // Определяем направление по знаку dist
 
-        const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
+        const mRotCalc = Math.round(Math.distanceToTicks(Math.abs(dist))); // Расчёт угла поворота на дистанцию
         syncMovement(v * dirSign, v * dirSign, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -96,7 +96,7 @@ namespace chassis {
         vLeft = Math.abs(vLeft), vRight = Math.abs(vRight); // Берём модуль скорости
         const dirSign = Math.sign(dist); // Определяем направление по знаку dist
 
-        const mRotCalc = Math.calculateDistanceToEncRotate(Math.abs(dist)); // Расчёт угла поворота на дистанцию
+        const mRotCalc = Math.round(Math.distanceToTicks(Math.abs(dist))); // Расчёт угла поворота на дистанцию
         
         syncMovement(vLeft * dirSign, vRight * dirSign, mRotCalc, MoveUnit.Degrees, braking);
     }
@@ -149,9 +149,9 @@ namespace chassis {
 
         const dirSign = Math.sign(totalDist); // Определяем направление по знаку totalDist
         
-        const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
-        const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
-        const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
+        const mRotAccelCalc = Math.round(Math.distanceToTicks(accelDist)); // Расчитываем расстояние фазы ускорения
+        const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
+        const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
 
         executeRampMovement(vStart, vMax, vFinish, mRotTotalCalc * dirSign, mRotAccelCalc, mRotDecelCalc);
         stop(Braking.Hold); // Остановить с удержанием
@@ -203,8 +203,8 @@ namespace chassis {
 
         const dirSign = Math.sign(totalDist); // Определяем направление по знаку totalDist
 
-        const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
-        const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
+        const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
+        const mRotAccelCalc = Math.round(Math.distanceToTicks(accelDist)); // Расчитываем расстояние фазы ускорения
 
         executeRampMovement(vStart * dirSign, vMax * dirSign, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
         steeringCommand(0, vMax * dirSign); // Без команды торможения, а просто ехать дальше вперёд
@@ -256,8 +256,8 @@ namespace chassis {
 
         const dirSign = Math.sign(totalDist); // Определяем направление по знаку totalDist
 
-        const mRotTotalCalc = Math.calculateDistanceToEncRotate(absTotalDist); // Рассчитываем общую дистанцию
-        const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
+        const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
+        const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
 
         executeRampMovement(0, v * dirSign, vFinish * dirSign, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
         motions.actionAfterMotion(actionAfterMotion, vFinish * dirSign); // stop(Braking.Hold); // Тормоз с удержанием
@@ -276,9 +276,9 @@ namespace chassis {
     //% blockHidden="true"
     export function rampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
         // ToDo
-        const mRotAccelCalc = Math.calculateDistanceToEncRotate(accelDist); // Расчитываем расстояние фазы ускорения
-        const mRotDecelCalc = Math.calculateDistanceToEncRotate(decelDist); // Расчитываем расстояние фазы замедления
-        const mRotTotalCalc = Math.calculateDistanceToEncRotate(totalDist); // Рассчитываем общую дистанцию
+        const mRotAccelCalc = Math.round(Math.distanceToTicks(accelDist)); // Расчитываем расстояние фазы ускорения
+        const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
+        const mRotTotalCalc = Math.round(Math.distanceToTicks(totalDist)); // Рассчитываем общую дистанцию
 
         advmotctrls.accTwoEncLinearMotionConfig(minSpeed, maxSpeedRight, minSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов регулирования

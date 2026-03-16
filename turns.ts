@@ -32,7 +32,7 @@ namespace chassis {
         
         v = Math.clamp(0, 100, Math.abs(v) >> 0); // Берём модуль скорости, ограничиваем от 0 до 100 и отсекаем дробную часть
         
-        const calcMotRot = Math.round(Math.calculateRotateToEncRotate(deg)); // Расчёт угла поворота моторов для поворота
+        const calcMotRot = Math.round(Math.turnToTicks(deg)); // Расчёт угла поворота моторов для поворота
         
         const vLeft = deg < 0 ? -v : v;
         const vRight = deg > 0 ? -v : v;
@@ -94,7 +94,7 @@ namespace chassis {
 
         v = Math.clamp(0, 100, Math.abs(v) >> 0); // Берём модуль скорости, ограничиваем от 0 до 100 и отсекаем дробную часть
         
-        const calcMotRot = Math.round(((Math.abs(deg) * getBaseLength()) / getWheelDiametr()) * 2); // Расчёт угла поворота моторов для поворота
+        const calcMotRot = Math.round(Math.turnToTicks(deg) * 2); // Расчёт угла поворота моторов для поворота
         
         const vSign = Math.sign(deg); // Определяем направление по знаку deg
         const vLeft = wheelPivot == WheelPivot.RightWheel ? v * vSign : 0;

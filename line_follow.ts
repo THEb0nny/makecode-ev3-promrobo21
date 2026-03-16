@@ -348,7 +348,7 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
         
-        const calcMotRot = Math.calculateDistanceToEncRotate(rollingDist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = Math.distanceToTicks(rollingDist); // Дистанция в мм, которую нужно проехать по линии
 
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору, временное
         // Сбрасывать регулятор не требуется, т.е. его состояние будет дальше использоваться с предыдущей функции
@@ -377,7 +377,7 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 
-        const calcMotRot = Math.calculateDistanceToEncRotate(rollingDist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = Math.distanceToTicks(rollingDist); // Дистанция в мм, которую нужно проехать по линии
 
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору, временное
         // Сбрасывать регулятор не требуется, т.е. его состояние будет дальше использоваться с предыдущей функции
@@ -636,7 +636,7 @@ namespace motions {
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
-        const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = Math.distanceToTicks(dist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 
@@ -722,7 +722,7 @@ namespace motions {
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
-        const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = Math.distanceToTicks(dist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 
@@ -785,7 +785,7 @@ namespace motions {
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс ПИД регулятора
 
-        const calcMotRot = Math.calculateDistanceToEncRotate(dist); // Дистанция в мм, которую нужно проехать по линии
+        const calcMotRot = Math.distanceToTicks(dist); // Дистанция в мм, которую нужно проехать по линии
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 

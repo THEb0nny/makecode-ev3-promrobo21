@@ -176,7 +176,7 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 
-        const calcMotRot = Math.round(Math.calculateRotateToEncRotate(30)); // Расчёт угла поворота моторов для поворота
+        const calcMotRot = Math.round(Math.turnToTicks(30)); // Расчёт угла поворота моторов для поворота
 
         // const [vLeft, vRight] = rotateSide == TurnSide.Left ? [-v, v] : [v, -v];
         const vLeft = rotateSide == TurnSide.Left ? -v : v;
@@ -232,7 +232,7 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 
-        const calcMotRot = Math.round(Math.calculateRotateToEncRotate(30)); // Расчёт угла поворота моторов для поворота
+        const calcMotRot = Math.round(Math.turnToTicks(30)); // Расчёт угла поворота моторов для поворота
 
         const vLeft = rotateSide == TurnSide.Left ? -v : v;
         const vRight = rotateSide == TurnSide.Left ? v : -v;
