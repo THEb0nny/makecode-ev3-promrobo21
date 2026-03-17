@@ -442,5 +442,4 @@ namespace navigation {
         return path;
     }
 
-
 }

@@ -56,14 +56,11 @@ namespace navigation {
         else return;
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
         for (let i = 0; i < path.length - 1; i++) {
-            // directionSpinTurn(navigationMatrix[path[i]][path[i + 1]], lineFollowByPathTurnV); // Поворот
             directionSpinTurn(getDirection(path[i], path[i + 1]), lineFollowByPathTurnV); // Поворот
             motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxV, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
-            // currentPosition = path[i + 1]; // Записываем новую позицию в глобальную переменную
-            setCurrentPosition(path[i + 1]);
+            setCurrentPosition(path[i + 1]); // Записываем новую позицию в глобальную переменную
         }
-        // currentPosition = newPos; // Записываем новую позицию в глобальную переменную
-        setCurrentPosition(newPos);
+        setCurrentPosition(newPos); // Записываем новую позицию в глобальную переменную
     }
 
     /**
@@ -73,7 +70,7 @@ namespace navigation {
      */
     //% blockId="NavigationFollowLineByPath"
     //% block="line follow along path $path after motion $actionAfterMotion||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии по пути $path с дейвствием после $actionAfterMotion||параметры: $params|отладка $debug"
+    //% block.loc.ru="движение по линии по пути $path с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
@@ -85,13 +82,14 @@ namespace navigation {
         if (!path || path.length < 2) return; // Если был передан пустой путь или только с начальной точкой
         for (let i = 0; i < path.length - 1; i++) {
             const currentDirection = getCurrentDirection();
-            // const newDirection = navigationMatrix[path[i]][path[i + 1]];
             const newDirection = getDirection(path[i], path[i + 1]);
-            // const afterMotion = (i != path.length - 2) && (newDirection == navigationMatrix[path[i + 1]][path[i + 2]]) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
-            const afterMotion =
-                (i != path.length - 2) && (newDirection == getDirection(path[i + 1], path[i + 2]))
-                    ? AfterLineMotion.LineContinueRoll
-                    : actionAfterMotion; // Определяем тип движения после завершения
+            let afterMotion: AfterLineMotion;
+            if (i === path.length - 2) afterMotion = actionAfterMotion; // Последний шаг
+            else {
+                const nextDirection = getDirection(path[i + 1], path[i + 2]);
+                if (newDirection == nextDirection) afterMotion = AfterLineMotion.LineContinueRoll; // Продолжаем в том же направлении
+                else afterMotion = AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
+            }
             const directionChanged = currentDirection != newDirection;
             if (directionChanged) directionSpinTurn(newDirection, lineFollowByPathTurnV, debug); // Поворот, если новое направление
             if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
@@ -112,11 +110,8 @@ namespace navigation {
                     Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                 }); // Движение до перекрёстка
             }
-            // currentPosition = path[i]; // Записываем новую позицию в глобальную переменную
-            setCurrentPosition(path[i]);
+            setCurrentPosition(path[i + 1]); // Записываем новую позицию в глобальную переменную
         }
-        // currentPosition = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
-        setCurrentPosition(path[path.length - 1]);
     }
 
 }
