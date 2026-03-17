@@ -92,9 +92,9 @@ namespace navigation {
                 (i != path.length - 2) && (newDirection == getDirection(path[i + 1], path[i + 2]))
                     ? AfterLineMotion.LineContinueRoll
                     : actionAfterMotion; // Определяем тип движения после завершения
-            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
             const directionChanged = currentDirection != newDirection;
             if (directionChanged) directionSpinTurn(newDirection, lineFollowByPathTurnV, debug); // Поворот, если новое направление
+            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
             if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
                     motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
