@@ -474,6 +474,7 @@ namespace navigation {
         if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
         if (params.Kd >= 0) lineFollowByPathKd = Math.abs(params.Kd);
         if (params.Kf >= 0) lineFollowByPathKf = Math.abs(params.Kf);
+        console.log(`lineFollowByPathTurnV: ${lineFollowByPathTurnV}`);
     }
 
     /**
