@@ -24,7 +24,7 @@ namespace navigation {
     let currentDirection: NavDirection = NavDirection.Right; // Направление робота для навигации
 
     let lineFollowByPathMoveStartV = 30; // Переменная для хранения минимальной скорости на старте при движении по линии двумя датчиками
-    let lineFollowByPathMoveMaxV = 50; // Переменная для хранения максимальной скорости при движении по линии двумя датчиками
+    let lineFollowByPathMoveMaxV = 60; // Переменная для хранения максимальной скорости при движении по линии двумя датчиками
     let lineFollowByPathTurnV = 60; // Переменная для хранения скорости при завершени при движении по линии двумя датчиками
     let lineFollowByPathAccelStartDist = 0; // Переменная для хранения дистанции плавного ускорения при движения по линии двумя датчиками
     let lineFollowByPathKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
@@ -461,11 +461,11 @@ namespace navigation {
                 turnDeg += 90; // Добавляем в переменную итогового поворота
             } else break; // Иначе поворот не требуется
         }
-        if (debug) console.log(`inputDirection: ${inputDirection}, turnDeg: ${turnDeg}`);
+        if (debug) console.log(`inputDirection: ${inputDirection}, turnDeg: ${turnDeg}, vTurn: ${v}`);
         chassis.spinTurn(turnDeg, v); // Поворот относительно центра шасси
     }
 
-    function processingFollowLineByPathInputParams(params?: params.NavLineFollow) {
+    function processingFollowLineByPathInputParams(params: params.NavLineFollow) {
         if (params.moveStartV >= 0) lineFollowByPathMoveStartV = Math.abs(params.moveStartV);
         if (params.moveMaxV >= 0) lineFollowByPathMoveMaxV = Math.abs(params.moveMaxV);
         if (params.turnV >= 0) lineFollowByPathTurnV = Math.abs(params.turnV);
@@ -473,7 +473,7 @@ namespace navigation {
         if (params.Kp >= 0) lineFollowByPathKp = Math.abs(params.Kp);
         if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
         if (params.Kd >= 0) lineFollowByPathKd = Math.abs(params.Kd);
-        if (params.Kf && params.Kf >= 0) lineFollowByPathKf = Math.abs(params.Kf);
+        if (params.Kf >= 0) lineFollowByPathKf = Math.abs(params.Kf);
     }
 
     /**

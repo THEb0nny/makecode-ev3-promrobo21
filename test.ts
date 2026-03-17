@@ -27,6 +27,8 @@ sensors.setHsvlToColorNumBoundaries(sensors.color4, {
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
+chassis.spinTurn(90, 10);
+
 // navigation.buildGraph([
 //     { from: 0, to: 1, direction: NavDirection.Right, weight: 40 },
 //     { from: 1, to: 2, direction: NavDirection.Right, weight: 40 },
