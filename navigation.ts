@@ -523,9 +523,9 @@ namespace navigation {
         for (let i = 0; i < path.length - 1; i++) {
             const newDirection = navigationMatrix[path[i]][path[i + 1]];
             const afterMotion = (i != path.length - 2) && (newDirection == navigationMatrix[path[i + 1]][path[i + 2]]) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
-            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, direction: ${currentDirection}, newDirection: ${newDirection}, afterMotion: ${afterMotion}`);
+            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
             const directionChanged = currentDirection != newDirection;
-            directionSpinTurn(newDirection, lineFollowByPathTurnV); // Поворот
+            directionSpinTurn(newDirection, lineFollowByPathTurnV, debug); // Поворот
             if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
                     motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
