@@ -30,7 +30,9 @@
         "ramp_line_follow_params.ts",
         "line_follow_params.ts",
         "levelings_params.ts",
-        "motors_params.ts"
+        "motors_params.ts",
+        "navigation_line_follow.ts",
+        "navigation_line_follow_params.ts"
     ],
     "testFiles": [
         "test.ts"

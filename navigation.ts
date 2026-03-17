@@ -23,15 +23,6 @@ namespace navigation {
     let currentPosition = 0; // Текущая позиция на узле (местоположение)
     let currentDirection: NavDirection = NavDirection.Right; // Направление робота для навигации
 
-    let lineFollowByPathMoveStartV = 30; // Переменная для хранения минимальной скорости на старте при движении по линии двумя датчиками
-    let lineFollowByPathMoveMaxV = 60; // Переменная для хранения максимальной скорости при движении по линии двумя датчиками
-    let lineFollowByPathTurnV = 60; // Переменная для хранения скорости при завершени при движении по линии двумя датчиками
-    let lineFollowByPathAccelStartDist = 0; // Переменная для хранения дистанции плавного ускорения при движения по линии двумя датчиками
-    let lineFollowByPathKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
-    let lineFollowByPathKi = 0; // Переменная для хранения коэффицента интегрального регулятора при движения по линии двумя датчиками
-    let lineFollowByPathKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
-    let lineFollowByPathKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
-
     // Вспомогательная функция, которая проверяет, чтобы массив-матрица была квадратной
     function isSquareMatrix(matrix: number[][], expectedSize: number): boolean {
         if (!matrix || matrix.length !== expectedSize) return false;
@@ -142,6 +133,10 @@ namespace navigation {
     //% group="Свойства"
     export function getCurrentDirection() {
         return currentDirection;
+    }
+
+    export function getDirection(from: number, to: number): number {
+        return navigationMatrix[from][to];
     }
     
     /**
@@ -447,105 +442,5 @@ namespace navigation {
         return path;
     }
 
-    // Поворот с помощью направления навигации
-    export function directionSpinTurn(inputDirection: number, v: number, debug: boolean = false) {
-        let turnDeg = 0; // Переменная для значения поворота
-        while (true) {
-            if (inputDirection > currentDirection && (currentDirection != 0 || inputDirection != 3) || (currentDirection == 3 && inputDirection == 0)) {
-                currentDirection += 1; // Изменяем глобальное значение направления
-                if (currentDirection > 3) currentDirection = 0; // Если записали направление больше 3, то его сбросить до 0
-                turnDeg -= 90; // Добавляем в переменную итогового поворота
-            } else if (inputDirection < currentDirection && (currentDirection != 3 || inputDirection != 0) || (currentDirection == 0 && inputDirection == 3)) {
-                currentDirection -= 1; // Изменяем глобальное значение направления
-                if (currentDirection < 0) currentDirection = 3; // Если записали направление меньше 0, то его сбросить до 3
-                turnDeg += 90; // Добавляем в переменную итогового поворота
-            } else break; // Иначе поворот не требуется
-        }
-        if (debug) console.log(`inputDirection: ${inputDirection}, turnDeg: ${turnDeg}, vTurn: ${v}`);
-        chassis.spinTurn(turnDeg, v); // Поворот относительно центра шасси
-    }
-
-    function processingFollowLineByPathInputParams(params: params.NavLineFollow) {
-        if (params.moveStartV >= 0) lineFollowByPathMoveStartV = Math.abs(params.moveStartV);
-        if (params.moveMaxV >= 0) lineFollowByPathMoveMaxV = Math.abs(params.moveMaxV);
-        if (params.turnV >= 0) lineFollowByPathTurnV = Math.abs(params.turnV);
-        if (params.accelStartDist >= 0) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist);
-        if (params.Kp >= 0) lineFollowByPathKp = Math.abs(params.Kp);
-        if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
-        if (params.Kd >= 0) lineFollowByPathKd = Math.abs(params.Kd);
-        if (params.Kf >= 0) lineFollowByPathKf = Math.abs(params.Kf);
-    }
-
-    /**
-     * Движение по линии до точки (вершины) выбранным алгоритмом.
-     * @param algorithm алгоритм нахождения пути, eg: GraphTraversal.BFS
-     * @param newPos узловая точка, в которую нужно двигаться, eg: 1
-     */
-    //% blockId="NavigationFollowLineToNode"
-    //% block="line follow by algorithm $algorithm to node $newPos||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии алгоритмом $algorithm до узловой точки $newPos||параметры: $params|отладка $debug"
-    //% inlineInputMode="inline"
-    //% expandableArgumentMode="enabled"
-    //% debug.shadow="toggleOnOff"
-    //% weight="66"
-    //% group="Алгоритм движения"
-    export function followLineToNode(algorithm: GraphTraversal, newPos: number, params?: params.NavLineFollow, debug: boolean = false) {
-        if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
-        let path: number[] = []; // Для массива пути, по которому нужно пройти
-        if (algorithm == GraphTraversal.DFS) path = algorithmDFS(currentPosition, newPos); // Алгоритм DFS
-        else if (algorithm == GraphTraversal.BFS) path = algorithmBFS(currentPosition, newPos); // Алгоритм BFS
-        else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(currentPosition, newPos); // Алгоритм Дейкрсты
-        else return;
-        if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
-        for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(navigationMatrix[path[i]][path[i + 1]], lineFollowByPathTurnV); // Поворот
-            motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxV, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
-            currentPosition = path[i + 1]; // Записываем новую позицию в глобальную переменную
-        }
-        currentPosition = newPos; // Записываем новую позицию в глобальную переменную
-    }
-
-    /**
-     * Движение по линии по пути в виде узлов. Решение от одного из алгоритма нужно передать массивом.
-     * @param path путь в виде массива
-     */
-    //% blockId="NavigationFollowLineByPath"
-    //% block="line follow along path $path||params: $params|debug $debug"
-    //% block.loc.ru="движение по линии по пути $path||параметры: $params|отладка $debug"
-    //% inlineInputMode="inline"
-    //% expandableArgumentMode="enabled"
-    //% debug.shadow="toggleOnOff"
-    //% weight="65"
-    //% group="Алгоритм движения"
-    export function followLineByPath(path: number[], params?: params.NavLineFollow, debug: boolean = false) {
-        if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
-        if (!path || path.length < 2) return; // Если был передан пустой путь или только с начальной точкой
-        for (let i = 0; i < path.length - 1; i++) {
-            const newDirection = navigationMatrix[path[i]][path[i + 1]];
-            const afterMotion = (i != path.length - 2) && (newDirection == navigationMatrix[path[i + 1]][path[i + 2]]) ? AfterLineMotion.LineContinueRoll : AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
-            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
-            const directionChanged = currentDirection != newDirection;
-            if (directionChanged) directionSpinTurn(newDirection, lineFollowByPathTurnV, debug); // Поворот, если новое направление
-            if (i == 0 || directionChanged) {
-                if (lineFollowByPathAccelStartDist > 0) {
-                    motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
-                        vStart: lineFollowByPathMoveStartV, vMax: lineFollowByPathMoveMaxV,
-                        Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
-                    }); // Движение на расстояние для разгона
-                }
-                motions.lineFollowToCrossIntersection(afterMotion, { 
-                    v: lineFollowByPathMoveMaxV,
-                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
-                }); // Движение до перекрёстка
-            } else {
-                motions.lineFollowToCrossIntersection(afterMotion, {
-                    v: lineFollowByPathMoveMaxV,
-                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
-                }); // Движение до перекрёстка
-            }
-            currentPosition = path[i]; // Записываем новую позицию в глобальную переменную
-        }
-        currentPosition = path[path.length - 1]; // Записываем новую последнюю позицию в глобальную переменную
-    }
 
 }
