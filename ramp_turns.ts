@@ -29,12 +29,8 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (vMin < 0) { // Берём модули скоростей и выводим предупреждение
-            console.log(`Warning: vMin is negative (${vMin}). Using absolute value.`);
-        }
-        if (vMax < 0) {
-            console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
-        }
+        if (vMin < 0) console.log(`Warning: vMin is negative (${vMin}). Using absolute value.`); // Берём модули скоростей и выводим предупреждение
+        if (vMax < 0) console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
 
         const emlPrev = leftMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
         const emrPrev = rightMotor.angle();
@@ -55,12 +51,8 @@ namespace chassis {
         let absAccelDeg = accelDeg !== undefined ? Math.abs(accelDeg) : absDeg * 0.25; // 25% на ускорение
         let absDecelDeg = decelDeg !== undefined ? Math.abs(decelDeg) : absDeg * 0.25; // 25% на замедление
 
-        if (accelDeg !== undefined && accelDeg < 0) {
-            console.log(`Warning: accelDeg is negative (${accelDeg}). Using absolute value (${absAccelDeg}).`);
-        }
-        if (decelDeg !== undefined && decelDeg < 0) {
-            console.log(`Warning: decelDeg is negative (${decelDeg}). Using absolute value (${absDecelDeg}).`);
-        }
+        if (accelDeg !== undefined && accelDeg < 0) console.log(`Warning: accelDeg is negative (${accelDeg}). Using absolute value (${absAccelDeg}).`);
+        if (decelDeg !== undefined && decelDeg < 0) console.log(`Warning: decelDeg is negative (${decelDeg}). Using absolute value (${absDecelDeg}).`);
         if (absAccelDeg + absDecelDeg > absDeg) { // Проверка если ускорение + замедление > всего пути, обрезаем
             const ratio = absDeg / (absAccelDeg + absDecelDeg);
             absAccelDeg *= ratio;
@@ -82,13 +74,15 @@ namespace chassis {
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить регулятор
 
-        let prevTime = control.millis(); // Переменная для хранения предыдущего времени для цикла регулирования
-        const startTime = control.millis(); // Стартовое время алгоритма
+        const timeOutUs = timeOut ? timeOut * 1000 : 0; // Перевод timeout в микросекунды
+
+        let prevTime = control.micros(); // Переменная для хранения предыдущего времени для цикла регулирования
+        const startTime = prevTime; // Стартовое время алгоритма
         while (true) {
-            const currTime = control.millis();
-            const dt = currTime - prevTime;
+            const currTime = control.micros();
+            const dt = (currTime - prevTime) / 1000;
             prevTime = currTime;
-            if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
+            if (timeOutUs && currTime - startTime >= timeOutUs) break; // Выход из алгоритма, если время вышло
             const eml = leftMotor.angle() - emlPrev;
             const emr = rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncComplexMotionCompute(eml, emr);
@@ -98,7 +92,7 @@ namespace chassis {
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwrLeft, out.pwrRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1);
+            control.pauseUntilTimeUs(currTime, 1000);
         }
         stop(Braking.Hold); // Удерживание при торможении
     }
@@ -133,12 +127,8 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (vMin < 0) {
-            console.log(`Warning: vMin is negative (${vMin}). Using absolute value.`);
-        }
-        if (vMax < 0) {
-            console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
-        }
+        if (vMin < 0) console.log(`Warning: vMin is negative (${vMin}). Using absolute value.`);
+        if (vMax < 0) console.log(`Warning: vMax is negative (${vMax}). Using absolute value.`);
 
         stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
 
@@ -183,25 +173,27 @@ namespace chassis {
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить регулятор
 
-        let prevTime = control.millis(); // Переменная для хранения предыдущего времени для цикла регулирования
-        const startTime = control.millis(); // Стартовое время алгоритма
+        const timeOutUs = timeOut ? timeOut * 1000 : 0; // Перевод timeout в микросекунды
+
+        let prevTime = control.micros(); // Переменная для хранения предыдущего времени для цикла регулирования
+        const startTime = prevTime; // Стартовое время алгоритма
         while (true) {
-            const currTime = control.millis();
-            const dt = currTime - prevTime;
+            const currTime = control.micros();
+            const dt = (currTime - prevTime) / 1000;
             prevTime = currTime;
-            if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
+            if (timeOutUs && currTime - startTime >= timeOutUs) break; // Выход из алгоритма, если время вышло
             const eml = leftMotor.angle() - emlPrev;
             const emr = rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncComplexMotionCompute(eml, emr);
-            if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= totalCalcMotRot ||
-                wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= totalCalcMotRot) {
+            if ((wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= totalCalcMotRot) ||
+                (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= totalCalcMotRot)) {
                 break;
             } // Условие выхода: проверяем только движущееся колесо
             const error = advmotctrls.getErrorSyncMotors(eml, emr, out.pwrLeft, out.pwrRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwrLeft, out.pwrRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1);
+            control.pauseUntilTimeUs(currTime, 1000);
         }
         stop(Braking.Hold); // Удерживание при торможении
     }

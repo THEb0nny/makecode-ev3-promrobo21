@@ -126,7 +126,7 @@ namespace motions {
                 brick.printValue("refRightLS", refRightLS, 2);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 1); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTimeMs(currTime, 1); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(277, 200); // Сигнал о завершении
         motions.actionAfterMotion(actionAfterMotion, v); // Действие после цикла управления
@@ -209,7 +209,7 @@ namespace motions {
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 5); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, 5); // Ожидание выполнения цикла
         }
         levelings.linePositioning(100, null, debug); // Позиционируемся на линии
     }
@@ -262,7 +262,7 @@ namespace motions {
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, 1); // Ожидание выполнения цикла
         }
         levelings.linePositioning(100, null, debug); // Позиционируемся на линии
     }

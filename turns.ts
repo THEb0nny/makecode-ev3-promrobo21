@@ -23,9 +23,7 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (v < 0) {
-            console.log(`Warning: v is negative (${v}). Using absolute value.`);
-        }
+        if (v < 0) console.log(`Warning: v is negative (${v}). Using absolute value.`);
 
         const emlPrev = leftMotor.angle(); // Считываем значение с энкодера с левого двигателя, правого двигателя перед запуском
         const emrPrev = rightMotor.angle();
@@ -42,14 +40,16 @@ namespace chassis {
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервалов регулирования
         pidChassisSync.setPoint(0); // Установить нулевую уставку регулятору
         pidChassisSync.reset(); // Сбросить регулятор
+
+        const timeOutUs = timeOut ? timeOut * 1000 : 0; // Перевод timeout в микросекунды
         
-        let prevTime = control.millis(); // Переменная для хранения предыдущего времени для цикла регулирования
-        const startTime = control.millis(); // Стартовое время алгоритма
+        let prevTime = control.micros(); // Переменная для хранения предыдущего времени для цикла регулирования
+        const startTime = prevTime; // Стартовое время алгоритма
         while (true) {
-            const currTime = control.millis();
-            const dt = currTime - prevTime;
+            const currTime = control.micros();
+            const dt = (currTime - prevTime) / 1000;
             prevTime = currTime;
-            if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
+            if (timeOutUs && currTime - startTime >= timeOutUs) break; // Выход из алгоритма, если время вышло
             const eml = leftMotor.angle() - emlPrev;
             const emr = rightMotor.angle() - emrPrev;
             if ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(calcMotRot)) break;
@@ -57,7 +57,7 @@ namespace chassis {
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1);
+            control.pauseUntilTimeUs(currTime, 1000);
         }
         stop(Braking.Hold); // Удерживание при торможении
     }
@@ -86,9 +86,7 @@ namespace chassis {
             stop(Braking.Hold);
             return;
         }
-        if (v < 0) {
-            console.log(`Warning: v is negative (${v}). Using absolute value.`);
-        }
+        if (v < 0) console.log(`Warning: v is negative (${v}). Using absolute value.`);
 
         stop(Braking.Hold); // Установить тормоз и удержание моторов перед поворотом
 
@@ -109,24 +107,26 @@ namespace chassis {
         const emlPrev = leftMotor.angle(); // Считываем с левого мотора и  правого мотора значения энкодера перед стартом алгаритма
         const emrPrev = rightMotor.angle();
 
-        let prevTime = control.millis(); // Переменная для хранения предыдущего времени для цикла регулирования
-        const startTime = control.millis(); // Стартовое время алгоритма
+        const timeOutUs = timeOut ? timeOut * 1000 : 0; // Перевод timeout в микросекунды
+
+        let prevTime = control.micros(); // Переменная для хранения предыдущего времени для цикла регулирования
+        const startTime = prevTime; // Стартовое время алгоритма
         while (true) {
-            const currTime = control.millis();
-            const dt = currTime - prevTime;
+            const currTime = control.micros();
+            const dt = (currTime - prevTime) / 1000;
             prevTime = currTime;
-            if (timeOut && currTime - startTime >= timeOut) break; // Выход из алгоритма, если время вышло
+            if (timeOutUs && currTime - startTime >= timeOutUs) break; // Выход из алгоритма, если время вышло
             const eml = leftMotor.angle() - emlPrev;
             const emr = rightMotor.angle() - emrPrev;
-            if (wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot ||
-                wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot) {
+            if ((wheelPivot == WheelPivot.LeftWheel && Math.abs(emr) >= calcMotRot) ||
+                (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= calcMotRot)) {
                 break;
             } // Условие выхода: проверяем только движущееся колесо
             const error = advmotctrls.getErrorSyncMotors(eml, emr, vLeft, vRight);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1);
+            control.pauseUntilTimeUs(currTime, 1000);
         }
         stop(Braking.Hold); // Удерживание при торможении
     }

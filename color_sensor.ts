@@ -426,7 +426,7 @@ namespace sensors {
                 brick.showString("Press RIGHT to search max", 11);
             }
             brick.showString("Press ENTER to exit", 12);
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, 10); // Ожидание выполнения цикла
         }
         brick.clearScreen();
     }

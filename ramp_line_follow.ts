@@ -40,7 +40,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, 1); // Ожидание выполнения цикла
+            control.pauseUntilTimeUs(currTime, 1000); // Ожидание выполнения цикла
         }
         actionAfterMotion(braking); // Действие после алгоритма движения
     }
@@ -103,6 +103,8 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 
+        const delayDt = getLineFollowLoopDt() * 1000;
+
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
             const currTime = control.millis(); // Текущее время
@@ -118,7 +120,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeUs(currTime, delayDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         actionAfterMotion(braking, rampLineFollowToDistance2SensorFinishV); // Действие после алгоритма движения
@@ -178,6 +180,8 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 
+        const delayDt = getLineFollowLoopDt() * 1000;
+
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
             const currTime = control.millis(); // Текущее время
@@ -193,7 +197,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeUs(currTime, delayDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion(actionAfterMotion, rampLineFollowCrossIntersection2SensorFinishV); // Действие после алгоритма движения

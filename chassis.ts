@@ -303,7 +303,7 @@ namespace chassis {
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwr, out.pwr);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
-            control.pauseUntilTime(currTime, 1);
+            control.pauseUntilTimeMs(currTime, 1);
         }
         stop(Braking.Hold);
     }

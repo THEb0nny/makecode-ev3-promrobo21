@@ -134,7 +134,7 @@ namespace levelings {
                 brick.showValue("uR", uR, 6);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTimeMs(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         chassis.stop(Braking.Hold);
@@ -199,7 +199,7 @@ namespace levelings {
                 brick.showValue("u", u, 4);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTimeMs(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 250); // Сигнал о завершении
         chassis.stop(Braking.Hold);
@@ -255,7 +255,7 @@ namespace levelings {
                 music.playToneInBackground(Note.D, 50); // Сигнал для понимация завершения
                 break;
             }
-            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTimeMs(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из первого цикла
         prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
@@ -278,7 +278,7 @@ namespace levelings {
                     break;
                 }
             }
-            control.pauseUntilTime(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTimeMs(currTime, lineAlignmentOrPositioningLoopDt); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(Note.E, 100); // Сигнал для понимация, что вышли из второго цикла
         if (debug) {

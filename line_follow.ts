@@ -339,7 +339,7 @@ namespace motions {
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
             const powers = advmotctrls.getPwrSyncMotors(u, speedLeft, speedRight); // Find out the power of motors for regulation
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
-            control.pauseUntilTime(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
+            control.pauseUntilTimeMs(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
         }
     }
 
@@ -367,7 +367,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, v); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         motions.actionAfterMotion(actionAfterMotion, v);
     }
@@ -396,7 +396,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, v); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         motions.actionAfterMotion(actionAfterMotion, v);
     }
@@ -452,7 +452,7 @@ namespace motions {
             chassis.regulatorSteering(u, lineFollowCrossIntersection2SensorV); // Команда моторам
             // console.log(`refLS: ${refLeftLS} ${refRightLS}, error: ${error}, u: ${u}`);
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion(actionAfterMotion, lineFollowCrossIntersection2SensorV); // Действие после алгоритма движения
@@ -539,7 +539,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowLeftIntersectionV); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion(actionAfterMotion, lineFollowLeftIntersectionV); // Действие после алгоритма движения
@@ -595,7 +595,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowRightIntersectionV); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion(actionAfterMotion, lineFollowRightIntersectionV); // Действие после алгоритма движения
@@ -654,7 +654,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowToDistance2SensorV); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistance2SensorV); // Действие после алгоритма движения
@@ -746,7 +746,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowToDistanceLeftSensorV); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceLeftSensorV); // Действие после алгоритма движения
@@ -809,7 +809,7 @@ namespace motions {
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, lineFollowToDistanceRightSensorV); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-            control.pauseUntilTime(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion(actionAfterMotion, lineFollowToDistanceRightSensorV); // Действие после алгоритма движения

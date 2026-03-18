@@ -159,7 +159,7 @@ namespace chassis {
                 brick.showValue("u", u, 7);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
         stop(Braking.Hold); // Остановка моторов с удержанием
@@ -233,7 +233,7 @@ namespace chassis {
                 brick.showValue("u", u, 4);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTime(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, 10); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
         stop(Braking.Hold); // Остановить моторы
