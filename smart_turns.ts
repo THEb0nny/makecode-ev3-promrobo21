@@ -128,7 +128,7 @@ namespace chassis {
         let isTurned = false; // Флажок о повороте
         let deregStartTime = 0; // Переменная для хранения времени старта таймера дорегулирования
         let prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
-        const startTime = control.millis(); // Стартовое время алгоритма
+        const startTime = prevTime; // Стартовое время алгоритма
         while (true) { // Цикл регулирования
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время выполнения итерации цикла
@@ -159,7 +159,7 @@ namespace chassis {
                 brick.showValue("u", u, 7);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTimeMs(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, 1); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
         stop(Braking.Hold); // Остановка моторов с удержанием
@@ -206,7 +206,7 @@ namespace chassis {
         let isTurned = false; // Флажок о повороте
         let deregStartTime = 0; // Переменная для хранения времени старта таймера дорегулирования 
         let prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
-        const startTime = control.millis(); // Стартовое время алгоритма
+        const startTime = prevTime; // Стартовое время алгоритма
         while (true) { // Цикл регулирования
             const currTime = control.millis(); // Текущее время
             const dt = currTime - prevTime; // Время выполнения итерации цикла
@@ -233,7 +233,7 @@ namespace chassis {
                 brick.showValue("u", u, 4);
                 brick.showValue("dt", dt, 12);
             }
-            control.pauseUntilTimeMs(currTime, 10); // Ожидание выполнения цикла
+            control.pauseUntilTimeMs(currTime, 1); // Ожидание выполнения цикла
         }
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
         stop(Braking.Hold); // Остановить моторы

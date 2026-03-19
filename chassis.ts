@@ -36,6 +36,18 @@ namespace chassis {
         setSpeedsCommand(pLeft, pRight);
     }
 
+    export function normalizedRegulatorSteering2(u: number, v: number) {
+        let pLeft = v + u, pRight = v - u;
+        const maxVal = Math.max(Math.abs(pLeft), Math.abs(pRight));
+        const maxAllowed = Math.max(Math.abs(v), 1); // Чтобы не было деления на 0
+        if (maxVal > maxAllowed) {
+            const k = maxAllowed / maxVal;
+            pLeft *= k, pRight *= k;
+        }
+        setSpeedsCommand(pLeft, pRight);
+    }
+
+
     /**
      * Линейное движение на расстояние в мм с постоянной скоростью (мощностью).
      * Для движения вперёд устанавливается положительная дистанция, а назад - отрицательная.

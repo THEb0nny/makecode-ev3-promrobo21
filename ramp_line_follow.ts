@@ -25,10 +25,10 @@ namespace motions {
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
 
-        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.micros(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
-            const currTime = control.millis(); // Текущее время
-            const dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.micros(); // Текущее время
+            const dt = (currTime - prevTime) / 1000; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
             const emr = chassis.rightMotor.angle() - emrPrev;
@@ -105,10 +105,10 @@ namespace motions {
 
         const delayDt = getLineFollowLoopDt() * 1000;
 
-        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.micros(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
-            const currTime = control.millis(); // Текущее время
-            const dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.micros(); // Текущее время
+            const dt = (currTime - prevTime) / 1000; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
             const emr = chassis.rightMotor.angle() - emrPrev;
@@ -182,10 +182,10 @@ namespace motions {
 
         const delayDt = getLineFollowLoopDt() * 1000;
 
-        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.micros(); // Переменная времени за предыдущую итерацию цикла
         while (true) {
-            const currTime = control.millis(); // Текущее время
-            const dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.micros(); // Текущее время
+            const dt = (currTime - prevTime) / 1000; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             const eml = chassis.leftMotor.angle() - emlPrev; // Значения с энкодеров моторов
             const emr = chassis.rightMotor.angle() - emrPrev;

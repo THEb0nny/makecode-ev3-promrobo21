@@ -61,7 +61,7 @@ namespace chassis {
 
         const accelCalcMotRot = Math.round(Math.turnToTicks(absAccelDeg)); // Расчёт угла поворота моторов для поворота для ускорения
         const decelCalcMotRot = Math.round(Math.turnToTicks(absDecelDeg)); // Расчёт угла поворота моторов для поворота для замедления
-        const totalCalcMotRot = Math.round(Math.turnToTicks(deg)); // Расчёт угла поворота моторов для поворота общего угла
+        const totalCalcMotRot = Math.round(Math.turnToTicks(absDeg)); // Расчёт угла поворота моторов для поворота общего угла
 
         const vLeftMax = deg > 0 ? vMax : -vMax;
         const vRightMax = deg > 0 ? -vMax : vMax;

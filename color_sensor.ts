@@ -371,7 +371,6 @@ namespace sensors {
         let btnRightNumberClicks = 0;
 
         let prevTime = 0; // Переменная времени за предыдущую итерацию цикла
-
         while (!brick.buttonEnter.isPressed()) { // while (!brick.buttonEnter.wasPressed())
             let currTime = control.millis();
             let dt = currTime - prevTime;
@@ -454,7 +453,7 @@ namespace sensors {
 
         let hue = Math.atan2(y, x) * 180 / Math.PI;
         if (hue < 0) hue += 360;
-
+        
         return Math.round(hue); // 0-359 — твой цвет по кольцу!
     }
 

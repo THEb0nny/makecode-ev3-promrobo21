@@ -106,10 +106,10 @@ namespace motions {
         const emrPrev = chassis.rightMotor.angle();
         const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(turnRatio, v);
         
-        let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
+        let prevTime = control.micros(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл работает пока отражение не будет больше/меньше на датчиках
-            const currTime = control.millis(); // Текущее время
-            const dt = currTime - prevTime; // Время за которое выполнился цикл
+            const currTime = control.micros(); // Текущее время
+            const dt = (currTime - prevTime) / 1000; // Время за которое выполнился цикл
             prevTime = currTime; // Новое время в переменную предыдущего времени
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
@@ -126,7 +126,7 @@ namespace motions {
                 brick.printValue("refRightLS", refRightLS, 2);
                 brick.printValue("dt", dt, 12);
             }
-            control.pauseUntilTimeMs(currTime, 1); // Ждём N мс выполнения итерации цикла
+            control.pauseUntilTimeUs(currTime, 1000); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(277, 200); // Сигнал о завершении
         motions.actionAfterMotion(actionAfterMotion, v); // Действие после цикла управления
