@@ -88,7 +88,8 @@ namespace chassis {
             const out = advmotctrls.accTwoEncComplexMotionCompute(eml, emr);
             if (out.isDoneLeft || out.isDoneRight ||
                 ((Math.abs(eml) + Math.abs(emr)) / 2 >= Math.abs(totalCalcMotRot))) break;
-            const error = advmotctrls.getErrorSyncMotors(eml, emr, out.pwrLeft, out.pwrRight);
+            const errorRaw = advmotctrls.getErrorSyncMotors(eml, emr, out.pwrLeft, out.pwrRight);
+            const error = Math.clamp(-1000, 1000, errorRaw);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwrLeft, out.pwrRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
@@ -189,7 +190,8 @@ namespace chassis {
                 (wheelPivot == WheelPivot.RightWheel && Math.abs(eml) >= totalCalcMotRot)) {
                 break;
             } // Условие выхода: проверяем только движущееся колесо
-            const error = advmotctrls.getErrorSyncMotors(eml, emr, out.pwrLeft, out.pwrRight);
+            const errorRaw = advmotctrls.getErrorSyncMotors(eml, emr, out.pwrLeft, out.pwrRight);
+            const error = Math.clamp(-1000, 1000, errorRaw);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwrLeft, out.pwrRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);

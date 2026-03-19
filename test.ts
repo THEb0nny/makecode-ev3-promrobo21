@@ -1,10 +1,12 @@
 chassis.setMotors(motors.mediumB, motors.mediumC, true, false); // Установить моторы в шасси и установить свойства инверсии
 
-chassis.setSyncRegulatorGains(0.02, 0.001, 0.5); // Установить параметры регулирования синхронизации моторов шасси
+chassis.setSyncRegulatorGains(0.02, 0.0001, 0.5); // Установить параметры регулирования синхронизации моторов шасси
 
 chassis.setWheelDiametr(62.4); // Установить радиус колёс в шасси
 
-chassis.setBaseLength(170); // Установить размер базы шасси
+chassis.setBaseLength(172); // Установить размер базы шасси
+
+chassis.setBrakeSettleTime(50);
 
 sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
 // sensors.preparationLineSensor();
@@ -27,14 +29,8 @@ sensors.setHsvlToColorNumBoundaries(sensors.color4, {
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
 
-// navigation.buildGraph([
-//     { from: 0, to: 1, direction: NavDirection.Right, weight: 40 },
-//     { from: 1, to: 2, direction: NavDirection.Right, weight: 40 },
-//     { from: 0, to: 3, direction: NavDirection.Down, weight: 50 },
-//     { from: 1, to: 4, direction: NavDirection.Down, weight: 50 },
-//     { from: 3, to: 4, direction: NavDirection.Right, weight: 40 },
-//     { from: 4, to: 5, direction: NavDirection.Right, weight: 40 }
-// ]);
+// chassis.linearDistMove(1000, 70, MotionBraking.Hold);
+// chassis.spinTurn(-90, 70);
 
 // let prevTime = 0;
 // while (true) {
@@ -116,22 +112,21 @@ music.playTone(262, music.beat(BeatFraction.Half));
 // chassis.rampDistMove(30, 70, 70, 200, 50, 50);
 
 // chassis.spinTurn(90, 60);
-// pause(2000);
+// pause(1000);
 // chassis.spinTurn(-90, 60);
-// pause(2000);
+// pause(1000);
 // chassis.spinTurn(180, 60);
-// pause(2000);
+// pause(1000);
 // chassis.spinTurn(-180, 60);
-// pause(2000);
+// pause(1000);
 
 // chassis.pivotTurn(WheelPivot.LeftWheel, 90, 70);
-// pause(2000);
+// pause(1000);
 // chassis.pivotTurn(WheelPivot.LeftWheel, -90, 70);
-// pause(2000);
+// pause(1000);
 // chassis.pivotTurn(WheelPivot.RightWheel, 90, 70);
-// pause(2000);
+// pause(1000);
 // chassis.pivotTurn(WheelPivot.RightWheel, -90, 70);
-
 
 // motions.lineFollowToCrossIntersection(AfterLineMotion.HoldStop, { speed: 60, Kp: 0.5, Kd: 0.5 });
 
@@ -216,6 +211,15 @@ navigation.setNavigationMatrix(navMatrix);
 navigation.setWeightMatrix(weightMatrix);
 navigation.setCurrentDirection(1);
 
+// navigation.buildGraph([
+//     { from: 0, to: 1, direction: NavDirection.Right, weight: 40 },
+//     { from: 1, to: 2, direction: NavDirection.Right, weight: 40 },
+//     { from: 0, to: 3, direction: NavDirection.Down, weight: 50 },
+//     { from: 1, to: 4, direction: NavDirection.Down, weight: 50 },
+//     { from: 3, to: 4, direction: NavDirection.Right, weight: 40 },
+//     { from: 4, to: 5, direction: NavDirection.Right, weight: 40 }
+// ]);
+
 // console.log(`travelDFS: ${navigation.algorithmDFS(25, 1).join(', ')}`);
 console.log(`travelBFS: ${navigation.algorithmBFS(1, 23).join(', ')}`);
 // console.log(`travelDijkstra: ${navigation.algorithmDijkstra(1, 23).join(', ')}`);
@@ -223,30 +227,3 @@ console.log(`travelBFS: ${navigation.algorithmBFS(1, 23).join(', ')}`);
 // navigation.followLineToNode(GraphTraversal.Dijkstra, 1, {moveSpeed: 70, turnSpeed: 50, Kp: 0.5 });
 navigation.followLineByPath(navigation.algorithmBFS(1, 23), null, true);
 */
-
-function lineFollowTest() {
-    motions.pidLineFollow.setGains(motions.lineFollowCrossIntersection2SensorKp, motions.lineFollowCrossIntersection2SensorKi, motions.lineFollowCrossIntersection2SensorKd); // Установка коэффицентов ПИД регулятора
-    motions.pidLineFollow.setDerivativeFilter(motions.lineFollowCrossIntersection2SensorKf); // Установить фильтр дифференциального регулятора
-    motions.pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
-    motions.pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
-    motions.pidLineFollow.reset(); // Сброс ПИД регулятора
-    let i = 0;
-    let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
-    control.timer1.reset();
-    while (control.timer1.millis() < 1000) { // Цикл регулирования движения по линии
-        const currTime = control.millis(); // Текущее время
-        const dt = currTime - prevTime; // Время за которое выполнился цикл
-        prevTime = currTime; // Новое время в переменную предыдущего времени
-        const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
-        const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
-        const error = refLeftLS - refRightLS; // Ошибка регулирования
-        const u = motions.pidLineFollow.compute(1, -error); // Управляющее воздействие
-        chassis.regulatorSteering(u, 100); // Команда моторам
-        i++;
-    }
-    console.log(`i: ${i}`);
-    chassis.stop();
-}
-
-// pause(100);
-// lineFollowTest();
