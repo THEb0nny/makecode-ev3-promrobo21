@@ -57,6 +57,7 @@ namespace chassis {
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            console.log(`eml: ${eml}, emr: ${emr}, error: ${error}, u: ${error}, pwrLeft: ${powers.pwrLeft}, pwrRight: ${powers.pwrRight}`);
             control.pauseUntilTimeUs(currTime, 1000);
         }
         stop(Braking.Hold); // Удерживание при торможении
