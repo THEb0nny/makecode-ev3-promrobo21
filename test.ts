@@ -248,5 +248,5 @@ function lineFollowTest() {
     chassis.stop();
 }
 
-pause(100);
-lineFollowTest();
+// pause(100);
+// lineFollowTest();
