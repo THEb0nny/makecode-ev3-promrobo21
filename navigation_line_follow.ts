@@ -17,8 +17,7 @@ namespace navigation {
         const turnSteps = delta > 2 ? delta - 4 : delta; // Преобразуем в шаги поворота (-1, 0, 1, 2) для кратчайшего вращения
         const turnDeg = -turnSteps * 90; // Получаем угол поворота
         if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}, vTurn: ${v}`);
-        if (turnDeg != 0) chassis.spinTurn(turnDeg, v);
-        chassis.spinTurn(turnDeg, v); // Поворот относительно центра шасси
+        if (turnDeg != 0) chassis.spinTurn(turnDeg, v); // Поворот относительно центра шасси
         setCurrentDirection(inputDirection); // Установить новое направление
     }
 
