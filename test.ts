@@ -115,17 +115,23 @@ music.playTone(262, music.beat(BeatFraction.Half));
 
 // chassis.rampDistMove(30, 70, 70, 200, 50, 50);
 
-chassis.spinTurn(90, 60);
-pause(2000);
-chassis.spinTurn(-90, 60);
-pause(2000);
-chassis.spinTurn(180, 60);
-pause(2000);
-chassis.spinTurn(-180, 60);
-pause(2000);
+// chassis.spinTurn(90, 60);
+// pause(2000);
+// chassis.spinTurn(-90, 60);
+// pause(2000);
+// chassis.spinTurn(180, 60);
+// pause(2000);
+// chassis.spinTurn(-180, 60);
+// pause(2000);
 
+// chassis.pivotTurn(WheelPivot.LeftWheel, 90, 70);
+// pause(2000);
+// chassis.pivotTurn(WheelPivot.LeftWheel, -90, 70);
+// pause(2000);
+// chassis.pivotTurn(WheelPivot.RightWheel, 90, 70);
+// pause(2000);
+// chassis.pivotTurn(WheelPivot.RightWheel, -90, 70);
 
-// chassis.pivotTurn(90, -70, WheelPivot.LeftWheel);
 
 // motions.lineFollowToCrossIntersection(AfterLineMotion.HoldStop, { speed: 60, Kp: 0.5, Kd: 0.5 });
 
