@@ -311,7 +311,8 @@ namespace chassis {
             const emr = rightMotor.angle() - emrPrev;
             const out = advmotctrls.accTwoEncLinearMotionCompute(eml, emr);
             if (out.isDone) break; // Проверка условия окончания
-            const error = advmotctrls.getErrorSyncMotors(eml, emr, out.pwr, out.pwr);
+            const errorRaw = advmotctrls.getErrorSyncMotors(eml, emr, out.pwr, out.pwr);
+            const error = Math.clamp(-1000, 1000, errorRaw);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwr, out.pwr);
             setSpeedsCommand(powers.pwrLeft, powers.pwrRight);

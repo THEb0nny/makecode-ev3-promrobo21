@@ -6,7 +6,7 @@
         "ev3": "*",
         "automation": "github:microsoft/pxt-automation#v0.0.3",
         "nxt-light-sensor": "*",
-        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#v3.0.10"
+        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#v3.0.11"
     },
     "files": [
         "README.md",
@@ -31,8 +31,8 @@
         "line_follow_params.ts",
         "levelings_params.ts",
         "motors_params.ts",
-        "navigation_line_follow.ts",
-        "navigation_line_follow_params.ts"
+        "navigation_motions.ts",
+        "navigation_motions_param.ts"
     ],
     "testFiles": [
         "test.ts"

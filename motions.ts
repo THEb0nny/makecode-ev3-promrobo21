@@ -116,7 +116,8 @@ namespace motions {
             if (sensorsReflectionCondition(sensorsSelection, refCondition, refTreshold, refLeftLS, refRightLS)) break; // Проверка условия выхода
             const eml = chassis.leftMotor.angle() - emlPrev; // Значение энкодера с левого мотора в текущий момент
             const emr = chassis.rightMotor.angle() - emrPrev; // Значение энкодера с правого мотора в текущий момент
-            const error = advmotctrls.getErrorSyncMotors(eml, emr, speedLeft, speedRight);
+            const errorRaw = advmotctrls.getErrorSyncMotors(eml, emr, speedLeft, speedRight);
+            const error = Math.clamp(-1000, 1000, errorRaw);
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, speedLeft, speedRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
@@ -205,7 +206,8 @@ namespace motions {
                 if (!lineIsFound && colorCS == 1) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && colorCS == 6) break; // Нашли белую часть после линии
             }
-            const error = advmotctrls.getErrorSyncMotors(eml, emr, vLeft, vRight);
+            const errorRaw = advmotctrls.getErrorSyncMotors(eml, emr, vLeft, vRight);
+            const error = Math.clamp(-1000, 1000, errorRaw);
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
@@ -258,7 +260,8 @@ namespace motions {
                 if (!lineIsFound && refLS <= 15) lineIsFound = true; // Ищем чёрный цвет, т.е. линию
                 if (lineIsFound && refLS >= 80) break; // Нашли белую часть посли линии
             }
-            const error = advmotctrls.getErrorSyncMotors(eml, emr, vLeft, vRight);
+            const errorRaw = advmotctrls.getErrorSyncMotors(eml, emr, vLeft, vRight);
+            const error = Math.clamp(-1000, 1000, errorRaw);
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
