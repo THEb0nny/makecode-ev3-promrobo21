@@ -64,7 +64,7 @@ namespace chassis {
     //% weight="79" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function linearDistMove(dist: number, v: number, braking: MotionBraking = MotionBraking.Hold) {
+    export function linearDistMove(dist: number, v: number, braking: MotionBraking) {
         if (v == 0 || dist == 0) {
             stop(Braking.Hold);
             return;
@@ -97,7 +97,7 @@ namespace chassis {
     //% weight="78"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function distMove(dist: number, vLeft: number, vRight: number, braking: MotionBraking = MotionBraking.Hold) {
+    export function distMove(dist: number, vLeft: number, vRight: number, braking: MotionBraking) {
         if (dist == 0 || vLeft == 0 || vRight == 0) {
             stop(Braking.Hold);
             return;
@@ -165,7 +165,7 @@ namespace chassis {
         const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
         const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
 
-        executeRampMovement(vStart, vMax, vFinish, mRotTotalCalc * dirSign, mRotAccelCalc, mRotDecelCalc);
+        executeRampMovement(vStart, vMax * dirSign, vFinish, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
         stop(Braking.Hold); // Остановить с удержанием
     }
 
@@ -218,7 +218,7 @@ namespace chassis {
         const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
         const mRotAccelCalc = Math.round(Math.distanceToTicks(accelDist)); // Расчитываем расстояние фазы ускорения
 
-        executeRampMovement(vStart * dirSign, vMax * dirSign, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(vStart, vMax * dirSign, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
         steeringCommand(0, vMax * dirSign); // Без команды торможения, а просто ехать дальше вперёд
     }
 
@@ -271,7 +271,7 @@ namespace chassis {
         const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
         const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
 
-        executeRampMovement(0, v * dirSign, vFinish * dirSign, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(0, v * dirSign, vFinish, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
         motions.actionAfterMotion(actionAfterMotion, vFinish * dirSign); // stop(Braking.Hold); // Тормоз с удержанием
     }
 

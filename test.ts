@@ -11,20 +11,20 @@ chassis.setBrakeSettleTime(50);
 sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
 // sensors.preparationLineSensor();
 
-sensors.setColorSensorMinRgbValues(sensors.color4, 1, 1, 1);
-sensors.setColorSensorMaxRgbValues(sensors.color4, 235, 249, 178);
-sensors.setHsvlToColorNumBoundaries(sensors.color4, {
-    whiteBoundary: 50,
-    blackBoundary: 10,
-    coloredBoundary: 50,
-    redBoundary: 20,
-    orangeBoundary: -1,
-    brownBoundary: -1,
-    yellowBoundary: 90,
-    greenBoundary: 190,
-    blueBoundary: 300,
-    purpleBoundary: -1
-});
+// sensors.setColorSensorMinRgbValues(sensors.color4, 1, 1, 1);
+// sensors.setColorSensorMaxRgbValues(sensors.color4, 235, 249, 178);
+// sensors.setHsvlToColorNumBoundaries(sensors.color4, {
+//     whiteBoundary: 50,
+//     blackBoundary: 10,
+//     coloredBoundary: 50,
+//     redBoundary: 20,
+//     orangeBoundary: -1,
+//     brownBoundary: -1,
+//     yellowBoundary: 90,
+//     greenBoundary: 190,
+//     blueBoundary: 300,
+//     purpleBoundary: -1
+// });
 
 brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
 music.playTone(262, music.beat(BeatFraction.Half));
