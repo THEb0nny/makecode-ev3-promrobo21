@@ -90,10 +90,7 @@ namespace navigation {
                 else afterMotion = AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
             }
             const directionChanged = currentDirection != newDirection;
-            if (directionChanged) {
-                pause(100);
-                directionSpinTurn(newDirection, lineFollowByPathTurnV, debug); // Поворот, если новое направление
-            }
+            if (directionChanged) directionSpinTurn(newDirection, lineFollowByPathTurnV, debug); // Поворот, если новое направление
             if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
             if (i == 0 || directionChanged) {
                 if (lineFollowByPathAccelStartDist > 0) {
