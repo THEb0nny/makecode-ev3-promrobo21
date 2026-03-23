@@ -165,7 +165,7 @@ namespace chassis {
         const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
         const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
 
-        executeRampMovement(vStart, vMax * dirSign, vFinish, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
+        executeRampMovement(vStart, vMax, vFinish, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc, dirSign);
         stop(Braking.Hold); // Остановить с удержанием
     }
 
@@ -218,7 +218,7 @@ namespace chassis {
         const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
         const mRotAccelCalc = Math.round(Math.distanceToTicks(accelDist)); // Расчитываем расстояние фазы ускорения
 
-        executeRampMovement(vStart, vMax * dirSign, 0, mRotTotalCalc, mRotAccelCalc, 0); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(vStart, vMax, 0, mRotTotalCalc, mRotAccelCalc, 0, dirSign); // Выполнение синхронизированного движения с фазами
         steeringCommand(0, vMax * dirSign); // Без команды торможения, а просто ехать дальше вперёд
     }
 
@@ -271,7 +271,7 @@ namespace chassis {
         const mRotTotalCalc = Math.round(Math.distanceToTicks(absTotalDist)); // Рассчитываем общую дистанцию
         const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
 
-        executeRampMovement(0, v * dirSign, vFinish, mRotTotalCalc, 0, mRotDecelCalc); // Выполнение синхронизированного движения с фазами
+        executeRampMovement(0, v, vFinish, mRotTotalCalc, 0, mRotDecelCalc, dirSign); // Выполнение синхронизированного движения с фазами
         motions.actionAfterMotion(actionAfterMotion, vFinish * dirSign); // stop(Braking.Hold); // Тормоз с удержанием
     }
 
@@ -287,12 +287,22 @@ namespace chassis {
     //% group="Синхронизированное движение с ускорениями"
     //% blockHidden="true"
     export function rampDistMove(minSpeed: number, maxSpeedLeft: number, maxSpeedRight: number, totalDist: number, accelDist: number, decelDist: number) {
+        if (minSpeed < 0) console.log(`Warning: minSpeed is negative (${minSpeed}). Using absolute value.`);
+        if (maxSpeedLeft < 0) console.log(`Warning: maxSpeedLeft is negative (${maxSpeedLeft}). Using absolute value.`);
+        if (maxSpeedRight < 0) console.log(`Warning: maxSpeedRight is negative (${maxSpeedRight}). Using absolute value.`);
+
+        minSpeed = Math.abs(maxSpeedLeft);
+        maxSpeedLeft = Math.abs(maxSpeedLeft);
+        maxSpeedRight = Math.abs(maxSpeedRight);
+
         // ToDo
         const mRotAccelCalc = Math.round(Math.distanceToTicks(accelDist)); // Расчитываем расстояние фазы ускорения
         const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
         const mRotTotalCalc = Math.round(Math.distanceToTicks(totalDist)); // Рассчитываем общую дистанцию
 
-        advmotctrls.accTwoEncLinearMotionConfig(minSpeed, maxSpeedRight, minSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc);
+        const dirSign = Math.sign(totalDist);
+
+        advmotctrls.accTwoEncLinearMotionConfig(minSpeed, maxSpeedRight, minSpeed, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc, dirSign < 0);
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов регулирования
         pidChassisSync.setDerivativeFilter(getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
         pidChassisSync.setControlSaturation(-100, 100); // Установка интервала ПИД регулятора

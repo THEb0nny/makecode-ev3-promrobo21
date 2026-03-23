@@ -66,7 +66,10 @@ namespace chassis {
         const vLeftMax = deg > 0 ? vMax : -vMax;
         const vRightMax = deg > 0 ? -vMax : vMax;
 
-        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, totalCalcMotRot, accelCalcMotRot, decelCalcMotRot); // Установить конфигурация синхронизированного движения с ускорениями
+        const dirSignLeft = Math.sign(vLeftMax);
+        const dirSignRight = Math.sign(vRightMax);
+
+        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, totalCalcMotRot, accelCalcMotRot, decelCalcMotRot, dirSignLeft < 0, dirSignRight < 0); // Установить конфигурация синхронизированного движения с ускорениями
 
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setDerivativeFilter(getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
@@ -166,7 +169,10 @@ namespace chassis {
         const vLeftMax = wheelPivot === WheelPivot.LeftWheel ? 0 : vMax * vSign;
         const vRightMax = wheelPivot === WheelPivot.LeftWheel ? vMax * vSign : 0;
 
-        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, totalCalcMotRot, accelCalcMotRot, decelCalcMotRot); // Установить конфигурация синхронизированного движения с ускорениями
+        const dirSignLeft = Math.sign(vLeftMax);
+        const dirSignRight = Math.sign(vRightMax);
+
+        advmotctrls.accTwoEncComplexMotionConfig(vMin, vLeftMax, vRightMax, vMin, totalCalcMotRot, accelCalcMotRot, decelCalcMotRot, dirSignLeft < 0, dirSignRight < 0); // Установить конфигурация синхронизированного движения с ускорениями
 
         pidChassisSync.setGains(getSyncRegulatorKp(), getSyncRegulatorKi(), getSyncRegulatorKd()); // Установка коэффицентов ПИД регулятора
         pidChassisSync.setDerivativeFilter(getSyncRegulatorKf()); // Установить фильтр дифференциального регулятора
