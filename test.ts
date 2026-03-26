@@ -1,90 +1,56 @@
 chassis.setMotors(motors.mediumB, motors.mediumC, true, false); // Установить моторы в шасси и установить свойства инверсии
-
 chassis.setSyncRegulatorGains(0.02, 0.0001, 0.5); // Установить параметры регулирования синхронизации моторов шасси
-
 chassis.setWheelDiametr(62.4); // Установить радиус колёс в шасси
-
 chassis.setBaseLength(172); // Установить размер базы шасси
+motions.setDistRollingAfterIntersection(50); // Установить дистанцию прокатки после перекрёстка в мм
+chassis.setBrakeSettleTime(100); // Время для стабилизации шасси после торможения
 
-chassis.setBrakeSettleTime(50);
+sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
+sensors.setLineSensorsRawRefValues(630, 499, 650, 520); // Установить калибровочные значения чёрного и белого левого и правого датчика
 
-sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
-// sensors.preparationLineSensor();
+const colorSensor = sensors.color4; // Датчик цвета, которым определяем цвет предмета
 
-// sensors.setColorSensorMinRgbValues(sensors.color4, 1, 1, 1);
-// sensors.setColorSensorMaxRgbValues(sensors.color4, 235, 249, 178);
-// sensors.setHsvlToColorNumBoundaries(sensors.color4, {
-//     whiteBoundary: 50,
-//     blackBoundary: 10,
-//     coloredBoundary: 50,
-//     redBoundary: 20,
-//     orangeBoundary: -1,
-//     brownBoundary: -1,
-//     yellowBoundary: 90,
-//     greenBoundary: 190,
-//     blueBoundary: 300,
-//     purpleBoundary: -1
-// });
+sensors.setColorSensorMinRgbValues(colorSensor, 1, 1, 1);
+sensors.setColorSensorMaxRgbValues(colorSensor, 235, 249, 178);
+sensors.setHsvlToColorNumBoundaries(colorSensor, {
+    whiteBoundary: 50,
+    blackBoundary: 10,
+    coloredBoundary: 50,
+    redBoundary: 20,
+    orangeBoundary: -1,
+    brownBoundary: -1,
+    yellowBoundary: 90,
+    greenBoundary: 190,
+    blueBoundary: 300,
+    purpleBoundary: -1
+});
 
-brick.buttonEnter.pauseUntil(ButtonEvent.Pressed);
-music.playTone(262, music.beat(BeatFraction.Half));
+let btnLeftEventDone = false;
 
-// chassis.linearDistMove(1000, 70, MotionBraking.Hold);
-// chassis.spinTurn(-90, 70);
+brick.buttonLeft.onEvent(ButtonEvent.Pressed, function () {
+    if (btnLeftEventDone) return; // Отключаем обработчик
+    btnLeftEventDone = true; // Переставляе флаг, чтобы событие больше не работало
+    sensors.searchRgbMinMax(colorSensor);
+})
 
-// let prevTime = 0;
-// while (true) {
-//     let currTime = control.millis();
-//     let dt = currTime - prevTime;
-//     prevTime = currTime;
-//     const rgbRaw = sensors.color4.rgbRaw();
-//     const rgbNorm = sensors.getNormalizeRgb(sensors.color4);
-//     // РАЗБРОС RGB
-//     let max = Math.max3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
-//     let min = Math.min3(rgbNorm[0], rgbNorm[1], rgbNorm[2]);
-//     let light = (max + min) / 5.12;
-//     let val = max / 2.56;
-//     let color = -1, hue = -1;
-//     if (val == 0 && light == 0) {
-//         hue = -1;
-//     } else {
-//         hue = sensors.hueByVectorSum(rgbNorm);
-//     }
+function Main() {
+    for (let i = 0; i < 10; i ++) { // Предварительно перевести датчик цвета в режим цвета
+        colorSensor.rgbRaw();
+        pause(10);
+    }
+    sensors.preparationLineSensor(); // Предварительно подготовить датчики линии
 
-//     brick.clearScreen();
-//     brick.printValue("r", rgbNorm[0], 1);
-//     brick.printValue("g", rgbNorm[1], 2);
-//     brick.printValue("b", rgbNorm[2], 3);
-//     brick.printValue("light", light, 5);
-//     brick.printValue("val", val, 6);
+    brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
+    music.playTone(262, music.beat(BeatFraction.Half)); // Звук начала
+
+    chassis.linearDistMove(100, 60, MotionBraking.Continue);
+    motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: 60, Kp: 0.2 });
+    chassis.spinTurn(-90, 60);
     
-//     if (val < 1) { // ПУСТОТА
-//         color = 0;
-//     } else if (val < 15) {
-//         color = 1;  // ЧЁРНЫЙ
-//     } else if (val > 75) { // БЕЛЫЙ
-//         color = 6;
-//     } else {
-//         color = sensors.hueToColorNum(hue, sensors.getHsvlToColorNumBoundaries(sensors.color4));
-//     }
-//     brick.printValue("hue", hue, 8);
-//     brick.printValue("color", color, 9);
-//     brick.printValue("dt", dt, 12);
-// }
+    motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 60, Kp: 0.2 });
+}
 
-// chassis.syncRampMovement(40, 80, 20, 500, 100, 100);
-// pause(100);
-// chassis.syncRampMovement(40, 80, 20, -500, 100, 100);
-
-// sensors.searchRgbMinMaxColorSensors(sensors.color3);
-
-// Установить датчики линии
-// sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3);
-// sensors.setNxtLightSensorsAsLineSensors(sensors.nxtLight1, sensors.nxtLight4)
-
-// Установить значения отражения на белом и чёрном для датчика линии
-// sensors.setLineSensorsRawRefValues(2520, 1712, 2420, 1636);
-// sensors.setLineSensorsRawRefValues(629, 503, 648, 525);
+Main();
 
 // Установить пороговое значение отражения при движении по линии
 // motions.setLineFollowRefTreshold(40)
@@ -104,31 +70,9 @@ music.playTone(262, music.beat(BeatFraction.Half));
 // Установить dt для циклов регулирования при выравнивания и позиционирования.
 // levelings.setLineAlignmentOrPositioningLoopDt(10)
 
-// Установка сокращённых параметров для алгоритма выравнивания на линии перпендикулярно с возможностью установить скорость, Kp, Ki, Kd, и N - фильтр дифференциального регулятора.
-// params.setLineAlignmentShortParams(40, 0.3, 0.3, 0.5, 0.5)
-
 // sensors.searchRgbMinMaxColorSensors(sensors.color4);
 
 // chassis.rampDistMove(30, 70, 70, 200, 50, 50);
-
-// chassis.spinTurn(90, 60);
-// pause(1000);
-// chassis.spinTurn(-90, 60);
-// pause(1000);
-// chassis.spinTurn(180, 60);
-// pause(1000);
-// chassis.spinTurn(-180, 60);
-// pause(1000);
-
-// chassis.pivotTurn(WheelPivot.LeftWheel, 90, 70);
-// pause(1000);
-// chassis.pivotTurn(WheelPivot.LeftWheel, -90, 70);
-// pause(1000);
-// chassis.pivotTurn(WheelPivot.RightWheel, 90, 70);
-// pause(1000);
-// chassis.pivotTurn(WheelPivot.RightWheel, -90, 70);
-
-// motions.lineFollowToCrossIntersection(AfterLineMotion.HoldStop, { speed: 60, Kp: 0.5, Kd: 0.5 });
 
 // chassis.rampLinearDistMove(30, 70, 25, 500, 100, 200);
 // pause(1000);
@@ -227,3 +171,37 @@ console.log(`travelBFS: ${navigation.algorithmBFS(1, 23).join(', ')}`);
 // navigation.followLineToNode(GraphTraversal.Dijkstra, 1, {moveSpeed: 70, turnSpeed: 50, Kp: 0.5 });
 navigation.followLineByPath(navigation.algorithmBFS(1, 23), null, true);
 */
+
+// function lineFollow(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
+//     if (params) { // Если были переданы параметры
+//         if (params.v >= 0) motions.lineFollowCrossIntersection2SensorV = Math.abs(params.v);
+//         if (params.Kp >= 0) motions.lineFollowCrossIntersection2SensorKp = Math.abs(params.Kp);
+//         if (params.Ki >= 0) motions.lineFollowCrossIntersection2SensorKi = Math.abs(params.Ki);
+//         if (params.Kd >= 0) motions.lineFollowCrossIntersection2SensorKd = Math.abs(params.Kd);
+//         if (params.Kf >= 0) motions.lineFollowCrossIntersection2SensorKf = Math.abs(params.Kf);
+//     }
+    
+//     motions.pidLineFollow.setGains(motions.lineFollowCrossIntersection2SensorKp, motions.lineFollowCrossIntersection2SensorKi, motions.lineFollowCrossIntersection2SensorKd); // Установка коэффицентов ПИД регулятора
+//     motions.pidLineFollow.setDerivativeFilter(motions.lineFollowCrossIntersection2SensorKf); // Установить фильтр дифференциального регулятора
+//     motions.pidLineFollow.setControlSaturation(-200, 200); // Установка интервала ПИД регулятора
+//     motions.pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
+//     motions.pidLineFollow.reset(); // Сброс ПИД регулятора
+
+//     let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
+//     while (true) { // Цикл регулирования движения по линии
+//         const currTime = control.millis(); // Текущее время
+//         const dt = currTime - prevTime; // Время за которое выполнился цикл
+//         prevTime = currTime; // Новое время в переменную предыдущего времени
+//         const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
+//         const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
+//         // if (refLeftLS < motions.getLineFollowRefThreshold() && refRightLS < motions.getLineFollowRefThreshold()) break; // Проверка на перекрёсток
+//         const error = refRightLS - refLeftLS; // Ошибка регулирования
+//         const u = motions.pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
+//         chassis.regulatorSteering(u, motions.lineFollowCrossIntersection2SensorV * -1); // Команда моторам
+//         // console.log(`refLS: ${refLeftLS} ${refRightLS}, error: ${error}, u: ${u}`);
+//         if (debug) motions.printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
+//         control.pauseUntilTimeMs(currTime, motions.getLineFollowLoopDt()); // Ожидание выполнения цикла
+//     }
+//     music.playToneInBackground(262, 250); // Издаём сигнал завершения
+//     motions.actionAfterLineMotion(actionAfterMotion, motions.lineFollowCrossIntersection2SensorV); // Действие после алгоритма движения
+// }
