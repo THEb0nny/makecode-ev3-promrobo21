@@ -5,6 +5,8 @@ chassis.setBaseLength(172); // Установить размер базы шас
 motions.setDistRollingAfterIntersection(50); // Установить дистанцию прокатки после перекрёстка в мм
 chassis.setBrakeSettleTime(100); // Время для стабилизации шасси после торможения
 
+const manipulatorMotor = motors.mediumD;
+
 sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
 sensors.setLineSensorsRawRefValues(630, 499, 650, 520); // Установить калибровочные значения чёрного и белого левого и правого датчика
 
@@ -69,6 +71,22 @@ function VoiceColor(color: number) {
     else if (color == 5) music.playSoundEffect(sounds.colorsRed);
     else if (color == 6) music.playSoundEffect(sounds.colorsWhite);
     else music.playSoundEffect(sounds.communicationNo);
+    pause(50);
+}
+
+enum ManipulatorState {
+    Down,
+    Up
+}
+
+// Манипулятор захвата
+function Manipulator(state: ManipulatorState, hold: boolean, v: number = 50) {
+    const dir = state == ManipulatorState.Up ? 1 : -1;
+    manipulatorMotor.run(Math.abs(v) * dir);
+    pause(10);
+    manipulatorMotor.pauseUntilStalled();
+    manipulatorMotor.setBrake(hold);
+    manipulatorMotor.stop();
 }
 
 let btnLeftEventDone = false;
@@ -98,6 +116,9 @@ brick.buttonRight.onEvent(ButtonEvent.Pressed, function () {
 });
 
 function Main() {
+    manipulatorMotor.setInverted(false);
+    Manipulator(ManipulatorState.Down, false, 50);
+
     for (let i = 0; i < 10; i ++) { // Предварительно перевести датчик цвета в режим цвета
         colorSensor.rgbRaw();
         pause(10);
@@ -107,44 +128,151 @@ function Main() {
     brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
     music.playTone(262, music.beat(BeatFraction.Half)); // Звук начала
 
-    chassis.linearDistMove(150, 60, MotionBraking.Continue);
-    motions.lineFollowToCrossIntersection(AfterLineMotion.Rolling, { v: 60, Kp: 0.2 });
+    chassis.linearDistMove(150, 50, MotionBraking.Continue);
+    motions.lineFollowToCrossIntersection(AfterLineMotion.Rolling, { v: 50, Kp: 0.2 });
     chassis.spinTurn(-90, 60);
-    
-    motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 60, Kp: 0.2 });
-    chassis.spinTurn(90, 60);
-    chassis.linearDistMove(40, 50, MotionBraking.Hold);
 
-    // if (color == 0) {
-    //     chassis.spinTurn(-90, 60);
-    // } else {
-    //     chassis.spinTurn(90, 60);
-    // }
-
+    // Левая производственная линия
+    let color = -1;
     let leftColorZone = -1;
-
+    let leftColorZoneArray = [0, 0, 0, 0];
     for (let i = 0; i < 4; i++) {
         if (i == 0) {
-            motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 60, Kp: 0.2 });
+            motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
         } else {
-            motions.lineFollowToDistanceByTwoSensors(100, AfterLineMotion.HoldStop, { v: 60, Kp: 0.2 });
+            motions.lineFollowToDistanceByTwoSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
         }
         chassis.spinTurn(90, 60);
         chassis.linearDistMove(40, 50, MotionBraking.Hold);
 
         brick.clearScreen();
-        leftColorZone = CheckColor(500, true);
+        color = CheckColor(500, true);
         brick.clearScreen();
-        brick.printValue("color", leftColorZone, 1);
-        VoiceColor(leftColorZone);
+        brick.printValue("color", color, 1);
+        VoiceColor(color);
 
-        pause(5000);
+        leftColorZoneArray[i] = color;
+
         chassis.linearDistMove(-40, 50, MotionBraking.Hold);
 
-        if (leftColorZone != 0) break;
+        if (i < 3) chassis.spinTurn(-90, 60);
     }
+    leftColorZone = custom.mostFrequentNumber(leftColorZoneArray.filter(item => item !== 0));
 
     chassis.spinTurn(90, 60);
+    motions.lineFollowToSideIntersection(SideIntersection.RightInside, AfterLineMotion.Rolling, { v: 50, Kp: 0.6 });
+
+    // Правая производственная линия
+    color = -1;
+    let rightColorZone = -1;
+    let rightColorZoneArray = [0, 0, 0, 0];
+    for (let i = 0; i < 4; i++) {
+        if (i == 0) {
+            motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+        } else {
+            motions.lineFollowToDistanceByTwoSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+        }
+        chassis.spinTurn(-90, 60);
+        chassis.linearDistMove(40, 50, MotionBraking.Hold);
+
+        brick.clearScreen();
+        color = CheckColor(500, true);
+        brick.clearScreen();
+        brick.printValue("color", color, 1);
+        VoiceColor(color);
+
+        rightColorZoneArray[i] = color;
+
+        chassis.linearDistMove(-40, 50, MotionBraking.Hold);
+
+        if (i < 3) chassis.spinTurn(90, 60);
+    }
+    rightColorZone = custom.mostFrequentNumber(rightColorZoneArray.filter(item => item !== 0));
+
+    brick.printString(`lColorZoneArr: ${leftColorZoneArray.join(", ")}`, 1);
+    brick.printString(`rColorZoneArr: ${rightColorZoneArray.join(", ")}`, 2);
+    brick.printValue("leftColorZone", leftColorZone, 4);
+    brick.printValue("rightColorZone", rightColorZone, 5);
+
+    chassis.spinTurn(-90, 60);
+    motions.lineFollowToSideIntersection(SideIntersection.LeftInside, AfterLineMotion.Rolling, { v: 50, Kp: 0.6 });
+
+    chassis.spinTurn(-90, 60);
+    motions.lineFollowToCrossIntersection(AfterLineMotion.Continue, { v: 50, Kp: 0.2 });
+    chassis.linearDistMove(300, 50, MotionBraking.Continue);
+    motions.lineFollowToCrossIntersection(AfterLineMotion.Rolling, { v: 50, Kp: 0.2 });
+
+    for (let i = 0; i < 3; i++) {
+        chassis.spinTurn(90, 60);
+        if (i == 0) {
+            motions.lineFollowToDistanceByTwoSensors(60, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+        } else {
+            motions.lineFollowToDistanceByTwoSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+        }
+        chassis.spinTurn(-90, 60);
+
+        chassis.linearDistMove(40, 50, MotionBraking.Hold);
+
+        brick.clearScreen();
+        color = CheckColor(500, true);
+        brick.clearScreen();
+        brick.printValue("color", color, 1);
+        VoiceColor(color);
+
+        let arrayAllZoneColor = [leftColorZone, rightColorZone];
+
+        if (arrayAllZoneColor.indexOf(color) !== -1) { // Кубик нужного цвета
+            Manipulator(ManipulatorState.Up, true, 60);
+            chassis.linearDistMove(-40, 50, MotionBraking.Hold);
+            chassis.spinTurn(-90, 60);
+            motions.lineFollowToSideIntersection(SideIntersection.LeftInside, AfterLineMotion.Rolling, { v: 50, Kp: 0.6 });
+            chassis.spinTurn(-90, 60);
+            motions.lineFollowToCrossIntersection(AfterLineMotion.Continue, { v: 50, Kp: 0.2 });
+            chassis.linearDistMove(300, 50, MotionBraking.Continue);
+            motions.lineFollowToCrossIntersection(AfterLineMotion.Rolling, { v: 50, Kp: 0.2 });
+            let pos = -1;
+            if (color == leftColorZone) {
+                chassis.spinTurn(-90, 60);
+                pos = leftColorZoneArray.indexOf(0);
+            } else {
+                chassis.spinTurn(90, 60);
+                pos = rightColorZoneArray.indexOf(0);
+            }
+            let distance = 210 + pos * 120;
+            motions.lineFollowToDistanceByTwoSensors(distance, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+            brick.printValue("pos", pos, 3);
+            brick.printValue("distance", distance, 4);
+            if (color == leftColorZone) {
+                chassis.spinTurn(90, 60);
+            } else {
+                chassis.spinTurn(-90, 60);
+            }
+            chassis.linearDistMove(40, 50, MotionBraking.Hold);
+            Manipulator(ManipulatorState.Down, true, 60);
+            break;
+        } else { // Кубик не совпадает
+            chassis.linearDistMove(-40, 50, MotionBraking.Hold);
+        }
+    }
+
+    // Домой
+    chassis.linearDistMove(-40, 50, MotionBraking.Hold);
+    if (color == leftColorZone) {
+        chassis.spinTurn(90, 60);
+        motions.lineFollowToSideIntersection(SideIntersection.RightInside, AfterLineMotion.Rolling, { v: 50, Kp: 0.6 });
+    } else {
+        chassis.spinTurn(-90, 60);
+        motions.lineFollowToSideIntersection(SideIntersection.LeftInside, AfterLineMotion.Rolling, { v: 50, Kp: 0.6 });
+    }
+    if (color == leftColorZone) {
+        chassis.spinTurn(90, 60);
+    } else {
+        chassis.spinTurn(-90, 60);
+    }
+    motions.lineFollowToCrossIntersection(AfterLineMotion.Continue, { v: 50, Kp: 0.2 });
+    chassis.linearDistMove(150, 50, MotionBraking.Hold);
+
+    music.playSoundEffectUntilDone(sounds.communicationGoodJob); // Гуд жопа
 }
 
 Main();
