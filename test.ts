@@ -10,8 +10,8 @@ sensors.setLineSensorsRawRefValues(630, 499, 650, 520); // Установить 
 
 const colorSensor = sensors.color4; // Датчик цвета, которым определяем цвет предмета
 
-sensors.setColorSensorMinRgbValues(colorSensor, 1, 1, 1);
-sensors.setColorSensorMaxRgbValues(colorSensor, 235, 249, 178);
+sensors.setColorSensorMinRgbValues(colorSensor, 22, 21, 24);
+sensors.setColorSensorMaxRgbValues(colorSensor, 255, 269, 215);
 sensors.setHsvlToColorNumBoundaries(colorSensor, {
     whiteBoundary: 50,
     blackBoundary: 10,
@@ -25,13 +25,77 @@ sensors.setHsvlToColorNumBoundaries(colorSensor, {
     purpleBoundary: -1
 });
 
+// Получить цвет
+function GetColor(debug: boolean = false): number {
+    const rgbHsvl = sensors.getRgbHsvl(colorSensor);
+    const color = sensors.convertHsvlToColorNum(rgbHsvl[1], sensors.getHsvlToColorNumBoundaries(colorSensor));
+    if (debug) {
+        brick.clearScreen();
+        brick.printValue("r", rgbHsvl[0][0], 1);
+        brick.printValue("g", rgbHsvl[0][1], 2);
+        brick.printValue("b", rgbHsvl[0][2], 3);
+        brick.printValue("h", rgbHsvl[1][0], 5);
+        brick.printValue("s", rgbHsvl[1][1], 6);
+        brick.printValue("v", rgbHsvl[1][2], 7);
+        brick.printValue("l", rgbHsvl[1][3], 8);
+        brick.printValue("color", color, 10);
+    }
+    return color;
+}
+
+// Проверка цвета
+function CheckColor(time: number, debug: boolean): number {
+    let colorSamples: number[] = [];
+    control.timer1.reset();
+    let prevTime = control.millis();
+    while (control.timer1.millis() < time) {
+        const currTime = control.millis();
+        const dt = currTime - prevTime;
+        prevTime = currTime;
+        const color = GetColor(debug);
+        colorSamples.push(color);
+        control.pauseUntilTimeMs(currTime, 10);
+    }
+    const colorResult = custom.mostFrequentNumber(colorSamples);
+    return colorResult;
+}
+
+// Озвучить цвет
+function VoiceColor(color: number) {
+    if (color == 1) music.playSoundEffect(sounds.colorsBlack);
+    if (color == 2) music.playSoundEffect(sounds.colorsBlue);
+    else if (color == 3) music.playSoundEffect(sounds.colorsGreen);
+    else if (color == 4) music.playSoundEffect(sounds.colorsYellow);
+    else if (color == 5) music.playSoundEffect(sounds.colorsRed);
+    else if (color == 6) music.playSoundEffect(sounds.colorsWhite);
+    else music.playSoundEffect(sounds.communicationNo);
+}
+
 let btnLeftEventDone = false;
 
 brick.buttonLeft.onEvent(ButtonEvent.Pressed, function () {
     if (btnLeftEventDone) return; // Отключаем обработчик
     btnLeftEventDone = true; // Переставляе флаг, чтобы событие больше не работало
     sensors.searchRgbMinMax(colorSensor);
-})
+    pause(500);
+});
+
+// let btnRightEventDone = false;
+
+brick.buttonRight.onEvent(ButtonEvent.Pressed, function () {
+    for (let i = 0; i < 10; i++) { // Предварительно перевести датчик цвета в режим цвета
+        colorSensor.rgbRaw();
+        pause(10);
+    }
+    // if (btnRightEventDone) return; // Отключаем обработчик
+    // btnRightEventDone = true; // Переставляе флаг, чтобы событие больше не работало
+    brick.clearScreen();
+    let color = CheckColor(1000, true);
+    brick.clearScreen();
+    brick.printValue("color", color, 1);
+    VoiceColor(color);
+    pause(1000);
+});
 
 function Main() {
     for (let i = 0; i < 10; i ++) { // Предварительно перевести датчик цвета в режим цвета
@@ -43,11 +107,44 @@ function Main() {
     brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
     music.playTone(262, music.beat(BeatFraction.Half)); // Звук начала
 
-    chassis.linearDistMove(100, 60, MotionBraking.Continue);
-    motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: 60, Kp: 0.2 });
+    chassis.linearDistMove(150, 60, MotionBraking.Continue);
+    motions.lineFollowToCrossIntersection(AfterLineMotion.Rolling, { v: 60, Kp: 0.2 });
     chassis.spinTurn(-90, 60);
     
     motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 60, Kp: 0.2 });
+    chassis.spinTurn(90, 60);
+    chassis.linearDistMove(40, 50, MotionBraking.Hold);
+
+    // if (color == 0) {
+    //     chassis.spinTurn(-90, 60);
+    // } else {
+    //     chassis.spinTurn(90, 60);
+    // }
+
+    let leftColorZone = -1;
+
+    for (let i = 0; i < 4; i++) {
+        if (i == 0) {
+            motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 60, Kp: 0.2 });
+        } else {
+            motions.lineFollowToDistanceByTwoSensors(100, AfterLineMotion.HoldStop, { v: 60, Kp: 0.2 });
+        }
+        chassis.spinTurn(90, 60);
+        chassis.linearDistMove(40, 50, MotionBraking.Hold);
+
+        brick.clearScreen();
+        leftColorZone = CheckColor(500, true);
+        brick.clearScreen();
+        brick.printValue("color", leftColorZone, 1);
+        VoiceColor(leftColorZone);
+
+        pause(5000);
+        chassis.linearDistMove(-40, 50, MotionBraking.Hold);
+
+        if (leftColorZone != 0) break;
+    }
+
+    chassis.spinTurn(90, 60);
 }
 
 Main();
