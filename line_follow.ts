@@ -304,10 +304,10 @@ namespace motions {
             } else {
                 return;
             }
-        } else if (actionAfterMotion == AfterLineMotion.HoldStop) { // Тормоз с жёстким торможением (удержанием)
+        } else if (actionAfterMotion == AfterLineMotion.HoldStop) { // Тормоз c удержанием
             chassis.stop(Braking.Hold);
-        } else if (actionAfterMotion == AfterLineMotion.FloatStop) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
-            chassis.stop(Braking.Float);
+        } else if (actionAfterMotion == AfterLineMotion.FloatStop) { // Тормоз с освобождением мотора, т.е. прокаткой по инерции
+            chassis.stop(Braking.Coast);
         } else if (actionAfterMotion == AfterLineMotion.Continue) { // В continue не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             chassis.steeringCommand(0, v);
         }

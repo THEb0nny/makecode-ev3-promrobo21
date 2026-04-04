@@ -31,11 +31,11 @@ namespace motions {
     }
 
     // Функция, которая выполняет действие после цикла с движением
-    export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, v?: number) { // 
-        if (actionAfterMotion == AfterMotion.HoldStop || actionAfterMotion == MotionBraking.Hold) { // Тормоз с жёстким торможением (удержанием)
+    export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, v?: number) {
+        if (actionAfterMotion == AfterMotion.HoldStop || actionAfterMotion == MotionBraking.Hold) { // Тормоз с удержанием
             chassis.stop(Braking.Hold);
-        } else if (actionAfterMotion == AfterMotion.FloatStop || actionAfterMotion == MotionBraking.Float) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
-            chassis.stop(Braking.Float);
+        } else if (actionAfterMotion == AfterMotion.FloatStop || actionAfterMotion == MotionBraking.Coast) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
+            chassis.stop(Braking.Coast);
         } else if (actionAfterMotion == AfterMotion.NoStop || actionAfterMotion == MotionBraking.Continue) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             chassis.steeringCommand(0, v);
         }
