@@ -90,6 +90,7 @@ function Manipulator(state: ManipulatorState, hold: boolean, v: number = 50) {
 }
 
 let btnLeftEventDone = false;
+let btnRightEventDone = false;
 
 brick.buttonLeft.onEvent(ButtonEvent.Pressed, function () {
     if (btnLeftEventDone) return; // Отключаем обработчик
@@ -98,15 +99,14 @@ brick.buttonLeft.onEvent(ButtonEvent.Pressed, function () {
     pause(500);
 });
 
-// let btnRightEventDone = false;
-
 brick.buttonRight.onEvent(ButtonEvent.Pressed, function () {
+    if (btnRightEventDone) return; // Отключаем обработчик
+    // btnRightEventDone = true; // Переставляе флаг, чтобы событие больше не работало
     for (let i = 0; i < 10; i++) { // Предварительно перевести датчик цвета в режим цвета
         colorSensor.rgbRaw();
         pause(10);
     }
-    // if (btnRightEventDone) return; // Отключаем обработчик
-    // btnRightEventDone = true; // Переставляе флаг, чтобы событие больше не работало
+    
     brick.clearScreen();
     let color = CheckColor(1000, true);
     brick.clearScreen();
@@ -125,6 +125,7 @@ function Main() {
     }
     sensors.preparationLineSensor(); // Предварительно подготовить датчики линии
 
+    brick.setStatusLight(StatusLight.GreenPulse); // Сигнал о готовности светодиодами
     brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
     music.playTone(262, music.beat(BeatFraction.Half)); // Звук начала
 

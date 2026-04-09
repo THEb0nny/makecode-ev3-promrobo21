@@ -193,6 +193,7 @@ namespace motions {
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (out.isDone && refLeftLS < getLineFollowRefThreshold() && refRightLS < getLineFollowRefThreshold()) break; // Проверка условия окончания движения на расстояние и на перекрёсток
+            if (out.isDone) out.pwr = rampLineFollowCrossIntersection2SensorFinishV; // Устанавливаем скорость фишиша для продолжения движения
             const error = refLeftLS - refRightLS; // Ошибка регулирования
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
