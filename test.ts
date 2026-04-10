@@ -29,7 +29,7 @@ sensors.setHsvlToColorNumBoundaries(colorSensor, {
 
 // Получить цвет
 function GetColor(debug: boolean = false): number {
-    const rgbHsvl = sensors.getRgbHsvl(colorSensor);
+    const rgbHsvl = sensors.getColorSensorRgbHsvl(colorSensor);
     const color = sensors.convertHsvlToColorNum(rgbHsvl[1], sensors.getHsvlToColorNumBoundaries(colorSensor));
     if (debug) {
         brick.clearScreen();
