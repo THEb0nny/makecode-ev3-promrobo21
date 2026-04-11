@@ -1,9 +1,9 @@
 namespace params {
 
     export interface NavLineFollow {
-        moveStartV?: number,
-        moveMaxV?: number,
-        turnV?: number,
+        vStartMove?: number,
+        vMaxMove?: number,
+        vTurn?: number,
         accelStartDist?: number
         Kp?: number,
         Ki?: number,

@@ -22,9 +22,9 @@ namespace navigation {
     }
 
     function processingFollowLineByPathInputParams(params: params.NavLineFollow) {
-        if (params.moveStartV >= 0) lineFollowByPathMoveStartV = Math.abs(params.moveStartV);
-        if (params.moveMaxV >= 0) lineFollowByPathMoveMaxV = Math.abs(params.moveMaxV);
-        if (params.turnV >= 0) lineFollowByPathTurnV = Math.abs(params.turnV);
+        if (params.vStartMove >= 0) lineFollowByPathMoveStartV = Math.abs(params.vStartMove);
+        if (params.vMaxMove >= 0) lineFollowByPathMoveMaxV = Math.abs(params.vMaxMove);
+        if (params.vTurn >= 0) lineFollowByPathTurnV = Math.abs(params.vTurn);
         if (params.accelStartDist >= 0) lineFollowByPathAccelStartDist = Math.abs(params.accelStartDist);
         if (params.Kp >= 0) lineFollowByPathKp = Math.abs(params.Kp);
         if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
