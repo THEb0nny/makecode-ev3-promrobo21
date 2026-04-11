@@ -21,6 +21,22 @@ namespace navigation {
         setCurrentDirection(inputDirection); // Установить новое направление
     }
 
+    /**
+     * Поворот робота на относительное количество четвертей (90°).
+     * Положительное значение - поворот направо (по часовой), отрицательное - налево (против часовой).
+     * @param quarterTurns количество четвертей поворота (-4..4), напр: 1 = +90°, -1 = -90°, 2 = +180°, 3 = +270°, 4 = +360°, eg: 1
+     * @param v скорость поворота, eg: 60
+     * @param debug отладочный вывод, eg: false
+     */
+    export function relativeSpinTurn(quarterTurns: number, v: number, debug: boolean = false) {
+        const currentDirection = getCurrentDirection(); // Получаем текущее направление
+        const newDirection = (currentDirection + quarterTurns + 8) % 4; // +8 для корректной обработки отрицательных значений
+        const turnDeg = -quarterTurns * 90; // Угол поворота (знак как в directionSpinTurn)
+        if (debug) console.log(`relativeTurn: ${quarterTurns}q (${turnDeg}°), currDir: ${currentDirection} → newDir: ${newDirection}, v: ${v}`);
+        chassis.spinTurn(turnDeg, v); // Выполняем поворот
+        setCurrentDirection(newDirection); // Обновляем текущее направление
+    }
+
     function processingFollowLineByPathInputParams(params: params.NavLineFollow) {
         if (params.vStartMove >= 0) lineFollowByPathMoveStartV = Math.abs(params.vStartMove);
         if (params.vMaxMove >= 0) lineFollowByPathMoveMaxV = Math.abs(params.vMaxMove);
