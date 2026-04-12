@@ -12,7 +12,10 @@ namespace navigation {
 
     // Поворот с помощью направления навигации
     export function directionSpinTurn(inputDirection: number, v: number, debug: boolean = false) {
-        if (inputDirection <= -1) return; // Не валидное значение направления
+        if (inputDirection <= -1) {
+            console.log(`Error: inputDirection (${inputDirection}) not valid. Return from function!`);
+            return; // Не валидное значение направления
+        }
         const currentDirection = getCurrentDirection(); // Получить направление
         const delta = (inputDirection - currentDirection + 4) % 4; // Считаем разницу направлений в цикле (0..3)
         const turnSteps = delta > 2 ? delta - 4 : delta; // Преобразуем в шаги поворота (-1, 0, 1, 2) для кратчайшего вращения
