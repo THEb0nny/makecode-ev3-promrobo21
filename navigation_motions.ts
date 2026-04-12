@@ -13,15 +13,29 @@ namespace navigation {
     // Поворот с помощью направления навигации
     export function directionSpinTurn(inputDirection: number, v: number, debug: boolean = false) {
         if (inputDirection <= -1) {
-            console.log(`Error: inputDirection (${inputDirection}) not valid. Return from function!`);
+            console.log(`Warning: inputDirection (${inputDirection}) not valid. Return from function!`);
             return; // Не валидное значение направления
         }
         const currentDirection = getCurrentDirection(); // Получить направление
         const delta = (inputDirection - currentDirection + 4) % 4; // Считаем разницу направлений в цикле (0..3)
         const turnSteps = delta > 2 ? delta - 4 : delta; // Преобразуем в шаги поворота (-1, 0, 1, 2) для кратчайшего вращения
         const turnDeg = -turnSteps * 90; // Получаем угол поворота
-        if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}, vTurn: ${v}`);
+        if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}, v: ${v}`);
         if (turnDeg != 0) chassis.spinTurn(turnDeg, v); // Поворот относительно центра шасси
+        setCurrentDirection(inputDirection); // Установить новое направление
+    }
+
+    export function directionRampSpinTurn(inputDirection: number, vMin: number, vMax: number, debug: boolean = false) {
+        if (inputDirection <= -1) {
+            console.log(`Warning: inputDirection (${inputDirection}) not valid. Return from function!`);
+            return; // Не валидное значение направления
+        }
+        const currentDirection = getCurrentDirection(); // Получить направление
+        const delta = (inputDirection - currentDirection + 4) % 4; // Считаем разницу направлений в цикле (0..3)
+        const turnSteps = delta > 2 ? delta - 4 : delta; // Преобразуем в шаги поворота (-1, 0, 1, 2) для кратчайшего вращения
+        const turnDeg = -turnSteps * 90; // Получаем угол поворота
+        if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}, vMin: ${vMin}, vMax: ${vMax}`);
+        if (turnDeg != 0) chassis.rampSpinTurn(turnDeg, 30, vMin, vMax); // Поворот относительно центра шасси
         setCurrentDirection(inputDirection); // Установить новое направление
     }
 
@@ -36,8 +50,17 @@ namespace navigation {
         const currentDirection = getCurrentDirection(); // Получаем текущее направление
         const newDirection = (currentDirection + quarterTurns + 8) % 4; // +8 для корректной обработки отрицательных значений
         const turnDeg = -quarterTurns * 90; // Угол поворота (знак как в directionSpinTurn)
-        if (debug) console.log(`relativeTurn: ${quarterTurns}q (${turnDeg}°), currDir: ${currentDirection} → newDir: ${newDirection}, v: ${v}`);
+        if (debug) console.log(`relativeSpinTurn: ${quarterTurns}q (${turnDeg}°), currDir: ${currentDirection} → newDir: ${newDirection}, v: ${v}`);
         chassis.spinTurn(turnDeg, v); // Выполняем поворот
+        setCurrentDirection(newDirection); // Обновляем текущее направление
+    }
+
+    export function relativeRampSpinTurn(quarterTurns: number, vMin: number, vMax: number, debug: boolean = false) {
+        const currentDirection = getCurrentDirection(); // Получаем текущее направление
+        const newDirection = (currentDirection + quarterTurns + 8) % 4; // +8 для корректной обработки отрицательных значений
+        const turnDeg = -quarterTurns * 90; // Угол поворота (знак как в directionSpinTurn)
+        if (debug) console.log(`relativeRampSpinTurn: ${quarterTurns}q (${turnDeg}°), currDir: ${currentDirection} → newDir: ${newDirection}, vMin: ${vMin}, vMax: ${vMax}`);
+        chassis.rampSpinTurn(turnDeg, vMin, vMax); // Выполняем поворот
         setCurrentDirection(newDirection); // Обновляем текущее направление
     }
 
