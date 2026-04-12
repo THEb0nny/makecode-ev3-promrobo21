@@ -135,6 +135,15 @@ namespace navigation {
         return currentDirection;
     }
 
+    /**
+     * Получить направление из одной узловой точки в другую.
+     */
+    //% blockId="NavigationGetDirection"
+    //% block="get direction from $from to $to"
+    //% block.loc.ru="получить направление из $from в $to"
+    //% inlineInputMode="inline"
+    //% weight="93"
+    //% group="Матрица смежности"
     export function getDirection(from: number, to: number): number {
         return navigationMatrix[from][to];
     }
