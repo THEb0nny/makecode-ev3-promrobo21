@@ -10,7 +10,22 @@ namespace navigation {
     let lineFollowByPathKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
 
-    // Поворот с помощью направления навигации
+    /**
+     * Синхронизированный поворот шасси относительно центра на нужное направление с определенной скоростью.
+     * Скорость v всегда должна быть положительной (отрицательное значение будет взято по модулю).
+     * @param inputDirection направление, eg: 0
+     * @param v скорость поворота, eg: 50
+     */
+    //% blockId="ChassisDirectionSpinTurn"
+    //% block="chassis spin turn direction $inputDirection at $v\\% relative to center wheel axis|debug $debug"
+    //% block.loc.ru="поворот шасси на направление $inputDirection с $v\\% относительно центра оси колёс|debug $debug"
+    //% expandableArgumentMode="enabled"
+    //% inlineInputMode="inline"
+    //% v.shadow="motorSpeedPicker"
+    //% debug.shadow="toggleOnOff"
+    //% weight="99" blockGap="8"
+    //% subcategory="Повороты"
+    //% group="Синхронизированные повороты"
     export function directionSpinTurn(inputDirection: number, v: number, debug: boolean = false) {
         if (inputDirection <= -1) {
             console.log(`Warning: inputDirection (${inputDirection}) not valid. Return from function!`);
