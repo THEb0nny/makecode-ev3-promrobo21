@@ -1,13 +1,5 @@
 namespace motions {
 
-    export let rampLineFollowCrossIntersection2SensorStartV = 20; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
-    export let rampLineFollowCrossIntersection2SensorMaxV = 60; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
-    export let rampLineFollowCrossIntersection2SensorFinishV = 20; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
-    export let rampLineFollowCrossIntersection2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
-    export let rampLineFollowCrossIntersection2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
-    export let rampLineFollowCrossIntersection2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
-    export let rampLineFollowCrossIntersection2SensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
-
     export let rampLineFollowToDistance2SensorStartV = 20; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
     export let rampLineFollowToDistance2SensorMaxV = 60; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
     export let rampLineFollowToDistance2SensorFinishV = 20; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
@@ -15,6 +7,14 @@ namespace motions {
     export let rampLineFollowToDistance2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
     export let rampLineFollowToDistance2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
     export let rampLineFollowToDistance2SensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
+
+    export let rampLineFollowCrossIntersection2SensorStartV = 20; // Переменная для хранения минимальной скорости на старте при движения по линии двумя датчиками
+    export let rampLineFollowCrossIntersection2SensorMaxV = 60; // Переменная для хранения максимальной скорости при движения по линии двумя датчиками
+    export let rampLineFollowCrossIntersection2SensorAfterDistV = 20; // Переменная для хранения минимальной скорости при окончании движения по линии двумя датчиками
+    export let rampLineFollowCrossIntersection2SensorKp = 0.4; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
+    export let rampLineFollowCrossIntersection2SensorKi = 0; // Переменная для хранения коэффицента интегорального регулятора при движения по линии двумя датчиками
+    export let rampLineFollowCrossIntersection2SensorKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
+    export let rampLineFollowCrossIntersection2SensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
     // Вспомогательная функция движения по линии на расстояние при обнаружении линии, для съезда с линии и последующего движения по ней с замедлением
     export function rampRollingLineFollowingByTwoSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
@@ -144,7 +144,7 @@ namespace motions {
     //% weight="99"
     //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка c фазами"
-    export function rampLineFollowToCrossIntersection(totalDist: number, accelDist: number, decelDist: number, actionAfterMotion: AfterLineMotion, params?: params.RampLineFollow, debug: boolean = false) {
+    export function rampLineFollowToCrossIntersection(totalDist: number, accelDist: number, decelDist: number, actionAfterMotion: AfterLineMotion, params?: params.RampLineFollowToCross, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             chassis.stop();
             console.log("Error: the distance values are negative or the sum of the acceleration and deceleration distances is greater than the total distance!");
@@ -158,7 +158,7 @@ namespace motions {
         if (params) { // Если были переданы параметры
             if (params.vStart >= 0) rampLineFollowCrossIntersection2SensorStartV = Math.abs(params.vStart);
             if (params.vMax >= 0) rampLineFollowCrossIntersection2SensorMaxV = Math.abs(params.vMax);
-            if (params.vFinish >= 0) rampLineFollowCrossIntersection2SensorFinishV = Math.abs(params.vFinish);
+            if (params.vAfterDist >= 0) rampLineFollowCrossIntersection2SensorAfterDistV = Math.abs(params.vAfterDist);
             if (params.Kp >= 0) rampLineFollowCrossIntersection2SensorKp = Math.abs(params.Kp);
             if (params.Ki >= 0) rampLineFollowCrossIntersection2SensorKi = Math.abs(params.Ki);
             if (params.Kd >= 0) rampLineFollowCrossIntersection2SensorKd = Math.abs(params.Kd);
@@ -175,7 +175,7 @@ namespace motions {
         const mRotDecelCalc = Math.distanceToTicks(Math.abs(decelDist)); // Расчитываем расстояние замедления
         const mRotTotalCalc = Math.distanceToTicks(Math.abs(totalDist)); // Рассчитываем общюю дистанцию
 
-        advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowCrossIntersection2SensorStartV, rampLineFollowCrossIntersection2SensorMaxV, rampLineFollowCrossIntersection2SensorFinishV, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc, false);
+        advmotctrls.accTwoEncLinearMotionConfig(rampLineFollowCrossIntersection2SensorStartV, rampLineFollowCrossIntersection2SensorMaxV, rampLineFollowCrossIntersection2SensorAfterDistV, mRotTotalCalc, mRotAccelCalc, mRotDecelCalc, false);
 
         const emlPrev = chassis.leftMotor.angle(); // Значения с энкодеров моторов до запуска
         const emrPrev = chassis.rightMotor.angle();
@@ -193,7 +193,7 @@ namespace motions {
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             if (out.isDone && refLeftLS < getLineFollowRefThreshold() && refRightLS < getLineFollowRefThreshold()) break; // Проверка условия окончания движения на расстояние и на перекрёсток
-            if (out.isDone) out.pwr = rampLineFollowCrossIntersection2SensorFinishV; // Устанавливаем скорость фишиша для продолжения движения
+            if (out.isDone) out.pwr = rampLineFollowCrossIntersection2SensorAfterDistV; // Устанавливаем скорость фишиша для продолжения движения
             const error = refLeftLS - refRightLS; // Ошибка регулирования
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
             chassis.regulatorSteering(u, out.pwr); // Команда моторам
@@ -201,7 +201,7 @@ namespace motions {
             control.pauseUntilTimeUs(currTime, delayDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(actionAfterMotion, rampLineFollowCrossIntersection2SensorFinishV); // Действие после алгоритма движения
+        motions.actionAfterLineMotion(actionAfterMotion, rampLineFollowCrossIntersection2SensorAfterDistV); // Действие после алгоритма движения
         // А если rampLineFollowCrossIntersection2SensorFinishV установленна как 0?
     }
 

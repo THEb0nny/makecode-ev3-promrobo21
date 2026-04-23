@@ -149,4 +149,15 @@ namespace params {
         };
     }
 
+    // Интерфейс перадачи параметров для алгоритма движения по линии с ускорениями и замедлениями до перекрёстка
+    export interface RampLineFollowToCross {
+        vStart?: number;
+        vMax?: number;
+        vAfterDist?: number;
+        Kp?: number;
+        Ki?: number;
+        Kd?: number;
+        Kf?: number;
+    }
+
 }
