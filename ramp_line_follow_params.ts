@@ -39,7 +39,7 @@ namespace params {
     }
 
     /**
-     * Пустые праметры для алгоритма с регулятором.
+     * Пустые параметры для алгоритма с регулятором.
      */
     //% blockId="RampLineFollowEmptyParams"
     //% block="empty"
@@ -158,6 +158,19 @@ namespace params {
         Ki?: number;
         Kd?: number;
         Kf?: number;
+    }
+
+    /**
+     * Пустые параметры для алгоритма с регулятором.
+     */
+    //% blockId="RampLineFollowToCrossEmptyParams"
+    //% block="empty"
+    //% block.loc.ru="пусто"
+    //% inlineInputMode="inline"
+    //% weight="89"
+    //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
+    export function rampLineFollowToCrossEmptyParams(): RampLineFollow {
+        return null;
     }
 
 }

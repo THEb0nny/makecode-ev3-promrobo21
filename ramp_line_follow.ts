@@ -140,7 +140,7 @@ namespace motions {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="RampLineFollowEmptyParams"
+    //% params.shadow="RampLineFollowToCrossEmptyParams"
     //% weight="99"
     //% subcategory="По линии"
     //% group="Движение по линии до перекрёстка c фазами"
@@ -153,7 +153,6 @@ namespace motions {
             chassis.stop();
             return;
         }
-        // Проверка условия, что params.finishSpeed или rampLineFollowCrossIntersection2SensorFinishV 0, робот не будет ехать по линии до перекрёстка
         
         if (params) { // Если были переданы параметры
             if (params.vStart >= 0) rampLineFollowCrossIntersection2SensorStartV = Math.abs(params.vStart);
@@ -163,6 +162,10 @@ namespace motions {
             if (params.Ki >= 0) rampLineFollowCrossIntersection2SensorKi = Math.abs(params.Ki);
             if (params.Kd >= 0) rampLineFollowCrossIntersection2SensorKd = Math.abs(params.Kd);
             if (params.Kf >= 0) rampLineFollowCrossIntersection2SensorKf = Math.abs(params.Kf);
+        }
+        if (rampLineFollowCrossIntersection2SensorAfterDistV == 0) {
+            console.log("Warning: vAfterDist is 0. vMax will be used to continue motion until the cross intersection.");
+            rampLineFollowCrossIntersection2SensorAfterDistV = rampLineFollowCrossIntersection2SensorMaxV;
         }
 
         pidLineFollow.setGains(rampLineFollowCrossIntersection2SensorKp, rampLineFollowCrossIntersection2SensorKi, rampLineFollowCrossIntersection2SensorKd); // Установка коэффицентов ПИД регулятора
@@ -202,7 +205,6 @@ namespace motions {
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion(actionAfterMotion, rampLineFollowCrossIntersection2SensorAfterDistV); // Действие после алгоритма движения
-        // А если rampLineFollowCrossIntersection2SensorFinishV установленна как 0?
     }
 
 }
