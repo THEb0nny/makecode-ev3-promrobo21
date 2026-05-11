@@ -77,8 +77,7 @@ namespace arrays {
         numbers.sort((a, b) => a - b); // Сортируем массив для более эффективного подсчета частоты
         let maxCount = 0, currentCount = 1;
         let currentNum = numbers[0], mostFrequentNum = numbers[0];
-        // Проходим по отсортированному массиву, подсчитывая частоту каждого числа
-        for (let i = 1; i < numbers.length; i++) {
+        for (let i = 1; i < numbers.length; i++) { // Проходим по отсортированному массиву, подсчитывая частоту каждого числа
             if (numbers[i] === currentNum) currentCount++;
             else {
                 if (currentCount > maxCount) {
