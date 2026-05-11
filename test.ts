@@ -58,7 +58,7 @@ function CheckColor(time: number, debug: boolean): number {
         colorSamples.push(color);
         control.pauseUntilTimeMs(currTime, 10);
     }
-    const colorResult = custom.mostFrequentNumber(colorSamples);
+    const colorResult = arrays.mode(colorSamples);
     return colorResult;
 }
 
@@ -158,7 +158,7 @@ function Main() {
 
         if (i < 3) chassis.spinTurn(-90, 60);
     }
-    leftColorZone = custom.mostFrequentNumber(leftColorZoneArray.filter(item => item !== 0));
+    leftColorZone = arrays.mode(leftColorZoneArray.filter(item => item !== 0));
 
     chassis.spinTurn(90, 60);
     motions.lineFollowToSideIntersection(SideIntersection.RightInside, AfterLineMotion.Rolling, { v: 50, Kp: 0.6 });
@@ -188,7 +188,7 @@ function Main() {
 
         if (i < 3) chassis.spinTurn(90, 60);
     }
-    rightColorZone = custom.mostFrequentNumber(rightColorZoneArray.filter(item => item !== 0));
+    rightColorZone = arrays.mode(rightColorZoneArray.filter(item => item !== 0));
 
     brick.printString(`lColorZoneArr: ${leftColorZoneArray.join(", ")}`, 1);
     brick.printString(`rColorZoneArr: ${rightColorZoneArray.join(", ")}`, 2);
