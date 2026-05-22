@@ -101,7 +101,7 @@ namespace navigation {
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% debug.shadow="toggleOnOff"
-    //% params.shadow="LineFollowEmptyParams"
+    //% params.shadow="NavLineFollowEmptyParams"
     //% weight="66"
     //% group="Алгоритм движения"
     export function followLineToNode(algorithm: GraphTraversal, newPos: number, params?: params.NavLineFollow, debug: boolean = false) {
