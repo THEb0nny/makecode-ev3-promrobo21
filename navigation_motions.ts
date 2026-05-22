@@ -16,8 +16,8 @@ namespace navigation {
      * @param v скорость поворота, eg: 50
      */
     //% blockId="ChassisDirectionSpinTurn"
-    //% block="chassis spin turn direction $inputDirection at $v\\% relative to center wheel axis|debug $debug"
-    //% block.loc.ru="поворот шасси на направление $inputDirection с $v\\% относительно центра оси колёс|debug $debug"
+    //% block="chassis spin turn direction $inputDirection at $v\\% relative to center wheel axis||debug $debug"
+    //% block.loc.ru="поворот шасси на направление $inputDirection с $v\\% относительно центра оси колёс||debug $debug"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
     //% v.shadow="motorSpeedPicker"
