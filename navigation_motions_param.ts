@@ -20,7 +20,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры движения по линии"
-    export function navLineFollowEmptyParams(): LineFollow {
+    export function navLineFollowEmptyParams(): NavLineFollow {
         return null;
     }
 
