@@ -169,7 +169,7 @@ namespace params {
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Параметры движения по линии двумя датчиками c ускорениями/замедлениями"
-    export function rampLineFollowToCrossEmptyParams(): RampLineFollow {
+    export function rampLineFollowToCrossEmptyParams(): RampLineFollowToCross {
         return null;
     }
 
