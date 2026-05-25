@@ -16,7 +16,7 @@ namespace navigation {
      * @param v скорость поворота, eg: 50
      */
     //% blockId="ChassisDirectionSpinTurn"
-    //% block="chassis spin turn direction $inputDirection at $v\\% relative to center wheel axis||debug $debug"
+    //% block="chassis spin turn direction $inputDirection at $v\\%||debug $debug"
     //% block.loc.ru="поворот шасси на направление $inputDirection с $v\\% относительно центра оси колёс||debug $debug"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
@@ -26,55 +26,56 @@ namespace navigation {
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
     export function directionSpinTurn(inputDirection: number, v: number, debug: boolean = false) {
-        if (inputDirection <= -1) {
+        if (inputDirection < 0) {
             console.log(`Warning: inputDirection (${inputDirection}) not valid. Return from function!`);
             return; // Не валидное значение направления
         }
         const currentDirection = getCurrentDirection(); // Получить направление
-        const delta = (inputDirection - currentDirection + 4) % 4; // Считаем разницу направлений в цикле (0..3)
-        const turnSteps = delta > 2 ? delta - 4 : delta; // Преобразуем в шаги поворота (-1, 0, 1, 2) для кратчайшего вращения
-        const turnDeg = -turnSteps * 90; // Получаем угол поворота
+        const delta = (inputDirection - currentDirection + 360) % 360; // Считаем разницу направлений
+        const turnDeg = delta > 180 ? 360 - delta : -delta; // Преобразуем в шаги поворота для кратчайшего вращения
         if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}, v: ${v}`);
         if (turnDeg != 0) chassis.spinTurn(turnDeg, v); // Поворот относительно центра шасси
         setCurrentDirection(inputDirection); // Установить новое направление
     }
 
+    /**
+     * Поворот шасси с плавным разгоном (Ramp) на абсолютное направление.
+     */
     export function directionRampSpinTurn(inputDirection: number, vMin: number, vMax: number, accelDeg?: number, decelDeg?: number, timeOut?: number, debug: boolean = false) {
-        if (inputDirection <= -1) {
-            console.log(`Warning: inputDirection (${inputDirection}) not valid.`);
+        if (inputDirection < 0) {
+            console.log(`Warning: inputDirection (${inputDirection}) not valid. Return from function!`);
             return; // Не валидное значение направления
         }
         const currentDirection = getCurrentDirection(); // Получить направление
-        const delta = (inputDirection - currentDirection + 4) % 4; // Считаем разницу направлений в цикле (0..3)
-        const turnSteps = delta > 2 ? delta - 4 : delta; // Преобразуем в шаги поворота (-1, 0, 1, 2) для кратчайшего вращения
-        const turnDeg = -turnSteps * 90; // Получаем угол поворота
-        if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}, vMin: ${vMin}, vMax: ${vMax}`);
+        const delta = (inputDirection - currentDirection + 360) % 360; // Считаем разницу направлений
+        const turnDeg = delta > 180 ? 360 - delta : -delta; // Преобразуем в шаги поворота для кратчайшего вращения
+        if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}°, vMin: ${vMin}, vMax: ${vMax}`);
         if (turnDeg != 0) chassis.rampSpinTurn(turnDeg, vMin, vMax); // Поворот относительно центра шасси
         setCurrentDirection(inputDirection); // Установить новое направление
     }
 
     /**
-     * Поворот робота на относительное количество четвертей (90°).
+     * Поворот робота на относительное количество градусов.
      * Положительное значение - поворот направо (по часовой), отрицательное - налево (против часовой).
-     * @param quarterTurns количество четвертей поворота (-4..4), напр: 1 = +90°, -1 = -90°, 2 = +180°, 3 = +270°, 4 = +360°, eg: 1
+     * @param relativeDegrees на сколько градусов повернуть , например: +90°, -90°, +180°, +270°, +360°, eg: 90
      * @param v скорость поворота, eg: 60
      * @param debug отладочный вывод, eg: false
      */
-    export function relativeSpinTurn(quarterTurns: number, v: number, debug: boolean = false) {
+    export function relativeSpinTurn(relativeDegrees: number, v: number, debug: boolean = false) {
         const currentDirection = getCurrentDirection(); // Получаем текущее направление
-        const newDirection = (currentDirection + quarterTurns + 8) % 4; // +8 для корректной обработки отрицательных значений
-        const turnDeg = -quarterTurns * 90; // Угол поворота (знак как в directionSpinTurn)
-        if (debug) console.log(`relativeSpinTurn: ${quarterTurns}q (${turnDeg}°), currDir: ${currentDirection} → newDir: ${newDirection}, v: ${v}`);
-        chassis.spinTurn(turnDeg, v); // Выполняем поворот
+        const newDirection = (currentDirection + relativeDegrees + 720) % 360; // +720 для корректной обработки отрицательных значений
+        const turnDeg = -relativeDegrees; // Угол поворота (знак как в directionSpinTurn)
+        if (debug) console.log(`relativeSpinTurn: ${relativeDegrees}°, currDir: ${currentDirection} → newDir: ${newDirection}, v: ${v}`);
+        if (turnDeg != 0) chassis.spinTurn(turnDeg, v); // Выполняем поворот
         setCurrentDirection(newDirection); // Обновляем текущее направление
     }
 
-    export function relativeRampSpinTurn(quarterTurns: number, vMin: number, vMax: number, accelDeg?: number, decelDeg?: number, timeOut?: number, debug: boolean = false) {
+    export function relativeRampSpinTurn(relativeDegrees: number, vMin: number, vMax: number, accelDeg?: number, decelDeg?: number, timeOut?: number, debug: boolean = false) {
         const currentDirection = getCurrentDirection(); // Получаем текущее направление
-        const newDirection = (currentDirection + quarterTurns + 8) % 4; // +8 для корректной обработки отрицательных значений
-        const turnDeg = -quarterTurns * 90; // Угол поворота (знак как в directionSpinTurn)
-        if (debug) console.log(`relativeRampSpinTurn: ${quarterTurns}q (${turnDeg}°), currDir: ${currentDirection} → newDir: ${newDirection}, vMin: ${vMin}, vMax: ${vMax}`);
-        chassis.rampSpinTurn(turnDeg, vMin, vMax); // Выполняем поворот
+        const newDirection = (currentDirection + relativeDegrees + 720) % 360; // +720 для корректной обработки отрицательных значений
+        const turnDeg = -relativeDegrees; // Угол поворота (знак как в directionSpinTurn)
+        if (debug) console.log(`relativeSpinTurn: ${relativeDegrees}°, currDir: ${currentDirection} → newDir: ${newDirection}, vMin: ${vMin}, vMax: ${vMax}`);
+        if (turnDeg != 0) chassis.rampSpinTurn(turnDeg, vMin, vMax); // Выполняем поворот
         setCurrentDirection(newDirection); // Обновляем текущее направление
     }
 
@@ -112,12 +113,8 @@ namespace navigation {
         else if (algorithm == GraphTraversal.Dijkstra) path = algorithmDijkstra(getCurrentPosition(), newPos); // Алгоритм Дейкрсты
         else return;
         if (debug) console.log(`Target path: ${path.join(', ')}`); // Отладка, вывод пути в консоль
-        for (let i = 0; i < path.length - 1; i++) {
-            directionSpinTurn(getDirection(path[i], path[i + 1]), lineFollowByPathTurnV); // Поворот
-            motions.lineFollowToCrossIntersection(AfterLineMotion.SmoothRolling, { v: lineFollowByPathMoveMaxV, Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf }); // Движение до перекрёстка
-            setCurrentPosition(path[i + 1]); // Записываем новую позицию в глобальную переменную
-        }
-        setCurrentPosition(newPos); // Записываем новую позицию в глобальную переменную
+        if (path.length < 2) return;
+        followLineByPath(path, AfterLineMotion.SmoothRolling, params, debug); // Передаем управление в более умную функцию followLineByPath
     }
 
     /**
@@ -137,37 +134,52 @@ namespace navigation {
     export function followLineByPath(path: number[], actionAfterMotion: AfterLineMotion, params?: params.NavLineFollow, debug: boolean = false) {
         if (params) processingFollowLineByPathInputParams(params); // Если были переданы параметры
         if (!path || path.length < 2) return; // Если был передан пустой путь или только с начальной точкой
-        for (let i = 0; i < path.length - 1; i++) {
-            const currentDirection = getCurrentDirection();
-            const newDirection = getDirection(path[i], path[i + 1]);
+        
+        for (let i = 0; i < path.length - 1; i++) { // Основной цикл обхода пути: идем по ребрам графа от i к i + 1
+            const currentDirection = getCurrentDirection(); // Где робот сейчас
+            const newDirection = getDirection(path[i], path[i + 1]); // Куда нужно ехать на текущем шаге
             let afterMotion: AfterLineMotion;
-            if (i === path.length - 2) afterMotion = actionAfterMotion; // Последний шаг
-            else {
+            // Определение логики проезда перекрестка
+            if (i === path.length - 2) { // Если это последний сегмент пути, используем действие, заданное пользователем (обычно остановка)
+                afterMotion = actionAfterMotion;
+            } else { // Если путь продолжается, смотрим направление следующего сегмента
                 const nextDirection = getDirection(path[i + 1], path[i + 2]);
-                if (newDirection == nextDirection) afterMotion = AfterLineMotion.LineContinueRoll; // Продолжаем в том же направлении
-                else afterMotion = AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
+                if (newDirection == nextDirection) { // Если путь продолжается, смотрим направление следующего сегмента
+                    afterMotion = AfterLineMotion.LineContinueRoll; // Продолжаем в том же направлении
+                } else { // Если впереди поворот, притормаживаем (SmoothRolling), чтобы точнее спозиционироваться на узле
+                    afterMotion = AfterLineMotion.SmoothRolling; // Определяем тип движения после завершения
+                }
             }
+
+            // Проверка необходимости поворота
             const directionChanged = currentDirection != newDirection;
-            if (directionChanged) directionSpinTurn(newDirection, lineFollowByPathTurnV, debug); // Поворот, если новое направление
+            if (directionChanged) { // Если направление движения изменилось, выполняем поворот на месте перед началом движения
+                directionSpinTurn(newDirection, lineFollowByPathTurnV, debug);
+            }
+
             if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
-            if (i == 0 || directionChanged) {
-                if (lineFollowByPathAccelStartDist > 0) {
+            
+            // Выполнение движения по линии
+            if (i == 0 || directionChanged) { // Если это старт пути или мы только что повернули
+                if (lineFollowByPathAccelStartDist > 0) { // Используем разгон (Ramp), если задана дистанция
                     motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
                         vStart: lineFollowByPathMoveStartV, vMax: lineFollowByPathMoveMaxV,
                         Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                     }); // Движение на расстояние для разгона
                 }
+                // Основная фаза движения до перекрестка после разгона
                 motions.lineFollowToCrossIntersection(afterMotion, {
                     v: lineFollowByPathMoveMaxV,
                     Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                 }); // Движение до перекрёстка
-            } else {
+            } else {  // Если мы уже едем прямо и скорость сбрасывать не нужно — просто продолжаем ехать до следующего перекрестка
                 motions.lineFollowToCrossIntersection(afterMotion, {
                     v: lineFollowByPathMoveMaxV,
                     Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                 }); // Движение до перекрёстка
             }
-            setCurrentPosition(path[i + 1]); // Записываем новую позицию в глобальную переменную
+
+            setCurrentPosition(path[i + 1]); // Записываем новую позицию в глобальную переменную после успешного доезда фиксируем, что робот теперь находится в новом узле
         }
     }
 
