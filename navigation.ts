@@ -4,24 +4,26 @@ namespace navigation {
     export interface NavPath {
         from: number
         to: number
-        direction: NavDirection
+        direction: number
         weight: number
     }
 
-    const directionMap: { [key: number]: NavDirection[] } = {
-        [NavDirection.RightLeft]: [NavDirection.Right, NavDirection.Left],
-        [NavDirection.LeftRight]: [NavDirection.Left, NavDirection.Right],
-        [NavDirection.UpDown]: [NavDirection.Up, NavDirection.Down],
-        [NavDirection.DownUp]: [NavDirection.Down, NavDirection.Up]
+    const directionMap: { [key: number]: number[] } = {
+        [NavDirection.UpDown]: [90, 270], // Туда - вверх, обратно - вниз
+        [NavDirection.DownUp]: [270, 90], // Туда - вниз, обратно - вверх
+        [NavDirection.RightLeft]: [0, 180], // Туда - вправо, обратно - влево
+        [NavDirection.LeftRight]: [180, 0], // Туда - влево, обратно - вправо
+        [NavDirection.UpRightDownLeft]: [45, 225], // Диагональ с 45 до 225 и обратно
+        [NavDirection.UpLeftDownRight]: [135, 315] // Дионональ с 135 до 315 и обратно
     };
 
-    let nodesCount = 0; // Количество узлов (вершин)
+    let nodesCount: number = 0; // Количество узлов (вершин)
     
-    let navigationMatrix: number[][] = []; // Матрица смежности в виде навигации: -1 - пути нет, 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
+    let navigationMatrix: number[][] = []; // Матрица смежности в виде направлений: -1 - пути нет
     let weightMatrix: number[][] = []; // Матрица весов путей
 
-    let currentPosition = 0; // Текущая позиция на узле (местоположение)
-    let currentDirection: NavDirection = NavDirection.Right; // Направление робота для навигации
+    let currentPosition: number = 0; // Текущая позиция на узле (местоположение)
+    let currentDirection: number = 0; // Направление робота для навигации
 
     // Вспомогательная функция, которая проверяет, чтобы массив-матрица была квадратной
     function isSquareMatrix(matrix: number[][], expectedSize: number): boolean {
@@ -109,8 +111,8 @@ namespace navigation {
     }
 
     /**
-     * Установить текущее направление на узловой точке.
-     * @param newDirection новое направление, где 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз, eg: 0
+     * Установить текущее направление на узловой точке в градусах.
+     * @param newDirection новое направление в градусах (0-360), eg: 90
      */
     //% blockId="NavigationSetCurrentDirection"
     //% block="set current direction $newDirection"
@@ -119,11 +121,12 @@ namespace navigation {
     //% weight="95"
     //% group="Свойства"
     export function setCurrentDirection(newDirection: number) {
-        currentDirection = newDirection;
+        // Приводим угол к диапазону 0-359
+        currentDirection = ((newDirection % 360) + 360) % 360;
     }
 
     /**
-     * Получить текущее направление, на узловой точке.
+     * Получить текущее направление в градусах, на узловой точке.
      */
     //% blockId="NavigationGetCurrentDirection"
     //% block="get current direction"
@@ -209,6 +212,17 @@ namespace navigation {
     export function getWeightMatrix(): number[][] {
         return weightMatrix;
     }
+
+    /**
+     * Блок-выбиралка для направлений.
+     */
+    //% blockId="nav_direction_picker"
+    //% block="%direction"
+    //% blockHidden=true
+    //% shim=TD_ID
+    export function _navDirectionPicker(direction: NavDirection): number {
+        return direction;
+    }
     
     /**
      * Создать ребро графа.
@@ -218,8 +232,9 @@ namespace navigation {
     //% block.loc.ru="создать ребро из $fromNode в $toNode направление $direction вес $weight"
     //% inlineInputMode="inline"
     //% weight="89"
+    //% direction.shadow="nav_direction_picker"
     //% group="Граф"
-    export function createPath(fromNode: number, toNode: number, direction: NavDirection, weight: number): NavPath {
+    export function createPath(fromNode: number, toNode: number, direction: number, weight: number): NavPath {
         return {
             from: fromNode,
             to: toNode,
@@ -229,7 +244,7 @@ namespace navigation {
     }
 
     /**
-     * Построить граф.
+     * Построить граф с помощью рёбер.
      */
     //% blockId="NavigationBuildGraph"
     //% block="build graph $paths"
@@ -251,25 +266,31 @@ namespace navigation {
                 console.log(`Self-loop path ${path.from}`);
                 continue;
             }
-            if (path.from < 0 || path.from >= nodesCount) continue;
-            if (path.to < 0 || path.to >= nodesCount) continue;
-            if (navigationMatrix[path.from][path.to] != -1) {
-                console.log(`Duplicate path ${path.from}, ${path.to}`);
+            if (path.from < 0 || path.from >= nodesCount || path.to < 0 || path.to >= nodesCount) {  // Проверки на выход за границы...
+                console.log(`FATAL: Node index out of range (${path.from} or ${path.to})`);
+                continue;
             }
-            if (navigationMatrix[path.to][path.from] != -1) {
-                console.log(`Duplicate reverse path ${path.to}, ${path.from}`);
+            if (navigationMatrix[path.from][path.to] != -1) { // Проверка дубликатов пути
+                console.log(`Duplicate path ${path.from}, ${path.to}`);
             }
 
             const pair = directionMap[path.direction];
 
-            // Направление from → to
-            navigationMatrix[path.from][path.to] = pair ? pair[0] : path.direction;
-            weightMatrix[path.from][path.to] = path.weight;
-
-            // Направление to → from (если дорога двусторонняя)
             if (pair) {
-                navigationMatrix[path.to][path.from] = pair[1];
+                // Если путь двусторонний, проверяем и обратное направление
+                if (navigationMatrix[path.to][path.from] != -1) console.log(`Duplicate reverse path ${path.to} -> ${path.from}`);
+                navigationMatrix[path.from][path.to] = pair[0]; // Направление from → to
+                navigationMatrix[path.to][path.from] = pair[1]; // Направление to → from
+                weightMatrix[path.from][path.to] = path.weight;
                 weightMatrix[path.to][path.from] = path.weight;
+            } else if (path.direction >= 0 && path.direction <= 360) {
+                // Если в карте нет, значит это одиночный угол (0, 90, 180, 270 или любой другой)
+                path.direction = path.direction === 360 ? 0 : path.direction; // Если ввели 360, записываем как 0
+                navigationMatrix[path.from][path.to] = path.direction;
+                weightMatrix[path.from][path.to] = path.weight;
+            } else { // Сообщение для "особо одаренных"
+                console.log(`ERROR: Invalid direction ${path.direction} on path ${path.from}->${path.to}. Use 0-360 or standard pairs.`);
+                // control.fail("Invalid Navigation Angle") // Чтобы программа вообще зависла с ошибкой на экране
             }
         }
     }
