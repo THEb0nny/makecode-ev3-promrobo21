@@ -252,3 +252,15 @@ const enum NavDirection {
     //% block.loc.ru="вверх/влево-вниз/вправо (135°/315°)"
     UpLeftDownRight = 135315,
 }
+
+const enum NodeType {
+    //% block="X-образный"
+    //% block.loc.ru="X-образный"
+    Cross = 0,
+    //% block="T-образный (left)"
+    //% block.loc.ru="T-образный (лево)"
+    Left = 1,
+    //% block="T-образный (right)"
+    //% block.loc.ru="T-образный (право)"
+    Right = 2
+}

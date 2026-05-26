@@ -158,25 +158,33 @@ namespace navigation {
             }
 
             if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
+
+            const nodeType = getNodeTypeMatrix()[path[i]][path[i + 1]]; // Тип узла
             
             // Выполнение движения по линии
-            if (i == 0 || directionChanged) { // Если это старт пути или мы только что повернули
-                if (lineFollowByPathAccelStartDist > 0) { // Используем разгон (Ramp), если задана дистанция
-                    motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
-                        vStart: lineFollowByPathMoveStartV, vMax: lineFollowByPathMoveMaxV,
-                        Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
-                    }); // Движение на расстояние для разгона
-                }
-                // Основная фаза движения до перекрестка после разгона
+            if ((i == 0 || directionChanged) && lineFollowByPathAccelStartDist > 0) { // Если это старт пути или мы только что повернули
+                motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
+                    vStart: lineFollowByPathMoveStartV, vMax: lineFollowByPathMoveMaxV,
+                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
+                }); // Движение на расстояние для разгона
+            }
+
+            // Основное движение до узла
+            if (nodeType == NodeType.Left) {
+                motions.lineFollowToSideIntersection(SideIntersection.LeftInside, afterMotion, {
+                    v: lineFollowByPathMoveMaxV,
+                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
+                });
+            } else if (nodeType == NodeType.Right) {
+                motions.lineFollowToSideIntersection(SideIntersection.RightInside, afterMotion, {
+                    v: lineFollowByPathMoveMaxV,
+                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
+                });
+            } else {
                 motions.lineFollowToCrossIntersection(afterMotion, {
                     v: lineFollowByPathMoveMaxV,
                     Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
-                }); // Движение до перекрёстка
-            } else {  // Если мы уже едем прямо и скорость сбрасывать не нужно — просто продолжаем ехать до следующего перекрестка
-                motions.lineFollowToCrossIntersection(afterMotion, {
-                    v: lineFollowByPathMoveMaxV,
-                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
-                }); // Движение до перекрёстка
+                });
             }
 
             setCurrentPosition(path[i + 1]); // Записываем новую позицию в глобальную переменную после успешного доезда фиксируем, что робот теперь находится в новом узле

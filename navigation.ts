@@ -5,8 +5,19 @@ namespace navigation {
         from: number
         to: number
         direction: number
-        weight: number
+        weight: number,
+        nodeType?: number
     }
+
+
+    let nodesCount: number = 0; // Количество узлов (вершин)
+    
+    let navigationMatrix: number[][] = []; // Матрица смежности в виде направлений: -1 - пути нет
+    let weightMatrix: number[][] = []; // Матрица весов путей
+    let nodeTypeMatrix: number[][] = []; // Матрица типов узлов
+
+    let currentPosition: number = 0; // Текущая позиция на узле (местоположение)
+    let currentDirection: number = 0; // Направление робота для навигации
 
     const directionMap: { [key: number]: number[] } = {
         [NavDirection.UpDown]: [90, 270], // Туда - вверх, обратно - вниз
@@ -16,14 +27,6 @@ namespace navigation {
         [NavDirection.UpRightDownLeft]: [45, 225], // Диагональ с 45 до 225 и обратно
         [NavDirection.UpLeftDownRight]: [135, 315] // Дионональ с 135 до 315 и обратно
     };
-
-    let nodesCount: number = 0; // Количество узлов (вершин)
-    
-    let navigationMatrix: number[][] = []; // Матрица смежности в виде направлений: -1 - пути нет
-    let weightMatrix: number[][] = []; // Матрица весов путей
-
-    let currentPosition: number = 0; // Текущая позиция на узле (местоположение)
-    let currentDirection: number = 0; // Направление робота для навигации
 
     // Вспомогательная функция, которая проверяет, чтобы массив-матрица была квадратной
     function isSquareMatrix(matrix: number[][], expectedSize: number): boolean {
@@ -59,13 +62,15 @@ namespace navigation {
     export function setNodesCount(newNodesCount: number) {
         nodesCount = newNodesCount;
         // Создаём сразу нужный размер
-        navigationMatrix = [], weightMatrix = [];
+        navigationMatrix = [], weightMatrix = [], nodeTypeMatrix = [];
         for (let i = 0; i < nodesCount; i++) {
             navigationMatrix[i] = [];
             weightMatrix[i] = [];
+            nodeTypeMatrix[i] = [];
             for (let j = 0; j < nodesCount; j++) {
                 navigationMatrix[i][j] = -1;
                 weightMatrix[i][j] = -1;
+                nodeTypeMatrix[i][j] = NodeType.Cross; // По умолчанию считаем все перекрестки обычными
             }
         }
     }
@@ -213,6 +218,10 @@ namespace navigation {
         return weightMatrix;
     }
 
+    export function getNodeTypeMatrix(): number[][] {
+        return nodeTypeMatrix;
+    }
+
     /**
      * Блок-выбиралка для направлений.
      */
@@ -234,12 +243,13 @@ namespace navigation {
     //% weight="89"
     //% direction.shadow="nav_direction_picker"
     //% group="Граф"
-    export function createPath(fromNode: number, toNode: number, direction: number, weight: number): NavPath {
+    export function createPath(fromNode: number, toNode: number, direction: number, weight: number, nodeType: NodeType = NodeType.Cross): NavPath {
         return {
             from: fromNode,
             to: toNode,
             direction: direction,
-            weight: weight
+            weight: weight,
+            nodeType: nodeType
         }
     }
 
@@ -283,11 +293,15 @@ namespace navigation {
                 navigationMatrix[path.to][path.from] = pair[1]; // Направление to → from
                 weightMatrix[path.from][path.to] = path.weight;
                 weightMatrix[path.to][path.from] = path.weight;
+                // Записываем тип узла для обоих направлений двустороннего пути
+                nodeTypeMatrix[path.from][path.to] = path.nodeType;
+                nodeTypeMatrix[path.to][path.from] = path.nodeType;
             } else if (path.direction >= 0 && path.direction <= 360) {
                 // Если в карте нет, значит это одиночный угол (0, 90, 180, 270 или любой другой)
                 path.direction = path.direction === 360 ? 0 : path.direction; // Если ввели 360, записываем как 0
                 navigationMatrix[path.from][path.to] = path.direction;
                 weightMatrix[path.from][path.to] = path.weight;
+                nodeTypeMatrix[path.from][path.to] = path.nodeType;
             } else { // Сообщение для "особо одаренных"
                 console.log(`ERROR: Invalid direction ${path.direction} on path ${path.from}->${path.to}. Use 0-360 or standard pairs.`);
                 // control.fail("Invalid Navigation Angle") // Чтобы программа вообще зависла с ошибкой на экране
