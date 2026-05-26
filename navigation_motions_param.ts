@@ -9,6 +9,10 @@ namespace params {
         Ki?: number,
         Kd?: number,
         Kf?: number,
+        KpSide?: number,
+        KiSide?: number,
+        KdSide?: number,
+        KfSide?: number,
     }
 
     /**

@@ -4,10 +4,16 @@ namespace navigation {
     let lineFollowByPathMoveMaxV = 60; // Переменная для хранения максимальной скорости при движении по линии двумя датчиками
     let lineFollowByPathTurnV = 60; // Переменная для хранения скорости при завершени при движении по линии двумя датчиками
     let lineFollowByPathAccelStartDist = 0; // Переменная для хранения дистанции плавного ускорения при движения по линии двумя датчиками
+    
     let lineFollowByPathKp = 0.5; // Переменная для хранения коэффицента пропорционального регулятора при движения по линии двумя датчиками
     let lineFollowByPathKi = 0; // Переменная для хранения коэффицента интегрального регулятора при движения по линии двумя датчиками
     let lineFollowByPathKd = 0; // Переменная для хранения коэффицента дифференциального регулятора при движения по линии двумя датчиками
     let lineFollowByPathKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
+
+    let lineFollowByPathKpSide = 0.7;
+    let lineFollowByPathKiSide = 0;
+    let lineFollowByPathKdSide = 0;
+    let lineFollowByPathKfSide = 0;
 
     /**
      * Синхронизированный поворот шасси относительно центра на нужное направление с определенной скоростью.
@@ -89,6 +95,10 @@ namespace navigation {
         if (params.Ki >= 0) lineFollowByPathKi = Math.abs(params.Ki);
         if (params.Kd >= 0) lineFollowByPathKd = Math.abs(params.Kd);
         if (params.Kf >= 0) lineFollowByPathKf = Math.abs(params.Kf);
+        if (params.KpSide >= 0) lineFollowByPathKpSide = params.KpSide;
+        if (params.KiSide >= 0) lineFollowByPathKiSide = params.KiSide;
+        if (params.KdSide >= 0) lineFollowByPathKdSide = params.KdSide;
+        if (params.KfSide >= 0) lineFollowByPathKfSide = params.KfSide;
     }
 
     /**
@@ -173,12 +183,12 @@ namespace navigation {
             if (nodeType == NodeType.Left) {
                 motions.lineFollowToSideIntersection(SideIntersection.LeftInside, afterMotion, {
                     v: lineFollowByPathMoveMaxV,
-                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
+                    Kp: lineFollowByPathKpSide, Ki: lineFollowByPathKiSide, Kd: lineFollowByPathKdSide, Kf: lineFollowByPathKfSide
                 });
             } else if (nodeType == NodeType.Right) {
                 motions.lineFollowToSideIntersection(SideIntersection.RightInside, afterMotion, {
                     v: lineFollowByPathMoveMaxV,
-                    Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
+                    Kp: lineFollowByPathKpSide, Ki: lineFollowByPathKiSide, Kd: lineFollowByPathKdSide, Kf: lineFollowByPathKfSide
                 });
             } else {
                 motions.lineFollowToCrossIntersection(afterMotion, {
