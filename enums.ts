@@ -148,6 +148,13 @@ const enum FollowLineSensor {
     RightOutside,
 }
 
+// Перечисление о типе движения по линии
+const enum LineFollowMode {
+    TwoSensors,
+    LeftSensor,
+    RightSensor,
+}
+
 // Перечисление о поворотах в сторону
 const enum TurnSide {
     //% block="leftward"

@@ -204,7 +204,7 @@ namespace motions {
             control.pauseUntilTimeUs(currTime, delayDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion(actionAfterMotion, rampLineFollowCrossIntersection2SensorAfterDistV); // Действие после алгоритма движения
+        motions.actionAfterLineMotion({ actionAfterMotion, v: rampLineFollowCrossIntersection2SensorAfterDistV }); // Действие после алгоритма движения
     }
 
 }
