@@ -62,7 +62,8 @@ namespace motions {
     //% weight="99" blockGap="8"
     //% group="Свойства движения"
     export function setDistRollingAfterIntersection(dist: number) {
-        distRollingAfterIntersection = dist;
+        if (dist < 0) console.log("Warning: dist is negative, using absolute value.");
+        distRollingAfterIntersection = Math.abs(dist);
     }
 
     /**
@@ -90,7 +91,8 @@ namespace motions {
     //% group="Свойства движения"
     //% deprecated=true
     export function setDistRollingFromLineAfterIntersection(dist: number) {
-        distContinueRollFromLineAfterIntersection = dist;
+        if (dist < 0) console.log("Warning: dist is negative, using absolute value.");
+        distContinueRollFromLineAfterIntersection = Math.abs(dist);
     }
 
     /**
@@ -118,7 +120,8 @@ namespace motions {
     //% weight="89" blockGap="8"
     //% group="Свойства для датчиков"
     export function setLineRefThreshold(reflection: number) {
-        lineRefThreshold = reflection;
+        if (reflection < 0) console.log("Warning: reflection is negative, using absolute value.");
+        lineRefThreshold = Math.abs(reflection);
     }
 
     /**
@@ -145,7 +148,8 @@ namespace motions {
     //% weight="87" blockGap="8"
     //% group="Свойства для датчиков"
     export function setLineFollowRefThreshold(reflection: number) {
-        lineFollowRefThreshold = reflection;
+        if (reflection < 0) console.log("Warning: reflection is negative, using absolute value.");
+        lineFollowRefThreshold = Math.abs(reflection);
     }
 
     /**
@@ -172,7 +176,8 @@ namespace motions {
     //% weight="85" blockGap="8"
     //% group="Свойства для датчиков"
     export function setLineFollowSetPoint(reflectionSetPoint: number) {
-        lineFollowSetPoint = reflectionSetPoint;
+        if (reflectionSetPoint < 0) console.log("Warning: reflectionSetPoint is negative, using absolute value.");
+        lineFollowSetPoint = Math.abs(reflectionSetPoint);
     }
 
     /**
@@ -199,7 +204,8 @@ namespace motions {
     //% weight="79" blockGap="8"
     //% group="Свойства для датчиков"
     export function setLineFollowOneSensorConditionMaxErr(maxErr: number) {
-        lineFollowByOneSensorConditionMaxErr = maxErr;
+        if (maxErr < 0) console.log("Warning: maxErr is negative, using absolute value.");
+        lineFollowByOneSensorConditionMaxErr = Math.abs(maxErr);
     }
 
     /**
@@ -226,6 +232,7 @@ namespace motions {
     //% weight="99"
     //% group="Свойства"
     export function setLineFollowLoopDt(dt: number) {
+        if (dt < 0) console.log("Warning: dt is negative, using absolute value.");
         lineFollowLoopDt = Math.abs(dt);
     }
 
@@ -244,17 +251,17 @@ namespace motions {
 
     /**
      * Установить рулевое управление для поиска линии при движение по линии одним датчиком.
-     * @param newSteering получительное значение рулевого подворота к линии, eg: 25
+     * @param steering получительное значение рулевого подворота к линии, eg: 25
      */
     //% blockId="SetSteeringAtSearchLineForLineFollowOneSensor"
-    //% block="set steering $newSteering when searching line to follow line with one sensor"
-    //% block.loc.ru="установить рулевое управление $newSteering при поиске линии в движении по линии одним датчиком"
+    //% block="set steering $steering when searching line to follow line with one sensor"
+    //% block.loc.ru="установить рулевое управление $steering при поиске линии в движении по линии одним датчиком"
     //% inlineInputMode="inline"
     //% weight="89"
     //% group="Свойства движения"
-    export function setSteeringAtSearchLineForLineFollowOneSensor(newSteering: number) {
-        newSteering = Math.abs(newSteering);
-        steeringAtSearchLine = newSteering;
+    export function setSteeringAtSearchLineForLineFollowOneSensor(steering: number) {
+        if (steering < 0) console.log("Warning: steering is negative, using absolute value.");
+        steeringAtSearchLine = Math.abs(steering);
     }
 
     /**
