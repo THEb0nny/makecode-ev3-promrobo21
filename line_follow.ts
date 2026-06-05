@@ -53,17 +53,17 @@ namespace motions {
 
     /**
      * Установить дистанцию проезда после определения перекрёстка для прокатки в мм.
-     * @param dist дистанция прокатки после перекрёстка, eg: 50
+     * @param distance дистанция прокатки после перекрёстка, eg: 50
      */
     //% blockId="SetDistRollingAfterIntersection"
-    //% block="set distance $dist mm rolling after intersection"
-    //% block.loc.ru="установить дистанцию $dist мм прокатки после перекрёстка"
+    //% block="set distance $distance mm rolling after intersection"
+    //% block.loc.ru="установить дистанцию $distance мм прокатки после перекрёстка"
     //% inlineInputMode="inline"
     //% weight="99" blockGap="8"
     //% group="Свойства движения"
-    export function setDistRollingAfterIntersection(dist: number) {
-        if (dist < 0) console.log("Warning: dist is negative, using absolute value.");
-        distRollingAfterIntersection = Math.abs(dist);
+    export function setDistRollingAfterIntersection(distance: number) {
+        if (distance < 0) console.log("Warning: distance is negative, using absolute value.");
+        distRollingAfterIntersection = Math.abs(distance);
     }
 
     /**
@@ -81,18 +81,18 @@ namespace motions {
 
     /**
      * Установить дистанцию для прокатки на перекрёстке без торможения. Например, чтобы не определять повторно линию.
-     * @param dist дистанция прокатки после перекрёстка, eg: 20
+     * @param distance дистанция прокатки после перекрёстка, eg: 20
      */
     //% blockId="SetDistRollingFromLineAfterIntersection"
-    //% block="set distance $dist mm rolling exit an intersection"
-    //% block.loc.ru="установить дистанцию $dist мм прокатки съезда с перекрёстка"
+    //% block="set distance $distance mm rolling exit an intersection"
+    //% block.loc.ru="установить дистанцию $distance мм прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
     //% group="Свойства движения"
     //% deprecated=true
-    export function setDistRollingFromLineAfterIntersection(dist: number) {
-        if (dist < 0) console.log("Warning: dist is negative, using absolute value.");
-        distContinueRollFromLineAfterIntersection = Math.abs(dist);
+    export function setDistRollingFromLineAfterIntersection(distance: number) {
+        if (distance < 0) console.log("Warning: distance is negative, using absolute value.");
+        distContinueRollFromLineAfterIntersection = Math.abs(distance);
     }
 
     /**
