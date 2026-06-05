@@ -244,7 +244,7 @@ namespace motions {
 
     /**
      * Установить рулевое управление для поиска линии при движение по линии одним датчиком.
-     * @param newSteering получительное значение рулевого подворота к линии, eg: 15
+     * @param newSteering получительное значение рулевого подворота к линии, eg: 25
      */
     //% blockId="SetSteeringAtSearchLineForLineFollowOneSensor"
     //% block="set steering $newSteering when searching line to follow line with one sensor"
