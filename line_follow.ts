@@ -308,15 +308,8 @@ namespace motions {
         } else if (options.actionAfterMotion == AfterLineMotion.LineSmoothRolling) { // Прокатка с движением по линии и плавным торможением
             rampRollingLineFollowingByTwoSensors(motions.getDistRollingAfterIntersection(), options.v, MotionBraking.Hold);
         } else if (options.actionAfterMotion == AfterLineMotion.LineContinueRoll) { // Прокатка с движением по линии для съезда с линии с продолжением движения
-            if (options.lineFollowMode == LineFollowMode.TwoSensors) {
-                rollingLineFollowing(LineFollowMode.TwoSensors, motions.getDistRollingFromLineAfterIntersection(), options.v, AfterMotion.NoStop);
-            } else if (options.lineFollowMode == LineFollowMode.LeftSensor) {
-                rollingLineFollowing(LineFollowMode.LeftSensor, motions.getDistRollingFromLineAfterIntersection(), options.v, AfterMotion.NoStop);
-            } else if (options.lineFollowMode == LineFollowMode.RightSensor) {
-                rollingLineFollowing(LineFollowMode.RightSensor, motions.getDistRollingFromLineAfterIntersection(), options.v, AfterMotion.NoStop);
-            } else {
-                return;
-            }
+            if (options.lineFollowMode == undefined) return; // Ошибка!
+            rollingLineFollowing(options.lineFollowMode, motions.getDistRollingFromLineAfterIntersection(), options.v, AfterMotion.NoStop);
         } else if (options.actionAfterMotion == AfterLineMotion.HoldStop) { // Тормоз c удержанием
             chassis.stop(Braking.Hold);
         } else if (options.actionAfterMotion == AfterLineMotion.FloatStop) { // Тормоз с освобождением мотора, т.е. прокаткой по инерции
