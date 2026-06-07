@@ -33,7 +33,9 @@
         "motors_params.ts",
         "navigation_motions.ts",
         "navigation_motions_param.ts",
-        "statistics.ts"
+        "statistics.ts",
+        "line_follow_to_intersection.ts",
+        "line_follow_to_distance.ts"
     ],
     "testFiles": [
         "test.ts"

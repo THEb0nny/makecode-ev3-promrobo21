@@ -17,7 +17,7 @@ namespace motions {
     export let rampLineFollowCrossIntersection2SensorKf = 0; // Переменная для хранения коэффицента фильтра дифференциального регулятора при движения по линии двумя датчиками
 
     // Вспомогательная функция движения по линии на расстояние при обнаружении линии, для съезда с линии и последующего движения по ней с замедлением
-    export function rampRollingLineFollowingByTwoSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
+    export function rampRollingLineFollowingByDualSensors(rollingDist: number, speed: number, braking: MotionBraking, debug: boolean = false) {
         const mRotDecelCalc = Math.distanceToTicks(Math.abs(rollingDist)); // Расчитываем расстояние замедления
 
         advmotctrls.accTwoEncLinearMotionConfig(0, speed, motions.getMinPwrAtEndMovement(), mRotDecelCalc, 0, mRotDecelCalc, false);

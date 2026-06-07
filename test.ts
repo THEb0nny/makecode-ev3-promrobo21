@@ -139,9 +139,9 @@ function Main() {
     let leftColorZoneArray = [0, 0, 0, 0];
     for (let i = 0; i < 4; i++) {
         if (i == 0) {
-            motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+            motions.lineFollowToDistanceByDualSensors(200, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
         } else {
-            motions.lineFollowToDistanceByTwoSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+            motions.lineFollowToDistanceByDualSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
         }
         chassis.spinTurn(90, 60);
         chassis.linearDistMove(40, 50, MotionBraking.Hold);
@@ -169,9 +169,9 @@ function Main() {
     let rightColorZoneArray = [0, 0, 0, 0];
     for (let i = 0; i < 4; i++) {
         if (i == 0) {
-            motions.lineFollowToDistanceByTwoSensors(200, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+            motions.lineFollowToDistanceByDualSensors(200, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
         } else {
-            motions.lineFollowToDistanceByTwoSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+            motions.lineFollowToDistanceByDualSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
         }
         chassis.spinTurn(-90, 60);
         chassis.linearDistMove(40, 50, MotionBraking.Hold);
@@ -206,9 +206,9 @@ function Main() {
     for (let i = 0; i < 3; i++) {
         chassis.spinTurn(90, 60);
         if (i == 0) {
-            motions.lineFollowToDistanceByTwoSensors(60, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+            motions.lineFollowToDistanceByDualSensors(60, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
         } else {
-            motions.lineFollowToDistanceByTwoSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+            motions.lineFollowToDistanceByDualSensors(120, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
         }
         chassis.spinTurn(-90, 60);
 
@@ -240,7 +240,7 @@ function Main() {
                 pos = rightColorZoneArray.indexOf(0);
             }
             let distance = 210 + pos * 120;
-            motions.lineFollowToDistanceByTwoSensors(distance, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
+            motions.lineFollowToDistanceByDualSensors(distance, AfterLineMotion.HoldStop, { v: 50, Kp: 0.2 });
             brick.printValue("pos", pos, 3);
             brick.printValue("distance", distance, 4);
             if (color == leftColorZone) {
