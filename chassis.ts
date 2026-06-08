@@ -51,29 +51,29 @@ namespace chassis {
      * Линейное движение на расстояние в мм с постоянной скоростью (мощностью).
      * Для движения вперёд устанавливается положительная дистанция, а назад - отрицательная.
      * Скорость v всегда должна быть положительной (отрицательное значение будет взято по модулю).
-     * @param dist дистанция движения в мм, eg: 100
+     * @param distance дистанция движения в мм, eg: 100
      * @param v скорость (мощность) движения, eg: 60
      * @param braking тип торможения, eg: MotionBraking.Hold
      */
     //% blockId="LinearDistMove"
-    //% block="linear distance moving $dist mm at $v\\% braking $braking"
-    //% block.loc.ru="линейное движение на расстояние $dist мм с $v\\% торможение $braking"
+    //% block="linear distance moving $distance mm at $v\\% braking $braking"
+    //% block.loc.ru="линейное движение на расстояние $distance мм с $v\\% торможение $braking"
     //% inlineInputMode="inline"
     //% v.shadow="motorSpeedPicker"
     //% weight="79" blockGap="8"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function linearDistMove(dist: number, v: number, braking: MotionBraking) {
-        if (v == 0 || dist == 0) {
+    export function linearDistMove(distance: number, v: number, braking: MotionBraking) {
+        if (v == 0 || distance == 0) {
             stop(Braking.Hold);
             return;
         }
         if (v < 0) console.log(`Warning: v is negative (${v}). Using absolute value.`);
 
         v = Math.abs(v); // Берём модуль скорости (мощности)
-        const dirSign = Math.sign(dist); // Определяем направление по знаку dist
+        const dirSign = Math.sign(distance); // Определяем направление по знаку distance
 
-        const mRotCalc = Math.round(Math.distanceToTicks(Math.abs(dist))); // Расчёт угла поворота на дистанцию
+        const mRotCalc = Math.round(Math.distanceToTicks(Math.abs(distance))); // Расчёт угла поворота на дистанцию
         syncMovement(v * dirSign, v * dirSign, mRotCalc, MoveUnit.Degrees, braking);
     }
 
@@ -82,22 +82,22 @@ namespace chassis {
      * Для движения вперёд устанавливается положительная дистанция, а назад - отрицательная.
      * Скорости vLeft и vRight всегда должны быть положительными (отрицательные значения будут взяты по модулю).
      * Разные скорости позволяют роботу ехать по дуге. Обе скорости должны быть больше нуля!
-     * @param dist дистанция движения в мм, eg: 100
+     * @param distance дистанция движения в мм, eg: 100
      * @param vLeft скорость (мощность) левого мотора, eg: 50
      * @param vRight скорость (мощность) правого мотора, eg: 50
      * @param braking тип торможения, eg: MotionBraking.Hold
      */
     //% blockId="DistMove"
-    //% block="distance moving $dist mm at $vLeft\\% $vRight\\% braking $braking"
-    //% block.loc.ru="движение на расстояние $dist мм с $vLeft\\% $vRight\\% торможение $braking"
+    //% block="distance moving $distance mm at $vLeft\\% $vRight\\% braking $braking"
+    //% block.loc.ru="движение на расстояние $distance мм с $vLeft\\% $vRight\\% торможение $braking"
     //% inlineInputMode="inline"
     //% vLeft.shadow="motorSpeedPicker"
     //% vRight.shadow="motorSpeedPicker"
     //% weight="78"
     //% subcategory="Движение"
     //% group="Синхронизированное движение в мм"
-    export function distMove(dist: number, vLeft: number, vRight: number, braking: MotionBraking) {
-        if (dist == 0 || vLeft == 0 || vRight == 0) {
+    export function distMove(distance: number, vLeft: number, vRight: number, braking: MotionBraking) {
+        if (distance == 0 || vLeft == 0 || vRight == 0) {
             stop(Braking.Hold);
             return;
         }
@@ -105,9 +105,9 @@ namespace chassis {
         if (vRight < 0) console.log(`Warning: vRight is negative (${vRight}). Using absolute value.`);
 
         vLeft = Math.abs(vLeft), vRight = Math.abs(vRight); // Берём модуль скорости
-        const dirSign = Math.sign(dist); // Определяем направление по знаку dist
+        const dirSign = Math.sign(distance); // Определяем направление по знаку dist
 
-        const mRotCalc = Math.round(Math.distanceToTicks(Math.abs(dist))); // Расчёт угла поворота на дистанцию
+        const mRotCalc = Math.round(Math.distanceToTicks(Math.abs(distance))); // Расчёт угла поворота на дистанцию
         
         syncMovement(vLeft * dirSign, vRight * dirSign, mRotCalc, MoveUnit.Degrees, braking);
     }
@@ -222,7 +222,8 @@ namespace chassis {
     }
 
     /**
-     * Синхронизация движения с плавным сбросом скорости (мощности) в мм.
+     * Синхронизированное движение с плавным сбросом скорости (мощности) в мм.
+     * Для сброса скорости после другой функции!
      * Для движения вперёд устанавливается положительная totalDist дистанция, а назад - отрицательная.
      * Скорости всегда должны быть положительными (отрицательные значения будут взяты по модулю).
      * Расстояние замедления всегда должно быть положительным (отрицательное значение будет взято по модулю).
@@ -271,7 +272,7 @@ namespace chassis {
         const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
 
         executeRampMovement(0, v, vFinish, mRotTotalCalc, 0, mRotDecelCalc, dirSign); // Выполнение синхронизированного движения с фазами
-        motions.actionAfterMotion(actionAfterMotion, vFinish * dirSign); // stop(Braking.Hold); // Тормоз с удержанием
+        motions.actionAfterMotion(actionAfterMotion, vFinish * dirSign); // stop(Braking.Hold); // Тормоз с удержанием ???
     }
 
     //% blockId="RampDistMove"
