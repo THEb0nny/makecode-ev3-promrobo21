@@ -204,16 +204,6 @@ const enum SensorColors {
     Brown
 }
 
-// Перечисление методов обхода графа
-const enum GraphTraversal {
-    DFS, // Обход в глубину
-    BFS, // Обход в ширину
-    //% block.loc.ru="Дейкстра"
-    Dijkstra, // Алгоритм Дейкстры (для взвешенных графов)
-    //% block="A*"
-    // A_STAR // A* (для поиска пути)
-}
-
 const enum NavDirection {
     // Одностороние
     //% block="right (0°)"
@@ -259,6 +249,16 @@ const enum NavDirection {
     //% block="up/left-down/right (135°/315°)"
     //% block.loc.ru="вверх/влево-вниз/вправо (135°/315°)"
     UpLeftDownRight = 135315,
+}
+
+// Перечисление методов обхода графа
+const enum GraphTraversal {
+    DFS, // Обход в глубину
+    BFS, // Обход в ширину
+    //% block.loc.ru="Дейкстра"
+    Dijkstra, // Алгоритм Дейкстры (для взвешенных графов)
+    //% block="A*"
+    // A_STAR // A* (для поиска пути)
 }
 
 const enum NodeType {
