@@ -33,9 +33,7 @@
         "motors_params.ts",
         "navigation_motions.ts",
         "navigation_motions_param.ts",
-        "statistics.ts",
-        "line_follow_to_intersection.ts",
-        "line_follow_to_distance.ts"
+        "statistics.ts"
     ],
     "testFiles": [
         "test.ts"
@@ -44,7 +42,7 @@
         "branch": "v1.4.40",
         "tag": "v1.4.40",
         "commits": "https://github.com/microsoft/pxt-ev3/commits/5f46b7c20979151b8ba99ffb111fdf283686c778",
-        "target": "1.5.9-6-g8e6bc23",
+        "target": "1.5.8-51-g6fb264c",
         "pxt": "9.3.13",
         "targetId": "ev3"
     },

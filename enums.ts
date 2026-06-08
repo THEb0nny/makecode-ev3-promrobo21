@@ -27,7 +27,6 @@ const enum Comparison {
     Equal
 }
 
-
 // Перечисление о вариантах выбора датчиков для реагирования
 const enum LineSensorSelection {
     //% block="left and right sensor"
@@ -133,15 +132,8 @@ const enum SideIntersection {
     RightOutside,
 }
 
-// Перечисление о методе движения по линии
-const enum LineFollowMode {
-    DualSensors,
-    LeftSensor,
-    RightSensor
-}
-
-// Перечисление о методе движения по линии одним датчиком
-const enum LineFollowSingleMode {
+// Перечисление о движении по линии одним из двух датчиков
+const enum FollowLineSensor {
     //% block="left inside"
     //% block.loc.ru="левым изнутри"
     LeftInside,
@@ -154,6 +146,13 @@ const enum LineFollowSingleMode {
     //% block="right outside"
     //% block.loc.ru="правым снаружи"
     RightOutside,
+}
+
+// Перечисление о типе движения по линии
+const enum LineFollowMode {
+    TwoSensors,
+    LeftSensor,
+    RightSensor,
 }
 
 // Перечисление о поворотах в сторону
