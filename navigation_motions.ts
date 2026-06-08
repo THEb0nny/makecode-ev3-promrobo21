@@ -173,7 +173,7 @@ namespace navigation {
             
             // Выполнение движения по линии
             if ((i == 0 || directionChanged) && lineFollowByPathAccelStartDist > 0) { // Если это старт пути или мы только что повернули
-                motions.rampLineFollowToDistanceByTwoSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
+                motions.rampLineFollowToDistanceByDualSensors(lineFollowByPathAccelStartDist, lineFollowByPathAccelStartDist, 0, MotionBraking.Continue, {
                     vStart: lineFollowByPathMoveStartV, vMax: lineFollowByPathMoveMaxV,
                     Kp: lineFollowByPathKp, Ki: lineFollowByPathKi, Kd: lineFollowByPathKd, Kf: lineFollowByPathKf
                 }); // Движение на расстояние для разгона

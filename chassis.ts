@@ -272,7 +272,10 @@ namespace chassis {
         const mRotDecelCalc = Math.round(Math.distanceToTicks(decelDist)); // Расчитываем расстояние фазы замедления
 
         executeRampMovement(0, v, vFinish, mRotTotalCalc, 0, mRotDecelCalc, dirSign); // Выполнение синхронизированного движения с фазами
-        motions.actionAfterMotion(actionAfterMotion, vFinish * dirSign); // stop(Braking.Hold); // Тормоз с удержанием ???
+        motions.actionAfterMotion({
+            action: actionAfterMotion,
+            v: vFinish * dirSign
+        }); // stop(Braking.Hold); // Тормоз с удержанием ???
     }
 
     //% blockId="RampDistMove"

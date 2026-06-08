@@ -52,7 +52,10 @@ namespace motions {
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion({ actionAfterMotion, v: lineFollowToDistance2SensorV }); // Действие после алгоритма движения
+        motions.actionAfterLineMotion({
+            action: actionAfterMotion,
+            v: lineFollowToDistance2SensorV
+        }); // Действие после алгоритма движения
     }
 
     /**
@@ -144,7 +147,10 @@ namespace motions {
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion({ actionAfterMotion, v: lineFollowToDistanceLeftSensorV }); // Действие после алгоритма движения
+        motions.actionAfterLineMotion({
+            action: actionAfterMotion,
+            v: lineFollowToDistanceLeftSensorV
+        }); // Действие после алгоритма движения
     }
 
     /**
@@ -207,7 +213,10 @@ namespace motions {
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion({ actionAfterMotion, v: lineFollowToDistanceRightSensorV }); // Действие после алгоритма движения
+        motions.actionAfterLineMotion({
+            action: actionAfterMotion,
+            v: lineFollowToDistanceRightSensorV
+        }); // Действие после алгоритма движения
     }
 
 }

@@ -1,5 +1,10 @@
 namespace motions {
 
+    interface AfterMotionOptions {
+        action: AfterMotion | MotionBraking,
+        v?: number
+    }
+
     let minPwrAtEndMovement = 25; // Минимальная мощность при завершении движения
 
     /**
@@ -31,13 +36,13 @@ namespace motions {
     }
 
     // Функция, которая выполняет действие после цикла с движением
-    export function actionAfterMotion(actionAfterMotion: AfterMotion | MotionBraking, v?: number) {
-        if (actionAfterMotion == AfterMotion.HoldStop || actionAfterMotion == MotionBraking.Hold) { // Тормоз с удержанием
+    export function actionAfterMotion(options: AfterMotionOptions) {
+        if (options.action == AfterMotion.HoldStop || options.action == MotionBraking.Hold) { // Тормоз с удержанием
             chassis.stop(Braking.Hold);
-        } else if (actionAfterMotion == AfterMotion.FloatStop || actionAfterMotion == MotionBraking.Coast) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
+        } else if (options.action == AfterMotion.FloatStop || options.action == MotionBraking.Coast) { // Тормоз с особождением мотора, т.е. прокаткой по инерции
             chassis.stop(Braking.Coast);
-        } else if (actionAfterMotion == AfterMotion.NoStop || actionAfterMotion == MotionBraking.Continue) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
-            chassis.steeringCommand(0, v);
+        } else if (options.action == AfterMotion.NoStop || options.action == MotionBraking.Continue) { // NoStop не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
+            chassis.steeringCommand(0, options.v);
         }
     }
 
@@ -130,7 +135,10 @@ namespace motions {
             control.pauseUntilTimeUs(currTime, 1000); // Ждём N мс выполнения итерации цикла
         }
         music.playToneInBackground(277, 200); // Сигнал о завершении
-        motions.actionAfterMotion(actionAfterMotion, v); // Действие после цикла управления
+        motions.actionAfterMotion({
+            action: actionAfterMotion,
+            v: v
+        }); // Действие после цикла управления
     }
 
     /**

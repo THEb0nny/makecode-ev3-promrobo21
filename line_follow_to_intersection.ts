@@ -53,7 +53,10 @@ namespace motions {
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion({ actionAfterMotion, v: lineFollowCrossIntersection2SensorV }); // Действие после алгоритма движения
+        motions.actionAfterLineMotion({
+            action: actionAfterMotion,
+            v: lineFollowCrossIntersection2SensorV
+        }); // Действие после алгоритма движения
     }
 
     function updateLineFollowSideIntersectionParams(sideIntersection: SideIntersection, params?: params.LineFollow) {
@@ -151,7 +154,10 @@ namespace motions {
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion({ actionAfterMotion, v: p.v }); // Действие после алгоритма движения
+        motions.actionAfterLineMotion({
+            action: actionAfterMotion,
+            v: p.v
+        }); // Действие после алгоритма движения
     }
 
 }

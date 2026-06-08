@@ -208,26 +208,26 @@ namespace levelings {
     /**
      * Выравнивание на линии в движении.
      * Не используйте большие скорости. Поддерживается и выравнивание при движении назад.
-     * @param speed скорость движения, eg: 30
+     * @param v скорость движения, eg: 40
      * @param actionAfterMotion действие после, eg: AfterMotion.BreakStop
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignmentInMotion"
-    //% block="alignment on line in motion at $speed\\% after motion $actionAfterMotion||debug $debug"
-    //% block.loc.ru="выравнивание на линии в движении при $speed\\% c действием после $actionAfterMotion||отладка $debug"
+    //% block="alignment on line in motion at $v\\% after motion $actionAfterMotion||debug $debug"
+    //% block.loc.ru="выравнивание на линии в движении при $v\\% c действием после $actionAfterMotion||отладка $debug"
     //% expandableArgumentMode="enabled"
     //% inlineInputMode="inline"
-    //% speed.shadow="motorSpeedPicker"
+    //% v.shadow="motorSpeedPicker"
     //% debug.shadow="toggleOnOff"
     //% weight="97"
     //% group="Линия"
-    export function lineAlignmentInMotion(speed: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
+    export function lineAlignmentInMotion(v: number, actionAfterMotion: AfterMotion, debug: boolean = false) {
         // https://www.youtube.com/watch?v=DOPXPuB7Xhs
         if (distanceBetweenLineSensors <= 0) {
             chassis.stop(Braking.Hold);
             console.log("Error: the distance between the sensors is not set!");
             control.assert(false, 5);
-        } else if (speed == 0) {
+        } else if (v == 0) {
             chassis.stop(Braking.Hold);
             return;
         }
@@ -235,7 +235,7 @@ namespace levelings {
         let firstSide: string = null; // Инициализируем переменную для хранения какая сторона первой заехала на линию
         let encLeftMot1 = 0, encLeftMot2 = 0, encRightMot1 = 0, encRightMot2 = 0; // Инициализируем переменную хранения значения с энкодеров моторов
         let a = 0, b = distanceBetweenLineSensors, c = 0;
-        chassis.regulatorSteering(0, speed); // Команда двигаться вперёд
+        chassis.regulatorSteering(0, v); // Команда двигаться вперёд
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         // Первая часть - датчик, который замечает линию первым
         while (true) { // В цикле ждём, чтобы один из датчиков заметил линию
@@ -287,8 +287,8 @@ namespace levelings {
         }
         a = (a / 360) * Math.PI * chassis.getWheelDiametr(); // Перевести в мм пройденное значение
         const alpha = Math.atan(a / b) * (180.0 / Math.PI); // Рассчитываем угол альфа в радианах и переводим в градусы
-        if (firstSide == "LEFT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.LeftWheel);
-        else if (firstSide == "RIGHT_SIDE") chassis.pivotTurn(alpha, speed, WheelPivot.RightWheel);
+        if (firstSide == "LEFT_SIDE") chassis.pivotTurn(alpha, v, WheelPivot.LeftWheel);
+        else if (firstSide == "RIGHT_SIDE") chassis.pivotTurn(alpha, v, WheelPivot.RightWheel);
         if (debug) { // Выводим на экран расчёты
             brick.clearScreen();
             brick.printValue("encLeftMot1", encLeftMot1, 1);
@@ -300,7 +300,10 @@ namespace levelings {
             brick.printValue("alpha", alpha, 7);
         }
         music.playToneInBackground(Note.D, 250); // Сигнал для понимация завершения
-        motions.actionAfterMotion(actionAfterMotion, speed); // Действие после цикла управления
+        motions.actionAfterMotion({
+            action: actionAfterMotion,
+            v: v
+        }); // Действие после цикла управления
         if (debug) pause(3000);
     }
     

@@ -281,8 +281,8 @@ namespace motions {
 
 namespace motions {
 
-    interface LineMotionOptions {
-        actionAfterMotion: AfterLineMotion,
+    interface AfterLineMotionOptions {
+        action: AfterLineMotion,
         v?: number,
         lineFollowMode?: LineFollowMode
     }
@@ -308,23 +308,23 @@ namespace motions {
     }
 
     // Функция, которая выполняет действие после цикла с движением по линии
-    export function actionAfterLineMotion(options: LineMotionOptions) {
-        if (options.actionAfterMotion == AfterLineMotion.Rolling) { // Прокатка, чтобы встать на линию после определния перекрёстка
+    export function actionAfterLineMotion(options: AfterLineMotionOptions) {
+        if (options.action == AfterLineMotion.Rolling) { // Прокатка, чтобы встать на линию после определния перекрёстка
             chassis.linearDistMove(motions.getDistRollingAfterIntersection(), options.v, MotionBraking.Hold);
-        } else if (options.actionAfterMotion == AfterLineMotion.SmoothRolling) { // Прокатка, чтобы вставать на линию с мягким торможением после определния перекрёстка
+        } else if (options.action == AfterLineMotion.SmoothRolling) { // Прокатка, чтобы вставать на линию с мягким торможением после определния перекрёстка
             chassis.decelFinishLinearDistMove(options.v, motions.getMinPwrAtEndMovement(), motions.getDistRollingAfterIntersection(), motions.getDistRollingAfterIntersection(), AfterMotion.HoldStop);
-        } else if (options.actionAfterMotion == AfterLineMotion.LineRolling) { // Прокатка с движением по линии на расстояние и торможением
+        } else if (options.action == AfterLineMotion.LineRolling) { // Прокатка с движением по линии на расстояние и торможением
             rollingLineFollowing(LineFollowMode.DualSensors, motions.getDistRollingAfterIntersection(), options.v, AfterMotion.HoldStop);
-        } else if (options.actionAfterMotion == AfterLineMotion.LineSmoothRolling) { // Прокатка с движением по линии и плавным торможением
+        } else if (options.action == AfterLineMotion.LineSmoothRolling) { // Прокатка с движением по линии и плавным торможением
             rampRollingLineFollowingByDualSensors(motions.getDistRollingAfterIntersection(), options.v, MotionBraking.Hold);
-        } else if (options.actionAfterMotion == AfterLineMotion.LineContinueRoll) { // Прокатка с движением по линии для съезда с линии с продолжением движения
+        } else if (options.action == AfterLineMotion.LineContinueRoll) { // Прокатка с движением по линии для съезда с линии с продолжением движения
             if (options.lineFollowMode == undefined) return; // Ошибка!
             rollingLineFollowing(options.lineFollowMode, motions.getDistRollingFromLineAfterIntersection(), options.v, AfterMotion.NoStop);
-        } else if (options.actionAfterMotion == AfterLineMotion.HoldStop) { // Тормоз c удержанием
+        } else if (options.action == AfterLineMotion.HoldStop) { // Тормоз c удержанием
             chassis.stop(Braking.Hold);
-        } else if (options.actionAfterMotion == AfterLineMotion.FloatStop) { // Тормоз с освобождением мотора, т.е. прокаткой по инерции
+        } else if (options.action == AfterLineMotion.FloatStop) { // Тормоз с освобождением мотора, т.е. прокаткой по инерции
             chassis.stop(Braking.Coast);
-        } else if (options.actionAfterMotion == AfterLineMotion.Continue) { // В continue не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
+        } else if (options.action == AfterLineMotion.Continue) { // В continue не подаётся команда на торможение, а просто вперёд, например для перехвата следующей функцией управления моторами
             chassis.steeringCommand(0, options.v);
         }
     }
@@ -385,7 +385,10 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
-        motions.actionAfterMotion(actionAfterMotion, v);
+        motions.actionAfterMotion({
+            action: actionAfterMotion,
+            v: v
+        });
     }
     
 }

@@ -42,7 +42,9 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTimeUs(currTime, 1000); // Ожидание выполнения цикла
         }
-        actionAfterMotion(braking); // Действие после алгоритма движения
+        actionAfterMotion({
+            action: braking
+        }); // Действие после алгоритма движения
     }
 
 }
@@ -58,7 +60,7 @@ namespace motions {
      * @param braking тип торможения, eg: MotionBraking.Hold
      * @param debug отладка, eg: false
      */
-    //% blockId="RampLineFollowToDistanceByTwoSensors"
+    //% blockId="RampLineFollowToDistanceByDualSensors"
     //% block="ramp line follow to distance $totalDist mm acceleration $accelDist deceleration $decelDist|с действием после $braking||params: $params|debug $debug"
     //% block.loc.ru="движение по линии на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist|с действием после $braking||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -68,7 +70,7 @@ namespace motions {
     //% weight="78"
     //% subcategory="По линии"
     //% group="Движение по линии на расстояние с ускорениями"
-    export function rampLineFollowToDistanceByTwoSensors(totalDist: number, accelDist: number, decelDist: number, braking: MotionBraking, params?: params.RampLineFollow, debug: boolean = false) {
+    export function rampLineFollowToDistanceByDualSensors(totalDist: number, accelDist: number, decelDist: number, braking: MotionBraking, params?: params.RampLineFollow, debug: boolean = false) {
         if (totalDist < 0 || accelDist < 0 || decelDist < 0 || Math.abs(accelDist) + Math.abs(decelDist) > totalDist) {
             chassis.stop();
             console.log("Error: the distance values are negative or the sum of the acceleration and deceleration distances is greater than the total distance!");
@@ -123,7 +125,10 @@ namespace motions {
             control.pauseUntilTimeUs(currTime, delayDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        actionAfterMotion(braking, rampLineFollowToDistance2SensorFinishV); // Действие после алгоритма движения
+        actionAfterMotion({
+            action: braking,
+            v: rampLineFollowToDistance2SensorFinishV
+        }); // Действие после алгоритма движения
     }
 
     /**
@@ -204,7 +209,10 @@ namespace motions {
             control.pauseUntilTimeUs(currTime, delayDt); // Ожидание выполнения цикла
         }
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
-        motions.actionAfterLineMotion({ actionAfterMotion, v: rampLineFollowCrossIntersection2SensorAfterDistV }); // Действие после алгоритма движения
+        motions.actionAfterLineMotion({
+            action: actionAfterMotion, 
+            v: rampLineFollowCrossIntersection2SensorAfterDistV
+        }); // Действие после алгоритма движения
     }
 
 }
