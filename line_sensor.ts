@@ -10,7 +10,7 @@ namespace sensors {
     export let wRefRawRightLineSensor: number; // Сырые значения на белом для правого датчика линии
 
     /**
-     * Метод установки датчиков цвета в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
+     * Функция установки датчиков цвета в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
      * @param newLeftLineSensor левый датчик цвета, eg: sensors.color2
      * @param newRightLineSensor правый датчик цвета, eg: sensors.color3
      */
@@ -31,7 +31,7 @@ namespace sensors {
     }
 
     /**
-     * Метод установки nxt датчиков отражения в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
+     * Функция установки nxt датчиков отражения в качестве датчиков для движения и работы с линией. Устанавливать датчики линии требуется только один раз!
      * @param newLeftLineSensor левый nxt датчик отражения, eg: sensors.nxtLight1
      * @param newRightLineSensor правый nxt датчик отражения, eg: sensors.nxtLight4
      */
@@ -94,7 +94,7 @@ namespace sensors {
     }
 
     /**
-     * Метод установки датчику линии сырых значений на чёрном и белом.
+     * Функция установки датчику линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorRawRefValue"
     //% block="set $sensor **line sensor** black $bRefRawVal white $wRefRawVal raw values"
@@ -113,7 +113,7 @@ namespace sensors {
     }
 
     /**
-     * Новый метод установки датчикам линии сырых значений на чёрном и белом.
+     * Функция метод установки датчикам линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorsRawRefValues"
     //% block="set ref raw values ​​for **left line sensor** black $blackRefRawValLeftSensor white $whiteRefRawValLeftSensor **right** black $blackRefRawValRightSensor white $whiteRefRawValRightSensor"
@@ -129,7 +129,7 @@ namespace sensors {
     }
 
     /**
-     * Метод получения с датчика линии сырого значения отражения.
+     * Функция получения с датчика линии сырого значения отражения.
      * @param sensor датчик линии, eg: LineSensor.Left
      */
     //% blockId="GetLineSensorRawRefValue"
@@ -156,7 +156,7 @@ namespace sensors {
     }
 
     /**
-     * Метод нормализации значения отражения для датчика линии из сырых значений.
+     * Функция нормализации значения отражения для датчика линии из сырых значений.
      * @param refRawVal текущее сырое значение отражения, eg: 0
      * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
@@ -174,7 +174,7 @@ namespace sensors {
     }
 
     /**
-     * Метод получения нормализованного значения отражения для датчика линии из сырых значений.
+     * Функция получения нормализованного значения отражения для датчика линии из сырых значений.
      * @param refRawVal текущее сырое значение отражения, eg: 0
      * @param bRefRawVal сырое значение отражения на чёрном, eg: 500
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
