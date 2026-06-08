@@ -56,7 +56,7 @@ namespace motions {
      * @param distance дистанция прокатки после перекрёстка, eg: 50
      */
     //% blockId="SetDistRollingAfterIntersection"
-    //% block="set distance $distance mm rolling after intersection"
+    //% block="set rolling distance $distance mm after intersection"
     //% block.loc.ru="установить дистанцию $distance мм прокатки после перекрёстка"
     //% inlineInputMode="inline"
     //% weight="99" blockGap="8"
@@ -70,7 +70,7 @@ namespace motions {
      * Получить дистанцию проезда после определения перекрёстка для прокатки в мм.
      */
     //% blockId="GetDistRollingAfterIntersection"
-    //% block="get distance rolling after intersection in mm"
+    //% block="get rolling distance after intersection in mm"
     //% block.loc.ru="дистанция прокатки после перекрёстка в мм"
     //% inlineInputMode="inline"
     //% weight="98"
@@ -84,7 +84,7 @@ namespace motions {
      * @param distance дистанция прокатки после перекрёстка, eg: 20
      */
     //% blockId="SetDistRollingFromLineAfterIntersection"
-    //% block="set distance $distance mm rolling exit an intersection"
+    //% block="set rolling distance $distance mm exit an intersection"
     //% block.loc.ru="установить дистанцию $distance мм прокатки съезда с перекрёстка"
     //% inlineInputMode="inline"
     //% weight="97" blockGap="8"
@@ -197,14 +197,14 @@ namespace motions {
      * Установить максимальную ошибку условия движения одним датчиком по линии.
      * @param maxError максимальное значение ошибки движения по линии, eg: 40
      */
-    //% blockId="SetLineFollowSingleSensorConditionMaxErr"
+    //% blockId="SetLineFollowSingleSensorConditionMaxError"
     //% block="set line follow max error $maxError at moving by one sensor"
     //% block.loc.ru="установить максимальую ошибку $maxError при движении одним датчиком"
     //% inlineInputMode="inline"
     //% weight="79" blockGap="8"
     //% group="Свойства для датчиков"
-    export function setLineFollowSingleSensorConditionMaxErr(maxError: number) {
-        if (maxError < 0) console.log("Warning: maxErr is negative, using absolute value.");
+    export function setLineFollowSingleSensorConditionMaxError(maxError: number) {
+        if (maxError < 0) console.log("Warning: maxError is negative, using absolute value.");
         lineFollowBySingleSensorConditionMaxError = Math.abs(maxError);
     }
 
