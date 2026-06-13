@@ -46,7 +46,7 @@ namespace levelings {
 
     /**
      * Установить расстояние между двумя датчиками линии в мм.
-     * @param dist расстояние между датчиками в мм, eg: 32
+     * @param distance расстояние между датчиками в мм, eg: 32
      */
     //% blockId="SetDistanceBetweenLineSensors"
     //% block="set distance $dist mm between line sensors"
@@ -54,8 +54,8 @@ namespace levelings {
     //% inlineInputMode="inline"
     //% weight="99"
     //% group="Свойства"
-    export function setDistanceBetweenLineSensors(dist: number) {
-        distanceBetweenLineSensors = dist;
+    export function setDistanceBetweenLineSensors(distance: number) {
+        distanceBetweenLineSensors = distance;
     }
 
     /**
