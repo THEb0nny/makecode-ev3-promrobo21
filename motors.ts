@@ -36,9 +36,9 @@ namespace motors {
             if (params.Ki >= 0) regMotorKi = Math.abs(params.Ki);
             if (params.Kd >= 0) regMotorKd = Math.abs(params.Kd);
             if (params.Kf >= 0) regMotorKf = Math.abs(params.Kf);
+            if (params.timeOut >= 0) regMotorTimeOut = Math.abs(params.timeOut);
             if (params.errorThreshold >= 0) errorThreshold = Math.abs(params.errorThreshold);
             if (params.vMinThreshold >= 0) vMinThreshold = Math.abs(params.vMinThreshold);
-            if (params.timeOut >= 0) regMotorTimeOut = Math.abs(params.timeOut);
         }
 
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора
