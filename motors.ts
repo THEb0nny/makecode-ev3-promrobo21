@@ -41,8 +41,6 @@ namespace motors {
             if (params.timeOut >= 0) regMotorTimeOut = Math.abs(params.timeOut);
         }
 
-        motor.setBrake(braking == Braking.Hold); // Установка удерживания мотором позиции
-
         pidRegMotor.setGains(regMotorKp, regMotorKi, regMotorKd); // Установка коэффицентов ПИД регулятора
         pidRegMotor.setDerivativeFilter(regMotorKf); // Установить фильтр дифференциального регулятора
         pidRegMotor.setControlSaturation(-360, 360); // Установка интервала ПИД регулятора
@@ -71,6 +69,7 @@ namespace motors {
             }
             control.pauseUntilTimeMs(currTime, 5); // Ожидание выполнения цикла за нужную частоту
         }
+        motor.setBrake(braking == Braking.Hold); // Установка удерживания мотором позиции
         motor.stop(); // Останавливаем
         music.playToneInBackground(988, 50); // Сигнал о завершении
         if (debug) console.log(`Stop motors.setPosition(${pos}), currAngle: ${motor.angle()}`);
