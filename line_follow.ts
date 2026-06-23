@@ -377,13 +377,9 @@ namespace motions {
             const refLeftLS = sensors.getNormalizedReflectionValue(LineSensor.Left); // Нормализованное значение с левого датчика линии
             const refRightLS = sensors.getNormalizedReflectionValue(LineSensor.Right); // Нормализованное значение с правого датчика линии
             const error = getLineFollowError(lineFollowMode, refLeftLS, refRightLS);
-
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error);
-
             chassis.regulatorSteering(u, v);
-
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
-
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt());
         }
 
@@ -715,7 +711,7 @@ namespace motions {
         const emrPrev = chassis.rightMotor.angle();
 
         // Подруливаем плавно к линии
-        steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
+        steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
         music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
