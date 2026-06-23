@@ -66,18 +66,14 @@ namespace motors {
             u = Math.constrain(u, -regMotorMaxV, regMotorMaxV); // Ограничиваем
             motor.run(u); // Установить мотору управляющее воздействие
             if (debug && currTime - prevDebugPrintTime >= 10) {
-                // brick.clearScreen();
-                // brick.printString(`angle: ${motor.angle()}`, 1);
-                // brick.printString(`error: ${error}`, 2);
-                // brick.printString(`U: ${U}`, 3);
                 console.log(`currAngle: ${currentAngle}, error: ${error}, u: ${u}`);
                 prevDebugPrintTime = control.millis();
             }
             control.pauseUntilTimeMs(currTime, 5); // Ожидание выполнения цикла за нужную частоту
         }
-        if (debug) console.log(`Stop motors.setPosition(${pos}), currAngle: ${motor.angle()}`);
-        music.playToneInBackground(988, 50); // Сигнал о завершении
         motor.stop(); // Останавливаем
+        music.playToneInBackground(988, 50); // Сигнал о завершении
+        if (debug) console.log(`Stop motors.setPosition(${pos}), currAngle: ${motor.angle()}`);
     }
 
 }
