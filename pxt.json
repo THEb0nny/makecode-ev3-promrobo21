@@ -6,7 +6,8 @@
         "ev3": "*",
         "automation": "github:microsoft/pxt-automation#v0.0.3",
         "nxt-light-sensor": "*",
-        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#v3.2.0"
+        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#v3.2.0",
+        "ht-color-sensor-v2": "github:theb0nny/makecode-ev3-hitechnic-color-sensor-v2#v3.0.3"
     },
     "files": [
         "README.md",
@@ -33,7 +34,8 @@
         "motors_params.ts",
         "navigation_motions.ts",
         "navigation_motions_param.ts",
-        "statistics.ts"
+        "statistics.ts",
+        "ht_color_sensor.ts"
     ],
     "testFiles": [
         "test.ts"
@@ -42,7 +44,7 @@
         "branch": "v1.4.40",
         "tag": "v1.4.40",
         "commits": "https://github.com/microsoft/pxt-ev3/commits/5f46b7c20979151b8ba99ffb111fdf283686c778",
-        "target": "1.5.9-6-g8e6bc23",
+        "target": "1.5.9-16-g89f8e46",
         "pxt": "9.3.13",
         "targetId": "ev3"
     },
