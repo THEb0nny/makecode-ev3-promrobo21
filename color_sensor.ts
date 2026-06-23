@@ -30,7 +30,7 @@ namespace sensors {
 
 namespace sensors {
 
-    interface ColorBoundaries {
+    export interface ColorBoundaries {
         whiteBoundary: number;
         blackBoundary: number;
         coloredBoundary: number;
