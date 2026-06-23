@@ -6,7 +6,8 @@
         "ev3": "*",
         "automation": "github:microsoft/pxt-automation#v0.0.3",
         "nxt-light-sensor": "*",
-        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#v3.2.0"
+        "adv-motor-controllers": "github:theb0nny/makecode-ev3-advanced-motor-controllers#v3.2.0",
+        "ht-color-sensor-v2": "github:theb0nny/makecode-ev3-hitechnic-color-sensor-v2#v3.0.3"
     },
     "files": [
         "README.md",
@@ -35,7 +36,8 @@
         "navigation_motions_param.ts",
         "statistics.ts",
         "line_follow_to_intersection.ts",
-        "line_follow_to_distance.ts"
+        "line_follow_to_distance.ts",
+        "ht_color_sensor.ts"
     ],
     "testFiles": [
         "test.ts"

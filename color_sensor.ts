@@ -30,7 +30,7 @@ namespace sensors {
 
 namespace sensors {
 
-    interface ColorBoundaries {
+    export interface ColorBoundaries {
         whiteBoundary: number;
         blackBoundary: number;
         coloredBoundary: number;
@@ -270,7 +270,7 @@ namespace sensors {
      * Установить значения перевода HSVL в цветовые коды.
      * @param boundaries параметры перевода
      */
-    //% blockId="SetHsvlToColorNumBoundaries"
+    //% blockId="SetHsvlToColorNumBoundariesColorSensor"
     //% block="set converting params HSVL **color sensor** $sensor to color code $boundaries"
     //% block.loc.ru="установить параметры перевода HSVL **датчика цвета** $sensor в цветовой код $boundaries"
     //% inlineInputMode="inline"
@@ -279,7 +279,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="54" blockGap="8"
     //% group="Color Sensor"
-    export function setHsvlToColorNumBoundaries(sensor: sensors.ColorSensor, boundaries: ColorBoundaries) {
+    export function setHsvlToColorNumBoundariesColorSensor(sensor: sensors.ColorSensor, boundaries: ColorBoundaries) {
         const index = sensor.port() - 1;
         whiteBoundaryColorSensors[index] = boundaries.whiteBoundary;
         blackBoundaryColorSensors[index] = boundaries.blackBoundary;
@@ -296,7 +296,7 @@ namespace sensors {
     /**
      * Получить значения перевода HSVL в цветовые коды.
      */
-    //% blockId="GetHsvlToColorNumBoundaries"
+    //% blockId="GetHsvlToColorNumBoundariesColorSensor"
     //% block="get converting params HSVL **color sensor** $sensor to color code"
     //% block.loc.ru="получить параметры перевода HSVL **датчика цвета** $sensor в цветовой код"
     //% inlineInputMode="inline"
@@ -305,7 +305,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="53"
     //% group="Color Sensor"
-    export function getHsvlToColorNumBoundaries(sensor: sensors.ColorSensor): ColorBoundaries {
+    export function getHsvlToColorNumBoundariesColorSensor(sensor: sensors.ColorSensor): ColorBoundaries {
         const index = sensor.port() - 1;
         return {
             whiteBoundary: whiteBoundaryColorSensors[index],
