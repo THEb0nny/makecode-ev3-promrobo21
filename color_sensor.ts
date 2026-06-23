@@ -1,5 +1,22 @@
 namespace sensors {
 
+    export interface ColorBoundaries {
+        whiteBoundary: number;
+        blackBoundary: number;
+        coloredBoundary: number;
+        redBoundary: number;
+        orangeBoundary: number;
+        brownBoundary: number;
+        yellowBoundary: number;
+        greenBoundary: number;
+        blueBoundary: number;
+        purpleBoundary: number;
+    }
+
+}
+
+namespace sensors {
+
     // https://github.com/THEb0nny/makecode-ev3-promrobo21/blob/master/color_hue.png
 
     /**
@@ -29,19 +46,6 @@ namespace sensors {
 }
 
 namespace sensors {
-
-    export interface ColorBoundaries {
-        whiteBoundary: number;
-        blackBoundary: number;
-        coloredBoundary: number;
-        redBoundary: number;
-        orangeBoundary: number;
-        brownBoundary: number;
-        yellowBoundary: number;
-        greenBoundary: number;
-        blueBoundary: number;
-        purpleBoundary: number;
-    }
 
     let minRgbColorSensors: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]; // Минимальные значения RGB для датчиков цвета
     let maxRgbColorSensors: number[][] = [[255, 255, 255], [255, 255, 255], [255, 255, 255], [255, 255, 255]]; // Максимальные значения RGB для датчиков цвета
@@ -245,13 +249,13 @@ namespace sensors {
      * @param newBlueBoundary значение границы синего H, от зелёного до этого значения, eg: 260
      * @param newPurpleBoundary значение границы пурпурного H, от синего до этого значения, а после до 360 (включительно) снова идёт красный, eg: 260
      */
-    //% blockId="HsvlToColorNumBoundaries"
+    //% blockId="HsvlToColorNumBoundariesColorSensor"
     //% block="converting params HSVL to color at boundars chroma = $newColoredBoundary white = $newWhiteBoundary black = $newBlackBoundary|red = $newRedBoundary orange = $newOrangeBoundary brown = $newBrownBoundary yellow = $newYellowBoundary|green = $newGreenBoundary blue = $newBlueBoundary purple = $newPurpleBoundary"
     //% block.loc.ru="параметры перевода HSVL в цвет при границах цветности = $newColoredBoundary белого = $newWhiteBoundary чёрного = $newBlackBoundary|красного = $newRedBoundary оранжевого = $newOrangeBoundary коричневого = $newBrownBoundary жёлтого = $newYellowBoundary|зелёного = $newGreenBoundary синего = $newBlueBoundary пурпурный = $newPurpleBoundary"
     //% inlineInputMode="external"
     //% weight="55" blockGap="8"
     //% group="Color Sensor"
-    export function hsvlToColorNumBoundaries(newColoredBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newOrangeBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number, newPurpleBoundary: number): ColorBoundaries {
+    export function hsvlToColorNumBoundariesColorSensor(newColoredBoundary: number, newWhiteBoundary: number, newBlackBoundary: number, newRedBoundary: number, newOrangeBoundary: number, newBrownBoundary: number, newYellowBoundary: number, newGreenBoundary: number, newBlueBoundary: number, newPurpleBoundary: number): ColorBoundaries {
         return {
             whiteBoundary: newWhiteBoundary,
             blackBoundary: newBlackBoundary,
@@ -270,7 +274,7 @@ namespace sensors {
      * Установить значения перевода HSVL в цветовые коды.
      * @param boundaries параметры перевода
      */
-    //% blockId="SetHsvlToColorNumBoundaries"
+    //% blockId="SetHsvlToColorNumBoundariesColorSensor"
     //% block="set converting params HSVL **color sensor** $sensor to color code $boundaries"
     //% block.loc.ru="установить параметры перевода HSVL **датчика цвета** $sensor в цветовой код $boundaries"
     //% inlineInputMode="inline"
@@ -279,7 +283,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="54" blockGap="8"
     //% group="Color Sensor"
-    export function setHsvlToColorNumBoundaries(sensor: sensors.ColorSensor, boundaries: ColorBoundaries) {
+    export function setHsvlToColorNumBoundariesColorSensor(sensor: sensors.ColorSensor, boundaries: ColorBoundaries) {
         const index = sensor.port() - 1;
         whiteBoundaryColorSensors[index] = boundaries.whiteBoundary;
         blackBoundaryColorSensors[index] = boundaries.blackBoundary;
@@ -296,7 +300,7 @@ namespace sensors {
     /**
      * Получить значения перевода HSVL в цветовые коды.
      */
-    //% blockId="GetHsvlToColorNumBoundaries"
+    //% blockId="GetHsvlToColorNumBoundariesColorSensor"
     //% block="get converting params HSVL **color sensor** $sensor to color code"
     //% block.loc.ru="получить параметры перевода HSVL **датчика цвета** $sensor в цветовой код"
     //% inlineInputMode="inline"
@@ -305,7 +309,7 @@ namespace sensors {
     //% sensor.fieldOptions.width="300"
     //% weight="53"
     //% group="Color Sensor"
-    export function getHsvlToColorNumBoundaries(sensor: sensors.ColorSensor): ColorBoundaries {
+    export function getHsvlToColorNumBoundariesColorSensor(sensor: sensors.ColorSensor): ColorBoundaries {
         const index = sensor.port() - 1;
         return {
             whiteBoundary: whiteBoundaryColorSensors[index],

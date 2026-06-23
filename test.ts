@@ -14,7 +14,7 @@ const colorSensor = sensors.color4; // Датчик цвета, которым �
 
 sensors.setColorSensorMinRgbValues(colorSensor, 22, 21, 24);
 sensors.setColorSensorMaxRgbValues(colorSensor, 255, 269, 215);
-sensors.setHsvlToColorNumBoundaries(colorSensor, {
+sensors.setHsvlToColorNumBoundariesColorSensor(colorSensor, {
     whiteBoundary: 50,
     blackBoundary: 10,
     coloredBoundary: 50,
@@ -30,7 +30,7 @@ sensors.setHsvlToColorNumBoundaries(colorSensor, {
 // Получить цвет
 function GetColor(debug: boolean = false): number {
     const rgbHsvl = sensors.getColorSensorRgbHsvl(colorSensor);
-    const color = sensors.convertHsvlToColorNum(rgbHsvl[1], sensors.getHsvlToColorNumBoundaries(colorSensor));
+    const color = sensors.convertHsvlToColorNum(rgbHsvl[1], sensors.getHsvlToColorNumBoundariesColorSensor(colorSensor));
     if (debug) {
         brick.clearScreen();
         brick.printValue("r", rgbHsvl[0][0], 1);
