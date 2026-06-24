@@ -711,7 +711,7 @@ namespace motions {
         const emrPrev = chassis.rightMotor.angle();
 
         // Подруливаем плавно к линии
-        steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
+        steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowLeftIntersectionV);
         music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
