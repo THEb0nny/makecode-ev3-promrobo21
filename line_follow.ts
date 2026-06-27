@@ -4,7 +4,9 @@ namespace motions {
     let lineFollowRefThreshold = 40; // Пороговое значение определения заезда на перекрёсток
     let lineFollowSetPoint = lineRefThreshold; // Среднее значение серого (уставка) для движения по линии
 
-    let lineFollowByOneSensorConditionMaxErr = 30; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
+    let lineFollowByOneSensorConditionMaxErr = 40; // Максимальная ошибка для определения, что робот движется по линии одним датчиком
+
+    let lineFollowSearchTolerance = 10; // Допуск отклонения от уставки для пропуска поиска линии
 
     let steeringAtSearchLine = 25; // Подруливание при поиске линии для последущего движени одним датчиком
 
@@ -270,6 +272,33 @@ namespace motions {
         return steeringAtSearchLine;
     }
 
+    /**
+     * Установить допуск (люфт) отклонения от уставки для отмены поиска линии.
+     * @param tolerance значение допуска, eg: 8
+     */
+    //% blockId="SetLineFollowSearchTolerance"
+    //% block="set line follow search tolerance $tolerance"
+    //% block.loc.ru="установить допуск поиска линии $tolerance"
+    //% inlineInputMode="inline"
+    //% weight="77" blockGap="8"
+    //% group="Свойства для датчиков"
+    export function setLineFollowSearchTolerance(tolerance: number) {
+        lineFollowSearchTolerance = Math.abs(tolerance);
+    }
+
+    /**
+     * Получить допуск (люфт) отклонения от уставки для отмены поиска линии.
+     */
+    //% blockId="GetLineFollowSearchTolerance"
+    //% block="get line follow search tolerance"
+    //% block.loc.ru="допуск поиска линии"
+    //% inlineInputMode="inline"
+    //% weight="76"
+    //% group="Свойства для датчиков"
+    export function getLineFollowSearchTolerance(): number {
+        return lineFollowSearchTolerance;
+    }
+
 }
 
 namespace motions {
@@ -279,6 +308,8 @@ namespace motions {
         v?: number,
         lineFollowMode?: LineFollowMode
     }
+
+    
 
     // Функция для вывода на экран отладочной информации при движении по линии
     export function printDubugLineFollow(refLeftLS: number, refRightLS: number, error: number, u: number, dt: number) {
@@ -328,6 +359,11 @@ namespace motions {
 
     // Вспомогательная функция для движения по линии одним датчиком и для того, чтобы подрулувать с ожиданием нахождения линии
     export function steeringUntilFindLine(lineSensor: LineSensor, steering: number, v: number) {
+        // ToDo сделать учитывание, что мы не привысили дистанцию общего движения одним датчиком на расстояние
+
+        // Сначала ПРОВЕРЯЕМ: если мы уже на линии, вообще ничего не делаем и сразу выходим
+        if (sensors.getNormalizedReflectionValue(lineSensor) < (getLineFollowSetPoint() + getLineFollowSearchTolerance())) return;
+
         const { speedLeft, speedRight } = chassis.getSpeedsAtSteering(steering, v);
 
         chassis.pidChassisSync.setGains(chassis.getSyncRegulatorKp(), chassis.getSyncRegulatorKi(), chassis.getSyncRegulatorKd()); // Установка коэффицентов регулятора
@@ -354,6 +390,7 @@ namespace motions {
             chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
             control.pauseUntilTimeMs(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
         }
+        music.playToneInBackground(587, 50); // Издаём сигнал завершения поиска
     }
 
     // Вспомогательная функция движения по линии на расстояние, для съезда с линии и последующего движения по ней одним датчиком
@@ -382,7 +419,6 @@ namespace motions {
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt());
         }
-
         motions.actionAfterMotion(actionAfterMotion, v);
     }
     
@@ -507,7 +543,6 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
-        music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
@@ -563,7 +598,6 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowRightIntersectionV);
-        music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
@@ -712,7 +746,6 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowLeftIntersectionV);
-        music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Пока моторы не достигнули градусов вращения
@@ -775,7 +808,6 @@ namespace motions {
 
         // Подруливаем плавно к линии
         steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
-        music.playToneInBackground(587, 50); // Издаём сигнал завершения
 
         let prevTime = control.millis(); // Переменная предыдущего времения для цикла регулирования
         while (true) { // Пока моторы не достигнули градусов вращения
