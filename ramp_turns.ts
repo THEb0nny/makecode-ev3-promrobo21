@@ -95,7 +95,7 @@ namespace chassis {
             const error = Math.clamp(-1000, 1000, errorRaw);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwrLeft, out.pwrRight);
-            setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            setPower(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTimeUs(currTime, 1000);
         }
         stop(Braking.Hold); // Удерживание при торможении
@@ -200,7 +200,7 @@ namespace chassis {
             const error = Math.clamp(-1000, 1000, errorRaw);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwrLeft, out.pwrRight);
-            setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            setPower(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTimeUs(currTime, 1000);
         }
         stop(Braking.Hold); // Удерживание при торможении

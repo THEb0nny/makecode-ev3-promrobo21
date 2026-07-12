@@ -387,7 +387,7 @@ namespace motions {
             const error = advmotctrls.getErrorSyncMotors(eml, emr, speedLeft, speedRight); // Find out the error in motor speed control
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
             const powers = advmotctrls.getPwrSyncMotors(u, speedLeft, speedRight); // Find out the power of motors for regulation
-            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
+            chassis.setPower(powers.pwrLeft, powers.pwrRight); // Set power/speed motors
             control.pauseUntilTimeMs(currTime, 1); // Wait until the control cycle reaches the set amount of time passed
         }
         music.playToneInBackground(587, 50); // Издаём сигнал завершения поиска

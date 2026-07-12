@@ -14,7 +14,7 @@ namespace chassis {
     //% group="Move"
     export function regulatorSteering(u: number, v: number) {
         const pLeft = v + u, pRight = v - u;
-        setSpeedsCommand(pLeft, pRight);
+        setPower(pLeft, pRight);
     }
 
     /**
@@ -33,7 +33,7 @@ namespace chassis {
         let pLeft = v + u, pRight = v - u;
         const z = v / Math.max(Math.abs(pLeft), Math.abs(pRight));
         pLeft *= z, pRight *= z;
-        setSpeedsCommand(pLeft, pRight);
+        setPower(pLeft, pRight);
     }
 
     export function normalizedRegulatorSteering2(u: number, v: number) {
@@ -44,7 +44,7 @@ namespace chassis {
             const k = maxAllowed / maxVal;
             pLeft *= k, pRight *= k;
         }
-        setSpeedsCommand(pLeft, pRight);
+        setPower(pLeft, pRight);
     }
 
     /**
@@ -324,7 +324,7 @@ namespace chassis {
             const error = Math.clamp(-1000, 1000, errorRaw);
             const u = pidChassisSync.compute(dt == 0 ? 1 : dt, -error); // Find out and record the control action of the regulator
             const powers = advmotctrls.getPwrSyncMotors(u, out.pwr, out.pwr);
-            setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            setPower(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTimeMs(currTime, 1);
         }
         stop(Braking.Hold);
