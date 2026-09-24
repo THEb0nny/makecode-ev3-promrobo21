@@ -83,8 +83,8 @@ namespace sensors {
             }
         } else if (leftLineSensor instanceof sensors.NXTLightSensor && rightLineSensor instanceof sensors.NXTLightSensor) { // Если датчики отражения nxt были до этого установлены
             for (let i = 0; i < 10; i++) { // Опрос датчиков, чтобы датчики дальше давали правильные показания
-                leftLineSensor.reflectetLightRaw();
-                rightLineSensor.reflectetLightRaw();
+                leftLineSensor.reflectedLightRaw();
+                rightLineSensor.reflectedLightRaw();
                 pause(1);
             }
         } else {
