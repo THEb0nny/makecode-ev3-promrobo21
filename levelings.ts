@@ -123,7 +123,7 @@ namespace levelings {
             let uR = pidRightSideLineAlignment.compute(dt == 0 ? 1 : dt, -errorR) * regulatorMultiplier; // Регулятор правой стороны
             uL = Math.constrain(uL, -lineAlignmentMaxV, lineAlignmentMaxV); // Ограничиваем скорость левой стороны
             uR = Math.constrain(uR, -lineAlignmentMaxV, lineAlignmentMaxV); // Ограничиваем скорость правой стороны
-            chassis.setSpeedsCommand(uL, uR); // Передаём управляющее воздействие на моторы
+            chassis.setPower(uL, uR); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
                 brick.showValue("refLeftLS", refLeftLS, 1);
@@ -190,7 +190,7 @@ namespace levelings {
             // pidLinePositioning.setPoint(error); // Устанавливаем ошибку в регулятор
             let u = pidLinePositioning.compute(dt == 0 ? 1 : dt, -error); // Вычисляем и записываем значение с регулятора
             u = Math.constrain(u, -linePositioningMaxV, linePositioningMaxV); // Ограничиваем скорость
-            chassis.setSpeedsCommand(u, -u); // Передаём управляющее воздействие на моторы
+            chassis.setPower(u, -u); // Передаём управляющее воздействие на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
                 brick.showValue("refLeftLS", refLeftLS, 1);

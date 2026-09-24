@@ -147,7 +147,7 @@ namespace chassis {
                 deregStartTime = control.millis(); // Время старта таймер времени для дорегулирования
                 music.playToneInBackground(587, 50); // Сигнал начале дорегулирования
             }
-            setSpeedsCommand(u, -u); // Передаём управляющее воздействие как скорости на моторы
+            setPower(u, -u); // Передаём управляющее воздействие как скорости на моторы
             if (debug) { // Отладка
                 brick.clearScreen();
                 brick.showValue("calcMotRot", calcMotRot, 1);

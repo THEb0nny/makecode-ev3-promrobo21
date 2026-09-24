@@ -120,7 +120,7 @@ namespace motions {
             const error = Math.clamp(-1000, 1000, errorRaw);
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, speedLeft, speedRight);
-            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            chassis.setPower(powers.pwrLeft, powers.pwrRight);
             if (debug) { // Отладка
                 brick.clearScreen(); // Очистка экрана
                 brick.printValue("refLeftLS", refLeftLS, 1);
@@ -210,7 +210,7 @@ namespace motions {
             const error = Math.clamp(-1000, 1000, errorRaw);
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
-            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            chassis.setPower(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTimeMs(currTime, 5); // Ожидание выполнения цикла
         }
         levelings.linePositioning(100, null, debug); // Позиционируемся на линии
@@ -264,7 +264,7 @@ namespace motions {
             const error = Math.clamp(-1000, 1000, errorRaw);
             const u = chassis.pidChassisSync.compute(dt == 0 ? 1 : dt, -error);
             const powers = advmotctrls.getPwrSyncMotors(u, vLeft, vRight);
-            chassis.setSpeedsCommand(powers.pwrLeft, powers.pwrRight);
+            chassis.setPower(powers.pwrLeft, powers.pwrRight);
             control.pauseUntilTimeMs(currTime, 1); // Ожидание выполнения цикла
         }
         levelings.linePositioning(100, null, debug); // Позиционируемся на линии
