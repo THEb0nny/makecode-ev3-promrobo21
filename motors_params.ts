@@ -23,5 +23,4 @@ namespace params {
     export function motorSetPosEmptyParams(): MotorRegulator {
         return null;
     }
-
 }

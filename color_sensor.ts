@@ -12,7 +12,6 @@ namespace sensors {
         blueBoundary: number;
         purpleBoundary: number;
     }
-
 }
 
 namespace sensors {
@@ -42,7 +41,6 @@ namespace sensors {
         }
         return normRgb;
     }
-
 }
 
 namespace sensors {
@@ -433,7 +431,6 @@ namespace sensors {
         }
         brick.clearScreen();
     }
-
 }
 
 namespace sensors {
@@ -460,5 +457,4 @@ namespace sensors {
         
         return Math.round(hue); // 0-359 — твой цвет по кольцу!
     }
-
 }

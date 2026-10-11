@@ -40,7 +40,6 @@ namespace motions {
             chassis.steeringCommand(0, v);
         }
     }
-
 }
 
 namespace motions {
@@ -269,5 +268,4 @@ namespace motions {
         }
         levelings.linePositioning(100, null, debug); // Позиционируемся на линии
     }
-
 }

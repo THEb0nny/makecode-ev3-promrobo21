@@ -132,5 +132,4 @@ namespace chassis {
         }
         stop(Braking.Hold); // Удерживание при торможении
     }
-
 }

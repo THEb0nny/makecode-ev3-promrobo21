@@ -9,7 +9,6 @@ namespace navigation {
         nodeType?: number
     }
 
-
     let nodesCount: number = 0; // Количество узлов (вершин)
     
     let navigationMatrix: number[][] = []; // Матрица смежности в виде направлений: -1 - пути нет
@@ -485,5 +484,4 @@ namespace navigation {
         path.reverse();
         return path;
     }
-
 }

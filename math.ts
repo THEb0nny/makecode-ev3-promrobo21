@@ -24,5 +24,4 @@ namespace Math {
     export function clip(a: number, b: number, c: number): number {
         return Math.min(c, Math.max(b, a));
     }
-
 }

@@ -303,5 +303,4 @@ namespace levelings {
         motions.actionAfterMotion(actionAfterMotion, speed); // Действие после цикла управления
         if (debug) pause(3000);
     }
-    
 }

@@ -329,5 +329,4 @@ namespace chassis {
         }
         stop(Braking.Hold);
     }
-
 }

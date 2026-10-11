@@ -298,7 +298,6 @@ namespace motions {
     export function getLineFollowSearchTolerance(): number {
         return lineFollowSearchTolerance;
     }
-
 }
 
 namespace motions {
@@ -308,8 +307,6 @@ namespace motions {
         v?: number,
         lineFollowMode?: LineFollowMode
     }
-
-    
 
     // Функция для вывода на экран отладочной информации при движении по линии
     export function printDubugLineFollow(refLeftLS: number, refRightLS: number, error: number, u: number, dt: number) {
@@ -421,7 +418,6 @@ namespace motions {
         }
         motions.actionAfterMotion(actionAfterMotion, v);
     }
-    
 }
 
 namespace motions {
@@ -830,5 +826,4 @@ namespace motions {
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion({ actionAfterMotion, lineFollowMode: LineFollowMode.LeftSensor, v: lineFollowToDistanceRightSensorV} ); // Действие после алгоритма движения
     }
-
 }

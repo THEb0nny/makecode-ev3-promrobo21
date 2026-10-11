@@ -182,7 +182,6 @@ namespace params {
             rightKf: newRightKf
         };
     }
-
 }
 
 namespace params {
@@ -259,5 +258,4 @@ namespace params {
             Kf: newKf
         };
     }
-
 }

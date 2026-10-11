@@ -17,7 +17,6 @@ namespace music {
             music.playTone(frequency, duration);
         });
     }
-
 }
 
 namespace brick {
@@ -40,5 +39,4 @@ namespace brick {
             brick.setStatusLight(StatusLight.Off);
         });
     }
-
 }

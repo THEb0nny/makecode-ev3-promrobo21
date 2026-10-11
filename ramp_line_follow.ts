@@ -44,7 +44,6 @@ namespace motions {
         }
         actionAfterMotion(braking); // Действие после алгоритма движения
     }
-
 }
 
 namespace motions {
@@ -206,5 +205,4 @@ namespace motions {
         music.playToneInBackground(262, 250); // Издаём сигнал завершения
         motions.actionAfterLineMotion({ actionAfterMotion, v: rampLineFollowCrossIntersection2SensorAfterDistV }); // Действие после алгоритма движения
     }
-
 }

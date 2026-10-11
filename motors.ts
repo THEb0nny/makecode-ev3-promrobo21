@@ -74,5 +74,4 @@ namespace motors {
         music.playToneInBackground(988, 50); // Сигнал о завершении
         if (debug) console.log(`Stop motors.setPosition(${position}), currAngle: ${motor.angle()}`);
     }
-
 }

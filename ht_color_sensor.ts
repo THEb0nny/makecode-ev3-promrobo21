@@ -69,5 +69,4 @@ namespace sensors {
             purpleBoundary: purpleBoundaryColorSensors[index]
         }
     }
-
 }

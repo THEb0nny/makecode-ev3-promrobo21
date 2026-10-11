@@ -238,5 +238,4 @@ namespace chassis {
         music.playToneInBackground(622, 100); // Издаём сигнал завершения дорегулирования
         stop(Braking.Hold); // Остановить моторы
     }
-
 }

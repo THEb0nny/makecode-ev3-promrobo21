@@ -172,5 +172,4 @@ namespace params {
     export function rampLineFollowToCrossEmptyParams(): RampLineFollowToCross {
         return null;
     }
-
 }

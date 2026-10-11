@@ -206,5 +206,4 @@ namespace sensors {
             else if (refRawVal < wRefRawRightLineSensor) wRefRawRightLineSensor = refRawVal;
         }
     }
-
 }
