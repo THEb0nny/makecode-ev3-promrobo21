@@ -45,11 +45,6 @@ namespace navigation {
     //% subcategory="Повороты"
     //% group="Синхронизированные повороты"
     export function directionSpinTurn(inputDirection: number, v: number, debug: boolean = false) {
-        if (inputDirection < 0) {
-            console.log(`Warning: inputDirection (${inputDirection}) not valid. Return from function!`);
-            return; // Невалидное значение направления
-        }
-
         const turnDeg = getDirectionTurnDegrees(inputDirection, debug);
         if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}, v: ${v}`);
         if (turnDeg != 0) chassis.spinTurn(turnDeg, v); // Поворот относительно центра шасси
@@ -60,11 +55,6 @@ namespace navigation {
      * Поворот шасси с плавным разгоном (Ramp) на абсолютное направление.
      */
     export function directionRampSpinTurn(inputDirection: number, vMin: number, vMax: number, accelDeg?: number, decelDeg?: number, timeOut?: number, debug: boolean = false) {
-        if (inputDirection < 0) {
-            console.log(`Warning: inputDirection (${inputDirection}) not valid. Return from function!`);
-            return; // Невалидное значение направления
-        }
-
         const turnDeg = getDirectionTurnDegrees(inputDirection, debug);
         if (debug) console.log(`inputDir: ${inputDirection}, turnDeg: ${turnDeg}°, vMin: ${vMin}, vMax: ${vMax}`);
         if (turnDeg != 0) chassis.rampSpinTurn(turnDeg, vMin, vMax); // Поворот относительно центра шасси
