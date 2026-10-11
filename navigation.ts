@@ -319,8 +319,7 @@ namespace navigation {
     //% weight="69"
     //% group="Алгоритм нахождения пути"
     export function algorithmDFS(startNode: number, finishNode: number): number[] {
-        if (startNode < 0 || startNode >= nodesCount) return [];
-        if (finishNode < 0 || finishNode >= nodesCount) return [];
+        if (startNode < 0 || startNode >= nodesCount || finishNode < 0 || finishNode >= nodesCount) return [];
 
         let stack: number[] = [startNode]; // Стек для хранения узлов в порядке обхода
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
@@ -375,8 +374,7 @@ namespace navigation {
     //% weight="68"
     //% group="Алгоритм нахождения пути"
     export function algorithmBFS(startNode: number, finishNode: number): number[] {
-        if (startNode < 0 || startNode >= nodesCount) return [];
-        if (finishNode < 0 || finishNode >= nodesCount) return [];
+        if (startNode < 0 || startNode >= nodesCount || finishNode < 0 || finishNode >= nodesCount) return [];
 
         let queue: number[] = [startNode];
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
@@ -430,6 +428,8 @@ namespace navigation {
     //% weight="67"
     //% group="Алгоритм нахождения пути"
     export function algorithmDijkstra(startNode: number, finishNode: number): number[] {
+        if (startNode < 0 || startNode >= nodesCount || finishNode < 0 || finishNode >= nodesCount) return [];
+
         let dist: number[] = []; // Для записи расстояний до узлов
         let visited: boolean[] = []; // Для отслеживания посещённых узлов
         let parent: number[] = []; // Для восстановления пути (хранит "родителей")
