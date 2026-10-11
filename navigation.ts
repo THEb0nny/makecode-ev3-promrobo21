@@ -267,6 +267,7 @@ namespace navigation {
             for (let j = 0; j < nodesCount; j++) {
                 navigationMatrix[i][j] = -1;
                 weightMatrix[i][j] = -1;
+                nodeTypeMatrix[i][j] = NodeType.Cross;
             }
         }
         // Заполняем по путям
