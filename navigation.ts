@@ -6,7 +6,7 @@ namespace navigation {
         to: number
         direction: number
         weight: number,
-        nodeType?: number
+        nodeType?: NodeType
     }
 
     let nodesCount: number = 0; // Количество узлов (вершин)
@@ -236,9 +236,10 @@ namespace navigation {
      * Создать ребро графа.
      */
     //% blockId="NavigationCreatePath"
-    //% block="create path from $fromNode to $toNode direction $direction weight $weight"
-    //% block.loc.ru="создать ребро из $fromNode в $toNode направление $direction вес $weight"
+    //% block="create path from $fromNode to $toNode direction $direction weight $weight||node type $nodeType"
+    //% block.loc.ru="создать ребро из $fromNode в $toNode направление $direction вес $weight||тип узла $nodeType"
     //% inlineInputMode="inline"
+    //% expandableArgumentMode="enabled"
     //% weight="89"
     //% direction.shadow="nav_direction_picker"
     //% group="Граф"
