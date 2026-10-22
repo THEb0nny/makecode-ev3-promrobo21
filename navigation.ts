@@ -9,7 +9,7 @@ namespace navigation {
         nodeType?: NodeType
     }
 
-    let nodesCount: number = 0; // Количество узлов (вершин)
+    let nodesCount: number = 0; // Количество узлов/вершин (перекрёстков)
     
     let navigationMatrix: number[][] = []; // Матрица смежности в виде направлений: -1 - пути нет
     let weightMatrix: number[][] = []; // Матрица весов путей
