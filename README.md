@@ -1,5 +1,5 @@
 
-> Открыть эту страницу в [https://theb0nny.github.io/makecode-ev3-promrobo21/](https://theb0nny.github.io/makecode-prom-robo-21/)
+> Открыть эту страницу в [https://theb0nny.github.io/makecode-ev3-promrobo21/](https://theb0nny.github.io/makecode-ev3-promrobo21/)
 
 ## Использовать это расширение
 
