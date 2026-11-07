@@ -172,9 +172,11 @@ namespace navigation {
                 directionSpinTurn(newDirection, lineFollowByPathTurnV, debug);
             }
 
-            if (debug) console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
+            if (debug) {
+                console.log(`path[${i}]: ${path[i]} -> ${path[i + 1]}, currDir: ${currentDirection}, newDir: ${newDirection}, afterMotion: ${afterMotion}`);
+            }
 
-            const nodeType = getNodeTypeMatrix()[path[i]][path[i + 1]]; // Тип узла
+            const nodeType = getApproachNodeType(path[i], path[i + 1]); // Тип узла
             
             // Выполнение движения по линии
             if ((i == 0 || directionChanged) && lineFollowByPathAccelStartDist > 0) { // Если это старт пути или мы только что повернули

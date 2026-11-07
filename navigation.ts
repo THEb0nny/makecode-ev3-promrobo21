@@ -2,18 +2,18 @@ namespace navigation {
 
     // Интерфейс путей / рёбер
     export interface NavPath {
-        from: number
-        to: number
+        a: number
+        b?: number
         direction: number
-        weight: number,
-        nodeType?: NodeType
+        weight?: number,
+        isBranch?: boolean
     }
 
     let nodesCount: number = 0; // Количество узлов/вершин (перекрёстков)
     
     let navigationMatrix: number[][] = []; // Матрица смежности в виде направлений: -1 - пути нет
     let weightMatrix: number[][] = []; // Матрица весов путей
-    let nodeTypeMatrix: number[][] = []; // Матрица типов узлов
+    let nodeBranches: number[][] = []; // Физические направления дорог/веток из каждого узла
 
     let currentPosition: number = 0; // Текущая позиция на узле (местоположение)
     let currentDirection: number = 0; // Направление робота для навигации
@@ -61,15 +61,16 @@ namespace navigation {
     export function setNodesCount(newNodesCount: number) {
         nodesCount = newNodesCount;
         // Создаём сразу нужный размер
-        navigationMatrix = [], weightMatrix = [], nodeTypeMatrix = [];
+        navigationMatrix = [];
+        weightMatrix = [];
+        nodeBranches = [];
         for (let i = 0; i < nodesCount; i++) {
             navigationMatrix[i] = [];
             weightMatrix[i] = [];
-            nodeTypeMatrix[i] = [];
+            nodeBranches[i] = [];
             for (let j = 0; j < nodesCount; j++) {
                 navigationMatrix[i][j] = -1;
                 weightMatrix[i][j] = -1;
-                nodeTypeMatrix[i][j] = NodeType.Cross; // По умолчанию считаем все перекрестки обычными
             }
         }
     }
@@ -217,97 +218,191 @@ namespace navigation {
         return weightMatrix;
     }
 
-    export function getNodeTypeMatrix(): number[][] {
-        return nodeTypeMatrix;
-    }
-
     /**
      * Блок-выбиралка для направлений.
      */
     //% blockId="nav_direction_picker"
     //% block="%direction"
-    //% blockHidden=true
     //% shim=TD_ID
+    //% blockHidden=true
     export function _navDirectionPicker(direction: NavDirection): number {
         return direction;
     }
     
     /**
-     * Создать ребро графа.
+     * Создать ребро графа между узлами a и b.
+     * Направление direction указывается в сторону от a к b.
+     * @param a первый узел
+     * @param b второй узел
+     * @param direction направление от a к b
+     * @param weight длина дороги в мм (вес ребра)
      */
     //% blockId="NavigationCreatePath"
-    //% block="create path from $fromNode to $toNode direction $direction weight $weight||node type $nodeType"
-    //% block.loc.ru="создать ребро из $fromNode в $toNode направление $direction вес $weight||тип узла $nodeType"
+    //% block="create path between $a and $b direction $direction weight $weight"
+    //% block.loc.ru="создать ребро между $a и $b направление $direction вес $weight"
     //% inlineInputMode="inline"
     //% expandableArgumentMode="enabled"
     //% weight="89"
     //% direction.shadow="nav_direction_picker"
     //% group="Граф"
-    export function createPath(fromNode: number, toNode: number, direction: number, weight: number, nodeType: NodeType = NodeType.Cross): NavPath {
+    export function createPath(a: number, b: number, direction: number, weight: number): NavPath {
         return {
-            from: fromNode,
-            to: toNode,
+            a: a,
+            b: b,
             direction: direction,
             weight: weight,
-            nodeType: nodeType
+            isBranch: false
         }
     }
 
     /**
-     * Построить граф с помощью рёбер.
+     * Добавить тупиковую ветку на перекрёстке (дорога никуда не ведёт, но есть на карте).
+     * @param node узел, из которого выходит ветка
+     * @param direction глобальное направление ветки на карте
+     */
+    //% blockId="NavigationCreateBranch"
+    //% block="create dead-end branch at node $node direction $direction"
+    //% block.loc.ru="тупиковая ветка на узле $node направление $direction"
+    //% inlineInputMode="inline"
+    //% weight="88"
+    //% direction.shadow="nav_direction_picker"
+    //% group="Граф"
+    export function createBranch(node: number, direction: number): NavPath {
+        return {
+            a: node,
+            direction: direction,
+            weight: 0,
+            isBranch: true
+        };
+    }
+
+    /**
+     * Построить граф с помощью дорог (рёбер и тупиковых веток).
+     * Заполняет матрицы смежности, весов и списки физических лучей перекрёстков.
+     * @param paths массив дорог (createPath) и тупиковых веток (createBranch)
      */
     //% blockId="NavigationBuildGraph"
     //% block="build graph $paths"
     //% block.loc.ru="построить граф $paths"
     //% inlineInputMode="inline"
-    //% weight="88"
+    //% weight="87"
     //% group="Граф"
     export function buildGraph(paths: NavPath[]) {
-        // Очищаем старые матрицы
+        // Очищаем матрицы навигации, весов и списки физических веток перед построением
         for (let i = 0; i < nodesCount; i++) {
+            nodeBranches[i] = []; // Список направлений линий, выходящих из узла i
             for (let j = 0; j < nodesCount; j++) {
-                navigationMatrix[i][j] = -1;
-                weightMatrix[i][j] = -1;
-                nodeTypeMatrix[i][j] = NodeType.Cross;
+                navigationMatrix[i][j] = -1; // -1 означает отсутствие дороги
+                weightMatrix[i][j] = -1; // -1 означает отсутствие веса/расстояния
             }
         }
-        // Заполняем по путям
+
+        // Поочерёдно обрабатываем каждое переданное ребро или тупиковую ветку
         for (let path of paths) {
-            if (path.from == path.to) { // Защита, чтобы не допускать ребро из узла в самого себя
-                console.log(`Self-loop path ${path.from}`);
+            // Обработка тупиковой ветки (физическая линия на карте есть, но узла на конце нет)
+            if (path.isBranch || path.b == null) {
+                if (path.a < 0 || path.a >= nodesCount) { // Проверяем, существует ли узел на карте
+                    console.log(`FATAL: Branch node index out of range (${path.a})`);
+                    continue;
+                }
+                const normDir = (path.direction % 360 + 360) % 360; // Приводим угол к диапазону 0-359 градусов
+                if (nodeBranches[path.a].indexOf(normDir) < 0) { // Приводим угол к диапазону 0-359 градусов
+                    nodeBranches[path.a].push(normDir);
+                }
+                continue; // В матрицу смежности не пишем, чтобы алгоритмы поиска пути не строили маршрут в тупик
+            }
+            // Защита от создания ребра из узла в самого себя (петля)
+            if (path.a == path.b) {
+                console.log(`Self-loop path ${path.a}`);
                 continue;
             }
-            if (path.from < 0 || path.from >= nodesCount || path.to < 0 || path.to >= nodesCount) {  // Проверки на выход за границы...
-                console.log(`FATAL: Node index out of range (${path.from} or ${path.to})`);
+            // Проверка на выход номеров узлов за границы объявленного количества (nodesCount)
+            if (path.a < 0 || path.a >= nodesCount || path.b < 0 || path.b >= nodesCount) {
+                console.log(`FATAL: Node index out of range (${path.a} or ${path.b})`);
                 continue;
             }
-            if (navigationMatrix[path.from][path.to] != -1) { // Проверка дубликатов пути
-                console.log(`Duplicate path ${path.from}, ${path.to}`);
+            // Проверка на случайное повторное добавление одного и того же пути (a -> b)
+            if (navigationMatrix[path.a][path.b] != -1) {
+                console.log(`Duplicate path ${path.a} -> ${path.b}`);
             }
 
+            // Проверяем, является ли направление стандартной двусторонней парой (например, RightLeft, UpDown)
             const pair = directionMap[path.direction];
-
             if (pair) {
-                // Если путь двусторонний, проверяем и обратное направление
-                if (navigationMatrix[path.to][path.from] != -1) console.log(`Duplicate reverse path ${path.to} -> ${path.from}`);
-                navigationMatrix[path.from][path.to] = pair[0]; // Направление from → to
-                navigationMatrix[path.to][path.from] = pair[1]; // Направление to → from
-                weightMatrix[path.from][path.to] = path.weight;
-                weightMatrix[path.to][path.from] = path.weight;
-                // Записываем тип узла для обоих направлений двустороннего пути
-                nodeTypeMatrix[path.from][path.to] = path.nodeType;
-                nodeTypeMatrix[path.to][path.from] = path.nodeType;
+                // ДВУСТОРОННЯЯ ДОРОГА
+                // Если путь двусторонний pair[0] (a -> b), pair[1] (b -> a), проверяем и обратное направление
+                if (navigationMatrix[path.b][path.a] != -1) { // Проверяем обратное направление на дубликат перед записью
+                    console.log(`Duplicate reverse path ${path.b} -> ${path.a}`);
+                }
+                // Записываем глобальные направления движения в матрицу навигации
+                navigationMatrix[path.a][path.b] = pair[0]; // Направление a → b
+                navigationMatrix[path.b][path.a] = pair[1]; // Направление b → a
+                // Записываем длину ребра в матрицу весов для обоих направлений
+                weightMatrix[path.a][path.b] = path.weight;
+                weightMatrix[path.b][path.a] = path.weight;
+                // Запоминаем физические направления лучей перекрёстков
+                 // Для узла a дорога уходит по направлению pair[0] (добавляем, если ещё нет)
+                if (nodeBranches[path.a].indexOf(pair[0]) < 0) {
+                    nodeBranches[path.a].push(pair[0]);
+                }
+                // Для узла b эта же дорога уходит в противоположную сторону pair[1] (добавляем, если ещё нет)
+                if (nodeBranches[path.b].indexOf(pair[1]) < 0) {
+                    nodeBranches[path.b].push(pair[1]);
+                }
             } else if (path.direction >= 0 && path.direction <= 360) {
+                // ОДНОСТОРОННЯЯ ДОРОГА (только от a к b)
                 // Если в карте нет, значит это одиночный угол (0, 90, 180, 270 или любой другой)
-                path.direction = path.direction === 360 ? 0 : path.direction; // Если ввели 360, записываем как 0
-                navigationMatrix[path.from][path.to] = path.direction;
-                weightMatrix[path.from][path.to] = path.weight;
-                nodeTypeMatrix[path.from][path.to] = path.nodeType;
-            } else { // Сообщение для "особо одаренных"
-                console.log(`ERROR: Invalid direction ${path.direction} on path ${path.from}->${path.to}. Use 0-360 or standard pairs.`);
+                const dir = path.direction === 360 ? 0 : path.direction; // Если ввели 360, записываем как 0
+                navigationMatrix[path.a][path.b] = dir;
+                weightMatrix[path.a][path.b] = path.weight;
+                // Для узла a добавляем луч в направлении dir (с защитой от дублирования)
+                if (nodeBranches[path.a].indexOf(dir) < 0) {
+                    nodeBranches[path.a].push(dir);
+                }
+            } else {
+                // Некорректное значение угла (не входит в 0-360 и не найдено в парах)
+                // Сообщение для "особо одаренных"
+                console.log(`ERROR: Invalid direction ${path.direction} on path ${path.a}->${path.b}. Use 0-360 or standard pairs.`);
                 // control.fail("Invalid Navigation Angle") // Чтобы программа вообще зависла с ошибкой на экране
             }
         }
+    }
+
+    /**
+     * Автоматически определяет тип перекрёстка (Cross, Left, Right) при подъезде к узлу toNode из fromNode.
+     */
+    export function getApproachNodeType(fromNode: number, toNode: number): NodeType {
+        const moveDir = navigationMatrix[fromNode][toNode];
+        if (moveDir < 0 || !nodeBranches[toNode]) return NodeType.Cross;
+        let hasLeft = false;
+        let hasRight = false;
+        // Смотрим все физические ветки перекрёстка toNode
+        for (let branchDir of nodeBranches[toNode]) {
+            // Вычисляем угол ответвления относительно движения робота
+            const relAngle = ((branchDir - moveDir) % 360 + 360) % 360;
+            // Ответвление слева (в районе 90°: от 45° до 135°)
+            if (relAngle >= 45 && relAngle <= 135) {
+                hasLeft = true;
+            }
+            // Ответвление справа (в районе 270°: от 225° до 315°)
+            else if (relAngle >= 225 && relAngle <= 315) {
+                hasRight = true;
+            }
+        }
+        // Если ветки есть с двух сторон (X-крест или Т-перекрёсток "в упор")
+        if (hasLeft && hasRight) {
+            return NodeType.Cross; // Eхать 2 датчиками
+        }
+        // Если ветка только слева
+        if (hasLeft) {
+            return NodeType.Left; // Kовить левым датчиком
+        }
+        // Если ветка только справа
+        if (hasRight) {
+            return NodeType.Right; // Kовить правым датчиком
+        }
+        // Если боковых веток нет (поворот L или прямой проезд)
+        return NodeType.Cross;
     }
 
     /**
