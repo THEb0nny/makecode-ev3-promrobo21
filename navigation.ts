@@ -241,7 +241,6 @@ namespace navigation {
     //% block="create path between $a and $b direction $direction weight $weight"
     //% block.loc.ru="создать ребро между $a и $b направление $direction вес $weight"
     //% inlineInputMode="inline"
-    //% expandableArgumentMode="enabled"
     //% weight="89"
     //% direction.shadow="nav_direction_picker"
     //% group="Граф"
