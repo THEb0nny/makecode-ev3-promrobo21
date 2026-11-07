@@ -27,6 +27,72 @@ sensors.setHsvlToColorNumBoundariesColorSensor(colorSensor, {
     purpleBoundary: -1
 });
 
+// [База 0]                                                                    [тупик] 
+//    │                                                                           .
+//    │      (1)─────────────────(2)─────────────────(3)┄┄[тупик]                 .
+//    │       │                   │                   │                           .
+//    │       │                   │                  (6)───────────────(7)        .
+//    │       │                   │                   │                 │         .
+//    │      (4)─────────────────(5)                  │                (8)───────(9)
+//    │       │                   │                   │                           │   
+//    │       │                   │                   │                           │   
+//   (10)────(11)────────────────(12)                 │                           │   
+//    │       │                   │                   │                           │   
+//    │       │                  (13)────────────────(14)─────────────(15)        │   
+//    │       │                   │                                     │         │   
+//    ▼       ▼                   ▼                                     ▼         ▼   
+// [тупик] [тупик]             [тупик]                               [тупик]   [База 16]
+
+// НАВИГАЦИОННЫЙ ГРАФ: КАРТА РРО 2026 (17 узлов)
+navigation.setNodesCount(17);
+navigation.buildGraph([
+    // ВЫХОД ИЗ БАЗЫ 1 (0)
+    navigation.createPath(0, 10, NavDirection.DownUp, 380),
+    // ВЕРХНИЙ КОНТУР
+    navigation.createPath(1, 2, NavDirection.RightLeft, 435),
+    navigation.createPath(2, 3, NavDirection.RightLeft, 445),
+    navigation.createBranch(3, NavDirection.Right), // тупик вправо над аркой
+    // ВЕРХНИЕ ВЕРТИКАЛИ
+    navigation.createPath(1, 4, NavDirection.DownUp, 320),
+    navigation.createPath(2, 5, NavDirection.DownUp, 320),
+    navigation.createPath(3, 6, NavDirection.DownUp, 250),
+    // СРЕДНЯЯ ПЕРЕМЫЧКА СЛЕВА
+    navigation.createPath(4, 5, NavDirection.RightLeft, 435),
+    // ОБЪЕЗД СПРАВА ВВЕРХУ
+    navigation.createPath(6, 7, NavDirection.RightLeft, 440),
+    navigation.createPath(7, 8, NavDirection.DownUp, 220),
+    // ДОРОЖКА ПОД ДЕВОЧКОЙ СПРАВА
+    navigation.createPath(8, 9, NavDirection.RightLeft, 330),
+    navigation.createBranch(9, NavDirection.Up), // тупик вверх вдоль края
+    // Съезд к Базе 2 (16)
+    navigation.createPath(9, 16, NavDirection.DownUp, 230),
+    // ВЕРТИКАЛИ К ЦЕНТРАЛЬНОЙ МАГИСТРАЛИ
+    navigation.createPath(4, 11, NavDirection.DownUp, 320),
+    navigation.createPath(5, 12, NavDirection.DownUp, 320),
+    navigation.createPath(6, 14, NavDirection.DownUp, 565), // длинная вертикаль справа от арки
+    navigation.createPath(8, 15, NavDirection.DownUp, 345),
+    // ЦЕНТРАЛЬНАЯ ГОРИЗОНТАЛЬ (ЗОНА КРЕСТА)
+    navigation.createPath(10, 11, NavDirection.RightLeft, 335),
+    navigation.createBranch(10, NavDirection.Down), // тупик вниз к черному квадрату
+    navigation.createPath(11, 12, NavDirection.RightLeft, 435),
+    navigation.createBranch(11, NavDirection.Down), // тупик вниз к черному квадрату (крест на 11!)
+    // ПЕРЕХОД К НИЖНЕЙ МАГИСТРАЛИ
+    navigation.createPath(12, 13, NavDirection.DownUp, 170),
+    // НИЖНЯЯ МАГИСТРАЛЬ
+    navigation.createPath(13, 14, NavDirection.RightLeft, 445),
+    navigation.createBranch(13, NavDirection.Down), // тупик вниз к черному квадрату
+    navigation.createPath(14, 15, NavDirection.RightLeft, 440),
+    navigation.createBranch(15, NavDirection.Down)  // тупик вниз к черному квадрату
+]);
+
+// Старт на Базе 1 (узел 0), робот смотрит вниз (270°) на узел 10
+navigation.setCurrentPosition(0);
+navigation.setCurrentDirection(NavDirection.Down);
+
+// Тестовый поиск пути: из Базы 1 (0) в Базу 2 (16)
+const pathToBase2 = navigation.algorithmDijkstra(0, 16);
+console.log(`Путь из Базы 1 в Базу 2: ${pathToBase2.join(' -> ')}`);
+
 // Получить цвет
 function GetColor(debug: boolean = false): number {
     const rgbHsvl = sensors.getColorSensorRgbHsvl(colorSensor);
@@ -128,7 +194,6 @@ function Main() {
     brick.setStatusLight(StatusLight.GreenPulse); // Сигнал о готовности светодиодами
     brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
     music.playTone(262, music.beat(BeatFraction.Half)); // Звук начала
-
 }
 
 Main();
@@ -163,25 +228,6 @@ Main();
 // chassis.stop(true);
 // chassis.steeringCommand(0, 50);
 // chassis.decelFinishLinearDistMove(50, 10, 100, 300);
-
-navigation.setNodesCount(29);
-navigation.setCurrentDirection(1);
-
-navigation.buildGraph([
-    { a: 0, b: 1, direction: NavDirection.Right, weight: 40 },
-    { a: 1, b: 2, direction: NavDirection.Right, weight: 40 },
-    { a: 0, b: 3, direction: NavDirection.Down, weight: 50 },
-    { a: 1, b: 4, direction: NavDirection.Down, weight: 50 },
-    { a: 3, b: 4, direction: NavDirection.Right, weight: 40 },
-    { a: 4, b: 5, direction: NavDirection.Right, weight: 40 }
-]);
-
-// console.log(`travelDFS: ${navigation.algorithmDFS(25, 1).join(', ')}`);
-console.log(`travelBFS: ${navigation.algorithmBFS(1, 23).join(', ')}`);
-// console.log(`travelDijkstra: ${navigation.algorithmDijkstra(1, 23).join(', ')}`);
-
-// navigation.followLineToNode(GraphTraversal.Dijkstra, 1, {moveSpeed: 70, turnSpeed: 50, Kp: 0.5 });
-navigation.followLineByPath(navigation.algorithmBFS(1, 23), AfterLineMotion.LineSmoothRolling, { vStartMove: 30, vMaxMove: 50, vTurn:50, Kp: 0.2, Kd: 0.5 }, true);
 
 // function lineFollow(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
 //     if (params) { // Если были переданы параметры
