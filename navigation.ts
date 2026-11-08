@@ -266,7 +266,7 @@ namespace navigation {
     //% weight="88"
     //% direction.shadow="nav_direction_picker"
     //% group="Граф"
-    export function createBranch(node: number, direction: number): NavPath {
+    export function createBranch(node: number, direction: number, weight?: number): NavPath {
         return {
             a: node,
             direction: direction,
