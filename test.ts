@@ -4,7 +4,7 @@ enum ManipulatorState {
 }
 
 chassis.setMotors(motors.mediumB, motors.mediumC, true, false); // Установить моторы в шасси и установить свойства инверсии
-chassis.setSyncRegulatorGains(0.02, 0.0001, 0.5); // Установить параметры регулирования синхронизации моторов шасси
+chassis.setSyncRegulatorGains(0.005, 0.0001, 0.5); // Установить параметры регулирования синхронизации моторов шасси
 chassis.setWheelDiametr(62.4); // Установить радиус колёс в шасси
 chassis.setBaseLength(172); // Установить размер базы шасси
 motions.setDistRollingAfterIntersection(50); // Установить дистанцию прокатки после перекрёстка в мм
@@ -227,7 +227,19 @@ function Main() {
     // Тестовый поиск пути: из Базы 1 (0) в Базу 2 (16)
     const pathToBase2 = navigation.algorithmDijkstra(0, 16);
     console.log(`Путь из Базы 1 в Базу 2: ${pathToBase2.join(' -> ')}`);
-    navigation.followLineByPath(pathToBase2, AfterLineMotion.SmoothRolling, { vStartMove: 30, vMaxMove: 60, vTurn: 60, Kp: 0.2, Kd: 0.5 });
+    navigation.followLineByPath(pathToBase2, AfterLineMotion.SmoothRolling, { 
+        vStartMove: 30, 
+        vMaxMove: 60, 
+        vTurn: 60, 
+        accelStartDist: 30, 
+        Kp: 0.2, 
+        Kd: 0.5
+    });
+
+    brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
+    const path = navigation.algorithmDijkstra(navigation.getCurrentPosition(), 4);
+    console.log(`Путь: ${path.join(' -> ')}`);
+    navigation.followLineByPath(path, AfterLineMotion.SmoothRolling);
 }
 
 Main();
