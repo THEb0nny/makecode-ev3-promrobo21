@@ -1,3 +1,8 @@
+enum ManipulatorState {
+    Down,
+    Up
+}
+
 chassis.setMotors(motors.mediumB, motors.mediumC, true, false); // Установить моторы в шасси и установить свойства инверсии
 chassis.setSyncRegulatorGains(0.02, 0.0001, 0.5); // Установить параметры регулирования синхронизации моторов шасси
 chassis.setWheelDiametr(62.4); // Установить радиус колёс в шасси
@@ -7,8 +12,9 @@ chassis.setBrakeSettleTime(100); // Время для стабилизации �
 
 const manipulatorMotor = motors.mediumD;
 
-sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
-sensors.setLineSensorsRawRefValues(630, 499, 650, 520); // Установить калибровочные значения чёрного и белого левого и правого датчика
+// sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
+sensors.setNxtLightSensorsAsLineSensors(sensors.nxtLight2, sensors.nxtLight3);
+sensors.setLineSensorsRawRefValues(2420, 1740, 2004, 1308); // Установить калибровочные значения чёрного и белого левого и правого датчика
 
 const colorSensor = sensors.color4; // Датчик цвета, которым определяем цвет предмета
 
@@ -90,10 +96,6 @@ navigation.setCurrentPosition(0);
 // WARNING В новой системе направление задаётся в градусах. При старте обязательно нужно передавать enum. Если случайно передать число 1, робот решит, что он смотрит под углом 1° вместо 270°, и сделает лишний доворот.
 navigation.setCurrentDirection(NavDirection.Down);
 
-// Тестовый поиск пути: из Базы 1 (0) в Базу 2 (16)
-const pathToBase2 = navigation.algorithmDijkstra(0, 16);
-console.log(`Путь из Базы 1 в Базу 2: ${pathToBase2.join(' -> ')}`);
-
 // Получить цвет
 function GetColor(debug: boolean = false): number {
     const rgbHsvl = sensors.getColorSensorRgbHsvl(colorSensor);
@@ -141,11 +143,6 @@ function VoiceColor(color: number) {
     pause(50);
 }
 
-enum ManipulatorState {
-    Down,
-    Up
-}
-
 // Манипулятор захвата
 function Manipulator(state: ManipulatorState, hold: boolean, v: number = 50) {
     const dir = state == ManipulatorState.Up ? 1 : -1;
@@ -182,23 +179,6 @@ brick.buttonRight.onEvent(ButtonEvent.Pressed, function () {
     pause(1000);
 });
 
-function Main() {
-    manipulatorMotor.setInverted(false);
-    Manipulator(ManipulatorState.Down, false, 50);
-
-    for (let i = 0; i < 10; i ++) { // Предварительно перевести датчик цвета в режим цвета
-        colorSensor.rgbRaw();
-        pause(10);
-    }
-    sensors.preparationLineSensor(); // Предварительно подготовить датчики линии
-
-    brick.setStatusLight(StatusLight.GreenPulse); // Сигнал о готовности светодиодами
-    brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
-    music.playTone(262, music.beat(BeatFraction.Half)); // Звук начала
-}
-
-Main();
-
 // Установить пороговое значение отражения при движении по линии
 // motions.setLineFollowRefTreshold(40)
 
@@ -229,6 +209,28 @@ Main();
 // chassis.stop(true);
 // chassis.steeringCommand(0, 50);
 // chassis.decelFinishLinearDistMove(50, 10, 100, 300);
+
+function Main() {
+    manipulatorMotor.setInverted(false);
+    Manipulator(ManipulatorState.Down, false, 50);
+
+    for (let i = 0; i < 10; i ++) { // Предварительно перевести датчик цвета в режим цвета
+        colorSensor.rgbRaw();
+        pause(10);
+    }
+    sensors.preparationLineSensor(); // Предварительно подготовить датчики линии
+
+    brick.setStatusLight(StatusLight.GreenPulse); // Сигнал о готовности светодиодами
+    brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
+    music.playTone(262, music.beat(BeatFraction.Half)); // Звук начала
+
+    // Тестовый поиск пути: из Базы 1 (0) в Базу 2 (16)
+    const pathToBase2 = navigation.algorithmDijkstra(0, 16);
+    console.log(`Путь из Базы 1 в Базу 2: ${pathToBase2.join(' -> ')}`);
+    navigation.followLineByPath(pathToBase2, AfterLineMotion.SmoothRolling, { vStartMove: 30, vMaxMove: 60, vTurn: 60, Kp: 0.2, Kd: 0.5 });
+}
+
+Main();
 
 // function lineFollow(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
 //     if (params) { // Если были переданы параметры
