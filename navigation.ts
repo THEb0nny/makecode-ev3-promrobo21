@@ -308,6 +308,10 @@ namespace navigation {
                 if (nodeBranches[path.a].indexOf(normDir) < 0) { // Приводим угол к диапазону 0-359 градусов
                     nodeBranches[path.a].push(normDir);
                 }
+                // Записываем длину тупика прямо в матрицу весов на диагональ!
+                if (path.weight) {
+                    weightMatrix[path.a][path.a] = path.weight;
+                }
                 continue; // В матрицу смежности не пишем, чтобы алгоритмы поиска пути не строили маршрут в тупик
             }
             // Защита от создания ребра из узла в самого себя (петля)
@@ -325,6 +329,9 @@ namespace navigation {
                 console.log(`Duplicate path ${path.a} -> ${path.b}`);
             }
 
+            // Вычисляем безопасный вес: если не задан или <= 0, ставим 1 для Дейкстры
+            const edgeWeight = (path.weight != null && path.weight > 0) ? path.weight : 1;
+
             // Проверяем, является ли направление стандартной двусторонней парой (например, RightLeft, UpDown)
             const pair = directionMap[path.direction];
             if (pair) {
@@ -337,8 +344,8 @@ namespace navigation {
                 navigationMatrix[path.a][path.b] = pair[0]; // Направление a → b
                 navigationMatrix[path.b][path.a] = pair[1]; // Направление b → a
                 // Записываем длину ребра в матрицу весов для обоих направлений
-                weightMatrix[path.a][path.b] = path.weight;
-                weightMatrix[path.b][path.a] = path.weight;
+                weightMatrix[path.a][path.b] = edgeWeight;
+                weightMatrix[path.b][path.a] = edgeWeight;
                 // Запоминаем физические направления лучей перекрёстков
                  // Для узла a дорога уходит по направлению pair[0] (добавляем, если ещё нет)
                 if (nodeBranches[path.a].indexOf(pair[0]) < 0) {
