@@ -40,10 +40,10 @@ sensors.setHsvlToColorNumBoundariesColorSensor(colorSensor, {
 //    │       │                   │                  (6)───────────────(7)        |
 //    │       │                   │                   │                 │         |
 //    │      (4)─────────────────(5)                  │                (8)───────(9)
-//    │       │                   │                   │                           │   
-//    │       │                   │                   │                           │   
-//   (10)────(11)────────────────(12)                 │                           │   
-//    │       │                   │                   │                           │   
+//    │       │                   │                   │                 |         │   
+//    │       │                   │                   │                 |         │   
+//   (10)────(11)────────────────(12)                 │                 |         │   
+//    │       │                   │                   │                 |         │   
 //    │       │                  (13)────────────────(14)─────────────(15)        │   
 //    │       ▼                   │                                     │         │
 //    ▼    [тупик]                ▼                                     ▼         ▼   
@@ -212,7 +212,7 @@ brick.buttonRight.onEvent(ButtonEvent.Pressed, function () {
 
 function Main() {
     manipulatorMotor.setInverted(false);
-    Manipulator(ManipulatorState.Down, false, 50);
+    // Manipulator(ManipulatorState.Down, false, 50);
 
     for (let i = 0; i < 10; i ++) { // Предварительно перевести датчик цвета в режим цвета
         colorSensor.rgbRaw();
