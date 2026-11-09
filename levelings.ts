@@ -65,6 +65,7 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignment"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/levelings/line-alignment
     //% block="line alignment $lineLocation at $regulatorTime ms||params: $params|debug $debug"
     //% block.loc.ru="выравнивание на линии $lineLocation за $regulatorTimeмс||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -146,6 +147,7 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LinePositioning"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/levelings/line-positioning
     //% block="positioning on line at $regTime ms||params: $params|debug $debug"
     //% block.loc.ru="спозиционироваться на линии за время $regTime мс||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -213,6 +215,7 @@ namespace levelings {
      * @param debug отладка, eg: false
      */
     //% blockId="LineAlignmentInMotion"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/levelings/line-alignment-in-motion
     //% block="alignment on line in motion at $speed\\% after motion $actionAfterMotion||debug $debug"
     //% block.loc.ru="выравнивание на линии в движении при $speed\\% c действием после $actionAfterMotion||отладка $debug"
     //% expandableArgumentMode="enabled"

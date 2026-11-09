@@ -15,6 +15,7 @@ namespace chassis {
      * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisRampSpinTurn"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/ramp-spin-turn
     //% block="chassis ramp spin turn $deg\\° from min $vMin\\% макс $vMax\\% relative to center wheel axis||at accel deg $accelDeg|decel $decelDeg"
     //% block.loc.ru="плавный поворот шасси на $deg\\° с мин $vMin\\% макс $vMax\\% при относительно центра оси колёс||при угле ускорения $accelDeg|замедления $decelDeg"
     //% inlineInputMode="inline"
@@ -117,6 +118,7 @@ namespace chassis {
      * @param timeOut максимальное время выполнения в мсек, eg: 2000
      */
     //% blockId="ChassisRampPivotTurn"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/ramp-pivot-turn
     //% block="chassis rump pivot turn $deg\\° from min $vMin\\% max $vMax\\% pivot $wheelPivot||at accel deg $accelDeg|decel $decelDeg"
     //% block.loc.ru="плавный поворот шасси на $deg\\° с мин $vMin\\% макс $vMax\\% относительно $wheelPivot||при угле ускорения $accelDeg|замедления $decelDeg"
     //% inlineInputMode="inline"

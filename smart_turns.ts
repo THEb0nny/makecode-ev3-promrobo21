@@ -97,6 +97,7 @@ namespace chassis {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartSpinTurn"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/smart-spin-turn
     //% block="smart turn at $deg\\° relative center of wheels||params = $params|debug $debug"
     //% block.loc.ru="умный поворот на $deg\\° относительно центра оси колёс||параметры = $params|отдалка $debug"
     //% expandableArgumentMode="toggle"
@@ -172,6 +173,7 @@ namespace chassis {
      * @param debug отладка на экран, eg: false
      */
     //% blockId="SmartPivotTurn"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/smart-pivot-turn
     //% block="smart turn at $deg\\° relative $wheelPivot wheel||params = $params|debug %debug"
     //% block.loc.ru="умный поворот на $deg\\° относительно $wheelPivot колеса||параметры = $params|отладка %debug"
     //% expandableArgumentMode="toggle"

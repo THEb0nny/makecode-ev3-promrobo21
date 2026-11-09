@@ -15,6 +15,7 @@ namespace sensors {
      * @param newRightLineSensor правый датчик цвета, eg: sensors.color3
      */
     //% blockId="SetColorSensorsAsLineSensors"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/sensors/set-color-sensors-as-line-sensors
     //% block="set **color sensors** as line sensors left $newLeftLineSensor right $newRightLineSensor"
     //% block.loc.ru="установить **датчики цвета** в качестве датчиков линии левый $newLeftLineSensor правый $newRightLineSensor"
     //% inlineInputMode="inline"
@@ -36,6 +37,7 @@ namespace sensors {
      * @param newRightLineSensor правый nxt датчик отражения, eg: sensors.nxtLight4
      */
     //% blockId="SetNxtLightSensorsAsLineSensors"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/sensors/set-nxt-light-sensors-as-line-sensors
     //% block="set **nxt light sensors** as line sensors left $newLeftLineSensor right $newRightLineSensor"
     //% block.loc.ru="установить **nxt датчики** отражения в качестве датчиков линии левый $newLeftLineSensor правый $newRightLineSensor"
     //% inlineInputMode="inline"
@@ -116,6 +118,7 @@ namespace sensors {
      * Новый метод установки датчикам линии сырых значений на чёрном и белом.
      */
     //% blockId="SetLineSensorsRawRefValues"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/sensors/set-line-sensors-raw-ref-values
     //% block="set ref raw values ​​for **left line sensor** black $blackRefRawValLeftSensor white $whiteRefRawValLeftSensor **right** black $blackRefRawValRightSensor white $whiteRefRawValRightSensor"
     //% block.loc.ru="установить сырые значения отражения **левому датчику линии** чёрный $blackRefRawValLeftSensor белый $whiteRefRawValLeftSensor **правому** чёрный $blackRefRawValRightSensor белый $whiteRefRawValRightSensor"
     //% inlineInputMode="inline"
@@ -180,6 +183,7 @@ namespace sensors {
      * @param wRefRawVal сырое значение отражения на белом, eg: 650
      */
     //% blockId="GetNormalizedReflectionValue"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/sensors/get-normalized-reflection-value
     //% block="normalized reflection **line sensor** $sensor"
     //% block.loc.ru="нормализованное отражение **датчика линии** $sensor"
     //% inlineInputMode="inline"

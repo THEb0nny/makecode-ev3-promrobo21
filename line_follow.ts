@@ -432,6 +432,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToCrossIntersection"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/line-follow/follow-to-cross-intersection
     //% block="line follow to intersection after motion $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии до перекрёстка с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -484,6 +485,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToSideIntersection"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/line-follow/follow-to-side-intersection
     //% block="line follow to intersection $sideIntersection after motion $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии до перекрёстка $sideIntersection с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -512,6 +514,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToLeftIntersection"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/line-follow/follow-to-left-intersection
     //% block="line follow to left intersection $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии до перекрёстка слева $lineLocation c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -567,6 +570,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToRightIntersection"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/line-follow/follow-to-right-intersection
     //% block="line follow to right intersection $lineLocation after motion $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии до перекрёстка справа $lineLocation c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -626,6 +630,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceByTwoSensors"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/line-follow/follow-to-distance-by-two-sensors
     //% block="line follow to distance $dist mm after motion $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии на расстояние $dist мм с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -682,6 +687,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="LineFollowToDistanceByOneSensor"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/line-follow/follow-to-distance-by-one-sensor
     //% block="line follow $followLineSensor sensor to distance $dist mm|after motion $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии $followLineSensor датчиком на расстояние $dist мм|c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"

@@ -238,6 +238,7 @@ namespace navigation {
      * @param weight длина дороги в мм (вес ребра)
      */
     //% blockId="NavigationCreatePath"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/navigation/create-path
     //% block="create path between $a and $b direction $direction weight $weight"
     //% block.loc.ru="создать ребро между $a и $b направление $direction вес $weight"
     //% inlineInputMode="inline"
@@ -260,6 +261,7 @@ namespace navigation {
      * @param direction глобальное направление ветки на карте
      */
     //% blockId="NavigationCreateBranch"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/navigation/create-branch
     //% block="create dead-end branch at node $node direction $direction"
     //% block.loc.ru="тупиковая ветка на узле $node направление $direction"
     //% inlineInputMode="inline"
@@ -281,6 +283,7 @@ namespace navigation {
      * @param paths массив дорог (createPath) и тупиковых веток (createBranch)
      */
     //% blockId="NavigationBuildGraph"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/navigation/build-graph
     //% block="build graph $paths"
     //% block.loc.ru="построить граф $paths"
     //% inlineInputMode="inline"
@@ -525,6 +528,7 @@ namespace navigation {
      * Дейкстра гарантированно найдёт оптимальный путь A → C → B. Взвешенный граф (учёт реальных расстояний/весов).
      */
     //% blockId="GraphTraversalAlgorithmDijkstra"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/navigation/algorithm-dijkstra
     //% block="path of Dijkstra algorithm at start $startNode final $finishNode nodes"
     //% block.loc.ru="путь алгоритмом Дейкрсты при начальной $startNode конечной $finishNode узлах"
     //% inlineInputMode="inline"

@@ -85,6 +85,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="MoveToReflectionZone"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/motions/move-to-reflection-zone
     //% block="move in direction $turnRatio at $v\\%| before determining reflection $sensorsSelection $refCondition $refTreshold|action after $actionAfterMotion||debug $debug"
     //% block.loc.ru="движение по направлению $turnRatio на $v\\%| до определения отражения $sensorsSelection $refCondition $refTreshold|действие после $actionAfterMotion||отладка $debug"
     //% inlineInputMode="inline"
@@ -140,6 +141,7 @@ namespace motions {
      * @param debug отладка на экран, eg: false
     */
     //% blockId="SpinTurnToLine"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/motions/spin-turn-to-line
     //% block="turn to line $rotateSide at $v\\% relative to center of wheel axis||params: $params|debug $debug"
     //% block.loc.ru="поворот до линии $rotateSide на $v\\% относительно центра оси колёс||параметры: $params|отладка $debug"
     //% expandableArgumentMode="enabled"

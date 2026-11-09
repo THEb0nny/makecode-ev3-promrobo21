@@ -56,6 +56,7 @@ namespace chassis {
      * @param braking тип торможения, eg: MotionBraking.Hold
      */
     //% blockId="LinearDistMove"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/linear-dist-move
     //% block="linear distance moving $dist mm at $v\\% braking $braking"
     //% block.loc.ru="линейное движение на расстояние $dist мм с $v\\% торможение $braking"
     //% inlineInputMode="inline"
@@ -88,6 +89,7 @@ namespace chassis {
      * @param braking тип торможения, eg: MotionBraking.Hold
      */
     //% blockId="DistMove"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/dist-move
     //% block="distance moving $dist mm at $vLeft\\% $vRight\\% braking $braking"
     //% block.loc.ru="движение на расстояние $dist мм с $vLeft\\% $vRight\\% торможение $braking"
     //% inlineInputMode="inline"
@@ -125,6 +127,7 @@ namespace chassis {
      * @param vFinish финишная скорость (мощность) движения, eg: 20
      */
     //% blockId="RampLinearDistMove"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/ramp-linear-dist-move
     //% block="linear distance moving $totalDist mm|at acceleration $accelDist deceleration $decelDist|from start $vStart\\% max $vMax\\% finish $vFinish\\%"
     //% block.loc.ru="линейное движение на расстояние $totalDist мм|при ускорении $accelDist замедлении $decelDist|c стартовой $vStart\\% макс $vMax\\% финишной $vFinish\\%"
     //% inlineInputMode="inline"
@@ -180,6 +183,7 @@ namespace chassis {
      * @param accelDist расстояние ускорения в мм, eg: 80
      */
     //% blockId="AccelStartLinearDistMove"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/accel-start-linear-dist-move
     //% block="acceleration in linear motion from $vStart\\% to $vMax\\% per $accelDist mm|at total distance $totalDist"
     //% block.loc.ru="ускорение при линейном движении c $vStart\\% до $vMax\\% за $accelDist мм|при общей дистанции $totalDist"
     //% inlineInputMode="inline"
@@ -234,6 +238,7 @@ namespace chassis {
      * @param actionAfterMotion действие после, eg: AfterMotion.HoldStop
      */
     //% blockId="DecelFinishLinearDistMove"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/chassis/decel-finish-linear-dist-move
     //% block="deceleration in linear motion from $v\\% to $vFinish\\%|per $decelDist mm|at total distance of $totalDist|after motion $actionAfterMotion"
     //% block.loc.ru="замеделение при линейном движении c $v\\% до $vFinish\\%|за $decelDist мм|при общей дистанции $totalDist|действие после $actionAfterMotion"
     //% inlineInputMode="inline"

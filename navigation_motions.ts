@@ -35,6 +35,7 @@ namespace navigation {
      * @param v скорость поворота, eg: 50
      */
     //% blockId="ChassisDirectionSpinTurn"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/navigation/direction-spin-turn
     //% block="chassis spin turn direction $inputDirection at $v\\%||debug $debug"
     //% block.loc.ru="поворот шасси на направление $inputDirection с $v\\% относительно центра оси колёс||debug $debug"
     //% expandableArgumentMode="enabled"
@@ -108,6 +109,7 @@ namespace navigation {
      * @param newPos узловая точка, в которую нужно двигаться, eg: 1
      */
     //% blockId="NavigationFollowLineToNode"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/navigation/follow-line-to-node
     //% block="line follow by algorithm $algorithm to node $newPos||params: $params|debug $debug"
     //% block.loc.ru="движение по линии алгоритмом $algorithm до узловой точки $newPos||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -134,6 +136,7 @@ namespace navigation {
      * @param actionAfterMotion действие после перекрёстка, eg: AfterLineMotion.SmoothRolling
      */
     //% blockId="NavigationFollowLineByPath"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/navigation/follow-line-by-path
     //% block="line follow along path $path after motion $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии по пути $path с действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"

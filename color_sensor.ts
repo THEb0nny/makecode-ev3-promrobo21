@@ -328,6 +328,7 @@ namespace sensors {
      * @param hsvl массив значений hsvl
      */
     //% blockId="ConvertHsvlToColorNum"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/sensors/convert-hsvl-to-color-num
     //% block="convert HSVL $hsvl to color code at params $boundaries"
     //% block.loc.ru="перевести HSVL $hsvl в цветовой код при параметрах $boundaries"
     //% inlineInputMode="inline"

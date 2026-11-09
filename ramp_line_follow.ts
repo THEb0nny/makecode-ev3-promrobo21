@@ -58,6 +58,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="RampLineFollowToDistanceByTwoSensors"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/line-follow/ramp-follow-to-distance
     //% block="ramp line follow to distance $totalDist mm acceleration $accelDist deceleration $decelDist|с действием после $braking||params: $params|debug $debug"
     //% block.loc.ru="движение по линии на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist|с действием после $braking||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"
@@ -134,6 +135,7 @@ namespace motions {
      * @param debug отладка, eg: false
      */
     //% blockId="RampLineFollowToCrossIntersection"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/line-follow/ramp-follow-to-cross-intersection
     //% block="движение по линии до перекрёстка на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist c действием после $actionAfterMotion||params: $params|debug $debug"
     //% block.loc.ru="движение по линии до перекрёстка на расстояние $totalDist мм с ускорением $accelDist замеделнием $decelDist c действием после $actionAfterMotion||параметры: $params|отладка $debug"
     //% inlineInputMode="inline"

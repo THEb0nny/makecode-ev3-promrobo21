@@ -19,6 +19,7 @@ namespace motors {
      * @param braking торможение мотора по завершению по завершению, eg: Braking.Hold
      */
     //% blockId="MotorSetPosition"
+    //% help=github:theb0nny/makecode-ev3-promrobo21/docs/motors/set-position
     //% block="set $motor to position $position||braking $braking|params: $params"
     //% block.loc.ru="установить $motor на позицию $position||торможение $braking|параметры: $params"
     //% inlineInputMode="inline"
