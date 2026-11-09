@@ -70,8 +70,6 @@ namespace navigation {
      */
     export function relativeSpinTurn(relativeDegrees: number, v: number, debug: boolean = false) {
         const currentDirection = getCurrentDirection(); // Получаем текущее направление
-        // const newDirection = (currentDirection + relativeDegrees + 720) % 360; // +720 для корректной обработки отрицательных значений
-        // const turnDeg = -relativeDegrees; // Угол поворота (знак как в directionSpinTurn)
         const newDirection = (currentDirection - relativeDegrees + 720) % 360; // +720 для корректной обработки отрицательных значений
         const turnDeg = relativeDegrees; // Угол поворота (знак как в directionSpinTurn)
         if (debug) console.log(`relativeSpinTurn: ${relativeDegrees}°, currDir: ${currentDirection} → newDir: ${newDirection}, v: ${v}`);
@@ -81,8 +79,6 @@ namespace navigation {
 
     export function relativeRampSpinTurn(relativeDegrees: number, vMin: number, vMax: number, accelDeg?: number, decelDeg?: number, timeOut?: number, debug: boolean = false) {
         const currentDirection = getCurrentDirection(); // Получаем текущее направление
-        // const newDirection = (currentDirection + relativeDegrees + 720) % 360; // +720 для корректной обработки отрицательных значений
-        // const turnDeg = -relativeDegrees; // Угол поворота (знак как в directionSpinTurn)
         const newDirection = (currentDirection - relativeDegrees + 720) % 360; // +720 для корректной обработки отрицательных значений
         const turnDeg = relativeDegrees; // Угол поворота (знак как в directionSpinTurn)
         if (debug) console.log(`relativeSpinTurn: ${relativeDegrees}°, currDir: ${currentDirection} → newDir: ${newDirection}, vMin: ${vMin}, vMax: ${vMax}`);
