@@ -7,14 +7,16 @@ chassis.setMotors(motors.mediumB, motors.mediumC, true, false); // Устано�
 chassis.setSyncRegulatorGains(0.005, 0.0001, 0.5); // Установить параметры регулирования синхронизации моторов шасси
 chassis.setWheelDiametr(62.4); // Установить радиус колёс в шасси
 chassis.setBaseLength(172); // Установить размер базы шасси
-motions.setDistRollingAfterIntersection(50); // Установить дистанцию прокатки после перекрёстка в мм
+motions.setDistRollingAfterIntersection(45); // Установить дистанцию прокатки после перекрёстка в мм
 chassis.setBrakeSettleTime(100); // Время для стабилизации шасси после торможения
+motions.setSteeringAtSearchLineForLineFollowOneSensor(35);
+motions.setLineFollowOneSensorConditionMaxErr(50);
 
 const manipulatorMotor = motors.mediumD;
 
 // sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
 sensors.setNxtLightSensorsAsLineSensors(sensors.nxtLight2, sensors.nxtLight3);
-sensors.setLineSensorsRawRefValues(2420, 1740, 2004, 1308); // Установить калибровочные значения чёрного и белого левого и правого датчика
+sensors.setLineSensorsRawRefValues(2688, 2076, 2282, 1648); // Установить калибровочные значения чёрного и белого левого и правого датчика
 
 const colorSensor = sensors.color4; // Датчик цвета, которым определяем цвет предмета
 
@@ -93,7 +95,6 @@ navigation.buildGraph([
 
 // Старт на Базе 1 (узел 0), робот смотрит вниз (270°) на узел 10
 navigation.setCurrentPosition(0);
-// WARNING В новой системе направление задаётся в градусах. При старте обязательно нужно передавать enum. Если случайно передать число 1, робот решит, что он смотрит под углом 1° вместо 270°, и сделает лишний доворот.
 navigation.setCurrentDirection(NavDirection.Down);
 
 // Получить цвет
@@ -227,17 +228,20 @@ function Main() {
     // Тестовый поиск пути: из Базы 1 (0) в Базу 2 (16)
     const pathToBase2 = navigation.algorithmDijkstra(0, 16);
     console.log(`Путь из Базы 1 в Базу 2: ${pathToBase2.join(' -> ')}`);
+
     navigation.followLineByPath(pathToBase2, AfterLineMotion.SmoothRolling, { 
         vStartMove: 30, 
         vMaxMove: 60, 
         vTurn: 60, 
         accelStartDist: 30, 
         Kp: 0.2, 
-        Kd: 0.5
+        Kd: 0.5,
+        KpSide: 0.3,
+        KdSide: 0.7
     });
 
     brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
-    const path = navigation.algorithmDijkstra(navigation.getCurrentPosition(), 4);
+    const path = navigation.algorithmDijkstra(navigation.getCurrentPosition(), 6);
     console.log(`Путь: ${path.join(' -> ')}`);
     navigation.followLineByPath(path, AfterLineMotion.SmoothRolling);
 }
