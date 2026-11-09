@@ -16,6 +16,14 @@ namespace navigation {
     let lineFollowByPathKfSide = 0;
 
 
+    /**
+     * Расчёт угла доворота робота для перехода от текущего курса к целевому направлению.
+     * Определяет кратчайшую дугу вращения (по или против часовой стрелки) в диапазоне от -180° до +180°.
+     * Положительный угол соответствует повороту вправо (по часовой стрелке), отрицательный — влево.
+     * @param inputDirection целевое абсолютное направление в градусах (0–360°) или перечисление NavDirection, eg: NavDirection.Up
+     * @param debug включение вывода отладочных сообщений, eg: false
+     * @returns угол поворота в градусах для шасси (от -180° до +180°)
+     */
     function getDirectionTurnDegrees(inputDirection: number, debug: boolean = false): number {
         if (inputDirection < 0) {
             console.log(`Warning: inputDirection (${inputDirection}) not valid. Return from function!`);
