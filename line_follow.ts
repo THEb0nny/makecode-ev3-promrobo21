@@ -534,14 +534,18 @@ namespace motions {
             if (params.Kf >= 0) lineFollowLeftIntersectionKf = Math.abs(params.Kf);
         }
 
-        pidLineFollow.setGains(lineFollowLeftIntersectionKp, lineFollowLeftIntersectionKi, lineFollowLeftIntersectionKd); // Установка коэффицентов регулятора
+        pidLineFollow.setGains(lineFollowLeftIntersectionKp * 1.7, 0, lineFollowLeftIntersectionKd * 2.5); // Установка коэффицентов регулятора
         pidLineFollow.setDerivativeFilter(lineFollowLeftIntersectionKf); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс регулятора
 
+        const searchSpeed = Math.min(lineFollowLeftIntersectionV, 30);
+        let isAligned = false;
+        let stableCount = 0;
+
         // Подруливаем плавно к линии
-        steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
+        // steeringUntilFindLine(LineSensor.Right, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? -1 : 1), lineFollowLeftIntersectionV);
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
@@ -553,9 +557,24 @@ namespace motions {
             let error = 0; // Переменная для хранения ошибки регулирования
             if (lineLocation == LineLocation.Inside) error = getLineFollowSetPoint() - refRightLS; // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = refRightLS - getLineFollowSetPoint(); // Ошибка регулирования
-            if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refLeftLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
+            // Фаза 1: Ждём, пока ПИД сам плавно заведёт робота на границу и стабилизирует его
+            if (!isAligned) {
+                if (Math.abs(error) < 20) {
+                    stableCount++;
+                    if (stableCount >= 5) {
+                        isAligned = true;
+                        // Фаза 2: Переключаемся на мягкие рабочие коэффициенты и полную скорость
+                        pidLineFollow.setGains(lineFollowLeftIntersectionKp, lineFollowLeftIntersectionKi, lineFollowLeftIntersectionKd);
+                        pidLineFollow.reset();
+                    }
+                } else {
+                    stableCount = 0;
+                }
+            }
+            if (isAligned && Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refLeftLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток, когда робот едет по линии
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
-            chassis.regulatorSteering(u, lineFollowLeftIntersectionV); // Команда моторам
+            const currentSpeed = isAligned ? lineFollowLeftIntersectionV : searchSpeed;
+            chassis.regulatorSteering(u, currentSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }
@@ -590,14 +609,18 @@ namespace motions {
             if (params.Kf >= 0) lineFollowRightIntersectionKf = Math.abs(params.Kf);
         }
 
-        pidLineFollow.setGains(lineFollowRightIntersectionKp, lineFollowRightIntersectionKi, lineFollowRightIntersectionKd); // Установка коэффицентов регулятора
+        pidLineFollow.setGains(lineFollowRightIntersectionKp * 1.7, 0, lineFollowRightIntersectionKd * 2.5); // Установка коэффицентов регулятора
         pidLineFollow.setDerivativeFilter(lineFollowRightIntersectionKf); // Установить фильтр дифференциального регулятора
         pidLineFollow.setControlSaturation(-200, 200); // Установка диапазона регулирования регулятора
         pidLineFollow.setPoint(0); // Установить нулевую уставку регулятору
         pidLineFollow.reset(); // Сброс регулятора
 
+        const searchSpeed = Math.min(lineFollowLeftIntersectionV, 30);
+        let isAligned = false;
+        let stableCount = 0;
+
         // Подруливаем плавно к линии
-        steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowRightIntersectionV);
+        // steeringUntilFindLine(LineSensor.Left, getSteeringAtSearchLineForLineFollowOneSensor() * (lineLocation == LineLocation.Inside ? 1 : -1), lineFollowRightIntersectionV);
 
         let prevTime = control.millis(); // Переменная времени за предыдущую итерацию цикла
         while (true) { // Цикл регулирования движения по линии
@@ -609,9 +632,24 @@ namespace motions {
             let error = 0; // Переменная для хранения ошибки регулирования
             if (lineLocation == LineLocation.Inside) error = refLeftLS - getLineFollowSetPoint(); // Ошибка регулирования
             else if (lineLocation == LineLocation.Outside) error = getLineFollowSetPoint() - refLeftLS; // Ошибка регулирования
-            if (Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refRightLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
+            // Фаза 1: Ждём, пока ПИД сам плавно заведёт робота на границу и стабилизирует его
+            if (!isAligned) {
+                if (Math.abs(error) < 20) {
+                    stableCount++;
+                    if (stableCount >= 5) {
+                        isAligned = true;
+                        // Фаза 2: Переключаемся на мягкие рабочие коэффициенты и полную скорость
+                        pidLineFollow.setGains(lineFollowRightIntersectionKp, lineFollowRightIntersectionKi, lineFollowRightIntersectionKd);
+                        pidLineFollow.reset();
+                    }
+                } else {
+                    stableCount = 0;
+                }
+            }
+            if (isAligned && Math.abs(error) <= getLineFollowOneSensorConditionMaxErr() && refRightLS < getLineFollowRefThreshold()) break; // Проверка на перекрёсток в момент, когда робот едет по линии
             const u = pidLineFollow.compute(dt == 0 ? 1 : dt, -error); // Управляющее воздействие
-            chassis.regulatorSteering(u, lineFollowRightIntersectionV); // Команда моторам
+            const currentSpeed = isAligned ? lineFollowLeftIntersectionV : searchSpeed;
+            chassis.regulatorSteering(u, currentSpeed); // Команда моторам
             if (debug) printDubugLineFollow(refLeftLS, refRightLS, error, u, dt);
             control.pauseUntilTimeMs(currTime, getLineFollowLoopDt()); // Ожидание выполнения цикла
         }

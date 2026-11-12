@@ -16,7 +16,7 @@ const manipulatorMotor = motors.mediumD;
 
 // sensors.setColorSensorsAsLineSensors(sensors.color2, sensors.color3); // Установить датчики цвета в качестве датчиков линии
 sensors.setNxtLightSensorsAsLineSensors(sensors.nxtLight2, sensors.nxtLight3);
-sensors.setLineSensorsRawRefValues(2688, 2076, 2282, 1648); // Установить калибровочные значения чёрного и белого левого и правого датчика
+sensors.setLineSensorsRawRefValues(2396, 1772, 1904, 1332); // Установить калибровочные значения чёрного и белого левого и правого датчика
 
 const colorSensor = sensors.color4; // Датчик цвета, которым определяем цвет предмета
 
@@ -233,15 +233,15 @@ function Main() {
         vStartMove: 30, 
         vMaxMove: 60, 
         vTurn: 60, 
-        accelStartDist: 30, 
-        Kp: 0.2, 
+        // accelStartDist: 30, 
+        Kp: 0.1, 
         Kd: 0.5,
-        KpSide: 0.3,
-        KdSide: 0.7
+        KpSide: 0.2,
+        KdSide: 0.5
     });
 
     brick.buttonEnter.pauseUntil(ButtonEvent.Pressed); // Ждём нажатия
-    const path = navigation.algorithmDijkstra(navigation.getCurrentPosition(), 6);
+    const path = navigation.algorithmDijkstra(navigation.getCurrentPosition(), 1);
     console.log(`Путь: ${path.join(' -> ')}`);
     navigation.followLineByPath(path, AfterLineMotion.SmoothRolling);
 }
