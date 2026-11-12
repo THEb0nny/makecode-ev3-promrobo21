@@ -423,7 +423,7 @@ namespace motions {
 namespace motions {
 
     function lineFollowToIntersection(actionAfterMotion: AfterLineMotion, params?: params.LineFollow, debug: boolean = false) {
-        
+        // ToDo
     }
 
     /**
